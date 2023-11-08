@@ -1,0 +1,52 @@
+{
+  "name": "react-faux-dom",
+  "version": "2.7.1",
+  "description": "DOM like data structure to be mutated by D3 et al, then rendered to React elements",
+  "main": "lib/ReactFauxDOM.js",
+  "scripts": {
+    "test": "standard && tape './test/**/*.js' | faucet",
+    "prepublish": "npm test && make build"
+  },
+  "files": [
+    "dist",
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Olical/react-faux-dom.git"
+  },
+  "keywords": [
+    "d3",
+    "react",
+    "dom",
+    "virtual"
+  ],
+  "author": {
+    "name": "Oliver Caldwell",
+    "email": "olliec87@gmail.com",
+    "url": "http://oli.me.uk/"
+  },
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/Olical/react-faux-dom/issues"
+  },
+  "homepage": "https://github.com/Olical/react-faux-dom#readme",
+  "devDependencies": {
+    "bastion": "^1.8.0",
+    "d3": "^4.1.1",
+    "d3-selection-multi": "^0.4.1",
+    "faucet": "0.0.1",
+    "nodemon": "^1.9.1",
+    "react": "^15.1.0",
+    "sinon": "^1.17.3",
+    "standard": "^7.1.2",
+    "tape": "^4.4.0"
+  },
+  "dependencies": {
+    "query-selector": "^1.0.9",
+    "style-attr": "^1.0.1"
+  },
+  "peerDependencies": {
+    "react": "*"
+  }
+}
