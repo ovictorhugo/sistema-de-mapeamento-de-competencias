@@ -1,0 +1,15 @@
+{
+    "header": {
+        "chooseProgram": "Escolha um programa",
+        "seePlatformFilter": "e veja o que a plataforma filtra para você.",
+      "filterPrompt": "Arraste ou clique em um dos pontos no gráfico para selecionar o programa de pós-graduação. Você também pode escolher pela lista abaixo"
+    },
+
+    "buttons": {
+        "avancar": "Avançar"
+    },
+
+    "input": {
+        "type1": "Nome ou sigla da instituição"
+    }
+  }

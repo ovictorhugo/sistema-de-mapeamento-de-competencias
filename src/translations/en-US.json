@@ -1,0 +1,15 @@
+{
+    "header": {
+    "chooseProgram": "Choose a program",
+    "seePlatformFilter": "and see what the platform filters for you.",
+      "filterPrompt": "Drag or click one of the points on the graph to select the graduate program. You can also choose from the list below"
+    },
+
+    "buttons": {
+        "avancar": "Next"
+    },
+
+    "input": {
+        "type1": "Name or acronym of the institution"
+    }
+  }
