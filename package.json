@@ -39,7 +39,6 @@
     "powerbi-client-react": "^1.4.0",
     "react": "^18.2.0",
     "react-circular-progressbar": "^2.1.0",
-    "react-d3-zoom": "^1.1.2",
     "react-dom": "^18.2.0",
     "react-highcharts": "^16.1.0",
     "react-i18next": "^13.2.2",
