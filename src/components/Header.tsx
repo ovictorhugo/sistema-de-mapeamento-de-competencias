@@ -11,7 +11,6 @@ import logo_4 from '../assets/logo_4.png';
 import { Pesquisadores } from "./Pesquisadores";
 import { Publicacoes } from "./Publicacoes";
 
-import LanguageSwitcher from './LanguageSwitcher';
 
 import cimatec from '../assets/cimatec.png';
 import ifba from '../assets/ifba.png';

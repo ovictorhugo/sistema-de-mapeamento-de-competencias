@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import LanguageSwitcher from "./LanguageSwitcher";
+
 import { BookOpen, CaretDown, CaretUp, ChartLine, Divide, DownloadSimple, FileCsv, ListDashes, MagnifyingGlass, Minus, Plus, Textbox, Trash, UserPlus, X } from "phosphor-react";
 
 import cimatec from '../assets/logo_profnit.png';
@@ -842,7 +842,7 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
                 </div>
 
                 <div className="flex gap-4 z-[9999999999]">
-                    <LanguageSwitcher/>
+                 
                     </div>
                 </header>
 

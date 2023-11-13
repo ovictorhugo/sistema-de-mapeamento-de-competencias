@@ -7,8 +7,6 @@ import { Circle } from "./Circle";
 import DropdownMultiSelect from "./DropdownMultiSelect";
 import { SvgLines } from "./SvgLines";
 
-import { useTranslation } from 'react-i18next';
-
 import logo_1 from '../assets/logo_1.png';
 import logo_2 from '../assets/logo_2.png';
 import logo_3 from '../assets/logo_3.png';
@@ -92,8 +90,6 @@ export function MapProfnit(props: Props) {
   const [isSimulationRunning, setIsSimulationRunning] = useState<boolean>(true);
 
   const { idGraduateProgram, setIdGraduateProgram } = useContext(UserContext);
-
-  const { t } = useTranslation();
 
    //btns da página search
 
@@ -288,11 +284,11 @@ console.log('idversao',idVersao)
         <div className="h-[350px] absolute  ml-16 "><Circle/></div>
         <h1 className="z-[999999] text-5xl mb-4 font-medium max-w-[750px] ">
         <strong className="bg-blue-400 text-white font-normal">
-          {t('header.chooseProgram')}
+        Escolha um programa
         </strong>{" "}
-        {t('header.seePlatformFilter')}
+        e veja o que a plataforma filtra para você.
       </h1>
-          <p className=" z-[999999] max-w-[620px]  text-lg text-gray-400">{t('header.filterPrompt')} </p>
+          <p className=" z-[999999] max-w-[620px]  text-lg text-gray-400">Arraste ou clique em um dos pontos no gráfico para selecionar o programa de pós-graduação. Você também pode escolher pela lista abaixo </p>
 
           <div className="max-w-[700px] flex gap-3 items-center mt-6 z-[999999]">
          
@@ -305,13 +301,13 @@ console.log('idversao',idVersao)
                           onKeyPress={handleKeyPress}
                           value={filterValue}
                           onChange={e => setFilterValue(e.target.value)}
-                          placeholder={t('input.type1')}
+                          placeholder='Nome ou sigla da instituição'
                           className="w-full outline-none text-sm"
                         />
                       </div>
 
                       <Link onClick={() => handleFilterChange(filterValue)} to={"/result"} className="w-fit h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-6 py-2 justify-center hover:bg-blue-500 text-base font-medium transition">
-                        <ArrowRight size={16} className="text-white" /> {t('buttons.avancar')}
+                        <ArrowRight size={16} className="text-white" /> Avançar
                     </Link>
           </div>
 
