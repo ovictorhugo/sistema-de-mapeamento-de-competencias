@@ -120,7 +120,7 @@ export function MapProfnit(props: Props) {
 
   useEffect(() => {
   
-  if(idVersao == "" || (idVersao > '5' )) {
+  if(idVersao == "" || (idVersao > '6' )) {
     setIdVersao('1')
   }
 }, [graduatePrograms]);
