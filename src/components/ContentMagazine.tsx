@@ -31,12 +31,7 @@ export function ContentMagazine(props: Props) {
    
       setIdVersao(props.program)
   
-      useEffect(() => {
-      
-      if(idVersao == "" || (idVersao > '5' )) {
-        setIdVersao('1')
-      }
-    }, [props.program]);
+  
 
     let urlMagazine = `${urlGeral}magazine?initials=&issn=`
     const [magazine, setMagazine] = useState<Magazine[]>([]);

@@ -118,12 +118,7 @@ export function MapProfnit(props: Props) {
   const { idVersao, setIdVersao } = useContext(UserContext);
   setIdVersao(props.id)
 
-  useEffect(() => {
-  
-  if(idVersao == "" || (idVersao > '6' )) {
-    setIdVersao('1')
-  }
-}, [graduatePrograms]);
+
 
 console.log('idversao',idVersao)
   
@@ -148,7 +143,7 @@ console.log('idversao',idVersao)
 
 
 
-  const urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=${props.id}`;
+  const urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=${idVersao}`;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -362,7 +357,7 @@ console.log('idversao',idVersao)
           </div>
           </div>
           
-          {idVersao === "2" ? (
+          {idVersao === "2"  || idVersao === "4" ? (
               <div className=" flex  rounded-md  bg-opacity-80 z-[99] flex-wrap gap-6 mt-8 relative">
               <img src={logo_1} className=" relative w-auto h-12"/>
               <img src={logo_2} className=" relative w-auto h-12"/>

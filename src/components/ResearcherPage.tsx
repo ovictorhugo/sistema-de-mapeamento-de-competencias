@@ -144,13 +144,6 @@ export function ResearcherPage(props: Props) {
  
   setIdVersao(props.program)
 
-  useEffect(() => {
-  
-  if(idVersao == "" || (idVersao > '5' )) {
-    setIdVersao('1')
-  }
-}, [props.program]);
-
   console.log(urlTermPesquisador)
 
   const [researcher, setResearcher] = useState<Research[]>([])

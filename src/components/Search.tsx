@@ -93,8 +93,12 @@ function myWrapperFunction() {
       const urlArea = urlGeral + `/area_specialitInitials?initials=${pesquisaInput.trim()}&area=${selectedOptionsAreas}&graduate_program_id=${idGraduateProgram}`;
       const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
 
+      console.log('urlResumo', url)
 
-      if (isOpen && pesquisaInput != '') {
+
+      console.log(url)
+
+     
         fetch(url, {
           mode: 'cors',
           headers: {
@@ -119,11 +123,11 @@ function myWrapperFunction() {
           .catch((err) => {
             console.log(err.message);
           });
-      }
+      
 
       //Resumo
 
-      if (isOpen && pesquisaInput != '') {
+   
 
         fetch(urlResumo, {
           mode: 'cors',
@@ -149,10 +153,10 @@ function myWrapperFunction() {
           .catch((err) => {
             console.log(err.message);
           });
-      }
+      
 
       // Pesquisador
-      if (isOpen && pesquisaInput != '') {
+    
 
         fetch(urlPesquisador, {
           mode: 'cors',
@@ -181,11 +185,11 @@ function myWrapperFunction() {
           .catch((err) => {
             console.log(err.message);
           });
-      }
+      
 
 
       //Area
-      if (isOpen && pesquisaInput != '') {
+    
         fetch(urlArea, {
           mode: 'cors',
           headers: {
@@ -213,7 +217,7 @@ function myWrapperFunction() {
           });
       }
 
-    }
+    
 
     // CHECKBOX ENVIAAAR
 
@@ -321,6 +325,34 @@ function myWrapperFunction() {
 
       setSelectedTab(2);
     };
+
+    const { idVersao, setIdVersao } = useContext(UserContext);
+
+    const urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=${idVersao}`;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(urlGraduateProgram, {
+          mode: "cors",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Max-Age": "3600",
+            "Content-Type": "text/plain",
+          },
+        });
+        const data = await response.json();
+        if (data) {
+          
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, [urlGraduateProgram]);
 
 
     //CURRET PAGE
@@ -648,7 +680,7 @@ function myWrapperFunction() {
       setValoresSelecionadosExport(valoresAreasSelecionados)
     }
 
-    console.log(selectedTab)
+   
 
     useEffect(() => {
       if (pesquisaInput.length == 0) {

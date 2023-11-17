@@ -122,6 +122,7 @@ export function Pesquisadores() {
 
 
 console.log(urlTermPesquisadores)
+
   const location = useLocation();
 
   useEffect(() => {

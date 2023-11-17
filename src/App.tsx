@@ -66,7 +66,7 @@ export const App = () => {
 
   const [valoresSelecionadosPopUp, setValoresSelecionadosPopUp] = useState('');
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
-  const [idVersao, setIdVersao] = useState('1');
+  const [idVersao, setIdVersao] = useState('');
 
   const [idGraduateProgram, setIdGraduateProgram] = useState('0');
 
@@ -74,6 +74,7 @@ export const App = () => {
   setValoresSelecionadosPopUp(valoresSelecionadosExport)
 }, [valoresSelecionadosExport]);
 
+console.log('[idVersao', idVersao)
 
 
 

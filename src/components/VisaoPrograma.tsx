@@ -35,8 +35,8 @@ export function VisaoPrograma() {
     // Obtém o ano atual
 const anoAtual = new Date().getFullYear();
 
-// Calcula o ano 5 anos atrás
-const ano5AnosAtras = anoAtual - 4;
+  // Calcula o ano 5 anos atrás
+  const ano5AnosAtras = anoAtual - 4;
 
 
   let urlVisaoPrograma = `${urlGeral}/graduate_program_production?graduate_program_id=${idGraduateProgram}&year=${ano5AnosAtras}`;
@@ -44,17 +44,18 @@ const ano5AnosAtras = anoAtual - 4;
   console.log(urlVisaoPrograma)
 // Monta a URL com o ano 5 anos atrás
 
-let QualQualis
+let QualQualis = ''
 
-if (idGraduateProgram == '0') {
+if (idGraduateProgram == '0' || idGraduateProgram == '') {
   QualQualis = ''
 }
 else {
   QualQualis = idGraduateProgram
 }
+
 const urlQualis = `${urlGeral}/qualis_researcher?graduate_program_id=${QualQualis}&year=${ano5AnosAtras}&researcher_id=`;
 
-console.log(urlVisaoPrograma)
+console.log(urlQualis)
 
   useEffect(() => {
     const fetchData = async () => {

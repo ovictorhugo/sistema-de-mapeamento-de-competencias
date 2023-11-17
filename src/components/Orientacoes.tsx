@@ -33,7 +33,9 @@ export function Orientacoes(props: Publicacao) {
     const { isOn, setIsOn } = useContext(UserContext)
 
     return (
-        <div key={props.id} id="id_perfil" className={`group bg-white  justify-between border-solid border-gray-300 border-[1px] flex p-6 rounded-md hover:shadow-md transition  ${isOn ? "items-center justify-center flex" : "flex-col items-baseline"}`}>
+        <div className="flex ">
+            <div className="h-full w-6 rounded-l-xl"></div>
+            <div key={props.id} id="id_perfil" className={`group bg-white  justify-between border-solid border-gray-300 border-[1px] flex p-6 rounded-md hover:shadow-md transition  ${isOn ? "items-center justify-center flex" : "flex-col items-baseline"}`}>
             <div>
                 <div className="flex">
                     <div className="flex flex-col justify-center">
@@ -96,6 +98,7 @@ export function Orientacoes(props: Publicacao) {
 
 
 
+        </div>
         </div>
     )
 };
