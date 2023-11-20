@@ -56,7 +56,7 @@ export const App = () => {
   const [botaoResumoClicado, setBotaoResumoClicado] = useState(false);
   const [botaoAreasClicado, setBotaoAreasClicado] = useState(false);
   
-  const [urlGeral, setUrlGeral] = useState('http://200.128.66.226:5001/');
+  const [urlGeral, setUrlGeral] = useState('http://177.16.237.129:5001/');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
   const [user, setUser] = useState<User>({} as User)
   const [isOn, setIsOn] = useState(false);
@@ -66,7 +66,7 @@ export const App = () => {
 
   const [valoresSelecionadosPopUp, setValoresSelecionadosPopUp] = useState('');
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
-  const [idVersao, setIdVersao] = useState('');
+  const [idVersao, setIdVersao] = useState('4');
 
   const [idGraduateProgram, setIdGraduateProgram] = useState('0');
 
@@ -132,10 +132,10 @@ console.log('[idVersao', idVersao)
             <Route path='/export-sucupira' element={<Login/>}/>
            
 
-         
+          
 
             <Route
-            path='/result'
+            path='/result/:userId?'
             element={
               idGraduateProgram !== "0" ? (
                 <Home />
@@ -150,7 +150,7 @@ console.log('[idVersao', idVersao)
             
 
             <Route path='researcher'>
-              <Route path=':program/:userId/:term?/:type?' element={<Researcher/>}/>
+              <Route path=':program/:userId?/:term?/:type?' element={<Researcher/>}/>
             </Route>
 
             <Route path='terms'>

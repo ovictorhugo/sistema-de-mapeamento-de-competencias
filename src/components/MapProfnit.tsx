@@ -143,7 +143,7 @@ console.log('idversao',idVersao)
 
 
 
-  const urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=${idVersao}`;
+  const urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=${props.id}`;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -467,7 +467,7 @@ console.log('idversao',idVersao)
                     </div>
 
                     <div>
-                    <Link to={"/result"}  onClick={() => handleClick(props.graduate_program_id)} className="w-full mt-8 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-full px-6 py-2 justify-center hover:bg-blue-500 text-base font-medium transition">
+                    <Link to={`/result/${idVersao}`}  onClick={() => handleClick(props.graduate_program_id)} className="w-full mt-8 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-full px-6 py-2 justify-center hover:bg-blue-500 text-base font-medium transition">
                         <ArrowRight size={16} className="text-white" /> Avançar
                     </Link>
                     </div>

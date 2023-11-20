@@ -24,9 +24,6 @@ interface Area {
   area_specialty: string
 }
 
-interface Props {
-  children?: React.ReactNode;
-}
 
 function myWrapperFunction() {
   const Search: React.FC = () => {
@@ -84,16 +81,21 @@ function myWrapperFunction() {
 
     const { idGraduateProgram, setIdGraduateProgram } = useContext(UserContext)
 
+    if(idGraduateProgram == '0') {
+      setIdGraduateProgram('')
+    }
+
     //Enviar resultado da pesquisa
     function enviarRequisicao() {
       const pesquisaInputFormatado = pesquisaInput.trim().replace(/\s+/g, ";");
-      const url = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=ARTICLE&graduate_program_id=${idGraduateProgram}`;
+      const url = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=ARTICLE`;
       const urlResumo = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=ABSTRACT&graduate_program_id=${idGraduateProgram}`;
       const urlPesquisador = urlGeral + `/reasercherInitials?initials=${pesquisaInputFormatado}&graduate_program_id=${idGraduateProgram}`
       const urlArea = urlGeral + `/area_specialitInitials?initials=${pesquisaInput.trim()}&area=${selectedOptionsAreas}&graduate_program_id=${idGraduateProgram}`;
       const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
 
       console.log('urlResumo', url)
+
 
 
       console.log(url)

@@ -11,7 +11,9 @@ type Patente = {
 export function Patent(props: Patente) {
 
     return (
-        <div className="w-full  hover:shadow-md transition rounded-md border-[1px] border-gray-300 p-6 flex gap-4 items-center">
+        <div className="hover:shadow-md transition rounded-md border-[1px] border-gray-300 flex">
+        <div className={`h-full w-2 min-w-[8px] rounded-l-lg ${props.grant_date == "NaT" || props.grant_date == "None" ? ('bg-red-400') : ('bg-green-400')}` }></div>
+        <div className="w-full   p-6 flex gap-4 items-center">
             <div id="mudarCorDiv" className={` h-10 w-10 rounded-md  whitespace-nowrap flex items-center justify-center border-[1px] border-gray-300`}>
                 <Copyright size={18} className="text-gray-400 whitespace-nowrap  w-10" />
 
@@ -31,6 +33,7 @@ export function Patent(props: Patente) {
                 </div>
 
             </div>
+        </div>
         </div>
     )
 }

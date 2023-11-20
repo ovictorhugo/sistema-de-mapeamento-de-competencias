@@ -66,7 +66,10 @@ type Research = {
   totalLatoSensuPoints: number
   totalWorkEventPoints: number
   totalTitulacaoPoints: number
+  totalPatentePoints: number
 
+  totalSofwareBrandPoints: number
+  totalEspTccPoints: number
   TotalProducaoBibliografica: number
   TotalRecursosHumanosAndamento: number
   TotalRecursosHumanosConcluido: number
@@ -163,7 +166,7 @@ export function Barema() {
   const anoFiltro = anoAtual - ano;
 
 
-  let urlTermPesquisadores = `${urlGeral}/resarcher_barema?name=${pesquisadoresSelecionadosGroupBarema}&lattes_id=${csvData}&year=year_5=${anoFiltro}`
+  let urlTermPesquisadores = `${urlGeral}/resarcher_barema?name=${pesquisadoresSelecionadosGroupBarema}&lattes_id=${csvData}&yarticle=2018&ywork_event=2018&ybook=1900&ychapter_book=1900&ypatent=1900&ysoftware=1900&ybrand=1900&yresource_progress=1900&yresource_completed=1900&yparticipation_events=1900`
   
 
   
@@ -374,9 +377,15 @@ export function Barema() {
       const participacaoCategory = categories.find((category: any) => category.codigo === "19");
       const workEventCategory = categories.find((category: any) => category.codigo === "20");
 
+      const softwareBrandCategory = categories.find((category: any) => category.codigo === "23");
+      const espTccCategory = categories.find((category: any) => category.codigo === "25");
+     
+
       const posDocCategory = categories.find((category: any) => category.codigo === "2");
       const docCategory = categories.find((category: any) => category.codigo === "3");
       const mestCategory = categories.find((category: any) => category.codigo === "4");
+      const especCategory = categories.find((category: any) => category.codigo === "21");
+      const patenteCategory = categories.find((category: any) => category.codigo === "22");
 
       // Calcula os pontos para cada categoria
       const articlesPoints = parseFloat(articlesCategory?.pontos || "0");
@@ -392,9 +401,15 @@ export function Barema() {
       const latoSensuPoints = parseFloat(latoSensuCategory?.pontos || "0");
       const workEventPoints = parseFloat(workEventCategory?.pontos || "0");
 
+      const softwareBrandPoints = parseFloat(softwareBrandCategory?.pontos || "0");
+      const espTccPoints = parseFloat(espTccCategory?.pontos || "0");
+     
+
       const posDocPoints = parseFloat(posDocCategory?.pontos || "0");
       const docPoints = parseFloat(docCategory?.pontos || "0");
       const mestPoints = parseFloat(mestCategory?.pontos || "0");
+      const especPoints = parseFloat(especCategory?.pontos || "0");
+      const patentePoints = parseFloat(patenteCategory?.pontos || "0");
 
       //titulacao
 
@@ -412,6 +427,10 @@ export function Barema() {
         totalTitulacaoPoints = mestPoints
       }
 
+      if(props.graduation == "Especialização") {
+        totalTitulacaoPoints = especPoints
+      }
+
       
       
       let totalArticlesPoints
@@ -426,6 +445,24 @@ export function Barema() {
       totalArticlesPoints = parseFloat(articlesCategory?.pontuacao_maxima || "0");
     } else {
       totalArticlesPoints = selectedArticlesPoints;
+    }
+
+    // SOFFTWARE E MARCA
+    let totalSofwareBrandPoints = (softwareBrandPoints * parseFloat(props.software || "0")) + (softwareBrandPoints * parseFloat(props.brand || "0"));
+    if (totalSofwareBrandPoints > parseFloat(softwareBrandCategory?.pontuacao_maxima || "0")) {
+      totalSofwareBrandPoints = parseFloat(softwareBrandCategory?.pontuacao_maxima || "0");
+    }
+
+    // Outros (Especia e TCC)
+    let totalEspTccPoints = (espTccPoints * parseFloat(props.guidance_g_c || "0")) + (espTccPoints * parseFloat(props.guidance_e_c || "0"));
+    if (totalEspTccPoints > parseFloat(espTccCategory?.pontuacao_maxima || "0")) {
+      totalEspTccPoints = parseFloat(espTccCategory?.pontuacao_maxima || "0");
+    }
+
+    // patente
+    let totalPatentePoints = (patentePoints * parseFloat(props.patent|| "0")) 
+    if (totalPatentePoints > parseFloat(patenteCategory?.pontuacao_maxima || "0")) {
+      totalPatentePoints = parseFloat(patenteCategory?.pontuacao_maxima || "0");
     }
       
       // LIVRO
@@ -496,12 +533,13 @@ export function Barema() {
         }
 
 
-        let TotalProducaoBibliografica = parseFloat(String(totalArticlesPoints)) + totalBookPoints + totalChapterPoints
-        let TotalRecursosHumanosAndamento = totalPosAPoints +  totalIcAPoints
-        let TotalRecursosHumanosConcluido = totalDoutoradoCPoints + totalMestradoCPoints + totalLatoSensuPoints + totalIcCPoints
-        let TotalParticipacaoEventos = totalOrganizacaoPoints + totalParticipacaoPoints + totalWorkEventPoints
+        let TotalProducaoBibliografica = Number((totalArticlesPoints + totalBookPoints + totalChapterPoints + totalWorkEventPoints + totalPatentePoints + totalSofwareBrandPoints).toFixed(2))
+        let TotalRecursosHumanosAndamento = Number((totalPosAPoints +  totalIcAPoints).toFixed(2))
+        let TotalParticipacaoEventos = Number((totalOrganizacaoPoints + totalParticipacaoPoints).toFixed(2))
+        let TotalRecursosHumanosConcluido = Number((totalDoutoradoCPoints + totalMestradoCPoints + totalIcCPoints + totalEspTccPoints + Number(TotalParticipacaoEventos)).toFixed(2))
         
-        let TotalBarema = TotalProducaoBibliografica + TotalRecursosHumanosAndamento + TotalRecursosHumanosConcluido + TotalParticipacaoEventos + totalTitulacaoPoints
+        
+        let TotalBarema = Number(TotalProducaoBibliografica + TotalRecursosHumanosAndamento + TotalRecursosHumanosConcluido  + totalTitulacaoPoints).toFixed(2)
 
         let TotalBaremaFormated = String(TotalBarema).replace(/\./g, ",");
 
@@ -523,6 +561,9 @@ export function Barema() {
         totalLatoSensuPoints,
         totalWorkEventPoints,
         totalTitulacaoPoints,
+        totalSofwareBrandPoints,
+        totalEspTccPoints,
+        totalPatentePoints,
 
         TotalProducaoBibliografica,
         TotalRecursosHumanosAndamento,
@@ -552,13 +593,16 @@ export function Barema() {
       'totalTitulacaoPoints',
 
       'totalArticlesPoints',
+      'totalWorkEventPoints',
       'totalBookPoints',
       'totalChapterPoints',
+      'totalPatentePoints',
+      'totalSofwareBrandPoints',
+      'Projetos de Pesquisa',
       'TotalProducaoBibliografica',
 
       
-      'Ensino pós graduação',
-      'Ensino graduação',
+
 
       'totalPosAPoints',
       'totalIcAPoints',
@@ -566,15 +610,12 @@ export function Barema() {
 
       'totalDoutoradoCPoints',
       'totalMestradoCPoints',
-      'totalLatoSensuPoints',
       'totalIcCPoints',
-      'TotalRecursosHumanosConcluido',
-      
-
+      'totalEspTccPoints',
       'totalOrganizacaoPoints',
       'totalParticipacaoPoints',
-      'totalWorkEventPoints',
-      'TotalParticipacaoEventos',
+      
+      'TotalRecursosHumanosConcluido',
       
       
       'TotalBaremaFormated',
@@ -1105,6 +1146,21 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
                     );
                   }
 
+                  if (subCategory.codigo === '21' && props.graduation == "Especialização") {
+                    return (
+                      <div
+                        key={props.id}
+                        className="group transition-all pr-4 border-[1px] bg-white border-gray-300 flex h-10 items-center text-gray-400 rounded-md text-xs font-bold w-fit gap-3"
+                      >
+                        <div
+                          className="rounded-l-md w-[40px] h-[40px] bg-cover bg-center bg-no-repeat"
+                          style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id})` }}
+                        ></div>
+                        {props.totalTitulacaoPoints}
+                      </div>
+                    );
+                  }
+
                     // Artigo em periódicos qualificados (A ou B)
                     if (subCategory.codigo === '6') {
                       return (
@@ -1117,6 +1173,55 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
                             style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id})` }}
                           ></div>
                           {props.totalArticlesPoints}
+                        </div>
+                      );
+                    }
+
+                    // Outros (Especia e TCC)
+                    if (subCategory.codigo === '25') {
+                      return (
+                        <div
+                          key={props.id}
+                          className="group transition-all pr-4 border-[1px] bg-white border-gray-300 flex h-10 items-center text-gray-400 rounded-md text-xs font-bold w-fit gap-3"
+                        >
+                          <div
+                            className="rounded-l-md w-[40px] h-[40px] bg-cover bg-center bg-no-repeat"
+                            style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id})` }}
+                          ></div>
+                          {props.totalEspTccPoints}
+                        </div>
+                      );
+                    }
+
+                    // Patente
+                    if (subCategory.codigo === '22') {
+                      return (
+                        <div
+                          key={props.id}
+                          className="group transition-all pr-4 border-[1px] bg-white border-gray-300 flex h-10 items-center text-gray-400 rounded-md text-xs font-bold w-fit gap-3"
+                        >
+                          <div
+                            className="rounded-l-md w-[40px] h-[40px] bg-cover bg-center bg-no-repeat"
+                            style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id})` }}
+                          ></div>
+                          {props.totalPatentePoints}
+                        </div>
+                      );
+                    }
+
+                    // Sotware e marca
+                    if (subCategory.codigo === '23') {
+                     
+                      return (
+                        <div
+                          key={props.id}
+                          className="group transition-all pr-4 border-[1px] bg-white border-gray-300 flex h-10 items-center text-gray-400 rounded-md text-xs font-bold w-fit gap-3"
+                        >
+                          <div
+                            className="rounded-l-md w-[40px] h-[40px] bg-cover bg-center bg-no-repeat"
+                            style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id})` }}
+                          ></div>
+                          {props.totalSofwareBrandPoints}
                         </div>
                       );
                     }

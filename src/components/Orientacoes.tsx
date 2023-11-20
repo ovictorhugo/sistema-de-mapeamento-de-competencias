@@ -33,9 +33,10 @@ export function Orientacoes(props: Publicacao) {
     const { isOn, setIsOn } = useContext(UserContext)
 
     return (
-        <div className="flex ">
-            <div className="h-full w-6 rounded-l-xl"></div>
-            <div key={props.id} id="id_perfil" className={`group bg-white  justify-between border-solid border-gray-300 border-[1px] flex p-6 rounded-md hover:shadow-md transition  ${isOn ? "items-center justify-center flex" : "flex-col items-baseline"}`}>
+        <div className="flex border-solid bg-white  border-gray-300 border-[1px] rounded-md hover:shadow-md transition">
+            <div className={`h-full w-2 min-w-[8px] rounded-l-lg ${props.status == "Em andamento" ? ('bg-[#FCB712]') : ('bg-green-400')}` }></div>
+
+            <div key={props.id} id="id_perfil" className={`group  justify-between flex p-6   ${isOn ? "items-center justify-center flex" : "flex-col items-baseline"}`}>
             <div>
                 <div className="flex">
                     <div className="flex flex-col justify-center">
@@ -48,7 +49,7 @@ export function Orientacoes(props: Publicacao) {
                     </div>
 
                     <div>
-                        <h4 className="text-base font-medium ">{props.title}</h4>
+                        <h4 className="text-base font-medium flex-wrap whitespace-wrap ">{props.title}</h4>
                         <div className="flex items-center gap-2">
                             <CalendarBlank size={16} className="text-gray-400" />
                             <p className="text-[13px]  text-gray-500">{props.year}</p>
@@ -77,13 +78,7 @@ export function Orientacoes(props: Publicacao) {
                 <div className="flex  gap-4 items-center justify-between relative bottom-0S">
                     <div className="flex gap-3">
                         <div className=" flex gap-3 flex-wrap">
-                            <div className={` py-2 px-4 text-white rounded-md text-xs font-bold  flex gap-2 items-center w-fit ${props.status == "Em andamento" ? ('bg-[#FCB712]') : ('bg-green-400')}`}>
-                                {props.status == "Em andamento" ? (
-                                    <SpinnerGap size={12} className="textwhite" />
-                                ) : (
-                                    <Check size={12} className="textwhite" />
-                                )}
-                                {props.status}</div>
+                            
                             <div className="qualis border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium gap-2 items-center"><Paperclip size={16} className="text-gray-400" />  {props.nature}</div>
 
 
