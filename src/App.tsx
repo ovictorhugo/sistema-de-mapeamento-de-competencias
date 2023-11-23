@@ -51,6 +51,7 @@ export const App = () => {
 
   const [estadoSelecionado, setEstadoSelecionado] = useState('');
 
+  const [botaoPatentesClicado, setBotaoPatentesClicado] = useState(false)
   const [botaoPesquisadoresClicado, setBotaoPesquisadoresClicado] = useState(false);
   const [botaoTermosClicado, setBotaoTermosClicado] = useState(true);
   const [botaoResumoClicado, setBotaoResumoClicado] = useState(false);
@@ -89,6 +90,7 @@ console.log('[idVersao', idVersao)
           totalPublicacoes, setTotalPublicacoes, totalPesquisadores, 
           setTotalPesquisadores, totalInstituicoes, setTotalInstituicoes, 
           valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta,
+          botaoPatentesClicado, setBotaoPatentesClicado,
           botaoPesquisadoresClicado, setBotaoPesquisadoresClicado,
           botaoTermosClicado, setBotaoTermosClicado,
           botaoResumoClicado, setBotaoResumoClicado,

@@ -270,7 +270,7 @@ export function Homepage(props: Props) {
   };
 
   //btns da página search
-
+  const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext);
   const { botaoPesquisadoresClicado, setBotaoPesquisadoresClicado } = useContext(UserContext);
   const { botaoTermosClicado, setBotaoTermosClicado } = useContext(UserContext);
   const { botaoResumoClicado, setBotaoResumoClicado } = useContext(UserContext);
@@ -555,16 +555,14 @@ export function Homepage(props: Props) {
 
 
 
-                  {botaoPesquisadoresClicado ? (
-                    <head></head>
-                  ) : (
-                    <Tab onClick={handleClickTabs} selected={selectedTab === 2} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : ""))} className="w-full hidden cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center outline-none   gap-3  transition-all"  >
+                
+                    <Tab onClick={handleClickTabs} selected={selectedTab === 2} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : ""))} className="w-full flexcursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center outline-none   gap-3  transition-all"  >
                       <Buildings size={16} className="text-gray-500" />
                       <p className="text-gray-400 md:flex hidden">Instituições</p>
 
                       <div className={` py-1 px-4 text-white rounded-full text-xs font-bold ${botaoTermosClicado ? 'bg-[#005399]' : ''}  ${botaoResumoClicado ? 'bg-[#EC1C22]' : ''} ${botaoAreasClicado ? 'bg-[#8FC53E]' : ''} ${botaoPesquisadoresClicado ? 'bg-[#20BDBE]' : ''}`}>{totalInstituicoes}</div>
                     </Tab>
-                  )}
+                  
                 </div>
               </TabList>
             </div>
@@ -574,9 +572,11 @@ export function Homepage(props: Props) {
                 <Pesquisadores />
               </TabPanel>
 
-              <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16">
+              {botaoPatentesClicado ? (''):(
+                <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16">
                 <Publicacoes />
               </TabPanel>
+              )}
 
 
               <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16">

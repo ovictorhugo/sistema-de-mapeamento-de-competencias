@@ -74,7 +74,8 @@ type Research = {
   TotalRecursosHumanosAndamento: number
   TotalRecursosHumanosConcluido: number
   TotalParticipacaoEventos: number
-  TotalBarema: number
+  TotalBarema: string
+  TotalBaremaFormated: string
 
   }
 
@@ -580,7 +581,7 @@ export function Barema() {
   const sortedResearcher = [...researcher];
 
   // Classifique a matriz em ordem decrescente com base em TotalBarema
-  sortedResearcher.sort((a, b) => b.TotalBarema - a.TotalBarema);
+  sortedResearcher.sort((a, b) => Number(b.TotalBarema) - Number(a.TotalBarema));
   
 
   //baixar dados

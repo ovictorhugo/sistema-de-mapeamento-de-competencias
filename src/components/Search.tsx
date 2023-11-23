@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { ArrowCircleDown, Info, Funnel, User, File, Buildings, MagnifyingGlass, Rows, Lightbulb, X, CursorText, IdentificationCard, TextAlignLeft, CaretRight, CaretLeft } from "phosphor-react";
+import { ArrowCircleDown, Info, Funnel, User, File, Buildings, MagnifyingGlass, Rows, Lightbulb, X, CursorText, IdentificationCard, TextAlignLeft, CaretRight, CaretLeft, Copyright, SlidersHorizontal } from "phosphor-react";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 
 import { UserContext } from '../contexts/context'
@@ -24,6 +24,10 @@ interface Area {
   area_specialty: string
 }
 
+interface Patente {
+  frequency: string
+  term: string
+}
 
 function myWrapperFunction() {
   const Search: React.FC = () => {
@@ -41,6 +45,7 @@ function myWrapperFunction() {
     const [resultadosResumo, setResultadosResumo] = useState<Post[]>([]);
     const [resultadosPesquisadores, setResultadosPesquisadores] = useState<Pesquisadores[]>([]);
     const [resultadosArea, setResultadosArea] = useState<Area[]>([]);
+    const [resultadosPatentes, setResultadosPatentes] = useState<Patente[]>([]);
     //Atualizar o estado da pesquisa
     function handlePesquisaChange(event: React.ChangeEvent<HTMLInputElement>) {
       const valorDigitado = event.target.value;
@@ -54,6 +59,7 @@ function myWrapperFunction() {
         setResultados([]);
         setResultadosPesquisadores([]);
         setResultadosArea([]);
+        setResultadosPatentes([])
         enviarRequisicao();
       }
     }, [pesquisaInput]);
@@ -93,12 +99,12 @@ function myWrapperFunction() {
       const urlPesquisador = urlGeral + `/reasercherInitials?initials=${pesquisaInputFormatado}&graduate_program_id=${idGraduateProgram}`
       const urlArea = urlGeral + `/area_specialitInitials?initials=${pesquisaInput.trim()}&area=${selectedOptionsAreas}&graduate_program_id=${idGraduateProgram}`;
       const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
-
+      const urlPatente = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=PATENT`
       console.log('urlResumo', url)
 
 
 
-      console.log(url)
+   
 
      
         fetch(url, {
@@ -217,7 +223,40 @@ function myWrapperFunction() {
           .catch((err) => {
             console.log(err.message);
           });
+
+
+          //patente
+          fetch(urlPatente, {
+            mode: 'cors',
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'GET',
+              'Access-Control-Allow-Headers': 'Content-Type',
+              'Access-Control-Max-Age': '3600',
+              'Content-Type': 'text/plain'
+  
+            }
+          })
+  
+            .then((response) => response.json())
+            .then((data) => {
+              ;
+              const newDataArea = data.map((post: Patente) => ({
+                ...post,
+                name: post.term.replace(/\s+/g, "%20")
+              }));
+              setResultadosPatentes([]);
+              setResultadosPatentes(newDataArea);
+            })
+            .catch((err) => {
+              console.log(err.message);
+            });
+            console.log('patente', urlPatente)
       }
+
+     
+
+      
 
     
 
@@ -239,6 +278,7 @@ function myWrapperFunction() {
 
     const [checked, setChecked] = useState(false);
 
+const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext);
     const { botaoPesquisadoresClicado, setBotaoPesquisadoresClicado } = useContext(UserContext);
     const { botaoTermosClicado, setBotaoTermosClicado } = useContext(UserContext);
     const { botaoResumoClicado, setBotaoResumoClicado } = useContext(UserContext);
@@ -250,6 +290,30 @@ function myWrapperFunction() {
     //Se o botão Pesquisadores for clicado
     const handleClickPesquisadores = () => {
       setBotaoPesquisadoresClicado(true);
+      setBotaoPatentesClicado(false)
+      setBotaoTermosClicado(false);
+      setBotaoAreasClicado(false);
+      setBotaoResumoClicado(false)
+      //Apagar checkbox ao mudar de aba - termos
+      setItensSelecionados([]);
+      setAreasSelecionados([]);
+      setPesquisaInput('')
+      setItensSelecionadosPatente([])
+      setItensSelecionadosResumo([])
+
+      setResultadosPesquisadores([])
+      setResultados([])
+      setResultadosPesquisadores([])
+      setResultadosResumo([])
+      setResultadosPatentes([])
+
+      setSelectedTab(3);
+    };
+
+    //patentes
+    const handleClickPatentes = () => {
+      setBotaoPesquisadoresClicado(false);
+      setBotaoPatentesClicado(true)
       setBotaoTermosClicado(false);
       setBotaoAreasClicado(false);
       setBotaoResumoClicado(false)
@@ -264,12 +328,13 @@ function myWrapperFunction() {
       setResultadosPesquisadores([])
       setResultadosResumo([])
 
-      setSelectedTab(3);
+      setSelectedTab(4);
     };
 
     //Se o botão Termos for clicado
     const handleClickTermos = () => {
       setBotaoPesquisadoresClicado(false);
+      setBotaoPatentesClicado(false)
       setBotaoTermosClicado(true);
       setBotaoAreasClicado(false);
       setBotaoResumoClicado(false)
@@ -278,11 +343,13 @@ function myWrapperFunction() {
       setAreasSelecionados([]);
       setPesquisaInput('')
       setItensSelecionadosResumo([])
+      setItensSelecionadosPatente([])
 
       setResultadosPesquisadores([])
       setResultadosArea([])
       setResultados([])
       setResultadosResumo([])
+      setResultadosPatentes([])
 
 
       setSelectedTab(0);
@@ -291,6 +358,7 @@ function myWrapperFunction() {
     const handleClickResumo = () => {
       setBotaoPesquisadoresClicado(false);
       setBotaoResumoClicado(true);
+      setBotaoPatentesClicado(false)
       setBotaoAreasClicado(false);
       setBotaoTermosClicado(false)
       //Apagar checkbox ao mudar de aba - pesqisadores
@@ -298,11 +366,13 @@ function myWrapperFunction() {
       setAreasSelecionados([]);
       setPesquisaInput('')
       setItensSelecionados([])
+      setItensSelecionadosPatente([])
 
       setResultadosPesquisadores([])
       setResultadosArea([])
       setResultados([])
       setResultadosResumo([])
+      setResultadosPatentes([])
 
       setSelectedTab(1);
 
@@ -312,17 +382,21 @@ function myWrapperFunction() {
     const handleClickAreas = () => {
       setBotaoAreasClicado(true);
       setBotaoPesquisadoresClicado(false);
+      setBotaoPatentesClicado(false)
       setBotaoTermosClicado(false);
       setBotaoResumoClicado(false)
       //Apagar checkbox ao mudar de aba - pesqisadores
       setPesquisadoresSelecionados([]);
+  
       setItensSelecionados([]);
+      setItensSelecionadosPatente([])
       setItensSelecionadosResumo([])
       setPesquisaInput('')
 
       setResultadosPesquisadores([])
       setResultados([])
       setResultadosArea([])
+      setResultadosPatentes([])
       setResultadosResumo([])
 
       setSelectedTab(2);
@@ -608,6 +682,58 @@ function myWrapperFunction() {
       );
     };
 
+    // Patente
+    const [itensSelecionadosPatente, setItensSelecionadosPatente] = useState<string[]>([]);
+
+    const handleCheckboxChangeInputPatente = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { name } = event.target;
+      const isChecked = event.target.checked;
+
+      setItensSelecionadosPatente((prevSelecionados) => {
+        if (isChecked) {
+          return [...prevSelecionados, name];
+        } else {
+          return prevSelecionados.filter((item) => item !== name);
+        }
+      });
+    };
+
+    const checkboxItemsPatente = resultadosPatentes.slice(0, 6).map((resultado) => (
+      <li
+        key={resultado.term}
+        className="checkboxLabel group list-none inline-flex mr-4 mb-4 group overflow-hidden"
+        onMouseDown={(e) => e.preventDefault()}
+      >
+        <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
+          <span className="text-center block">{resultado.term.replace(/;/g, ' ')}</span>
+          <input
+            type="checkbox"
+            name={resultado.term}
+            className="absolute hidden group"
+            checked={itensSelecionadosPatente.includes(resultado.term)}
+            id={resultado.term}
+            onChange={handleCheckboxChangeInputPatente}
+            onClick={handleClickPatentes}
+          />
+        </label>
+      </li>
+    ));
+
+    console.log(resultadosPatentes)
+    const valoresPatenteSelecionados = itensSelecionadosPatente.join(';');
+
+    const valoresSelecionadosPatenteJSX = itensSelecionadosPatente.map((valor, index) => (
+      <li key={index} className='whitespace-nowrap gap-2 bg-[#FEE9E9] border-red-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>{valor.replace(/;/g, ' ')}
+        <button onClick={() => handleRemoverSelecionadoPatente(index)}><X size={16} className="text-gray-400 hover:text-blue-400" /></button>
+      </li>
+    ));
+
+    const handleRemoverSelecionadoPatente = (index: number) => {
+      setItensSelecionadosPatente((prevSelecionados) =>
+        prevSelecionados.filter((_, i) => i !== index)
+      );
+    };
+
 
 
 
@@ -680,6 +806,10 @@ function myWrapperFunction() {
 
     if (botaoAreasClicado) {
       setValoresSelecionadosExport(valoresAreasSelecionados)
+    }
+
+    if (botaoPatentesClicado) {
+      setValoresSelecionadosExport(valoresPatenteSelecionados)
     }
 
    
@@ -780,13 +910,14 @@ function myWrapperFunction() {
     return (
       <div className=' m-[0 auto] w-full px-6 md:px-16 '>
 
-        <div ref={dropdownRef} className='group w-full transition ' onChange={() => setIsOpen(isOpen)} onFocus={() => setIsOpen(isOpen)} >
+        <div ref={dropdownRef} className='group w-full transition' onChange={() => setIsOpen(isOpen)} onFocus={() => setIsOpen(isOpen)} >
+          
           <div className='flex flex-wrap md:flex-nowrap top-6 w-full'>
 
             <div className='flex w-full flex-col'>
               <div className={`flex bg-white  items-center h-14 group w-full  text-base font-medium  justify-center transition border-[1px] border-gray-300 ${botaoTermosClicado ? 'hover:border-blue-400' : ''} ${botaoResumoClicado ? 'hover:border-red-400' : ''} ${botaoAreasClicado ? 'hover:border-green-400' : ''} ${botaoPesquisadoresClicado ? 'hover:border-[#20BDBE]' : ''} ${isOpen && pesquisaInput.length >= 3 ? 'rounded-tl-2xl' : 'rounded-l-2xl'}`}>
                 <MagnifyingGlass size={20} className={`text-gray-400 min-w-[52px] ${botaoTermosClicado ? 'group-hover:text-[#005399]' : ''} ${botaoResumoClicado ? 'group-hover:text-red-400' : ''} ${botaoAreasClicado ? 'group-hover:text-[#8FC53E]' : ''} ${botaoPesquisadoresClicado ? 'group-hover:text-[#20BDBE]' : ''}`} />
-                <div className='flex gap-2 mx-2'>{valoresSelecionadosJSX}{valoresPesquisadoresSelecionadosJSX}{valoresAreasSelecionadosJSX}{valoresSelecionadosResumoJSX}</div>
+                <div className='flex gap-2 mx-2'>{valoresSelecionadosJSX}{valoresPesquisadoresSelecionadosJSX}{valoresSelecionadosPatenteJSX}{valoresAreasSelecionadosJSX}{valoresSelecionadosResumoJSX}</div>
                 <input
                   type="text"
                   value={pesquisaInput}
@@ -807,30 +938,35 @@ function myWrapperFunction() {
               <TabList className={`bg-white  p-2 flex gap-2  border-[1px] border-gray-300 border-l-0
             ${isOpen && pesquisaInput.length >= 3 ? 'rounded-tr-2xl' : 'rounded-r-2xl'}`}>
 
-                <Tab selected={selectedTab === 0} className={`outline-none cursor-pointer text-sm rounded-xl text-gray-400 flex items-center border-[1px] border-white gap-2 px-4 py-2 font-semibold transition ${botaoTermosClicado ? "activeTermos" : ('')}`} onClick={handleClickTermos} name="buttontermos">
+                <Tab selected={selectedTab === 0} className={`outline-none cursor-pointer text-sm rounded-xl text-gray-400 flex items-center border-[1px] justify-center border-white gap-2  font-semibold transition ${botaoTermosClicado ? "activeTermos px-4 py-2" : ('hover:bg-gray-100 w-[38px]')}`} onClick={handleClickTermos} name="buttontermos">
                   <CursorText size={16} className="" />
-                  Termo
+                  {selectedTab === 0 && botaoTermosClicado && <span>Termo</span>}
                 </Tab>
 
-                <Tab selected={selectedTab === 1} className={`outline-none cursor-pointer text-sm rounded-xl text-gray-400 flex items-center border-[1px] border-white gap-2 px-4 py-2 font-semibold transition ${botaoResumoClicado ? "activeResumo" : ('')}`} onClick={handleClickResumo} name="buttonresumo">
+                <Tab selected={selectedTab === 1} className={`outline-none cursor-pointer text-sm rounded-xl text-gray-400 flex items-center border-[1px] justify-center border-white gap-2  font-semibold transition ${botaoResumoClicado ? "activeResumo px-4 py-2" : ('hover:bg-gray-100 w-[38px]')}`} onClick={handleClickResumo} name="buttonresumo">
                   <TextAlignLeft size={16} className="" />
-                  Resumo
+                  {selectedTab === 1 && botaoResumoClicado && <span>Resumo</span>}
                 </Tab>
 
-                <Tab selected={selectedTab === 2} className={`outline-none cursor-pointer text-sm text-gray-400 rounded-xl flex items-center gap-2 px-4 py-2 font-semibold  transition ${botaoAreasClicado ? "activeAreas" : ('')}`} onClick={handleClickAreas}>
+                <Tab selected={selectedTab === 2} className={`outline-none cursor-pointer text-sm text-gray-400 rounded-xl flex items-center gap-2 justify-center font-semibold  transition ${botaoAreasClicado ? "activeAreas px-4 py-2" : ('hover:bg-gray-100 w-[38px]')}`} onClick={handleClickAreas}>
                   <Lightbulb size={16} className="" />
-                  Áreas
+                  {selectedTab === 2 && botaoAreasClicado && <span>Áreas</span>}
                 </Tab>
 
-                <Tab selected={selectedTab === 3} className={` outline-none cursor-pointer text-sm text-gray-400 rounded-xl flex items-center gap-2  px-4 py-2 font-semibold  transition ${botaoPesquisadoresClicado ? "activePesquisadores" : ('')}`} onClick={handleClickPesquisadores} >
+                <Tab selected={selectedTab === 4} className={` outline-none cursor-pointer text-sm text-gray-400 rounded-xl flex items-center gap-2 justify-center font-semibold  transition ${botaoPatentesClicado ? "activePatente px-4 py-2" : ('hover:bg-gray-100 w-[38px]')}`} onClick={handleClickPatentes} >
+                  <Copyright size={16} className="" />
+                  {selectedTab === 4 && botaoPatentesClicado && <span>Patente</span>}
+                </Tab>
+
+                <Tab selected={selectedTab === 3} className={` outline-none cursor-pointer text-sm text-gray-400 rounded-xl flex items-center gap-2 justify-center  font-semibold  transition ${botaoPesquisadoresClicado ? "activePesquisadores px-4 py-2" : ('hover:bg-gray-100 w-[38px]')}`} onClick={handleClickPesquisadores} >
                   <IdentificationCard size={16} className="" />
-                  Nome
+                  {selectedTab === 3 && botaoPesquisadoresClicado && <span>Nome</span>}
                 </Tab>
 
 
                 <div className='flex items-center justify-center'>
-                  <div className={`absolute z[-999] animate-ping gap-4 text-white rounded-xl h-[28px] w-[28px] justify-center hover:bg-blue-500  font-medium transition ${botaoTermosClicado ? 'bg-blue-400' : ''} ${botaoAreasClicado ? 'bg-green-400' : ''} ${botaoResumoClicado ? 'bg-yellow-400' : ''} ${botaoPesquisadoresClicado ? 'bg-red-400' : ''}`}></div>
-                  <div onClick={handleClick} className={`cursor-pointer flex z-[999] relative  items-center gap-4 text-white rounded-xl h-[38px] w-[38px] justify-center  font-medium transition ${botaoTermosClicado ? 'bg-blue-400' : ''} ${botaoResumoClicado ? 'bg-yellow-400' : ''} ${botaoAreasClicado ? 'bg-green-400' : ''} ${botaoPesquisadoresClicado ? 'bg-red-400' : ''}`}><Funnel size={16} className="text-white" /></div>
+                  <div className={`absolute z[-999] animate-ping gap-4 text-white rounded-xl h-[28px] w-[28px] justify-center hover:bg-blue-500  font-medium transition ${botaoTermosClicado ? 'bg-blue-400' : ''} ${botaoAreasClicado ? 'bg-green-400' : ''} ${botaoResumoClicado ? 'bg-yellow-400' : ''} ${botaoPesquisadoresClicado ? 'bg-red-400' : ''} ${botaoPatentesClicado ? 'bg-cyan-400' : ''}`}></div>
+                  <div onClick={handleClick} className={`cursor-pointer flex z-[999] relative  items-center gap-4 text-white rounded-xl h-[38px] w-[38px] justify-center  font-medium transition ${botaoTermosClicado ? 'bg-blue-400' : ''} ${botaoResumoClicado ? 'bg-yellow-400' : ''} ${botaoAreasClicado ? 'bg-green-400' : ''} ${botaoPesquisadoresClicado ? 'bg-red-400' : ''} ${botaoPatentesClicado ? 'bg-cyan-400' : ''}`}><Funnel size={16} className="text-white" /></div>
                 </div>
 
               </TabList>
@@ -866,7 +1002,7 @@ function myWrapperFunction() {
                   {resultadosArea.length === 0 ? (
                     <div></div>
                   ) : (
-                    <div className="mb-9 flex gap-4 w-full ">
+                    <div className=" flex gap-4 w-full ">
                       <button
                         className="flex items-center gap-4 bg-blue-400 text-white rounded-full px-2 py-2 justify-center hover:bg-blue-500 mb-6 font-medium transition"
                         onClick={() => {
@@ -898,8 +1034,13 @@ function myWrapperFunction() {
                       >
                         <CaretRight size={16} className="text-white" />
                       </button>
+
+                      
                     </div>
                   )}
+
+<p className='mb-4'>Patentes</p>
+                  {checkboxItemsPatente || <p className='text-gray-500 text-lg'>num</p>}
                 </div>
 
 
@@ -949,14 +1090,25 @@ function myWrapperFunction() {
 
         </div>
 
-        {valoresSelecionadosExport == "" ? (
-                  <div className='testeeeaq mt-4 flex gap-3 items-center'>
+        
+                  <div className='testeeeaq mt-4 flex gap-6 items-center'>
+                    <div  className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
+                        <SlidersHorizontal size={16} className="text-white" /> Filtros
+                    </div>
+
+                    <div className='w-[1px] bg-gray-300 h-8'></div>
+
+                    {valoresSelecionadosExport == "" ? (
+                    <div className=' flex gap-3 items-center'>
                     <p className='text-gray-400 text-sm font-bold'>Sugestões:</p>
                     <div className='gap-4 flex'>{checkboxItemsWords}</div>
-                  </div>
-                ):(
+                    </div>
+                    ):(
                   <div></div>
                 )}
+                    
+                  </div>
+                
 
       </div>
     );

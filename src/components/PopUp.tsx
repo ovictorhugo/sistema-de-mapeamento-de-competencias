@@ -126,6 +126,7 @@ export function PopUp(props: PesquisadorProps) {
   const { botaoTermosClicado, setBotaoTermosClicado } = useContext(UserContext);
   const { botaoResumoClicado, setBotaoResumoClicado } = useContext(UserContext);
   const { botaoAreasClicado, setBotaoAreasClicado } = useContext(UserContext);
+  const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext);
   const { urlGeral, setUrlGeral } = useContext(UserContext);
 
   //
@@ -240,7 +241,7 @@ export function PopUp(props: PesquisadorProps) {
           <span className="text-center block">{quali.itens}</span>
           <input
             type="checkbox"
-            name={quali.id.toString()}
+            name={String(quali.id)}
             className="absolute hidden group"
             onChange={handleCheckboxChangeInput}
             id={quali.itens}
@@ -275,6 +276,14 @@ export function PopUp(props: PesquisadorProps) {
   }
 
   if (botaoResumoClicado && valoresSelecionadosExport == "") {
+    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}&year=${value}`;
+  }
+
+  if (botaoPatentesClicado) {
+    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}&year=${value}`;
+  }
+
+  if (botaoPatentesClicado && valoresSelecionadosExport == "") {
     urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}&year=${value}`;
   }
 
@@ -896,9 +905,15 @@ export function PopUp(props: PesquisadorProps) {
     setSelectedTab(4)
   }
 
+  useEffect(() => {
+  if(botaoPatentesClicado) {
+    setSelectedTab(1)
+  }
+}, [botaoPatentesClicado]);
+
   //data atualização
   const currentDate = new Date();
-  const lattesUpdate = props.lattes_update.toString().split('/');
+  const lattesUpdate = String(props.lattes_update).split('/');
   const lattesMonth = parseInt(lattesUpdate[1]);
   const lattesYear = parseInt(lattesUpdate[2]);
 
@@ -955,7 +970,7 @@ export function PopUp(props: PesquisadorProps) {
           )}
 
           <div className="relative flex justify-end right-0 ml-auto">
-            <div className={`border-[1px] ml-auto border-gray-300 w-fit py-2 px-4 text-gray-400 rounded-full text-xs font-bold float-right flex gap-1 items-center absolute top-0 right-0 ${isOutdated ? ('bg-red-400 text-white border-none') : ('')}`}>Data de atualização do Lattes: {props.lattes_update.toString()}</div>
+            <div className={`border-[1px] ml-auto border-gray-300 w-fit py-2 px-4 text-gray-400 rounded-full text-xs font-bold float-right flex gap-1 items-center absolute top-0 right-0 ${isOutdated ? ('bg-red-400 text-white border-none') : ('')}`}>Data de atualização do Lattes: {String(props.lattes_update)}</div>
           </div>
 
           <div className="w-full flex justify-center ">
@@ -985,7 +1000,7 @@ export function PopUp(props: PesquisadorProps) {
                 </li>
               ))}
               <div className={`bg-blue-400 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center
-                                  ${props.graduation.includes('Pós-Doutorado') ? 'bg-[#E2A32F]' : props.graduation.includes('Doutorado') ? 'bg-[#E2A32F]' : props.graduation.includes('Mestrado') ? 'bg-[#D5D3D4]' : props.graduation.includes('CIENCIAS HUMANAS') ? 'bg-[#F5831F]' : props.graduation.includes('CIENCIAS BIOLOGICAS') ? 'bg-[#EB008B]' : props.graduation.includes('ENGENHARIAS') ? 'bg-[#FCB712]' : props.graduation.includes('CIENCIAS SOCIAIS APLICADAS') ? 'bg-[#009245]' : props.graduation.includes('LINGUISTICA LETRAS E ARTES') ? 'bg-[#A67C52]' : props.graduation.includes('OUTROS') ? 'bg-[#1B1464]' : 'bg-[#000]'}`}><GraduationCap size={12} className="textwhite" /> {props.graduation}</div>
+                                  ${props.graduation == ('Pós-Doutorado') ? 'bg-[#E2A32F]' : props.graduation == ('Doutorado') ? 'bg-[#E2A32F]' : props.graduation == ('Mestrado') ? 'bg-[#D5D3D4]' : props.graduation == ('CIENCIAS HUMANAS') ? 'bg-[#F5831F]' : props.graduation == ('CIENCIAS BIOLOGICAS') ? 'bg-[#EB008B]' : props.graduation == ('ENGENHARIAS') ? 'bg-[#FCB712]' : props.graduation == ('CIENCIAS SOCIAIS APLICADAS') ? 'bg-[#009245]' : props.graduation == ('LINGUISTICA LETRAS E ARTES') ? 'bg-[#A67C52]' : props.graduation == ('OUTROS') ? 'bg-[#1B1464]' : 'bg-[#000]'}`}><GraduationCap size={12} className="textwhite" /> {props.graduation}</div>
 
 {props.city != "None" ? (
                   <div className="bg-blue-400 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center"><MapPin size={12} className="textwhite" /> {props.city}</div>
@@ -1074,7 +1089,7 @@ export function PopUp(props: PesquisadorProps) {
                   </TabList>
 
                   <TabPanel>
-                    {valoresSelecionadosPopUp == '' || botaoAreasClicado || botaoPesquisadoresClicado || botaoTermosClicado || botaoResumoClicado || valorDigitadoPesquisaDireta ? (
+                    {valoresSelecionadosPopUp == '' || botaoAreasClicado || botaoPesquisadoresClicado || botaoTermosClicado || botaoResumoClicado || valorDigitadoPesquisaDireta || botaoPatentesClicado ? (
                       <div className=" flex gap-4 p-6 border-[1px] border-gray-300 rounded-md mt-6 items-center w-fit">
                         <div>
                           <p className="text-gray-400 mb-4  whitespace-nowrap">Selecione os qualis desejados</p>
@@ -1108,7 +1123,7 @@ export function PopUp(props: PesquisadorProps) {
                       <div></div>
                     )}
 
-                    {botaoAreasClicado || botaoPesquisadoresClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta == "") ? (
+                    {botaoAreasClicado || botaoPatentesClicado || botaoPesquisadoresClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta == "") ? (
                       <div className="flex justify-between pb-8 w-full items-center mt-8">
                         <div className="flex gap-4 w-full">
                           <File size={24} className="text-gray-400" />
@@ -1500,7 +1515,7 @@ export function PopUp(props: PesquisadorProps) {
 
 
                 <div className="w-full lg:w-[350px] mb-6 border-[1px] border-gray-300 rounded-md p-6 h-min">
-                  {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoAreasClicado ? (
+                  {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoAreasClicado || botaoPatentesClicado ? (
                     <div className="text-center font-medium text-xl text-gray-500 mb-6">Todas as publicações por ano</div>
                   ) : (
                     <div className="flex gap-2 w-full flex-col justify-center">
@@ -1553,7 +1568,7 @@ export function PopUp(props: PesquisadorProps) {
                 </div>
 
                 <div className="w-full lg:w-[350px] border-[1px] border-gray-300 rounded-md p-6 h-min">
-                {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoAreasClicado ? (
+                {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoAreasClicado || botaoPatentesClicado ? (
                     <div className="text-center font-medium text-xl text-gray-500 mb-6">Todas as publicações por qualis</div>
                   ) : (
                     <div className="flex gap-2 w-full flex-col justify-center">

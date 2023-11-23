@@ -46,6 +46,7 @@ export function Pesquisadores() {
   //btns da página search
 
   const { botaoPesquisadoresClicado, setBotaoPesquisadoresClicado } = useContext(UserContext);
+  const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext);
   const { botaoTermosClicado, setBotaoTermosClicado } = useContext(UserContext);
   const { botaoResumoClicado, setBotaoResumoClicado } = useContext(UserContext);
   const { botaoAreasClicado, setBotaoAreasClicado } = useContext(UserContext);
@@ -93,6 +94,15 @@ export function Pesquisadores() {
   if (botaoPesquisadoresClicado && valoresSelecionadosExport == "") {
     let valorDigitadoPesquisaDiretaPesquisadores = valorDigitadoPesquisaDireta.replace(/;/g, '%20')
     urlTermPesquisadores = `${urlGeral}/researcherName?name=${valorDigitadoPesquisaDireta}`;
+  }
+
+  if (botaoPatentesClicado) {
+    urlTermPesquisadores = `${urlGeral}/researcherPatent?term=${valoresSelecionadosExport}&graduate_program_id=${idGraduateProgram}&university=${intituicoesSelecionadasCheckbox}`;
+  }
+
+  if (botaoPatentesClicado && valoresSelecionadosExport == "") {
+    let valorDigitadoPesquisaDiretaPesquisadores = valorDigitadoPesquisaDireta.replace(/;/g, '%20')
+    urlTermPesquisadores = `${urlGeral}/researcherPatent?term=${valorDigitadoPesquisaDireta}&graduate_program_id=${idGraduateProgram}&university=${intituicoesSelecionadasCheckbox}`;
   }
 
   if (botaoTermosClicado) {
@@ -289,7 +299,7 @@ console.log(pesquisadoresSelecionadosGroupBarema)
       <div className="   m-[0 auto] w-full ">
 
 
-        {botaoPesquisadoresClicado || botaoAreasClicado || botaoResumoClicado ? (
+        {botaoPesquisadoresClicado || botaoAreasClicado || botaoResumoClicado || botaoPatentesClicado ? (
           <div></div>
         ) : (
           <div className="flex gap-4 w-full pb-8 justify-between items-center min-w-full">
@@ -307,7 +317,7 @@ console.log(pesquisadoresSelecionadosGroupBarema)
 
 
 
-        {botaoPesquisadoresClicado || botaoAreasClicado || botaoResumoClicado ? (
+        {botaoPesquisadoresClicado || botaoAreasClicado || botaoResumoClicado || botaoPatentesClicado ? (
           <div></div>
         ) : (
           isVisible && (
@@ -453,7 +463,7 @@ console.log(pesquisadoresSelecionadosGroupBarema)
             ) : (
               <div>
                 <p className="text-gray-400">
-                  {botaoResumoClicado ? "em resumos" : (botaoAreasClicado ? "em Áreas" : "em artigos")}
+                  {botaoResumoClicado ? "em resumos" : (botaoAreasClicado ? "em áreas" : botaoPatentesClicado ? "em patentes" : "em artigos")}
                 </p>
               </div>
             )}

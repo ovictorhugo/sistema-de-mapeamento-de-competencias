@@ -13,6 +13,9 @@ interface UserContextType {
 
   urlGeral: string,
   setUrlGeral: React.Dispatch<React.SetStateAction<string>>;
+  
+  botaoPatentesClicado: boolean, 
+  setBotaoPatentesClicado: React.Dispatch<React.SetStateAction<boolean>>;
 
   botaoPesquisadoresClicado: boolean,
   setBotaoPesquisadoresClicado: React.Dispatch<React.SetStateAction<boolean>>;
@@ -83,6 +86,8 @@ valorDigitadoPesquisaDireta: "",
 setValorDigitadoPesquisaDireta: () => {},
 urlGeral: "",
 setUrlGeral: () => {},
+botaoPatentesClicado:  false,
+  setBotaoPatentesClicado: () => {},
 botaoPesquisadoresClicado: false,
 setBotaoPesquisadoresClicado: () => {},
 botaoTermosClicado: false,

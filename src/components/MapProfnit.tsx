@@ -94,6 +94,7 @@ export function MapProfnit(props: Props) {
    //btns da página search
 
    const { botaoPesquisadoresClicado, setBotaoPesquisadoresClicado } = useContext(UserContext);
+   const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext);
    const { botaoTermosClicado, setBotaoTermosClicado } = useContext(UserContext);
    const { botaoResumoClicado, setBotaoResumoClicado } = useContext(UserContext);
    const { botaoAreasClicado, setBotaoAreasClicado } = useContext(UserContext);
@@ -518,11 +519,11 @@ console.log('idversao',idVersao)
               <p className="text-gray-400 mr-6 min-w-[350px] lg:flex gap-1">
                 Resultados da pesquisa em {' '}
                 <strong className="font-bold text-blue-400">
-                  {botaoTermosClicado ? 'termos' : botaoResumoClicado ? 'resumo' : botaoAreasClicado ? 'áreas' : botaoPesquisadoresClicado ? 'nome' : ''}
+                  {botaoTermosClicado ? 'termos' : botaoResumoClicado ? 'resumo' : botaoAreasClicado ? 'áreas' : botaoPesquisadoresClicado ? 'nome' : botaoPatentesClicado ? 'patente' :''}
                 </strong> por:
               </p>
               <TabList className="w-full">
-                <div className={`w-full gap-6  m-0 grid  ${botaoPesquisadoresClicado ? 'grid-cols-2' : 'grid-cols-2'}`}>
+                <div className={`w-full gap-6  m-0 grid  ${botaoPesquisadoresClicado || botaoPatentesClicado ? 'grid-cols-2' : 'grid-cols-3'}`}>
                   <Tab onClick={handleClickTabs} selected={selectedTab === 0} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all" >
                     <User size={16} className="" />
                     <p className=" md:flex hidden"> Pesquisadores</p>
@@ -530,20 +531,23 @@ console.log('idversao',idVersao)
                   </Tab>
 
 
+                  {botaoPatentesClicado ? (
+                    <head></head>
+                  ) : (
                   <Tab onClick={handleClickTabs} selected={selectedTab === 1} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all"  >
                     <File size={16} className="" />
 
                     <p className=" md:flex hidden">Publicações</p>
                     <div className={` py-1 px-4  rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : ''}`}>{totalPublicacoes}</div>
                   </Tab>
-
+                  )}
 
 
 
                   {botaoPesquisadoresClicado ? (
                     <head></head>
                   ) : (
-                    <Tab onClick={handleClickTabs} selected={selectedTab === 2} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : ""))} className="w-full hidden cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center outline-none   gap-3  transition-all"  >
+                    <Tab onClick={handleClickTabs} selected={selectedTab === 2} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : ""))} className="w-full flex cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center outline-none   gap-3  transition-all"  >
                       <Buildings size={16} className="text-gray-500" />
                       <p className="text-gray-400 md:flex hidden">Instituições</p>
 
@@ -559,9 +563,11 @@ console.log('idversao',idVersao)
                 <Pesquisadores />
               </TabPanel>
 
-              <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16">
+              {botaoPatentesClicado ? (''): (
+                <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16">
                 <Publicacoes />
               </TabPanel>
+              )}
 
 
               <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16">

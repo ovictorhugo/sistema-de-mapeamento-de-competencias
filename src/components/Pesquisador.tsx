@@ -187,14 +187,16 @@ export function Pesquisador(props: PesquisadorProps) {
           {valoresSelecionadosExport != "" || valorDigitadoPesquisaDireta != "" ? (
             <div className="w-full overflow-x-hidden ">
               <div id="main" className={`flex-wrap mx-4 flex h-full  gap-3 items-center overflow-x-hidden whitespace-nowrap ${isOn && valoresSelecionadosExport != '' ? "ml-6 justify-start" : "mb-2 items-center justify-center"}`}>
-                {props.area.split(';').map((value, index) => (
-                  <li
-                    key={index}
-                    className={`py-2 whitespace-nowrap px-4 rounded-md text-xs font-bold flex gap-2 text-white items-center ${value.includes('CIENCIAS AGRARIAS') ? 'bg-red-400' : value.includes('CIENCIAS EXATAS E DA TERRA') ? 'bg-green-400' : value.includes('CIENCIAS DA SAUDE') ? 'bg-[#20BDBE]' : value.includes('CIENCIAS HUMANAS') ? 'bg-[#F5831F]' : value.includes('CIENCIAS BIOLOGICAS') ? 'bg-[#EB008B]' : value.includes('ENGENHARIAS') ? 'bg-[#FCB712]' : value.includes('CIENCIAS SOCIAIS APLICADAS') ? 'bg-[#009245]' : value.includes('LINGUISTICA LETRAS E ARTES') ? 'bg-[#A67C52]' : value.includes('OUTROS') ? 'bg-[#1B1464]' : 'bg-[#000]'} `}
-                  >
-                    <PuzzlePiece size={12} className="text-white" /> {value.trim()}
-                  </li>
-                ))}
+              {props.area != '' ? (
+                  props.area.split(';').map((value, index) => (
+                    <li
+                      key={index}
+                      className={`py-2 whitespace-nowrap px-4 rounded-md text-xs font-bold flex gap-2 text-white items-center ${value.includes('CIENCIAS AGRARIAS') ? 'bg-red-400' : value.includes('CIENCIAS EXATAS E DA TERRA') ? 'bg-green-400' : value.includes('CIENCIAS DA SAUDE') ? 'bg-[#20BDBE]' : value.includes('CIENCIAS HUMANAS') ? 'bg-[#F5831F]' : value.includes('CIENCIAS BIOLOGICAS') ? 'bg-[#EB008B]' : value.includes('ENGENHARIAS') ? 'bg-[#FCB712]' : value.includes('CIENCIAS SOCIAIS APLICADAS') ? 'bg-[#009245]' : value.includes('LINGUISTICA LETRAS E ARTES') ? 'bg-[#A67C52]' : value.includes('OUTROS') ? 'bg-[#1B1464]' : 'bg-[#000]'} `}
+                    >
+                      <PuzzlePiece size={12} className="text-white" /> {value.trim()}
+                    </li>
+                  ))
+                ): ('')}
                 {props.city != "None" ? (
                   <div className="bg-blue-400 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center"><MapPin size={12} className="textwhite" /> {props.city}</div>
                 ):('')}
