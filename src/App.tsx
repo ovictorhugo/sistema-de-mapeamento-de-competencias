@@ -27,6 +27,7 @@ import { BaremaPage } from './pages/BaremaPage';
 import { HomePageSimcc } from './pages/HomePageSimcc';
 import { Magazine } from './pages/Magazine';
 import { Profnit } from './pages/Profnit';
+import { GraduationsMapPage } from './pages/GraduationsMapPage';
 
 
 
@@ -59,7 +60,7 @@ export const App = () => {
   const [botaoAreasClicado, setBotaoAreasClicado] = useState(false);
   const [botaoTaxonomiaClicado, setBotaoTaxonomiaClicado] = useState(false);
   
-  const [urlGeral, setUrlGeral] = useState('http://200.128.66.226:5001/');
+  const [urlGeral, setUrlGeral] = useState('http://177.16.237.129:5001/');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
   const [user, setUser] = useState<User>({} as User)
   const [isOn, setIsOn] = useState(false);
@@ -173,6 +174,10 @@ console.log('[idVersao', idVersao)
 
             <Route path='indicators'>
               <Route path=':program?' element={<Indicators/>}/>
+            </Route>
+
+            <Route path='programas-graduacao'>
+              <Route path=':program?' element={<GraduationsMapPage/>}/>
             </Route>
 
 
