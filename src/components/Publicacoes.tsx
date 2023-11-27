@@ -487,7 +487,7 @@ export function Publicacoes() {
   return (
     <div id="contentPesquisador" className="flex flex-col  m-[0 auto] min-w-full  flex justify-center items-center">
       <div className="  m-[0 auto] w-full">
-        <div className="w-full flex gap-4 p-6 border-[1px] border-gray-300 rounded-md mb-9 items-center">
+        <div className="w-full flex gap-4 p-6 border-[1px] border-gray-300 rounded-2xl mb-9 items-center">
           <div>
             <p className="text-gray-400 mb-4 w-min whitespace-nowrap">Selecione os qualis desejados</p>
             <div className="gap-4 flex flex-wrap ">
@@ -567,7 +567,7 @@ export function Publicacoes() {
 
             </div>
           ) : (
-            <div className="w-full flex gap-4 p-6 border-[1px] border-gray-300 rounded-md mb-9">
+            <div className="w-full flex gap-4 p-6 border-[1px] border-gray-300 rounded-2xl mb-9">
               <div className="w-full">
                 <div className="text-center font-medium text-xl text-gray-500 mb-6">Quantidade de qualis por tipo</div>
                 <HighchartsReact highcharts={Highcharts} options={chartOptions} />

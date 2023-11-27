@@ -42,7 +42,7 @@ const anoAtual = new Date().getFullYear();
   let urlVisaoPrograma = `${urlGeral}/graduate_program_production?graduate_program_id=${idGraduateProgram}&year=${ano5AnosAtras}`;
 
   console.log(urlVisaoPrograma)
-// Monta a URL com o ano 5 anos atrás
+// Monta a URL com o ano 4 anos atrás
 
 let QualQualis = ''
 

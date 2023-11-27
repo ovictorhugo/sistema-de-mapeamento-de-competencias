@@ -538,7 +538,7 @@ export function Homepage(props: Props) {
               </p>
               <TabList className="w-full">
                 <div className={`w-full gap-6  m-0 grid  ${botaoPesquisadoresClicado ? 'grid-cols-2' : 'grid-cols-2'}`}>
-                  <Tab onClick={handleClickTabs} selected={selectedTab === 0} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all" >
+                  <Tab onClick={handleClickTabs} selected={selectedTab === 0} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente" : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all" >
                     <User size={16} className="" />
                     <p className=" md:flex hidden"> Pesquisadores</p>
                     <div className={` py-1 px-4 rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : ''}`}>{totalPesquisadores}</div>

@@ -17,6 +17,9 @@ interface UserContextType {
   botaoPatentesClicado: boolean, 
   setBotaoPatentesClicado: React.Dispatch<React.SetStateAction<boolean>>;
 
+  botaoTaxonomiaClicado: boolean,
+  setBotaoTaxonomiaClicado:  React.Dispatch<React.SetStateAction<boolean>>;
+
   botaoPesquisadoresClicado: boolean,
   setBotaoPesquisadoresClicado: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -28,6 +31,9 @@ interface UserContextType {
 
   botaoAreasClicado: boolean,
   setBotaoAreasClicado: React.Dispatch<React.SetStateAction<boolean>>;
+  
+  EstadoFiltro: boolean,
+  setEstadoFiltro: React.Dispatch<React.SetStateAction<boolean>>;
 
   totalPublicacoes: string,
   setTotalPublicacoes: React.Dispatch<React.SetStateAction<string>>;
@@ -87,7 +93,7 @@ setValorDigitadoPesquisaDireta: () => {},
 urlGeral: "",
 setUrlGeral: () => {},
 botaoPatentesClicado:  false,
-  setBotaoPatentesClicado: () => {},
+setBotaoPatentesClicado: () => {},
 botaoPesquisadoresClicado: false,
 setBotaoPesquisadoresClicado: () => {},
 botaoTermosClicado: false,
@@ -96,6 +102,10 @@ botaoResumoClicado: false,
 setBotaoResumoClicado: () => {},
 botaoAreasClicado: false,
 setBotaoAreasClicado: () => {},
+EstadoFiltro: false,
+setEstadoFiltro: () => {},
+botaoTaxonomiaClicado: false,
+setBotaoTaxonomiaClicado:  () => {},
 totalPublicacoes: "", 
 setTotalPublicacoes: () => {},
 totalPesquisadores: "", 

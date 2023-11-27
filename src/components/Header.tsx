@@ -1,7 +1,7 @@
 import { Logo } from "./Logo";
 import { Link } from "react-router-dom";
 import { Ilustracao } from "./Ilustracao";
-import { ArrowCircleDown, Info, Funnel, User, File, Buildings, PaperPlaneTilt, ChartLine, Question, SignIn, ListDashes, UserCirclePlus, UserCircle, BookOpen, Textbox, Share } from "phosphor-react";
+import { ArrowCircleDown, Info, Funnel, User, File, Buildings, PaperPlaneTilt, ChartLine, Question, SignIn, ListDashes, UserCirclePlus, UserCircle, BookOpen, Textbox, Share, GraduationCap } from "phosphor-react";
 
 import logo_1 from '../assets/logo_1.png';
 import logo_2 from '../assets/logo_2.png';
@@ -109,6 +109,7 @@ export function Header() {
           <Link to={`/terms/${idVersao}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><ListDashes size={16} className="text-gray-400" />Dicionário</Link>
           <Link to={`/magazine/${idVersao}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><BookOpen size={16} className="text-gray-400" />Revistas</Link>
           <Link to={`/barema/${idVersao}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><Textbox size={16} />Barema{ pesquisadoresSelecionadosGroupBarema != '' ? (<div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>):('')}</Link>
+          <Link to={`/programas-graduacao/${idVersao}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><GraduationCap size={16} />Pós-gradução{ pesquisadoresSelecionadosGroupBarema != '' ? (<div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>):('')}</Link>
        
         </div>
       </div>

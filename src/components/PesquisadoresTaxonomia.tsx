@@ -2,7 +2,7 @@ import { Pesquisador } from "./Pesquisador"
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from '../contexts/context'
 import { Link } from "react-router-dom";
-import { CaretCircleLeft, CaretCircleRight, CaretDown, FileArrowDown, FileCsv, GitBranch, ListNumbers, Plus, Rows, SquaresFour, UserList, X } from "phosphor-react";
+import { CaretCircleLeft, CaretCircleRight, CaretDown, FileArrowDown, FileCsv, ListNumbers, Plus, Rows, SquaresFour, UserList, X } from "phosphor-react";
 import Carregando from "./Carregando";
 
 import Cookies from "js-cookie";
@@ -34,7 +34,7 @@ type Research = {
 
 
 
-export function Pesquisadores() {
+export function PesquisadoresTaxinomia() {
   const [isLoading, setIsLoading] = useState(false);
   const { urlTermExport, setUrlTermExport } = useContext(UserContext);
   const { totalPesquisadores, setTotalPesquisadores } = useContext(UserContext);
@@ -368,32 +368,6 @@ console.log(pesquisadoresSelecionadosGroupBarema)
             </div>
           )
         )}
-
-<div className="flex gap-4 w-full pb-8 justify-between items-center min-w-full">
-          <div className="flex gap-4">
-            <UserList size={24} className="text-gray-400" />
-            <p className="text-gray-400">Taxonimia</p>
-          </div>
-         
-        </div>
-
-        <div className="h-screen w-full">
-
-          <div className="flex gap-6 items-center">
-            <div className="flex items-center justify-center text-white bg-cyan-400 h-12 w-12 rounded-xl"> <GitBranch size={20} className="rotate-180 " /></div>
-
-            <div>
-              <p>Termo</p>
-              <p></p>
-            </div>
-          </div>
-
-          <div className="w-full overflow-hidden">
-            <div className="flex gap-6 flex-nowrap">
-              <div className="w-[300px] bg-white "></div>
-            </div>
-          </div>
-        </div>
 
 
         <div className="flex gap-4 w-full pb-8 justify-between items-center min-w-full">

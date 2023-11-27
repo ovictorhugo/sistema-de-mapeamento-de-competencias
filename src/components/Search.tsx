@@ -29,10 +29,16 @@ interface Patente {
   term: string
 }
 
+interface Bigrama {
+  freq: number
+  word: string
+}
+
 function myWrapperFunction() {
   const Search: React.FC = () => {
 
     const { urlTermExport, setUrlTermExport } = useContext(UserContext);
+    const { EstadoFiltro, setEstadoFiltro } = useContext(UserContext);
     const { valoresSelecionadosExport, setValoresSelecionadosExport } = useContext(UserContext);
     const { valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta } = useContext(UserContext);
     const { urlGeral, setUrlGeral } = useContext(UserContext);
@@ -46,6 +52,7 @@ function myWrapperFunction() {
     const [resultadosPesquisadores, setResultadosPesquisadores] = useState<Pesquisadores[]>([]);
     const [resultadosArea, setResultadosArea] = useState<Area[]>([]);
     const [resultadosPatentes, setResultadosPatentes] = useState<Patente[]>([]);
+    const [resultadosBigrama, setResultadosBigrama] = useState<Bigrama[]>([]);
     //Atualizar o estado da pesquisa
     function handlePesquisaChange(event: React.ChangeEvent<HTMLInputElement>) {
       const valorDigitado = event.target.value;
@@ -99,9 +106,39 @@ function myWrapperFunction() {
       const urlPesquisador = urlGeral + `/reasercherInitials?initials=${pesquisaInputFormatado}&graduate_program_id=${idGraduateProgram}`
       const urlArea = urlGeral + `/area_specialitInitials?initials=${pesquisaInput.trim()}&area=${selectedOptionsAreas}&graduate_program_id=${idGraduateProgram}`;
       const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
+      const urlBigrama = urlGeral +  `secondWord?term=${pesquisaInputFormatado}`
       const urlPatente = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=PATENT`
       console.log('urlResumo', url)
 
+      //bigrama
+
+      fetch(urlBigrama, {
+        mode: 'cors',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET',
+          'Access-Control-Allow-Headers': 'Content-Type',
+          'Access-Control-Max-Age': '3600',
+          'Content-Type': 'text/plain'
+
+        }
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          const newData = data.map((post: Post) => ({
+            ...post,
+            term: post.term.replace(/\s+/g, ";")
+          }));
+          setResultadosBigrama([]);
+          setResultadosBigrama(newData);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+
+       
+        console.log('urlBigrama', urlBigrama)
 
 
    
@@ -401,6 +438,23 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
 
       setSelectedTab(2);
     };
+
+    const handleAutocompleteClick = () => {
+      // Sort autocompleteOptions by frequency in descending order
+      const sortedOptions = resultadosBigrama.sort((a, b) => b.freq - a.freq);
+  
+      // Get the most frequent word
+      const mostFrequentWord = sortedOptions.length > 0 ? sortedOptions[0].word : '';
+  
+      // Set the input to the most frequent word
+      setPesquisaInput(mostFrequentWord);
+  
+      // Close the autocomplete dropdown
+      setIsOpen(false);
+    };
+
+    console.log('resuktados bigrama', resultadosBigrama)
+   
 
     const { idVersao, setIdVersao } = useContext(UserContext);
 
@@ -990,6 +1044,13 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
             >
               <div className='grid grid-cols-3 gap-4'>
                 <div className='block  w-full ' >
+                <ul>
+          {resultadosBigrama.map((option) => (
+            <li key={option.word} onClick={handleAutocompleteClick}>
+              {option.word}
+            </li>
+          ))}
+        </ul>
                   <p className='mb-4'>Termo</p>
                   {checkboxItems || <p className='text-gray-500 text-lg'>num</p>}
                   <p className='mb-4'>Resumo</p>
@@ -1092,7 +1153,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
 
         
                   <div className='testeeeaq mt-4 flex gap-6 items-center'>
-                    <div  className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
+                    <div onClick={() => setEstadoFiltro(true)} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
                         <SlidersHorizontal size={16} className="text-white" /> Filtros
                     </div>
 

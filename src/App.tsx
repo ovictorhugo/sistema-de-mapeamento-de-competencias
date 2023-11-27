@@ -51,13 +51,15 @@ export const App = () => {
 
   const [estadoSelecionado, setEstadoSelecionado] = useState('');
 
+  const [EstadoFiltro, setEstadoFiltro] = useState(false)
   const [botaoPatentesClicado, setBotaoPatentesClicado] = useState(false)
   const [botaoPesquisadoresClicado, setBotaoPesquisadoresClicado] = useState(false);
   const [botaoTermosClicado, setBotaoTermosClicado] = useState(true);
   const [botaoResumoClicado, setBotaoResumoClicado] = useState(false);
   const [botaoAreasClicado, setBotaoAreasClicado] = useState(false);
+  const [botaoTaxonomiaClicado, setBotaoTaxonomiaClicado] = useState(false);
   
-  const [urlGeral, setUrlGeral] = useState('http://177.16.237.129:5001/');
+  const [urlGeral, setUrlGeral] = useState('http://200.128.66.226:5001/');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
   const [user, setUser] = useState<User>({} as User)
   const [isOn, setIsOn] = useState(false);
@@ -95,11 +97,13 @@ console.log('[idVersao', idVersao)
           botaoTermosClicado, setBotaoTermosClicado,
           botaoResumoClicado, setBotaoResumoClicado,
           botaoAreasClicado, setBotaoAreasClicado,
+          botaoTaxonomiaClicado, setBotaoTaxonomiaClicado,
           urlGeral, setUrlGeral,
           pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema,
           user, setUser,
           isOn, setIsOn,
           enabled, setEnabled,
+          EstadoFiltro, setEstadoFiltro,
           intituicoesSelecionadasCheckbox, setIntituicoesSelecionadasCheckbox,
           areasSelecionadasCheckbox, setAreasSelecionadasCheckbox,
 

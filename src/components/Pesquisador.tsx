@@ -117,15 +117,19 @@ export function Pesquisador(props: PesquisadorProps) {
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   // outras variáveis de estado necessárias
 
+  const { EstadoFiltro, setEstadoFiltro } = useContext(UserContext);
   // Outros códigos do componente
 
   // Função para exibir o PopUp
   const handleOpenPopUp = () => {
     setIsPopUpVisible(true);
+    setEstadoFiltro(false)
   };
+
 
   const handleClosePopUp = () => {
     setIsPopUpVisible(false);
+    setEstadoFiltro(false)
     setValoresSelecionadosPopUp(valoresSelecionadosExport);
   };
 

@@ -124,7 +124,7 @@ export function Instituicoes() {
         },
         series: [
           {
-            name: "Soma do among",
+            name: "Instituições",
             data: amongValues,
           },
         ],
@@ -139,7 +139,7 @@ export function Instituicoes() {
         },
         plotOptions: {
           column: {
-            color: "#005399",
+            color: "#173DFF",
             dataLabels: {
               enabled: true,
               inside: true,
@@ -172,7 +172,7 @@ export function Instituicoes() {
 
             </div>
           ) : (
-            <div className="w-full flex gap-4 p-6 border-[1px] border-gray-300 rounded-md mb-9">
+            <div className="w-full flex gap-4 p-6 border-[1px] border-gray-300 rounded-2xl mb-9">
               <div className="w-full">
                 <div className="text-center font-medium text-xl text-gray-500 mb-6">Ocorências por instituição</div>
                 <HighchartsReact highcharts={Highcharts} options={chartOptions} />

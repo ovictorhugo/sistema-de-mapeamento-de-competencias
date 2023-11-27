@@ -48,8 +48,9 @@ export function Publicacao(props: Publicacao) {
     const ignoredWords = ['a', 'do', 'da', 'o', 'os', 'as', 'de', "e", "i", 'na', 'du', 'em']; // Adicionar outras palavras que devem ser ignoradas
 
     return (
-        <div key={props.id} id="id_perfil" className={`group bg-white  justify-between border-solid border-gray-300 border-[1px] flex p-6 rounded-md hover:shadow-md transition  ${isOn ? "items-center justify-center flex" : "flex-col items-baseline"}`}>
-            <div className="">
+        <div key={props.id} id="id_perfil" className={`group  flex w-full hover:shadow-md transition border-solid border-gray-300 border-[1px] rounded-md `}>
+            <div className={`h-full w-2 min-w-[8px] rounded-l-lg ${qualisColor[props.qualis as keyof typeof qualisColor]}` }></div>
+            <div className={`bg-white rounded-md  justify-between flex p-4  ${isOn ? "items-center justify-center flex" : "flex-col items-baseline"}`}>
                 <div className="flex">
                     <div className="flex flex-col justify-center">
                         <div id="mudarCorDiv" className={` h-10 w-10 rounded-md mr-4 whitespace-nowrap flex items-center justify-center  ${qualisColor[props.qualis as keyof typeof qualisColor]}`}>
@@ -106,9 +107,7 @@ export function Publicacao(props: Publicacao) {
                 )}
 </div>
 
-            </div>
-
-            <div className={`flex  flex-col flex-nowrap  ${isOn ? "ml-6 justify-end" : ""}`}>
+<div className={`flex  flex-col flex-nowrap  ${isOn ? "ml-6 justify-end" : ""}`}>
 
                 
 
@@ -132,6 +131,9 @@ export function Publicacao(props: Publicacao) {
                     </div>
                 </div>
             </div>
+            </div>
+
+            
 
 
 

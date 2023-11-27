@@ -272,11 +272,14 @@ console.log('idversao',idVersao)
   return (
     <div className="  overflow-y-hidden  overflow-x-hidden flex justify-center flex-col">
 
+      <div className="backgroundGradient opacity-60 animate-pulse h-screen w-full backdrop-blur-lg absolute top-0 z-[-9999]">
+      </div>
 
+      <div className="h-[500px] absolute z-[-9999]  top-[50vh] right-0"><SvgLines/></div>
 
+      <div className="w-full h-screen max-h-screen overflow-y-hidden  overflow-hidden flex items-center absolute top-0 "><BrasilMap/></div>
 
-
-      <div className="px-6 md:px-16 flex justify-center h-[75vh] flex-col  w-fit">
+      <div className="px-6 md:px-16 flex justify-center h-screen flex-col  w-fit">
         <div className="h-[350px] absolute  ml-16 "><Circle/></div>
         <h1 className="z-[999999] text-5xl mb-4 font-medium max-w-[750px] ">
         <strong className="bg-blue-400 text-white font-normal">
@@ -288,7 +291,74 @@ console.log('idversao',idVersao)
 
           <div className="max-w-[700px] flex gap-3 items-center mt-6 z-[999999]">
          
-         
+          <div className="w-full">
+          <div className="flex gap-3 w-full">
+          <div className="flex  items-center w-full  justify-center h-10 border-gray-300 border-[1px] rounded-xl bg-white hover:border-blue-400">
+                        <MagnifyingGlass size={20} className={`text-gray-400 min-w-[52px] `} />
+                        <input
+                          type="text"
+                          onKeyPress={handleKeyPress}
+                          value={filterValue}
+                          onChange={e => setFilterValue(e.target.value)}
+                          placeholder='Nome ou sigla da instituição'
+                          className="w-full outline-none text-sm"
+                        />
+                      </div>
+
+                      <Link onClick={() => handleFilterChange(filterValue)} to={"/result"} className="w-fit h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-6 py-2 justify-center hover:bg-blue-500 text-base font-medium transition">
+                        <ArrowRight size={16} className="text-white" /> Avançar
+                    </Link>
+          </div>
+
+          {filterValue.length <= 2 || filterValue == valueInstPesquisa ? (
+            <div></div>
+          ) : (
+            <div className="rounded-md bg-white absolute mt-3 p-4 gap-4 flex flex-col max-h-[250px] overflow-y-auto">
+          {filteredResults.map(props => {
+        
+              return (
+                <li
+                  key={props.graduate_program_id}
+                  className=" checkboxLabel group transition-all list-none inline-flex group w-full"
+                  onMouseDown={(e) => e.preventDefault()}
+                >
+                  <label  onClick={() => handleClickPesquisa(props.instituicao, props.graduate_program_id)}  className={`justify-between w-full p-4 flex-col cursor-pointer border-[1px] bg-white bg-opacity-70 backdrop-blur-sm border-gray-300 flex text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 `}>
+                    <div className="flex justify-between items-center gap-3">
+
+                    
+                    <div className="flex items-center gap-3">
+                    <div><img src={`${props.url_image}`} alt="" className="h-12 border-none w-auto"/></div>
+                      <div>
+                      <span className=" whitespace-normal text-base text-gray-400 mb-2 font-bold">{props.name}</span>
+                      <p className="font-medium flex gap-1 items-center"> {props.instituicao}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between items-center">
+                    <div className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium w-fit bg-white gap-1 items-center"><MapPin size={12} className="" /> {props.city} | {props.state}</div>
+                  
+                    </div>
+                    </div>
+
+                    
+
+
+                    <input
+                      type="checkbox"
+                      name={props.name}
+                      className="absolute hidden group"
+                      onClick={() => handleClick(props.graduate_program_id)}
+                      id={props.name}
+
+                    />
+                  </label>
+                </li>
+              )
+                    
+            })}
+          </div>
+          )}
+          </div>
           </div>
           
           {idVersao === "2"  || idVersao === "4" ? (
@@ -302,6 +372,123 @@ console.log('idversao',idVersao)
           </div>
             ):('')}
           
+      </div>
+
+      
+
+      <div className="absolute h-screen top-0 right-0 pr-16 items-center justify-center flex">
+      <div className="flex flex-col gap-3 max-h-[470px] overflow-y-auto">
+        {graduatePrograms.map(props => {
+         if (props.state === estadoSelecionado && idGraduateProgram == "0") {
+              return (
+                <li
+                  key={props.graduate_program_id}
+                  className=" checkboxLabel group transition-all list-none inline-flex group w-[350px] "
+                  onMouseDown={(e) => e.preventDefault()}
+                  
+                >
+                  <label onClick={() => handleClick(props.graduate_program_id)} className={`justify-between w-full p-6 flex-col  cursor-pointer border-[1px] bg-white bg-opacity-70 backdrop-blur-sm border-gray-300 flex text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 `}>
+                    <div className="flex flex-col">
+                    
+
+                    <div className="flex items-center gap-3">
+                    <div><img src={`${props.url_image}`} alt="" className="h-16 border-none w-auto"/></div>
+                      <div>
+                      <span className=" whitespace-normal text-base text-gray-400 mb-2 font-bold">{props.name}</span>
+                      <p className="font-medium flex gap-1 items-center"> <MapPin size={20} className="textwhite" /> {props.city} | {props.state}</p>
+                      </div>
+                    </div>
+                      
+                      
+                    </div>
+
+                   
+
+
+                    <input
+                      type="checkbox"
+                      name={props.name}
+                      className="absolute hidden group"
+                      onClick={() => handleClick(props.graduate_program_id)}
+                      id={props.name}
+
+                    />
+                  </label>
+                </li>
+              )
+                    }
+            })}
+      </div>
+            
+      {graduatePrograms.map(props => {
+         if (props.graduate_program_id === idGraduateProgram && props.state == estadoSelecionado ) {
+              return (
+                <li
+                  key={props.graduate_program_id}
+                  className=" checkboxLabel group transition-all list-none inline-flex group w-[350px] "
+                  onMouseDown={(e) => e.preventDefault()}
+                >
+                  <label className={`justify-between w-full p-6 flex-col cursor-pointer border-[1px] bg-white bg-opacity-70 backdrop-blur-sm border-gray-300 flex text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 `}>
+                    <div className="flex flex-col">
+                    <div className="flex justify-between items-center mb-6">
+                    <div className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium w-fit ">{props.area}</div>
+                    <div onClick={toggleButtonOff} className={`cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center `}>
+                        <X size={24} className={'rotate-180 transition-all text-gray-400'} />
+                        </div>
+                    </div>
+                      <div><img src={`${props.url_image}`} alt="" className="h-16 border-none mb-4 w-auto"/></div>
+                      <span className=" whitespace-normal text-base text-gray-400 mb-2 font-bold">{props.name}</span>
+                      <p className="font-medium">{props.code}</p>
+
+                      <div className="flex gap-3 items-center text-base mt-8 font-medium ">
+                      <MapPin size={20} className="textwhite" /> {props.city} | {props.state}
+                      </div>
+
+                      <div className="flex gap-2 mt-8 flex-wrap">
+                      {props.type.split(';').map((value, index) => {
+                        const ratingValues = props.rating.split(';');
+                        const ratingDoutorado = ratingValues[0]; // Valor correspondente a DOUTORADO
+                        const ratingMestrado = ratingValues[1]; // Valor correspondente a MESTRADO
+
+                        return (
+                          <div
+                            key={index}
+                            className={`py-2 px-4 text-white w-fit rounded-md text-xs font-bold flex gap-2 items-center ${value.includes('MESTRADO') ? 'bg-blue-200' : 'bg-blue-300'
+                              }`}
+                          >
+                            <GraduationCap size={12} className="textwhite" />
+                            {value.trim()}
+                            <p className=" flex gap-2 items-center"><Star size={12} className="textwhite" /> {props.type.split(';').length == 2 ? (value.includes('MESTRADO') ? ratingMestrado : ratingDoutorado) : (props.rating)}</p>
+                          </div>
+                        );
+                      })}
+
+                      <div className="bg-blue-400 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
+                        <BookmarkSimple size={12} className="textwhite" />
+                        {props.modality}
+                      </div>
+                    </div>
+                    </div>
+
+                    <div>
+                    <Link to={`/result/${idVersao}`}  onClick={() => handleClick(props.graduate_program_id)} className="w-full mt-8 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-full px-6 py-2 justify-center hover:bg-blue-500 text-base font-medium transition">
+                        <ArrowRight size={16} className="text-white" /> Avançar
+                    </Link>
+                    </div>
+
+                    <input
+                      type="checkbox"
+                      name={props.name}
+                      className="absolute hidden group"
+                      onClick={() => handleClick(props.graduate_program_id)}
+                      id={props.name}
+
+                    />
+                  </label>
+                </li>
+              )
+                    }
+            })}
       </div>
 
       <div className="absolute w-full top-[72vh] z-[-9] bg-gradient-to-t from-white h-[350px]"></div>
