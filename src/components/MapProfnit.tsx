@@ -14,6 +14,17 @@ import logo_4 from '../assets/logo_4.png';
 import logo_5 from '../assets/logo_5.png';
 import BrasilMap from "./BrasilMap";
 
+interface PalavrasChaves {
+  term: string;
+  among: number;
+}
+
+
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
+import drilldown from 'highcharts/modules/drilldown'
+import HC_wordcloud from 'highcharts/modules/wordcloud';
+
 import { PesquisaGeral } from "./PesquisaGeral";
 import SearchInicio from "./SearchInicio";
 import { Header } from "./Header";
@@ -266,19 +277,179 @@ console.log('idversao',idVersao)
         console.log(err.message);
       });
   }, [urlResearcherImage]);
+
+
+    // palavras chaves
+
+   
+
+    const [words, setWords] = useState<PalavrasChaves[]>([]);
+
+    const [isLoading, setIsLoading] = useState(false);
+  
+    let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&researcher_id=`
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        setIsLoading(true);
+        try {
+          const response = await fetch(urlPalavrasChaves, {
+            mode: 'cors',
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'GET',
+              'Access-Control-Allow-Headers': 'Content-Type',
+              'Access-Control-Max-Age': '3600',
+              'Content-Type': 'text/plain'
+            }
+          });
+          const data = await response.json();
+          if (data) {
+            setWords(data);
+          }
+        } catch (err) {
+          console.log(err);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchData();
+    }, [urlPalavrasChaves]);
+  
+    const options = {
+      chart: {
+        backgroundColor: 'transparent',
+        height: '300px',
+        display: 'flex',
+        position: 'relative'
+      },
+      credits: {
+        enabled: false
+      },
+      exporting: {
+        enabled: false, // Remove a opção de menu para baixar o gráfico
+      },
+      series: [
+        {
+          type: 'wordcloud',
+          data: words.map((word) => ({
+            name: word.term,
+            weight: word.among,
+          })),
+  
+          style: {
+            fontFamily: 'Ubuntu, sans-serif',
+          },
+        },
+      ],
+      title: {
+        text: '',
+      },
+      plotOptions: {
+        wordcloud: {
+          borderRadius: 3,
+          borderWidth: "1px",
+          borderColor: 'blue',
+          BackgroundColor: 'red',
+          colors: ['#041962', '#0392FA'],
+  
+        },
+      },
+    };
+
+    const [chartOptions, setChartOptions] = useState({});
+
+  useEffect(() => {
+    // ...
+    if (words) {
+      const categories = words.map((d) => d.term);
+      const amongValues = words.map((d) => Number(d.among));
+      const sumAmongValues = amongValues.reduce((acc, cur) => acc + cur, 0);
+
+      setChartOptions({
+        chart: {
+          type: "area",
+          backgroundColor: "transparent",
+          fontFamily: "Ubuntu, sans-serif",
+          height: '590px', // Define a altura como 100% da tela
+          position: "relative",
+          border: 'none'
+        },
+        exporting: {
+          enabled: false, // Remove a opção de menu para baixar o gráfico
+        },
+        title: {
+          text: "",
+        },
+        legend: {
+          enabled: false, // Defina esta propriedade como false para remover a legenda
+        },
+        xAxis: {
+          categories,
+          labels: {
+            enabled: false, // Remove as legendas do eixo x
+          },
+        },
+        yAxis: {
+          labels: {
+            enabled: false, // Remove as legendas do eixo y
+          },
+          gridLineWidth: 0, // Remove as linhas de referência do eixo y
+        },
+        series: [
+          {
+            data: amongValues,
+          },
+        ],
+
+        credits: {
+          enabled: false,
+        },
+        plotOptions: {
+          area: {
+            color: {
+              linearGradient: {
+                x1: 0,
+                y1: 0,
+                x2: 0,
+                y2: 1,
+              },
+              stops: [
+                [0, "#7D96FF"],   // Cor inicial (transparente)
+                [1, "#ffffff"],       // Cor final (#005399)
+              ],
+            },
+            lineWidth: 0,
+          },
+        },
+        animation: {
+          duration: 100000, // Duração da animação em milissegundos
+        },
+      });
+    }
+  }, [words]);
   
 
 
   return (
     <div className="  overflow-y-hidden  overflow-x-hidden flex justify-center flex-col">
 
+<div className="overflow-hidden absolute top-0   w-full">
+       
+       <div className="z-[-999999999] w-[120%] absolute top-[30px] left-[-100px]">
+         <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+       </div>
+      
 
-
-
-
-      <div className="px-6 md:px-16 flex justify-center h-[75vh] flex-col  w-fit">
+       <div className="rounded-lg">
+         <div className=" min-h-[340px] flex items-center ">
+           <div className=" w-full h-full items-start justify-start testeeee grid grid-cols-2">
+             <div className=" flex flex-col  h-full transition ">
+           
+              
+             <div className="px-6 md:px-16 flex justify-center h-[75vh] flex-col  w-fit">
         <div className="h-[350px] absolute  ml-16 "><Circle/></div>
-        <h1 className="z-[999999] text-5xl mb-4 font-medium max-w-[750px] ">
+        <h1 className="z-[999999] text-4xl mb-4 font-medium max-w-[750px] ">
         <strong className="bg-blue-400 text-white font-normal">
         Escolha um programa
         </strong>{" "}
@@ -286,10 +457,7 @@ console.log('idversao',idVersao)
       </h1>
           <p className=" z-[999999] max-w-[620px]  text-lg text-gray-400">Arraste ou clique em um dos pontos no gráfico para selecionar o programa de pós-graduação. Você também pode escolher pela lista abaixo </p>
 
-          <div className="max-w-[700px] flex gap-3 items-center mt-6 z-[999999]">
-         
-         
-          </div>
+   
           
           {idVersao === "2"  || idVersao === "4" ? (
               <div className=" flex  rounded-md  bg-opacity-80 z-[99] flex-wrap gap-6 mt-8 relative">
@@ -303,15 +471,29 @@ console.log('idversao',idVersao)
             ):('')}
           
       </div>
+                 
+             </div>
 
-      <div className="absolute w-full top-[72vh] z-[-9] bg-gradient-to-t from-white h-[350px]"></div>
-      
+             <div id="nuveeeem" className="flex w-full h-full items-center">
+             <HighchartsReact highcharts={Highcharts} options={options} className="h-full" />
+             </div>
 
-      <div className="flex">
+             <div>
+
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+
+
+     <div className="pt-[535px] flex flex-1 flex-col relative  items-center w-full ">
+
+      <div className=" w-full">
 
       <Filter/>
 
-      <div className=" flex flex-1 flex-col relative items-center ">
+      <div className=" flex flex-1 flex-col relative items-center w-full ">
 
 <div
   ref={ref}
@@ -377,37 +559,32 @@ console.log('idversao',idVersao)
       </TabList>
     </div>
 
-    <div className="w-full">
-      {botaoTaxonomiaClicado ? (
-        <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16 ">
-        <PesquisadoresTaxinomia />
-      </TabPanel>
-      ): (
-        <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16 ">
-        <Pesquisadores />
-      </TabPanel>
-      )}
-      
+    <div className="w-full ">
+              <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16 ">
+                <Pesquisadores />
+              </TabPanel>
 
-      {botaoPatentesClicado ? (''): (
-        <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16">
-        <Publicacoes />
-      </TabPanel>
-      )}
+              {botaoPatentesClicado ? (''):(
+                <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16">
+                <Publicacoes />
+              </TabPanel>
+              )}
 
 
-      <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16">
-        <Instituicoes />
-      </TabPanel>
+              <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16">
+                <Instituicoes />
+              </TabPanel>
 
-    </div>
+            </div>
 
   </Tabs>
 )}
 </div>
       </div>
 
-      <div className="w-full flex justify-center my-6  px-6 md:px-16">
+      {valoresSelecionadosExport == "" && valorDigitadoPesquisaDireta == "" ? (
+        <div>
+          <div className="w-full flex justify-center my-6  px-6 md:px-16">
                 <div className=" p-24 m-[0 auto] w-full rounded-2xl bg-blue-400 items-center grid grid-cols-2 gap-12 bg-opacity-10 backdrop-blur-sm">
                     <div>
                         <h3 className="text-3xl font-medium text-gray-400 max-w-[500px] mb-4">O que a plataforma pode <strong className="bg-blue-400 text-white font-medium">fazer</strong> e como ela pode te <strong className="bg-blue-400 text-white font-medium">auxiliar</strong>?</h3>
@@ -512,10 +689,12 @@ console.log('idversao',idVersao)
           <ArrowCircleUp size={24} className="text-blue-400 mt-4" />
         </div>
       </button>
+        </div>
+      ):('')}
 
       
    
-      
+      </div>
     </div>
   );
 }

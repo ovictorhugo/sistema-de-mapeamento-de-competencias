@@ -110,39 +110,7 @@ function myWrapperFunction() {
       const urlPatente = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=PATENT`
       console.log('urlResumo', url)
 
-      //bigrama
-
-      fetch(urlBigrama, {
-        mode: 'cors',
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET',
-          'Access-Control-Allow-Headers': 'Content-Type',
-          'Access-Control-Max-Age': '3600',
-          'Content-Type': 'text/plain'
-
-        }
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          const newData = data.map((post: Post) => ({
-            ...post,
-            term: post.term.replace(/\s+/g, ";")
-          }));
-          setResultadosBigrama([]);
-          setResultadosBigrama(newData);
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
-
-       
-        console.log('urlBigrama', urlBigrama)
-
-
-   
-
+ 
      
         fetch(url, {
           mode: 'cors',

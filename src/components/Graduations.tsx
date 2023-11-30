@@ -494,7 +494,105 @@ console.log('idversao',idVersao)
       <div className="absolute w-full top-[72vh] z-[-9] bg-gradient-to-t from-white h-[350px]"></div>
       
 
+      <div className="flex">
+
+      <Filter/>
+
+      <div className=" flex flex-1 flex-col relative items-center ">
+
+<div
+  ref={ref}
+  className={` left-0 flex-col items-center flex flex-1 w-full transition justify-center z-[999] ${isSticky ? 'pb-6 sticky top-0 bg-white transition-all shadow-sm' : ' transition-all'}`}
+>
+
+  <div className={`${isSticky ? 'flex' : ' hidden'} h-20 w-full`}>
+    <Header />
+  </div>
+
+  <Search />
+</div>
+
+
+{valoresSelecionadosExport == "" && valorDigitadoPesquisaDireta == "" ? (
+  
+
+    <DadosGerais/>
+   
  
+) : (
+  <Tabs className="w-full items-center flex flex-col " >
+    <div className="flex items-center justify-between w-full mt-6  px-6 md:px-16 m-[0 auto]">
+      <p className="text-gray-400 mr-6 min-w-[350px] lg:flex gap-1">
+        Resultados da pesquisa em {' '}
+        <strong className="font-bold text-blue-400">
+          {botaoTermosClicado ? 'termos' : botaoResumoClicado ? 'resumo' : botaoAreasClicado ? 'áreas' : botaoPesquisadoresClicado ? 'nome' : botaoPatentesClicado ? 'patente' :''}
+        </strong> por:
+      </p>
+      <TabList className="w-full">
+        <div className={`w-full gap-6  m-0 grid  ${botaoPesquisadoresClicado || botaoPatentesClicado ? 'grid-cols-2' : 'grid-cols-3'}`}>
+          <Tab onClick={handleClickTabs} selected={selectedTab === 0} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente" : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all" >
+            <User size={16} className="" />
+            <p className=" md:flex hidden"> Pesquisadores</p>
+            <div className={` py-1 px-4 rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" :''}`}>{totalPesquisadores}</div>
+          </Tab>
+
+
+          {botaoPatentesClicado ? (
+            <head></head>
+          ) : (
+          <Tab onClick={handleClickTabs} selected={selectedTab === 1} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente"  : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all"  >
+            <File size={16} className="" />
+
+            <p className=" md:flex hidden">Publicações</p>
+            <div className={` py-1 px-4  rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" : ''}`}>{totalPublicacoes}</div>
+          </Tab>
+          )}
+
+
+
+          {botaoPesquisadoresClicado ? (
+            <head></head>
+          ) : (
+            <Tab onClick={handleClickTabs} selected={selectedTab === 2} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente"  : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all"  >
+              <Buildings size={16} className="" />
+              <p className="md:flex hidden">Instituições</p>
+
+              <div className={` py-1 px-4  rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" : ''}`}>{totalInstituicoes}</div>
+            </Tab>
+          )}
+        </div>
+      </TabList>
+    </div>
+
+    <div className="w-full">
+      {botaoTaxonomiaClicado ? (
+        <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16 ">
+        <PesquisadoresTaxinomia />
+      </TabPanel>
+      ): (
+        <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16 ">
+        <Pesquisadores />
+      </TabPanel>
+      )}
+      
+
+      {botaoPatentesClicado ? (''): (
+        <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16">
+        <Publicacoes />
+      </TabPanel>
+      )}
+
+
+      <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16">
+        <Instituicoes />
+      </TabPanel>
+
+    </div>
+
+  </Tabs>
+)}
+</div>
+      </div>
 
       <div className="w-full flex justify-center my-6  px-6 md:px-16">
                 <div className=" p-24 m-[0 auto] w-full rounded-2xl bg-blue-400 items-center grid grid-cols-2 gap-12 bg-opacity-10 backdrop-blur-sm">

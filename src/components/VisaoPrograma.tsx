@@ -46,12 +46,7 @@ const anoAtual = new Date().getFullYear();
 
 let QualQualis = ''
 
-if (idGraduateProgram == '0' || idGraduateProgram == '') {
-  QualQualis = ''
-}
-else {
-  QualQualis = idGraduateProgram
-}
+
 
 const urlQualis = `${urlGeral}/qualis_researcher?graduate_program_id=${QualQualis}&year=${ano5AnosAtras}&researcher_id=`;
 
