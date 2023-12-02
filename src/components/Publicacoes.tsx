@@ -660,15 +660,6 @@ export function Publicacoes() {
           </div>
         </div>
 
-        <div className="flex gap-4 w-full pb-8">
-          <Book size={24} className="text-gray-400" />
-          <p className="text-gray-400">Livros</p>
-        </div>
-
-        <div className="flex gap-4 w-full pb-8">
-          <Books size={24} className="text-gray-400" />
-          <p className="text-gray-400">Capítulos de livros</p>
-        </div>
 
         <div className="mb-9">
 
