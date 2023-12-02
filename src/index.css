@@ -155,7 +155,7 @@ input[type=number] {
   cursor: pointer;
   color: #717A83;
   border: none;
-  border-radius: 100px;
+  border-radius: 12px;
   padding: 8px 16px;
   outline: none;
   display: flex;
@@ -173,21 +173,11 @@ element.style {
   display: none;
 }
 
-body > .skiptranslate {
-  display: none;
-}
 
-.goog-te-banner-frame.skiptranslate {
-  display: none !important;
-}
-body {
-  top: 0px !important;
-}
-@media print {
-  #google_translate_element {
-    display: none;
-  }
-}
+
+
+
+
 
 #google_translate_element select.goog-te-combo option {
   /* Your custom styles for options within the dropdown */

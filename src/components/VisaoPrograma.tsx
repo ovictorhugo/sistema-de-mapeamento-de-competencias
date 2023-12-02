@@ -201,10 +201,12 @@ console.log(urlQualis)
     return total + researcher;
   }, 0);
 
+
+
   console.log(pontuacaoTotal)
   
   // Calcula o índice de produção artigos
-  const indiceProducaoArtigos = (pontuacaoTotal / numeroTotalDocentes/5).toFixed(2);
+  const indiceProducaoArtigos = (pontuacaoTotal / numeroTotalDocentes/4).toFixed(2);
 
 
 
@@ -243,6 +245,7 @@ console.log(urlQualis)
   
     <div className="md:px-16 px-6 pt-12 w-full">
       {VisaoPrograma.map(props => {
+        
         return(
           <div className=" ">
         <div className="flex gap-4 items-center w-full">
@@ -320,14 +323,20 @@ console.log(urlQualis)
             <HighchartsReact highcharts={Highcharts} options={optionsqualis} />
             </div>
             <div className="w-[450px] flex flex-col gap-6">
-                <div className="border rounded-2xl p-12 border-gray-300 w-full ">
-                <div className=" font-medium text-2xl text-right mb-2 w-full">Índice de produção de artigos</div>
-                <p className="text-sm text-gray-400 mb-6 text-right ">Índice de produção artigos (últimos 4 anos) = (1 x A1 + 0,875 x A2 + 0,75 x A3 + 0,625 x A4 + 0,5x B1 + 0,375 x B2 + 0,25 x B3 + 0,125 x B4) / (Número total de docentes)</p>
-                <h3 className="text-6xl font-medium text-right">{indiceProducaoArtigos}</h3>
+                <div className="border rounded-2xl p-12 border-gray-300 w-full h-1/2 flex flex-col justify-center">
+                <div className=" font-medium text-2xl text-right mb-2 text-gray-400 w-full">Índice de produção de artigos</div>
+
+                <h3 className="text-6xl font-medium   text-right">{indiceProducaoArtigos}</h3>
                 </div>
 
-                <div className="border p-12 rounded-2xl border-gray-300 w-full h-full">
-                <div className=" font-medium text-2xl text-right mb-2 w-full">Índice de produção técnica</div>
+                <div className="border flex flex-col justify-center p-12 rounded-2xl border-gray-300 w-full h-1/2">
+                <div className=" text-gray-400 font-medium text-2xl text-right mb-2 w-full">Índice de produção de livros e capítulos</div>
+                
+                
+                {VisaoPrograma.map(props => {
+                
+                return(<h3 className="text-6xl font-medium  text-right">{(props.book * 1) + (props.book_chapter * 0.25)}</h3> )
+              })}
                 </div>
             </div>
           </div>

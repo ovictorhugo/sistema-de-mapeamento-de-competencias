@@ -1,6 +1,7 @@
 import { CalendarBlank, File, Graph, LinkBreak, Quotes } from "phosphor-react";
 import { UserContext } from '../contexts/context'
 import { useEffect, useState, useContext } from "react";
+import unorm from 'unorm';
 
 type Publicacao = {
     id: string,
@@ -44,6 +45,11 @@ export function Publicacao(props: Publicacao) {
         }
     }, [props.lattes_10_id]);
 
+    const normalizedTitle = props.title
+    .replace(/&quot;/g, '"')
+    .replace(/&#10;/g, '\n')
+    .toLowerCase();
+
     const {distinct, setDistinct} = useContext(UserContext)
 
     const { isOn, setIsOn } = useContext(UserContext)
@@ -76,29 +82,24 @@ export function Publicacao(props: Publicacao) {
                 {props.lattes_10_id !== 'K4796572P6' && (
   <div className="pt-6 flex flex-wrap">
     <p className="text-gray-400 text-sm font-medium flex-wrap flex gap-1">
-    {props.title
-  .replace(/&quot;/g, '"')
-  .replace(/&#10;/g, '\n')
-  .split(/[\s.,;?!]+/) // Dividir por espaços em branco e caracteres de pontuação
-  .map((word, index) => {
-    // Remover caracteres especiais e transformar em minúsculas
-    const formattedWord = word.replace(/[^\w\s]/gi, '').toLowerCase();
+    {normalizedTitle
+        .split(/[\s.,;?!]+/)
+        .map((word, index) => {
+          const formattedWord = unorm.nfkd(word).replace(/[^\w\s]/gi, '').toLowerCase();
+          const ignoredWords = ['a', 'do', 'da', 'o', 'os', 'as', 'de', 'e', 'i', 'na', 'du', 'em'];
 
-    // Lista de palavras ignoradas
-    const ignoredWords = ['lista', 'de', 'palavras', 'ignoradas'];
-
-    if (
-      valoresSelecionadosExport.includes(formattedWord) &&
-      !ignoredWords.includes(formattedWord)
-    ) {
-      return (
-        <span key={index} className="text-blue-400 font-bold">
-          {word}{' '}
-        </span>
-      );
-    }
-    return <span key={index}>{word} </span>;
-  })}
+          if (
+            valoresSelecionadosExport.includes(formattedWord) &&
+            !ignoredWords.includes(formattedWord)
+          ) {
+            return (
+              <span key={index} className="text-blue-400 font-bold">
+                {word.toUpperCase()}{' '}
+              </span>
+            );
+          }
+          return <span key={index}>{word.toUpperCase()} </span>;
+        })}
 
 
     </p>

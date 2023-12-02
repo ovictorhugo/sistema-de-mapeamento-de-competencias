@@ -537,7 +537,7 @@ export function Homepage(props: Props) {
                 </strong> por:
               </p>
               <TabList className="w-full">
-        <div className={`w-full gap-6  m-0 grid  ${botaoPesquisadoresClicado || botaoPatentesClicado ? 'grid-cols-2' : 'grid-cols-3'}`}>
+        <div className={`w-full gap-6  m-0 grid grid-cols-2`}>
           <Tab onClick={() => setSelectedTab(0)} selected={selectedTab === 0} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente" : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all" >
             <User size={16} className="" />
             <p className=" md:flex hidden"> Pesquisadores</p>
@@ -558,18 +558,6 @@ export function Homepage(props: Props) {
           )}
 
 
-
-          {botaoPesquisadoresClicado ? (
-            <head></head>
-          ) : (
-            <Tab onClick={() => setSelectedTab(2)} selected={selectedTab === 2} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente"  : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all"  >
-              <Buildings size={16} className="" />
-              <p className="md:flex hidden">Instituições</p>
-
-              {selectedTab == 2 ? (<div className={` py-1 px-4  rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" : ''}`}>{totalInstituicoes}</div>): ('')}
-              
-            </Tab>
-          )}
         </div>
       </TabList>
             </div>
@@ -586,9 +574,7 @@ export function Homepage(props: Props) {
               )}
 
 
-              <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16">
-                <Instituicoes />
-              </TabPanel>
+            
 
             </div>
 
