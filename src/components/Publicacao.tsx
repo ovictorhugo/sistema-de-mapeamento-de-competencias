@@ -38,7 +38,7 @@ let qualisColor = {
 
 export function Publicacao(props: Publicacao) {
     const { valoresSelecionadosExport, setValoresSelecionadosExport } = useContext(UserContext);
-
+    const { valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta } = useContext(UserContext);
     useEffect(() => {
         if (props.lattes_10_id == "undefined") {
             props.lattes_10_id = ""
@@ -90,6 +90,17 @@ export function Publicacao(props: Publicacao) {
 
           if (
             valoresSelecionadosExport.includes(formattedWord) &&
+            !ignoredWords.includes(formattedWord)
+          ) {
+            return (
+              <span key={index} className="text-blue-400 font-bold">
+                {word.toUpperCase()}{' '}
+              </span>
+            );
+          }
+
+          if (
+            valorDigitadoPesquisaDireta.includes(formattedWord) &&
             !ignoredWords.includes(formattedWord)
           ) {
             return (
