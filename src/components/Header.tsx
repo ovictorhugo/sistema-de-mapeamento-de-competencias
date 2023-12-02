@@ -80,7 +80,7 @@ export function Header() {
   const { pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema } = useContext(UserContext);
 
   return (
-    <header className={` z-[9999999] px-6 md:px-16 w-full mb-4 h-20 justify-between items-center flex absolute top-0`}>
+    <header className={` z-[9999] px-6 md:px-16 w-full mb-4 h-20 justify-between items-center flex absolute top-0`}>
       <div className=" w-full flex items-center h-12 ">
         <div className="flex gap-6 items-center h-full justify-center ">
         {idVersao === '1' || idVersao === ''  ? (

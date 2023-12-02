@@ -495,13 +495,13 @@ console.log('idversao',idVersao)
               
              <div className="pl-6 md:pl-16 flex justify-center h-[75vh] flex-col  w-fit">
         <div className="h-[350px] absolute  ml-16 "><Circle/></div>
-        <h1 className="z-[999999] text-4xl mb-4 font-medium max-w-[750px] ">Experimente
+        <h1 className="z-[999] text-4xl mb-4 font-medium max-w-[750px] ">Experimente
         <strong className="bg-red-400 text-white font-normal">
         pesquisar um tema
         </strong>{" "}
         e veja o que a plataforma pode filtrar para você.
       </h1>
-          <p className=" z-[999999] max-w-[620px]  text-lg text-gray-400">Arraste ou clique em um dos pontos no gráfico para selecionar o programa de pós-graduação. Você também pode escolher pela lista abaixo </p>
+          <p className=" z-[999] max-w-[620px]  text-lg text-gray-400">Arraste ou clique em um dos pontos no gráfico para selecionar o programa de pós-graduação. Você também pode escolher pela lista abaixo </p>
 
    
           

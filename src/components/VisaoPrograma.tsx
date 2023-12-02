@@ -44,7 +44,8 @@ const anoAtual = new Date().getFullYear();
   console.log(urlVisaoPrograma)
 // Monta a URL com o ano 4 anos atrás
 
-let QualQualis = ''
+let QualQualis = idGraduateProgram
+
 
 
 
