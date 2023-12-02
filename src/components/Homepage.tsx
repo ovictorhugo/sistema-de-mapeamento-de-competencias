@@ -397,7 +397,7 @@ export function Homepage(props: Props) {
                 y2: 1,
               },
               stops: [
-                [0, "#7D96FF"],   // Cor inicial (transparente)
+                [0, "#EAB7BA"],   // Cor inicial (transparente)
                 [1, "#ffffff"],       // Cor final (#005399)
               ],
             },
@@ -435,8 +435,8 @@ export function Homepage(props: Props) {
                   <div className="flex flex-col h-full transition ">
                    <div><img src={`${props.url_image}`} alt="" className="h-16 border-none w-auto mb-4"/></div>
                    <div className="h-[350px] absolute z-[-9] ml-16 scale-x-[-1] "><Circle2/></div>
-                    <h1 className="text-left max-w-[670px] font-medium text-4xl mb-2">
-                      <strong className="bg-blue-400 text-white font-medium">Pesquise um termo {idVersao} </strong> no programa de pós-graduação {props.name}
+                    <h1 className="text-left max-w-[670px] font-medium text-3xl mb-2">
+                      <strong className="bg-blue-400 text-white font-medium">Pesquise um termo</strong> no programa de pós-graduação {props.name}
                     </h1>
                     <p className="text-gray-400 max-w-[500px] ">Para ajudar a sua pesquisa, fornecemos uma lista extensa de termos e áreas de especialidade, abrangendo diversos setores.</p>
                   </div>

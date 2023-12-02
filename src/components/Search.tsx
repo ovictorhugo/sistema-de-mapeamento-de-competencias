@@ -517,8 +517,8 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
     const valoresPesquisadoresSelecionados = pesquisadoresSelecionados.join(';');
 
     const valoresPesquisadoresSelecionadosJSX = pesquisadoresSelecionados.map((valor, index) => (
-      <li key={index} className='whitespace-nowrap gap-2 bg-[#E9F9F9] border-[#20BDBE] border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>{valor.replace(/%20/g, ' ')}
-        <button onClick={() => handleRemoverSelecionadoPesquisadores(index)}><X size={16} className="text-gray-400 hover:text-blue-400" /></button>
+      <li key={index} className='whitespace-nowrap gap-2 bg-[#FEE9E9] border-red-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>{valor.replace(/%20/g, ' ')}
+        <button onClick={() => handleRemoverSelecionadoPesquisadores(index)}><X size={16} className="text-gray-400 hover:text-red-400" /></button>
       </li>
     ));
 
@@ -590,7 +590,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       >
         {valor}
         <button onClick={() => handleRemoverSelecionadoAreas(index)}>
-          <X size={16} className="text-gray-400 hover:text-blue-400" />
+          <X size={16} className="text-gray-400 hover:text-green-400" />
         </button>
       </li>
     ));
@@ -693,8 +693,8 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
     const valoresResumoSelecionados = itensSelecionadosResumo.join(';');
 
     const valoresSelecionadosResumoJSX = itensSelecionadosResumo.map((valor, index) => (
-      <li key={index} className='whitespace-nowrap gap-2 bg-[#FEE9E9] border-red-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>{valor.replace(/;/g, ' ')}
-        <button onClick={() => handleRemoverSelecionadoResumo(index)}><X size={16} className="text-gray-400 hover:text-blue-400" /></button>
+      <li key={index} className='whitespace-nowrap gap-2 bg-[#FFFAE6] border-yellow-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>{valor.replace(/;/g, ' ')}
+        <button onClick={() => handleRemoverSelecionadoResumo(index)}><X size={16} className="text-gray-400 hover:text-yellow-400" /></button>
       </li>
     ));
 
@@ -745,8 +745,8 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
     const valoresPatenteSelecionados = itensSelecionadosPatente.join(';');
 
     const valoresSelecionadosPatenteJSX = itensSelecionadosPatente.map((valor, index) => (
-      <li key={index} className='whitespace-nowrap gap-2 bg-[#FEE9E9] border-red-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>{valor.replace(/;/g, ' ')}
-        <button onClick={() => handleRemoverSelecionadoPatente(index)}><X size={16} className="text-gray-400 hover:text-blue-400" /></button>
+      <li key={index} className='whitespace-nowrap gap-2 bg-[#E9F4F4] border-cyan-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>{valor.replace(/;/g, ' ')}
+        <button onClick={() => handleRemoverSelecionadoPatente(index)}><X size={16} className="text-gray-400 hover:text-cyan-400" /></button>
       </li>
     ));
 
@@ -937,8 +937,8 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
           <div className='flex flex-wrap md:flex-nowrap top-6 w-full'>
 
             <div className='flex w-full flex-col'>
-              <div className={`flex bg-white  items-center h-14 group w-full  text-base font-medium  justify-center transition border-[1px] border-gray-300 ${botaoTermosClicado ? 'hover:border-blue-400' : ''} ${botaoResumoClicado ? 'hover:border-red-400' : ''} ${botaoAreasClicado ? 'hover:border-green-400' : ''} ${botaoPesquisadoresClicado ? 'hover:border-[#20BDBE]' : ''} ${isOpen && pesquisaInput.length >= 3 ? 'rounded-tl-2xl' : 'rounded-l-2xl'}`}>
-                <MagnifyingGlass size={20} className={`text-gray-400 min-w-[52px] ${botaoTermosClicado ? 'group-hover:text-[#005399]' : ''} ${botaoResumoClicado ? 'group-hover:text-red-400' : ''} ${botaoAreasClicado ? 'group-hover:text-[#8FC53E]' : ''} ${botaoPesquisadoresClicado ? 'group-hover:text-[#20BDBE]' : ''}`} />
+              <div className={`flex bg-white  items-center h-14 group w-full  text-base font-medium  justify-center transition border-[1px] border-gray-300 ${botaoTermosClicado ? 'hover:border-blue-400' : ''} ${botaoResumoClicado ? 'hover:border-yellow-400' : ''} ${botaoAreasClicado ? 'hover:border-green-400' : ''} ${botaoPesquisadoresClicado ? 'hover:border-red-400' : ''} ${botaoPatentesClicado ? 'group-hover:border-cyan-400' : ''} ${isOpen && pesquisaInput.length >= 3 ? 'rounded-tl-2xl' : 'rounded-l-2xl'}`}>
+                <MagnifyingGlass size={20} className={`text-gray-400 min-w-[52px] ${botaoTermosClicado ? 'group-hover:text-blue-400' : ''} ${botaoResumoClicado ? 'group-hover:text-yellow-400' : ''} ${botaoAreasClicado ? 'group-hover:text-green-400' : ''} ${botaoPesquisadoresClicado ? 'group-hover:text-red-400' : ''} ${botaoPatentesClicado ? 'group-hover:text-cyan-400' : ''}`} />
                 <div className='flex gap-2 mx-2'>{valoresSelecionadosJSX}{valoresPesquisadoresSelecionadosJSX}{valoresSelecionadosPatenteJSX}{valoresAreasSelecionadosJSX}{valoresSelecionadosResumoJSX}</div>
                 <input
                   type="text"
@@ -949,7 +949,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
                   onKeyPress={handleKeyPress}
                   name=""
                   placeholder={
-                    `${botaoResumoClicado ? 'Pesquise por uma ou mais palavras no resumo do pesquisador (Ex: Robótica, educação, indústria)' : ''} ${botaoTermosClicado ? 'Pesquise um ou mais termos (Ex: Robótica, educação, indústria)' : ''} ${botaoAreasClicado ? 'Pesquise uma ou mais áreas de especialidade (Ex: Astronomia, Ciência de dados)' : ''} ${botaoPesquisadoresClicado ? 'Pesquise o nome de um ou mais pesquisador(es)' : ''}`
+                    `${botaoResumoClicado ? 'Pesquise por uma ou mais palavras no resumo do pesquisador (Ex: Robótica, educação, indústria)' : ''} ${botaoTermosClicado ? 'Pesquise um ou mais termos (Ex: Robótica, educação, indústria)' : ''} ${botaoAreasClicado ? 'Pesquise uma ou mais áreas de especialidade (Ex: Astronomia, Ciência de dados)' : ''} ${botaoPesquisadoresClicado ? 'Pesquise o nome de um ou mais pesquisador(es)' : ''} ${botaoPatentesClicado ? 'Pesquise uma ou mais palavras nas patentes do pesquisador (Ex: energia, modelo, sistema)' : ''}`
                   }
                   id="" className="w-full h-full outline-none" />
               </div>

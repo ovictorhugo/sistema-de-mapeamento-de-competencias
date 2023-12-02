@@ -30,24 +30,24 @@ export function Instituicoes() {
 
   const [instituicoes, setInstituicoes] = useState<Instituicoes[]>([]); // Define o estado vazio no início
 
-  let urlTermPublicacoes = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}`;
+  let urlTermPublicacoes = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}`;
   const { intituicoesSelecionadasCheckbox, setIntituicoesSelecionadasCheckbox } = useContext(UserContext)
 
 
   if (botaoTermosClicado) {
 
-    urlTermPublicacoes = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}&university=${intituicoesSelecionadasCheckbox}`
+    urlTermPublicacoes = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}`
 
   }
 
   if (botaoResumoClicado) {
 
-    urlTermPublicacoes = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}&university=${intituicoesSelecionadasCheckbox}`
+    urlTermPublicacoes = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}`
 
   }
 
   if (botaoAreasClicado) {
-    urlTermPublicacoes = `${urlGeral}//institutionArea?area_specialty=${valoresSelecionadosExport}&great_area=&university=${intituicoesSelecionadasCheckbox}`;
+    urlTermPublicacoes = `${urlGeral}//institutionArea?area_specialty=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&great_area=&university=${intituicoesSelecionadasCheckbox}`;
   }
 
   if (botaoTermosClicado && valoresSelecionadosExport == "") {

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { UserContext } from "../contexts/context";
-import { ArrowCircleUp, ArrowRight, BookmarkSimple, Buildings, File, GraduationCap, MagnifyingGlass, MapPin, Star, User, X, YoutubeLogo } from "phosphor-react";
+import { ArrowCircleUp, ArrowRight, BookmarkSimple, Buildings, File, GraduationCap, ListDashes, MagnifyingGlass, MapPin, Star, User, X, YoutubeLogo } from "phosphor-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Circle } from "./Circle";
 import DropdownMultiSelect from "./DropdownMultiSelect";
@@ -41,6 +41,7 @@ import { Logo } from "./Logo";
 import { LogoSimcc } from "./LogoSimcc";
 import { PesquisadoresTaxinomia } from "./PesquisadoresTaxonomia";
 import { Filter } from "./Filter";
+import footer from '../assets/footer.png';
 
 
 interface GraduateProgram {
@@ -129,9 +130,15 @@ export function MapProfnit(props: Props) {
    const { valoresSelecionadosExport, setValoresSelecionadosExport } = useContext(UserContext);
    const { valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta } = useContext(UserContext);
   
+   useEffect(() => {
+   if(valoresSelecionadosExport != '' || valorDigitadoPesquisaDireta != "") {
+    setSelectedTab(0)
+   }
+
+  }, [valoresSelecionadosExport]);
 
   const { idVersao, setIdVersao } = useContext(UserContext);
-  setIdVersao(props.id)
+  setIdVersao("4")
 
 
 
@@ -436,7 +443,7 @@ console.log('idversao',idVersao)
 
 <div className="overflow-hidden absolute top-0   w-full">
        
-       <div className="z-[-999999999] w-[120%] absolute top-[30px] left-[-100px]">
+       <div className="z-[-999999999] w-[120%] absolute top-[0px] left-[-100px]">
          <HighchartsReact highcharts={Highcharts} options={chartOptions} />
        </div>
       
@@ -447,13 +454,13 @@ console.log('idversao',idVersao)
              <div className=" flex flex-col  h-full transition ">
            
               
-             <div className="px-6 md:px-16 flex justify-center h-[75vh] flex-col  w-fit">
+             <div className="pl-6 md:pl-16 flex justify-center h-[75vh] flex-col  w-fit">
         <div className="h-[350px] absolute  ml-16 "><Circle/></div>
-        <h1 className="z-[999999] text-4xl mb-4 font-medium max-w-[750px] ">
-        <strong className="bg-blue-400 text-white font-normal">
-        Escolha um programa
+        <h1 className="z-[999999] text-4xl mb-4 font-medium max-w-[750px] ">Experimente
+        <strong className="bg-red-400 text-white font-normal">
+        pesquisar um tema
         </strong>{" "}
-        e veja o que a plataforma filtra para você.
+        e veja o que a plataforma pode filtrar para você.
       </h1>
           <p className=" z-[999999] max-w-[620px]  text-lg text-gray-400">Arraste ou clique em um dos pontos no gráfico para selecionar o programa de pós-graduação. Você também pode escolher pela lista abaixo </p>
 
@@ -525,21 +532,22 @@ console.log('idversao',idVersao)
       </p>
       <TabList className="w-full">
         <div className={`w-full gap-6  m-0 grid  ${botaoPesquisadoresClicado || botaoPatentesClicado ? 'grid-cols-2' : 'grid-cols-3'}`}>
-          <Tab onClick={handleClickTabs} selected={selectedTab === 0} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente" : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all" >
+          <Tab onClick={() => setSelectedTab(0)} selected={selectedTab === 0} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente" : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all" >
             <User size={16} className="" />
             <p className=" md:flex hidden"> Pesquisadores</p>
-            <div className={` py-1 px-4 rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" :''}`}>{totalPesquisadores}</div>
+            {selectedTab == 0 ? (<div className={` py-1 px-4 rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" :''}`}>{totalPesquisadores}</div>): ('')}
           </Tab>
 
 
           {botaoPatentesClicado ? (
             <head></head>
           ) : (
-          <Tab onClick={handleClickTabs} selected={selectedTab === 1} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente"  : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all"  >
+          <Tab onClick={() => setSelectedTab(1)} selected={selectedTab === 1} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente"  : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all"  >
             <File size={16} className="" />
 
             <p className=" md:flex hidden">Publicações</p>
-            <div className={` py-1 px-4  rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" : ''}`}>{totalPublicacoes}</div>
+            {selectedTab == 1 ? (<div className={` py-1 px-4  rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" : ''}`}>{totalPublicacoes}</div>): ('')}
+            
           </Tab>
           )}
 
@@ -548,11 +556,12 @@ console.log('idversao',idVersao)
           {botaoPesquisadoresClicado ? (
             <head></head>
           ) : (
-            <Tab onClick={handleClickTabs} selected={selectedTab === 2} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente"  : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all"  >
+            <Tab onClick={() => setSelectedTab(2)} selected={selectedTab === 2} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente"  : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all"  >
               <Buildings size={16} className="" />
               <p className="md:flex hidden">Instituições</p>
 
-              <div className={` py-1 px-4  rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" : ''}`}>{totalInstituicoes}</div>
+              {selectedTab == 2 ? (<div className={` py-1 px-4  rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" : ''}`}>{totalInstituicoes}</div>): ('')}
+              
             </Tab>
           )}
         </div>
@@ -661,26 +670,26 @@ console.log('idversao',idVersao)
 
             
 
-      <div
-        id="principal"
-        className="h-screen max-h-screen overflow-y-hidden grid grid-cols-5 gap-6 w-[450px] py-6 px:6 md:pl-16"
-        style={{ maxHeight: "100vh" }}
-      >
-        {ResearcherImage.map((props, index) => (
-          <a
-            href={`https://lattes.cnpq.br/${props.lattes}`}
-            key={props.lattes_10_id}
-            className="whitespace-nowrap bg-cover bg-center bg-no-repeat rounded-md"
-            style={{
-              backgroundImage:
-                index % 3 === 0
-                  ? "none"
-                  : `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id})`,
-              paddingTop: "100%", // Define a proporção 1:1 (quadrado)
-            }}
-          ></a>
-        ))}
-      </div>
+      
+            <div className="w-full flex flex-col px-6 md:px-16">
+            
+                <div className="mb-16 pt-52 pb-0 flex justify-center flex-col items-center">
+                    <h3 className="font-medium text-4xl text-gray-400 text-center mb-4">Veja a lista com todos os <strong className="bg-blue-400 text-white font-medium text-4xl">Termos e Áreas de especialidade</strong> disponíveis </h3>
+                    <p className="mb-6 text-gray-400 text-center max-w-[1100px]">O Sistema de Mapeamento de Competências da Bahia é uma ferramenta que visa identificar e catalogar as habilidades e especialidades dos profissionais do estado. Para ajudar a sua pesquisa, fornecemos uma lista extensa de termos e áreas de especialidade, abrangendo diversos setores.</p>
+
+                    <div className="flex gap-4">
+                    <Link to={`/terms/${idVersao}`} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
+                        <ListDashes size={16} className="text-white" /> Dicionário
+                    </Link>
+
+                    <Link to={`/terms/${idVersao}`} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
+                        <ListDashes size={16} className="text-white" /> Dicionário
+                    </Link>
+                    </div>
+                </div>
+
+                <div className="flex-1 h-full flex items-center"> <img src={footer} alt="" className="w-full no-drag"/> </div>
+            </div>
 
 
       <button className={`fixed bottom-[32px] right-0 w-10 mb-[32px] h-auto hidden  ${isSticky ? 'md:flex' : ' hidden'}`} onClick={handleClickt}>

@@ -91,7 +91,7 @@ export function Filter() {
     <div className='' >
 
         {EstadoFiltro ? (
-            <div className='transition  h-screen p-12 z-[9999999999] bg-white  w-[350px] border-r border-r-gray-300'>
+            <div className='transition fixed top-0 left-0 h-screen p-12 z-[9999999999] bg-white  w-[350px] border-r border-r-gray-300'>
                 <div className='flex items-center gap-6 justify-between'>
                 <div className='flex items-center gap-4'>
                     <SlidersHorizontal size={24} className="text-gray-400" />

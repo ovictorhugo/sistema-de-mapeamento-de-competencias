@@ -740,7 +740,7 @@ export function PopUp(props: PesquisadorProps) {
         borderWidth: "1px",
         borderColor: 'blue',
         BackgroundColor: 'red',
-        colors: ['#005399', '#041962', '#174EA6'],
+        colors: ['#041962', '#0392FA'],
 
       },
     },
@@ -905,10 +905,14 @@ export function PopUp(props: PesquisadorProps) {
     setSelectedTab(4)
   }
 
+
+  const [tabIndex, setTabIndex] = useState(0);
+
   useEffect(() => {
   if(botaoPatentesClicado) {
     setSelectedTab(1)
     onClickProducaoTecnica()
+    setTabIndex(2)
   }
 
 }, [botaoPatentesClicado]);
@@ -992,15 +996,17 @@ export function PopUp(props: PesquisadorProps) {
 
             <div className="flex gap-3 mb-6 flex-wrap items-center justify-center">
 
-              {props.area.split(';').map((value, index) => (
-                <li
-                  key={index}
-              className={`py-2 whitespace-nowrap px-4 rounded-md text-xs font-bold flex gap-2 text-white items-center ${value.includes('CIENCIAS AGRARIAS') ? 'bg-red-400' : value.includes('CIENCIAS EXATAS E DA TERRA') ? 'bg-green-400' : value.includes('CIENCIAS DA SAUDE') ? 'bg-[#20BDBE]' : value.includes('CIENCIAS HUMANAS') ? 'bg-[#F5831F]' : value.includes('CIENCIAS BIOLOGICAS') ? 'bg-[#EB008B]' : value.includes('ENGENHARIAS') ? 'bg-[#FCB712]' : value.includes('CIENCIAS SOCIAIS APLICADAS') ? 'bg-[#009245]' : value.includes('LINGUISTICA LETRAS E ARTES') ? 'bg-[#A67C52]' : value.includes('OUTROS') ? 'bg-[#1B1464]' : 'bg-[#000]'}
-                              `}
-                >
-                  <PuzzlePiece size={12} className="text-white" /> {value.trim()}
-                </li>
-              ))}
+              {props.area != '' ? (
+                props.area.split(';').map((value, index) => (
+                  <li
+                    key={index}
+                className={`py-2 whitespace-nowrap px-4 rounded-md text-xs font-bold flex gap-2 text-white items-center ${value.includes('CIENCIAS AGRARIAS') ? 'bg-red-400' : value.includes('CIENCIAS EXATAS E DA TERRA') ? 'bg-green-400' : value.includes('CIENCIAS DA SAUDE') ? 'bg-[#20BDBE]' : value.includes('CIENCIAS HUMANAS') ? 'bg-[#F5831F]' : value.includes('CIENCIAS BIOLOGICAS') ? 'bg-[#EB008B]' : value.includes('ENGENHARIAS') ? 'bg-[#FCB712]' : value.includes('CIENCIAS SOCIAIS APLICADAS') ? 'bg-[#009245]' : value.includes('LINGUISTICA LETRAS E ARTES') ? 'bg-[#A67C52]' : value.includes('OUTROS') ? 'bg-[#1B1464]' : 'bg-[#000]'}
+                                `}
+                  >
+                    <PuzzlePiece size={12} className="text-white" /> {value.trim()}
+                  </li>
+                ))
+              ):('')}
               
               {props.graduation != '' ? (
                 <div className={`bg-blue-400 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center`}><GraduationCap size={12} className="textwhite" /> {props.graduation}</div>
@@ -1062,7 +1068,7 @@ export function PopUp(props: PesquisadorProps) {
             <div className="flex w-full gap-6 h-full flex-col-reverse lg:flex-row">
               <div className="flex-1 h-full ">
 
-                <Tabs>
+                <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
                   <TabList className={`flex gap-2 mb-6 overflow-x-auto `}>
                     <Tab selected={selectedTab === 0} className={` whitespace-nowrap  outline-none cursor-pointer text-sm rounded-full text-gray-400 flex items-center border-[1px] border-white gap-2 px-4 py-2 font-semibold transition  ${selectedTab == 0 ? "bg-blue-400 text-white hover:bg-blue-500" : ('hover:bg-gray-100')}`} onClick={onClickPublicacoes} >
                       <Quotes size={16} />

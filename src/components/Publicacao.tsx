@@ -38,9 +38,11 @@ let qualisColor = {
 export function Publicacao(props: Publicacao) {
     const { valoresSelecionadosExport, setValoresSelecionadosExport } = useContext(UserContext);
 
-    if (props.lattes_10_id == "undefined") {
-        props.lattes_10_id = ""
-    }
+    useEffect(() => {
+        if (props.lattes_10_id == "undefined") {
+            props.lattes_10_id = ""
+        }
+    }, [props.lattes_10_id]);
 
     const {distinct, setDistinct} = useContext(UserContext)
 
@@ -74,21 +76,31 @@ export function Publicacao(props: Publicacao) {
                 {props.lattes_10_id !== 'K4796572P6' && (
   <div className="pt-6 flex flex-wrap">
     <p className="text-gray-400 text-sm font-medium flex-wrap flex gap-1">
-      {props.title
-        .replace(/&quot;/g, '"')
-        .replace(/&#10;/g, '\n')
-        .split(/[\s.,;?!]+/) // Dividir por espaços em branco e caracteres de pontuação
-        .map((word, index) => {
-          const formattedWord = word.toLowerCase();
-          if (valoresSelecionadosExport.includes(formattedWord) && !ignoredWords.includes(formattedWord)) {
-            return (
-              <span key={index} className="text-blue-400 font-bold">
-                {word}{' '}
-              </span>
-            );
-          }
-          return <span key={index}>{word} </span>;
-        })}
+    {props.title
+  .replace(/&quot;/g, '"')
+  .replace(/&#10;/g, '\n')
+  .split(/[\s.,;?!]+/) // Dividir por espaços em branco e caracteres de pontuação
+  .map((word, index) => {
+    // Remover caracteres especiais e transformar em minúsculas
+    const formattedWord = word.replace(/[^\w\s]/gi, '').toLowerCase();
+
+    // Lista de palavras ignoradas
+    const ignoredWords = ['lista', 'de', 'palavras', 'ignoradas'];
+
+    if (
+      valoresSelecionadosExport.includes(formattedWord) &&
+      !ignoredWords.includes(formattedWord)
+    ) {
+      return (
+        <span key={index} className="text-blue-400 font-bold">
+          {word}{' '}
+        </span>
+      );
+    }
+    return <span key={index}>{word} </span>;
+  })}
+
+
     </p>
   </div>
 )}

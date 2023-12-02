@@ -455,7 +455,7 @@ console.log(pesquisadoresSelecionadosGroupBarema)
         </div>
 
         {valoresSelecionadosExport || valorDigitadoPesquisaDireta ? (
-          <div className="w-full gap-1 flex p-6 border-[1px] border-gray-300 rounded-md mb-9">
+          <div className="w-full gap-1 flex p-6 border-[1px] border-gray-300 rounded-xl mb-9">
             <p className="text-gray-400">Foram encontrados <strong className="font-bold text-blue-400">{totalPesquisadores}</strong> pesquisadores para <strong className="font-bold text-blue-400">{valorDigitadoPesquisaDireta.replace(/;/g, ' ')}{decodeURIComponent(valoresSelecionadosExport.replace(/;/g, ' ou ')).split('%20').join(' ')}</strong></p>
 
 

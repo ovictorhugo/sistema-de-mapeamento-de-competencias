@@ -104,17 +104,20 @@ export function Header() {
         <div className="md:flex h-full hidden  rounded-md   ml-4">
           
        {idVersao != '1' ? 
-       ( <Link to={`/indicators${idVersao}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><ChartLine size={16} className="text-gray-400" />Indicadores</Link>)
+       ( <Link to={`/indicators/${idVersao}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><ChartLine size={16} className="text-gray-400" />Indicadores</Link>)
        :('')}
           <Link to={`/terms/${idVersao}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><ListDashes size={16} className="text-gray-400" />Dicionário</Link>
           <Link to={`/magazine/${idVersao}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><BookOpen size={16} className="text-gray-400" />Revistas</Link>
           <Link to={`/barema/${idVersao}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><Textbox size={16} />Barema{ pesquisadoresSelecionadosGroupBarema != '' ? (<div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>):('')}</Link>
-          <Link to={`/programas-graduacao/${idVersao}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><GraduationCap size={16} />Pós-gradução{ pesquisadoresSelecionadosGroupBarema != '' ? (<div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>):('')}</Link>
+          <Link to={`/programas-graduacao/${idVersao}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><GraduationCap size={16} />Pós-gradução</Link>
        
         </div>
       </div>
 
       <div className="flex gap-4">
+      <Link  to={`/indicators-pos/${idVersao}`} className="w-fit h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-sm text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500  font-medium transition">
+            <ChartLine size={16} className="text-white" /> Indicadores da pós-graduação
+        </Link>
         <div id="google_translate_element" ></div>
         {/*<LanguageSwitcher/>*/}
         </div>

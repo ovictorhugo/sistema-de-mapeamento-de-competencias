@@ -14,22 +14,7 @@ import logo_4 from '../assets/logo_4.png';
 import logo_5 from '../assets/logo_5.png';
 import BrasilMap from "./BrasilMap";
 
-import { PesquisaGeral } from "./PesquisaGeral";
-import SearchInicio from "./SearchInicio";
-import { Header } from "./Header";
-import Search from "./Search";
-import { VisaoPrograma } from "./VisaoPrograma";
-import { HomeInicial } from "./HomeInicial";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { Pesquisadores } from "./Pesquisadores";
-import { Publicacoes } from "./Publicacoes";
-import { Instituicoes } from "./Instituicoes";
-import { DadosGerais } from "./DadosGerais";
-import { LogoIapos } from "./LogoIapos";
-import { Logo } from "./Logo";
-import { LogoSimcc } from "./LogoSimcc";
-import { PesquisadoresTaxinomia } from "./PesquisadoresTaxonomia";
-import { Filter } from "./Filter";
+
 
 
 interface GraduateProgram {
@@ -120,7 +105,7 @@ export function Graduations(props: Props) {
   
 
   const { idVersao, setIdVersao } = useContext(UserContext);
-  setIdVersao(props.id)
+  setIdVersao("4")
 
 
 
@@ -275,14 +260,14 @@ console.log('idversao',idVersao)
       <div className="backgroundGradient opacity-60 animate-pulse h-screen w-full backdrop-blur-lg absolute top-0 z-[-9999]">
       </div>
 
-      <div className="h-[500px] absolute z-[-9999]  top-[50vh] right-0"><SvgLines/></div>
+      <div className="h-[500px] absolute z-[-9999] bottom-0  right-0"><SvgLines/></div>
 
       <div className="w-full h-screen max-h-screen overflow-y-hidden  overflow-hidden flex items-center absolute top-0 "><BrasilMap/></div>
 
       <div className="px-6 md:px-16 flex justify-center h-screen flex-col  w-fit">
         <div className="h-[350px] absolute  ml-16 "><Circle/></div>
-        <h1 className="z-[999999] text-5xl mb-4 font-medium max-w-[750px] ">
-        <strong className="bg-blue-400 text-white font-normal">
+        <h1 className="z-[999999] text-4xl mb-4 font-medium max-w-[750px] ">
+        <strong className="bg-red-400 text-white font-normal">
         Escolha um programa
         </strong>{" "}
         e veja o que a plataforma filtra para você.
@@ -300,7 +285,7 @@ console.log('idversao',idVersao)
                           onKeyPress={handleKeyPress}
                           value={filterValue}
                           onChange={e => setFilterValue(e.target.value)}
-                          placeholder='Nome ou sigla da instituição'
+                          placeholder='Nome do programa de pós-graduação'
                           className="w-full outline-none text-sm"
                         />
                       </div>
@@ -491,214 +476,7 @@ console.log('idversao',idVersao)
             })}
       </div>
 
-      <div className="absolute w-full top-[72vh] z-[-9] bg-gradient-to-t from-white h-[350px]"></div>
-      
-
-      <div className="flex">
-
-      <Filter/>
-
-      <div className=" flex flex-1 flex-col relative items-center ">
-
-<div
-  ref={ref}
-  className={` left-0 flex-col items-center flex flex-1 w-full transition justify-center z-[999] ${isSticky ? 'pb-6 sticky top-0 bg-white transition-all shadow-sm' : ' transition-all'}`}
->
-
-  <div className={`${isSticky ? 'flex' : ' hidden'} h-20 w-full`}>
-    <Header />
-  </div>
-
-  <Search />
-</div>
-
-
-{valoresSelecionadosExport == "" && valorDigitadoPesquisaDireta == "" ? (
-  
-
-    <DadosGerais/>
    
- 
-) : (
-  <Tabs className="w-full items-center flex flex-col " >
-    <div className="flex items-center justify-between w-full mt-6  px-6 md:px-16 m-[0 auto]">
-      <p className="text-gray-400 mr-6 min-w-[350px] lg:flex gap-1">
-        Resultados da pesquisa em {' '}
-        <strong className="font-bold text-blue-400">
-          {botaoTermosClicado ? 'termos' : botaoResumoClicado ? 'resumo' : botaoAreasClicado ? 'áreas' : botaoPesquisadoresClicado ? 'nome' : botaoPatentesClicado ? 'patente' :''}
-        </strong> por:
-      </p>
-      <TabList className="w-full">
-        <div className={`w-full gap-6  m-0 grid  ${botaoPesquisadoresClicado || botaoPatentesClicado ? 'grid-cols-2' : 'grid-cols-3'}`}>
-          <Tab onClick={handleClickTabs} selected={selectedTab === 0} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente" : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all" >
-            <User size={16} className="" />
-            <p className=" md:flex hidden"> Pesquisadores</p>
-            <div className={` py-1 px-4 rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" :''}`}>{totalPesquisadores}</div>
-          </Tab>
-
-
-          {botaoPatentesClicado ? (
-            <head></head>
-          ) : (
-          <Tab onClick={handleClickTabs} selected={selectedTab === 1} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente"  : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all"  >
-            <File size={16} className="" />
-
-            <p className=" md:flex hidden">Publicações</p>
-            <div className={` py-1 px-4  rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" : ''}`}>{totalPublicacoes}</div>
-          </Tab>
-          )}
-
-
-
-          {botaoPesquisadoresClicado ? (
-            <head></head>
-          ) : (
-            <Tab onClick={handleClickTabs} selected={selectedTab === 2} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente"  : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all"  >
-              <Buildings size={16} className="" />
-              <p className="md:flex hidden">Instituições</p>
-
-              <div className={` py-1 px-4  rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" : ''}`}>{totalInstituicoes}</div>
-            </Tab>
-          )}
-        </div>
-      </TabList>
-    </div>
-
-    <div className="w-full">
-      {botaoTaxonomiaClicado ? (
-        <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16 ">
-        <PesquisadoresTaxinomia />
-      </TabPanel>
-      ): (
-        <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16 ">
-        <Pesquisadores />
-      </TabPanel>
-      )}
-      
-
-      {botaoPatentesClicado ? (''): (
-        <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16">
-        <Publicacoes />
-      </TabPanel>
-      )}
-
-
-      <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16">
-        <Instituicoes />
-      </TabPanel>
-
-    </div>
-
-  </Tabs>
-)}
-</div>
-      </div>
-
-      <div className="w-full flex justify-center my-6  px-6 md:px-16">
-                <div className=" p-24 m-[0 auto] w-full rounded-2xl bg-blue-400 items-center grid grid-cols-2 gap-12 bg-opacity-10 backdrop-blur-sm">
-                    <div>
-                        <h3 className="text-3xl font-medium text-gray-400 max-w-[500px] mb-4">O que a plataforma pode <strong className="bg-blue-400 text-white font-medium">fazer</strong> e como ela pode te <strong className="bg-blue-400 text-white font-medium">auxiliar</strong>?</h3>
-                        <p className=" text-gray-400 mb-8">O Sistema de Mapeamento de Competências é uma plataforma desenvolvida com o objetivo de auxiliar na seleção e filtragem de pesquisadores. Esta plataforma tem um potencial facilitar o processo de identificação e escolha dos profissionais mais qualificados em suas respectivas áreas de atuação, ver linhas de pesquisas e orientações.</p>
-
-                        <Link to={"/indicators"} className="w-fit mt-8 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-6 py-2 justify-center hover:bg-blue-500 text-base font-medium transition">
-                            <YoutubeLogo size={16} className="text-white" /> Assistir vídeo
-                        </Link>
-                    </div>
-
-                    <div className="flex-1 h-full flex items-center justify-center"> 
-                    {idVersao === '1' || idVersao === ''  ? (
-                        <div className="w-3/5 flex items-center justify-center "><LogoIapos /></div>
-                  ) : (idVersao === '2') ? (
-                    <div className="w-3/5 flex items-center justify-center "><Logo /></div>
-                  ) : (idVersao == '4') ? (
-                    <div className=" w-3/5 flex items-center justify-center "><LogoSimcc /></div>
-                  ) : (
-                  ''
-                  )}
-                  </div>
-
-                </div>
-
-               <div className="right-[400px] relative z-[-9] py-6"> <Circle/></div>
-            </div>
-
-
-            <div className="grid grid-cols-2 py-24 gap-12 px-6 md:px-16">
-                <div className="w-full max-w-[640px] ">
-                    <h3 className="font-medium text-4xl mb-4">1. Use <strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">palavras-chave</strong> específicas</h3>
-                    <p className="text-lg text-gray-400">
-                        Tente usar palavras-chave específicas que descrevem o tópico que você está procurando. Por exemplo, em vez de pesquisar por "robótica", pesquise por "robótica educacional". Você pode fazer a pesquisa com mais de uma palavra-chave
-                    </p>
-                </div>
-
-
-                <div className="flex items-center justify-end">
-                    
-                </div>
-
-            </div>
-
-            <div className="grid grid-cols-2 py-24 gap-12 px-6 md:px-16">
-
-
-                <div className="flex items-center justify-end">
-                    
-                </div>
-
-                <div className="w-full max-w-[640px] ">
-                    <h3 className="font-medium text-4xl mb-4">2. Use <strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">filtros</strong> de pesquisa</h3>
-                    <p className="text-lg text-gray-400">
-                    Você pode usar os filtros de pesquisa na plataforma para limitar os resultados da pesquisa com base em diferentes critérios, como buscar por Pesquisador específico, filtrar por área ou por qualis e ano.
-                    </p>
-                </div>
-
-            </div>
-
-            <div className="grid grid-cols-2 py-24 gap-12 px-6 md:px-16">
-                <div className="w-full max-w-[640px] ">
-                    <h3 className="font-medium text-4xl mb-4">3. Use <strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">palavras-chave</strong> específicas</h3>
-                    <p className="text-lg text-gray-400">
-                        Tente usar palavras-chave específicas que descrevem o tópico que você está procurando. Por exemplo, em vez de pesquisar por "robótica", pesquise por "robótica educacional". Você pode fazer a pesquisa com mais de uma palavra-chave
-                    </p>
-                </div>
-
-
-                <div className="flex items-center justify-end">
-                    
-                </div>
-
-            </div>
-
-            
-
-      <div
-        id="principal"
-        className="h-screen max-h-screen overflow-y-hidden grid grid-cols-5 gap-6 w-[450px] py-6 px:6 md:pl-16"
-        style={{ maxHeight: "100vh" }}
-      >
-        {ResearcherImage.map((props, index) => (
-          <a
-            href={`https://lattes.cnpq.br/${props.lattes}`}
-            key={props.lattes_10_id}
-            className="whitespace-nowrap bg-cover bg-center bg-no-repeat rounded-md"
-            style={{
-              backgroundImage:
-                index % 3 === 0
-                  ? "none"
-                  : `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id})`,
-              paddingTop: "100%", // Define a proporção 1:1 (quadrado)
-            }}
-          ></a>
-        ))}
-      </div>
-
-
-      <button className={`fixed bottom-[32px] right-0 w-10 mb-[32px] h-auto hidden  ${isSticky ? 'md:flex' : ' hidden'}`} onClick={handleClickt}>
-        <div className="">
-          <p className="text-blue-400 font-bold  writing-mode-vertical origin-top-right transform " style={{ writingMode: "vertical-rl" }}>VOLTAR AO TOPO</p>
-          <ArrowCircleUp size={24} className="text-blue-400 mt-4" />
-        </div>
-      </button>
 
       
    
