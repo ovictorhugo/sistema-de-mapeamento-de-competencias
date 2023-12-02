@@ -178,7 +178,7 @@ export function PopUp(props: PesquisadorProps) {
     { id: 7, itens: 'B3' },
     { id: 8, itens: 'B4' },
     { id: 10, itens: 'C' },
-    { id: 11, itens: 'None' },
+    { id: 11, itens: 'SQ' },
   ]);
 
   const qualisColor: { [key: string]: string } = {
@@ -191,7 +191,7 @@ export function PopUp(props: PesquisadorProps) {
     'B3': 'bg-[#F4AD78]',
     'B4': 'bg-[#F4A992]',
     'C': 'bg-[#EC1C22]',
-    'None': 'bg-[#560B11]',
+    'SQ': 'bg-[#560B11]',
   }
 
   //ano range

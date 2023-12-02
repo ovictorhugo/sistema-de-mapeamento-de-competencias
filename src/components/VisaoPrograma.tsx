@@ -208,6 +208,36 @@ console.log(urlQualis)
 
 
     const percentage = 66;
+
+      //download
+
+      const convertJsonToCsv = (json: any[]): string => {
+        const items = json;
+        const replacer = (key: string, value: any) => (value === null ? '' : value); // Handle null values
+        const header = Object.keys(items[0]);
+        const csv = [
+          '\uFEFF' + header.join(';'), // Add BOM and CSV header
+          ...items.map((item) =>
+            header.map((fieldName) => JSON.stringify(item[fieldName], replacer)).join(';')
+          ) // CSV data
+        ].join('\r\n');
+    
+        return csv;
+      };
+    
+      const handleDownloadJson = async () => {
+        try {
+          const csvData = convertJsonToCsv(VisaoPrograma);
+          const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.download = `dadosGerais.csv`;
+          link.href = url;
+          link.click();
+        } catch (error) {
+          console.error(error);
+        }
+      };
     return (
   
     <div className="md:px-16 px-6 pt-12 w-full">
@@ -217,7 +247,7 @@ console.log(urlQualis)
         <div className="flex gap-4 items-center w-full">
         <div className="">
         <h1 className="text-left max-w-[350px] min-w-[350px]  font-medium text-3xl ">
-           Visão geral do programa de <strong className="bg-green-400 text-white font-medium">pós-graduação</strong>
+           Visão geral do programa de <strong className="bg-red-400 text-white font-medium">pós-graduação</strong>
         </h1>
         <p className="text-sm text-gray-400 mt-2">Informações referentes a produção dos últimos 4 anos</p>
         </div>
@@ -272,7 +302,7 @@ console.log(urlQualis)
             <div className="flex gap-4">
            
 
-            <div className="cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+            <div onClick={handleDownloadJson}  className="cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
               <DownloadSimple size={24} className={" transition-all text-gray-400"} />
             </div>
             </div>

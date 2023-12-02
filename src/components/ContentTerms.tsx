@@ -47,7 +47,7 @@ export function ContentTerms(props: Props) {
 
     //logica versões
  
-    setIdVersao(props.program)
+    setIdVersao("4")
 
   
 

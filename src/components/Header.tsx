@@ -1,5 +1,5 @@
 import { Logo } from "./Logo";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Ilustracao } from "./Ilustracao";
 import { ArrowCircleDown, Info, Funnel, User, File, Buildings, PaperPlaneTilt, ChartLine, Question, SignIn, ListDashes, UserCirclePlus, UserCircle, BookOpen, Textbox, Share, GraduationCap } from "phosphor-react";
 
@@ -70,6 +70,11 @@ export function Header() {
     setEstadoSelecionado("");
   };
 
+  const location = useLocation();
+
+  // Verifica se a URL é "/programa-teste"
+  const isProgramaTeste = location.pathname === `/programas-graduacao/${idVersao}` || location.pathname === `/result`;
+
 
   
   const { pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema } = useContext(UserContext);
@@ -96,7 +101,7 @@ export function Header() {
           ) : (idVersao === "3") ?(
             <Link to={"https://profnit.org.br/"} target="_blank" className="h-[32px] "><img src={ifba} alt="" className="h-[30px]" /></Link>
           ) : (idVersao == '4') ? (
-            <Link to={"https://profnit.org.br/"} target="_blank" className=" "><img src={logo_4} alt="" className="h-[38px]" /></Link>
+            <Link to={""} target="_blank" className=" "><img src={logo_4} alt="" className="h-[38px]" /></Link>
           ): ('')}
 
         </div>
@@ -115,10 +120,18 @@ export function Header() {
       </div>
 
       <div className="flex gap-4">
-      <Link  to={`/indicators-pos/${idVersao}`} className="w-fit h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-sm text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500  font-medium transition">
-            <ChartLine size={16} className="text-white" /> Indicadores da pós-graduação
+      <div id="google_translate_element" ></div>
+
+      {isProgramaTeste && (
+        <Link
+          to={`/indicators-pos`}
+          className="w-fit h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-sm text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 font-medium transition"
+        >
+          <ChartLine size={16} className="text-white" /> Indicadores da pós-graduação
         </Link>
-        <div id="google_translate_element" ></div>
+      )}
+
+        
         {/*<LanguageSwitcher/>*/}
         </div>
     </header>

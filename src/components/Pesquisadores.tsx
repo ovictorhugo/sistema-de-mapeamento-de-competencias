@@ -516,7 +516,7 @@ console.log(pesquisadoresSelecionadosGroupBarema)
 
         <div className="mb-9">
 
-          <button onClick={handleDownloadJson} className="flex items-center gap-4 bg-blue-400 text-white rounded-full px-6 py-2 ml-auto justify-center hover:bg-blue-500 mb-6 font-medium transition"><FileCsv size={16} className="text-white" />Download CSV</button>
+          <button onClick={handleDownloadJson} className="flex items-center gap-4 bg-blue-400 text-white rounded-xl px-6 py-2 ml-auto justify-center hover:bg-blue-500 mb-6 font-medium transition"><FileCsv size={16} className="text-white" />Download CSV</button>
 
         </div>
       </div>

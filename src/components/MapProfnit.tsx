@@ -159,9 +159,50 @@ console.log('idversao',idVersao)
     
   }
 
+  //
+  const [showButton, setShowButton] = useState(false);
+
+  const handleScroll = () => {
+    if (window.pageYOffset > 300) {
+      setShowButton(true);
+    } else {
+      setShowButton(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+
   const handleClickt = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  //stick search
+  const [isSticky, setIsSticky] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  function handleScrollSearch() {
+    const element = ref.current!;
+    const { top } = element.getBoundingClientRect();
+    if (top <= 0) {
+      setIsSticky(true);
+    } else {
+      setIsSticky(false);
+    }
+  }
+
+  // adiciona um event listener para detectar o scroll da página e chama a função "handleScroll"
+  useEffect(() => {
+    window.addEventListener('scroll', handleScrollSearch);
+    return () => {
+      window.removeEventListener('scroll', handleScrollSearch);
+    };
+  }, []);
 
 
 
@@ -226,9 +267,7 @@ console.log('idversao',idVersao)
    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
 
-   //stick search
-  const [isSticky, setIsSticky] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+
    
   //idGraduateProgram
   function handleFilterChange(newValue: string) {
@@ -496,23 +535,23 @@ console.log('idversao',idVersao)
 
      <div className="pt-[535px] flex flex-1 flex-col relative  items-center w-full ">
 
-      <div className=" w-full">
+    
 
       <Filter/>
 
-      <div className=" flex flex-1 flex-col relative items-center w-full ">
+     
 
-<div
-  ref={ref}
-  className={` left-0 flex-col items-center flex flex-1 w-full transition justify-center z-[999] ${isSticky ? 'pb-6 sticky top-0 bg-white transition-all shadow-sm' : ' transition-all'}`}
->
+      <div
+          ref={ref}
+          className={` left-0 flex-col items-center flex flex-1 w-full transition justify-center z-[99999] ${isSticky ? 'pb-6 sticky top-0 left-0 bg-white transition-all shadow-sm' : ' transition-all'}`}
+        >
 
-  <div className={`${isSticky ? 'flex' : ' hidden'} h-20 w-full`}>
-    <Header />
-  </div>
+          <div className={`${isSticky ? 'flex' : ' hidden'} h-20 w-full`}>
+            <Header />
+          </div>
 
-  <Search />
-</div>
+          <Search  />
+        </div>
 
 
 {valoresSelecionadosExport == "" && valorDigitadoPesquisaDireta == "" ? (
@@ -588,8 +627,8 @@ console.log('idversao',idVersao)
 
   </Tabs>
 )}
-</div>
-      </div>
+
+  
 
       {valoresSelecionadosExport == "" && valorDigitadoPesquisaDireta == "" ? (
         <div>
@@ -693,7 +732,7 @@ console.log('idversao',idVersao)
 
 
       <button className={`fixed bottom-[32px] right-0 w-10 mb-[32px] h-auto hidden  ${isSticky ? 'md:flex' : ' hidden'}`} onClick={handleClickt}>
-        <div className="">
+        <div className="z-[99999999999999999999999]">
           <p className="text-blue-400 font-bold  writing-mode-vertical origin-top-right transform " style={{ writingMode: "vertical-rl" }}>VOLTAR AO TOPO</p>
           <ArrowCircleUp size={24} className="text-blue-400 mt-4" />
         </div>

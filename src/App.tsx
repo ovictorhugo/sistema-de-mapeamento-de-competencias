@@ -176,6 +176,10 @@ console.log('[idVersao', idVersao)
               <Route path=':program?' element={<Indicators/>}/>
             </Route>
 
+            <Route path='indicators-pos'>
+              <Route path=':program?' element={<Indicators/>}/>
+            </Route>
+
             <Route path='programas-graduacao'>
               <Route path=':program?' element={<GraduationsMapPage/>}/>
             </Route>

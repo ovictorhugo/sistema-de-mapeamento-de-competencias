@@ -49,7 +49,7 @@ else {
 
 
 
-  let urlVisaoPrograma = `${urlGeral}/graduate_program_production?graduate_program_id=${idGraduateProgram}&year=${ano5AnosAtras}`;
+  let urlVisaoPrograma = `${urlGeral}/graduate_program_production?graduate_program_id=0&year=${ano5AnosAtras}`;
 
 // Monta a URL com o ano 5 anos atrás
 const urlQualis = `${urlGeral}/qualis_researcher?graduate_program_id=${QualQualis}&year=${ano5AnosAtras}&researcher_id=`;
@@ -212,6 +212,36 @@ console.log(urlVisaoPrograma)
 
 
     const percentage = 66;
+
+    //download
+
+    const convertJsonToCsv = (json: any[]): string => {
+      const items = json;
+      const replacer = (key: string, value: any) => (value === null ? '' : value); // Handle null values
+      const header = Object.keys(items[0]);
+      const csv = [
+        '\uFEFF' + header.join(';'), // Add BOM and CSV header
+        ...items.map((item) =>
+          header.map((fieldName) => JSON.stringify(item[fieldName], replacer)).join(';')
+        ) // CSV data
+      ].join('\r\n');
+  
+      return csv;
+    };
+  
+    const handleDownloadJson = async () => {
+      try {
+        const csvData = convertJsonToCsv(VisaoPrograma);
+        const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = `dadosGerais.csv`;
+        link.href = url;
+        link.click();
+      } catch (error) {
+        console.error(error);
+      }
+    };
     return (
   
     <div className="md:px-16 px-6 pt-12 w-full">
@@ -221,7 +251,7 @@ console.log(urlVisaoPrograma)
         <div className="flex gap-4 items-center w-full">
         <div className="">
         <h1 className="text-left max-w-[350px] min-w-[350px]  font-medium text-3xl ">
-           Visão geral de <strong className="bg-green-400 text-white font-medium">todos os programas</strong>
+           Visão geral das <strong className="bg-red-400 text-white font-medium">universidades estaduais</strong>
         </h1>
         <p className="text-sm text-gray-400 mt-2">Informações referentes a produção dos últimos 4 anos</p>
         </div>
@@ -276,7 +306,7 @@ console.log(urlVisaoPrograma)
             <div className="flex gap-4">
            
 
-            <div className="cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+            <div onClick={handleDownloadJson} className="cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
               <DownloadSimple size={24} className={" transition-all text-gray-400"} />
             </div>
             </div>
@@ -287,23 +317,7 @@ console.log(urlVisaoPrograma)
       })}
 
 
-    <div className="flex gap-6 h-[500px] w-full">
-            <div className="flex flex-1 h-full bg-blue-400  bg-opacity-50 backdrop-blur-sm rounded-2xl p-12 flex-col">
-            <div className="text-center font-medium text-2xl text-white mb-6 w-full">Artigos por qualis nos últimos 4 anos</div>
-            <HighchartsReact highcharts={Highcharts} options={optionsqualis} />
-            </div>
-            <div className="w-[450px] flex flex-col gap-6">
-                <div className="border rounded-2xl p-12 border-gray-300 w-full ">
-                <div className=" font-medium text-2xl text-right mb-2 w-full">Índice de produção de artigos</div>
-                <p className="text-sm text-gray-400 mb-6 text-right ">Índice de produção artigos (últimos 4 anos) = (1 x A1 + 0,875 x A2 + 0,75 x A3 + 0,625 x A4 + 0,5x B1 + 0,375 x B2 + 0,25 x B3 + 0,125 x B4) / (Número total de docentes)</p>
-                <h3 className="text-6xl font-medium text-right">{indiceProducaoArtigos}</h3>
-                </div>
-
-                <div className="border p-12 rounded-2xl border-gray-300 w-full h-full">
-                <div className=" font-medium text-2xl text-right mb-2 w-full">Índice de produção técnica</div>
-                </div>
-            </div>
-          </div>
+   
     </div>
 
       

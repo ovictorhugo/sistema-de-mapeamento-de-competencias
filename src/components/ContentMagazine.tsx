@@ -29,7 +29,7 @@ export function ContentMagazine(props: Props) {
 
       //logica versões
    
-      setIdVersao(props.program)
+      setIdVersao("4")
   
   
 

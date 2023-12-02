@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import { BookOpen, CaretDown, CaretUp, ChartLine, Divide, DownloadSimple, FileCsv, ListDashes, MagnifyingGlass, Minus, Plus, Textbox, Trash, UserPlus, X } from "phosphor-react";
+import { BookOpen, CaretDown, CaretUp, ChartLine, Divide, DownloadSimple, FileCsv, GraduationCap, ListDashes, MagnifyingGlass, Minus, Plus, Textbox, Trash, UserPlus, X } from "phosphor-react";
 
 import cimatec from '../assets/logo_profnit.png';
 import { LogoWhite } from "./LogoWhite";
@@ -8,7 +8,7 @@ import { LogoWhite } from "./LogoWhite";
 import { UserContext } from '../contexts/context'
 import { useEffect, useState, useContext } from "react";
 import { SvgBarema } from "./SvgBarema";
-
+import logo_4 from '../assets/logo_4.png';
 import Papa from 'papaparse';
 import Cookies from 'js-cookie';
 
@@ -871,7 +871,7 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
                     <div className="flex gap-6 items-center h-full justify-center ">
                     <Link to={"/"} className="h-[30px]  "><LogoWhite /></Link>
                     <div className="w-[1px] h-8 bg-gray-400"></div>
-                    <Link to={"https://profnit.org.br/"} target="_blank" className="h-[32px] "><img src={cimatec} alt="" className="h-[30px]" /></Link>
+                    <Link to={""} target="_blank" className="h-[32px] "><img src={logo_4} alt="" className="h-[30px]" /></Link>
                     </div>
 
                     <div className="md:flex h-full hidden  rounded-md   ml-4">
@@ -880,6 +880,7 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
                     <Link to={"/terms"} className="flex items-center h-full  px-4 text-white text-sm font-bold transition  gap-2"><ListDashes size={16}  />Dicionário</Link>
                     <Link to={"/magazine"} className="flex items-center h-full  px-4 text-white text-sm font-bold transition  gap-2"><BookOpen size={16} />Revistas</Link>
                     <Link to={"/barema"} className="flex items-center h-full  px-4 text-white text-sm font-bold transition  justify-center gap-2"><Textbox size={16} />Barema {pesquisadoresSelecionadosGroupBarema != ''  ? (<div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>):('')}</Link>
+                    <Link to={`/programas-graduacao/${idVersao}`} className="flex items-center h-full  px-4 text-white text-sm font-bold transition  gap-2"><GraduationCap size={16} />Pós-gradução</Link>
                     </div>
                 </div>
 

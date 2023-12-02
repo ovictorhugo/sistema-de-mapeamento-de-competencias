@@ -161,7 +161,7 @@ export function Pesquisador(props: PesquisadorProps) {
       </Link>
 
       <div onClick={handleOpenPopUp} id="id_perfil" className={`cursor-pointer group bg-white  border-gray-300 border-[1px]  items-center rounded-2xl hover:shadow-md transition w-full   ${isOn && valoresSelecionadosExport != '' ? "flex items-center justify-between" : "flex flex-col"}`}>
-        <div className={`bg-cover bg-top bg-no-repeat backdrop-blur-md backdrop-brightness-150 h-28 bg-gray-400 rounded-t-xl  w-full ${isOn && valoresSelecionadosExport != '' ? "hidden" : "flex "}`} style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id}) ` }}>
+        <div  className={`bg-cover bg-top bg-no-repeat backdrop-blur-md backdrop-brightness-150 h-28 bg-gray-400 rounded-t-xl  w-full ${isOn && valoresSelecionadosExport != '' ? "hidden" : "flex "}`} style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id}) ` }}>
           <div className={`bg-[#000000] bg-opacity-30 absolute backdrop-blur-sm w-full h-full rounded-t-xl`}></div>
 
         </div>
@@ -256,7 +256,7 @@ export function Pesquisador(props: PesquisadorProps) {
         {isOn ? (
           <head></head>
         ) : (
-          <div className="w-full  h-32 absolute bottom-0 hidden group-hover:flex py-6 px-2">
+          <div className="w-full  h-36 absolute bottom-0 hidden group-hover:flex py-6 px-2">
             <div className="bg-white w-full h-full flex justify-center items-center gap-2">
               <a href={`https://lattes.cnpq.br/${props.lattes_id}`} target="blank_" className="bg-blue-400 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center w-fit"><LinkSimple size={12} className="textwhite" /> Currículo Lattes</a>
               {props.orcid != "None" ? (

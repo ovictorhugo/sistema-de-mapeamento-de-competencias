@@ -312,7 +312,7 @@ console.log('idversao',idVersao)
 
                     
                     <div className="flex items-center gap-3">
-                    <div><img src={`${props.url_image}`} alt="" className="h-12 border-none w-auto"/></div>
+                    <div><img src={`${props.url_image}`} alt="" className="h-12 border-none w-auto flex-1"/></div>
                       <div>
                       <span className=" whitespace-normal text-base text-gray-400 mb-2 font-bold">{props.name}</span>
                       <p className="font-medium flex gap-1 items-center"> {props.instituicao}</p>
@@ -377,9 +377,9 @@ console.log('idversao',idVersao)
                     
 
                     <div className="flex items-center gap-3">
-                    <div><img src={`${props.url_image}`} alt="" className="h-16 border-none w-auto"/></div>
-                      <div>
-                      <span className=" whitespace-normal text-base text-gray-400 mb-2 font-bold">{props.name}</span>
+                    <div><img src={`${props.url_image}`} alt="" className="h-16 border-none  w-auto"/></div>
+                      <div className="flex-1">
+                      <span className=" whitespace-normal text-base text-gray-400 mb-2  font-bold">{props.name}</span>
                       <p className="font-medium flex gap-1 items-center"> <MapPin size={20} className="textwhite" /> {props.city} | {props.state}</p>
                       </div>
                     </div>
