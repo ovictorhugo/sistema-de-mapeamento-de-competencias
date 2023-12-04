@@ -262,7 +262,7 @@ export function ContentTerms(props: Props) {
           <div className="  bg-blue-400   bg-opacity-50 backdrop-blur-sm z-[999999] min-h-[340px]  h-full flex items-center rounded-2xl">
             <div className="flex z-[999999] flex-col w-full h-full px-10 justify-center">
               <div className=" z-[999999] flex flex-col w-full  sm:items-center transition py-12">
-                <h1 className="text-left text-white max-w-[700px] font-light text-4xl mb-2">Dicionário de <strong className="bg-green-400">palavras encontradas</strong> em termos, resumo e área de especialidade</h1>
+                <h1 className="text-left text-white max-w-[700px] font-light text-4xl mb-2">Dicionário de <strong className="bg-red-400">palavras encontradas</strong> em termos, resumo e área de especialidade</h1>
                 <div className={`z-[999999] flex gap-2 w-full my-4`}>
 
                   <div onClick={handleClickTermos} className={`outline-none cursor-pointer text-sm rounded-full  flex items-center gap-2 px-4 py-2 font-semibold transition ${botaoTermosClicado ? "activeTermos" : ('text-white')}`}>
@@ -310,7 +310,7 @@ export function ContentTerms(props: Props) {
       </div>
 
       <div className=" px-6 md:px-16 pb-16 h-screen pt-20  ml-[600px]">
-        <h2 className="mb-4 text-3xl font-medium text-gray-400">Palavra em <strong className="font-bold text-white bg-green-400">{botaoResumoClicado ? "resumo" : (botaoAreasClicado ? "áreas" : "termo")}</strong></h2>
+        <h2 className="mb-4 text-3xl font-medium text-gray-400">Palavra em <strong className="font-bold text-white bg-red-400">{botaoResumoClicado ? "resumo" : (botaoAreasClicado ? "áreas" : "termo")}</strong></h2>
         {pesquisaInput.length == 0 ? (<p className="text-gray-400 mb-8">Mostrando as 50 palavras mais frequentes, digite para aparecer mais</p>) : ('')}
         {checkboxItems}
       </div>

@@ -101,7 +101,7 @@ const filteredResults = magazine.filter(prop =>
                 <div className="h-screen py-20  flex items-center ">
                 <div className="bg-blue-400 bg-opacity-50 backdrop-blur-sm rounded-2xl flex flex-col w-full h-full p-16 items-center justify-center">
                 <div className="flex justify-center flex-col items-center mb-12">
-                  <h1 className="text-white   font-light text-4xl mb-2">Pesquise <strong className="bg-green-400">o nome da revista ou ISSN</strong> para ver o Qualis e JCR</h1>
+                  <h1 className="text-white   font-light text-4xl mb-2">Pesquise <strong className="bg-red-400">o nome da revista ou ISSN</strong> para ver o Qualis e JCR</h1>
                 <p className="text-white ">Para ajudar a sua pesquisa, fornecemos uma lista extensa de revistas e suas classificações.</p>
 
                

@@ -37,8 +37,10 @@ export function Publicacoes() {
   const { totalPublicacoes, setTotalPublicacoes } = useContext(UserContext);
   const { valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta } = useContext(UserContext);
   const { urlGeral, setUrlGeral } = useContext(UserContext);
+    //ano range
+    const [value, setValue] = useState<number>(2000);
 
-  let urlTermPublicacoes = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=2000&qualis=A1;A2;A3;A4;B1;B2;B3;B4;B5;C`;
+  let urlTermPublicacoes = `${urlGeral}bibliographic_production_article?terms=${valoresSelecionadosExport}&year=${value}&qualis=A1;A2;A3;A4;B1;B2;B3;B4;B5;C`;
 
   const [researcher, setResearcher] = useState<PesquisadorProps[]>([]); // Define o estado vazio no início
   const [publicacoes, setPublicacoes] = useState<Publicacao[]>([]); // Define o estado vazio no início
@@ -94,8 +96,7 @@ export function Publicacoes() {
     { id: 11, itens: 'SQ' },
   ]);
 
-  //ano range
-  const [value, setValue] = useState<number>(2000);
+
 
   type Quali = {
     id: number;
@@ -608,7 +609,7 @@ export function Publicacoes() {
           )}
 
           {valoresSelecionadosExport || valorDigitadoPesquisaDireta ? (
-            <div className=" justify-between w-full gap-1 flex p-6 border-[1px] border-gray-300 rounded-md mb-9">
+            <div className=" justify-between w-full gap-1 flex p-6 border-[1px] border-gray-300 rounded-2xl mb-9">
               <p className="text-gray-400 ">Foram encontrados <strong className="font-bold text-blue-400">{totalPublicacoes}</strong> publicações para <strong className="font-bold text-blue-400">{valorDigitadoPesquisaDireta.replace(/;/g, ' ')}{decodeURIComponent(valoresSelecionadosExport.replace(/;/g, ' ou ')).split('%20').join(' ')} </strong>
                 em artigos
               </p>
@@ -663,7 +664,7 @@ export function Publicacoes() {
 
         <div className="mb-9">
 
-          <button onClick={handleDownloadJson} className="flex items-center gap-4 bg-blue-400 text-white rounded-full px-6 py-2 ml-auto justify-center hover:bg-blue-500 mb-6 font-medium transition"><FileCsv size={16} className="text-white" />Download CSV</button>
+          <button onClick={handleDownloadJson} className="flex items-center gap-4 bg-blue-400 text-white rounded-xl px-6 py-2 ml-auto justify-center hover:bg-blue-500 mb-6 font-medium transition"><FileCsv size={16} className="text-white" />Download CSV</button>
 
         </div>
       </div>

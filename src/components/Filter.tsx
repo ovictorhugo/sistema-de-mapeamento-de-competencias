@@ -1,10 +1,79 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useRef, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/context';
-import { PuzzlePiece, SlidersHorizontal, X } from 'phosphor-react';
+import { Buildings, CaretDown, CaretLeft, CaretRight, CaretUp, Info, PuzzlePiece, SlidersHorizontal, Trash, Users, X } from 'phosphor-react';
+import DropdownMultiSelect from './DropdownMultiSelect';
+
+type Research = {
+  among: number,
+  articles: number,
+  book: number,
+  book_chapters: number,
+  id: string,
+  name: string,
+  university: string,
+  lattes_id: string,
+  area: string,
+  lattes_10_id: string,
+  abstract: string
+  city: string,
+  orcid: string,
+  image: string,
+  graduation: string,
+  patent: string,
+  software: string,
+  brand: string,
+  lattes_update: Date,
+}
 
 export function Filter() {
     const { EstadoFiltro, setEstadoFiltro } = useContext(UserContext);
+    const [filtroArea , setFiltroArea] = useState(false);
+    const [popupPesquisadores , setPopupPesquisadores] = useState(false);
+    const [filtroInstituicao , setFiltroInstituicao] = useState(false);
+
+  
+
+    const [researcher, setResearcher] = useState<Research[]>([]); // Define o estado vazio no início
+    const [isLoading, setIsLoading] = useState(false);
+
+    const { botaoPesquisadoresClicado, setBotaoPesquisadoresClicado } = useContext(UserContext);
+  const { urlGeral, setUrlGeral } = useContext(UserContext);
+  const { pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema } = useContext(UserContext);
+
+  let urlTermPesquisadores = `${urlGeral}/researcherName?name=${pesquisadoresSelecionadosGroupBarema}`
+
+  if (botaoPesquisadoresClicado) {
+    urlTermPesquisadores = `${urlGeral}/researcherName?name=${pesquisadoresSelecionadosGroupBarema}`;
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(urlTermPesquisadores, {
+          mode: 'cors',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Max-Age': '3600',
+            'Content-Type': 'text/plain'
+          }
+        });
+        const data = await response.json();
+        if (data) {
+          setResearcher(data);
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, [urlTermPesquisadores]);
+  
 
     const qualisColor: { [key: string]: string } = {
         'CIENCIAS AGRARIAS': 'bg-red-400',
@@ -87,32 +156,204 @@ export function Filter() {
         );
       });
 
+      const history = useNavigate();
+      const { valoresSelecionadosExport, setValoresSelecionadosExport } = useContext(UserContext);
+
+      const handleClickBtn = () => {
+        setPopupPesquisadores(!popupPesquisadores)
+        setEstadoFiltro(false)
+
+       
+   
+      };
+
+      const limparSelecao = () => {
+        setPesquisadoresSelecionadosGroupBarema('')
+       
+   
+      };
+
+
+
+      //scrool
+      const [isSticky, setIsSticky] = useState(false);
+      const ref = useRef<HTMLDivElement>(null);
+    
+      function handleScrollSearch() {
+        const element = ref.current!;
+        const { top } = element.getBoundingClientRect();
+        if (top <= 0) {
+          setIsSticky(true);
+        } else {
+          setIsSticky(false);
+        }
+      }
+
+      //instituições
+      //dropdowsn
+      const optionsDropdown = ['Universidade Estadual do Sudoeste da Bahia', 'Universidade Estadual de Santa Cruz', 'Universidade do Estado da Bahia', 'Universidade Estadual de Feira de Santana'];
+      const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+      const {intituicoesSelecionadasCheckbox, setIntituicoesSelecionadasCheckbox} = useContext(UserContext)
+      setIntituicoesSelecionadasCheckbox(selectedOptions.join(';'))
+
+      console.log(intituicoesSelecionadasCheckbox)
+
   return (
-    <div className='' >
+    <div  ref={ref} className={` `} >
 
-        {EstadoFiltro ? (
-            <div className='transition fixed top-0 left-0 h-screen p-12 z-[9999999999] w-[400px] '>
-                <div className='bg-white w-full h-full mb-8 rounded-xl shadow-xl p-6 '>
-                <div className='flex items-center gap-6 justify-between'>
-                <div className='flex items-center gap-4'>
-                    <SlidersHorizontal size={24} className="text-gray-400" />
-                    <p className='text-gray-400 text-lg '>Filtros</p>
+        
+            <div className='transition pb-8 fixed top-0 flex left-0 h-full z-[999999]  '>
+              <div className={`h-full pb-4 w-16 items-center z-10 flex flex-col justify-between ${EstadoFiltro || popupPesquisadores ? ('bg-gray-50'): ('')}`}>
+                <div>
+                <div className='h-[80px] items-center justify-center flex '>
+                <div onClick={() => setEstadoFiltro(!EstadoFiltro)} className="  h-10 w-10 rounded-xl bg-gray-100 items-center justify-center flex hover:bg-gray-300 cursor-pointer transition-all">
+                    {EstadoFiltro ? (
+                      <CaretLeft size={16} className="text-gray-500" />
+                    ): (
+                      <CaretRight size={16} className="text-gray-500" />
+                    )}
+                  </div>
                 </div>
 
-                <div onClick={() => setEstadoFiltro(false)} className={`cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center `}>
-                        <X size={24} className={'rotate-180 transition-all text-gray-400'} />
-                        </div>
+                {EstadoFiltro || popupPesquisadores ? (
+                  <div onClick={() => setEstadoFiltro(!EstadoFiltro)} className="mb-2 h-10 w-10 rounded-xl bg-blue-400 items-center justify-center flex hover:bg-blue-500 cursor-pointer transition-all">
+                  <SlidersHorizontal size={16} className="text-white" />
                 </div>
+                ): ('')}
+                </div>
+                <div>
 
-                <div className=''>
+                <div  className="mb-4  h-10 w-10 rounded-xl bg-gray-100 items-center justify-center flex hover:bg-gray-300 cursor-pointer transition-all">
+                <Info size={16} className="text-gray-500" />
+                  </div>
+               
+                  <div  onClick={handleClickBtn} className=" h-10 w-10 rounded-xl bg-blue-400 items-center justify-center flex hover:bg-blue-500 cursor-pointer transition-all">
+                    <Users size={16} className="text-white" />
+                  </div>
 
-                <div className="gap-3 flex flex-wrap ">
-              {checkboxQualis}
+                 
+              
+                </div>
+              </div>
+
+               {EstadoFiltro ? (
+                 <div className='bg-white w-[400px] h-full mb-8 p-6 shadow-lg border-r-300 border-r  '>
+                 <div className='flex items-center gap-6 justify-between mb-8'>
+                 <div className='flex items-center gap-4'>
+                     <SlidersHorizontal size={24} className="text-gray-400" />
+                     <p className='text-gray-400 text-lg '>Filtros</p>
+                 </div>
+ 
+                 <div className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-2  text-blue-400 rounded-xl px-4 py-2 justify-center hover:bg-gray-50 text-sm font-medium transition">
+                 <Trash size={16} className="" /> Limpar filtros
+                 </div>
+                 </div>
+ 
+                 <div className=''>
+ 
+                   <div onClick={() => setFiltroArea(!filtroArea)} className='w-full h-12 border border-gray-300 mb-4 hover:bg-gray-50 transition-all cursor-pointer rounded-xl flex items-center justify-between'>
+                   <div className='flex w-full p-6 items-center gap-6 justify-between'>
+                 <div className='flex items-center gap-4'>
+                     <SlidersHorizontal size={20} className="text-gray-400" />
+                     <p className='text-gray-400 text-base font-medium '>Área de especialidade</p>
+                 </div>
+ 
+                 <div  className={`cursor-pointer  transition-all flex items-center justify-center `}>
+                         {filtroArea ? (
+                          <CaretUp size={20} className={' text-gray-400'} />
+                         ): (
+                          <CaretDown size={20} className={' text-gray-400'} />
+                         )}
+                         </div>
+                 </div>
+                   </div>
+ 
+                 {filtroArea ? (
+                  <div className="gap-3 flex flex-wrap mb-8 ">
+                  {checkboxQualis}
+                </div>
+                 ): ('')}
+
+<div onClick={() => setFiltroInstituicao(!filtroInstituicao)} className='w-full h-12 border border-gray-300 mb-4 hover:bg-gray-50 transition-all cursor-pointer rounded-xl flex items-center justify-between'>
+                   <div className='flex w-full p-6 items-center gap-6 justify-between'>
+                 <div className='flex items-center gap-4'>
+                     <Buildings size={20} className="text-gray-400" />
+                     <p className='text-gray-400 text-base font-medium '>Instituição</p>
+                 </div>
+ 
+                 <div  className={`cursor-pointer  transition-all flex items-center justify-center `}>
+                         {filtroInstituicao ? (
+                          <CaretUp size={20} className={' text-gray-400'} />
+                         ): (
+                          <CaretDown size={20} className={' text-gray-400'} />
+                         )}
+                         </div>
+                 </div>
+                   </div>
+
+                   {filtroInstituicao ? (
+                    <DropdownMultiSelect
+                    options={optionsDropdown}
+                    selectedOptions={selectedOptions}
+                    setSelectedOptions={setSelectedOptions}
+                    />
+                   ): ('')}
+
+                 </div>
+                 </div>
+               ):('')}
+
+{popupPesquisadores ? (
+        <div className='bg-white w-[400px] h-full mb-8 p-6 shadow-lg border-r-300 border-r  '>
+           <div className='flex items-center gap-6 justify-between mb-8'>
+                 <div className='flex items-center gap-4'>
+                     <Users size={24} className="text-gray-400" />
+                     <p className='text-gray-400 text-lg '>Pesquisadores selecionados</p>
+                 </div>
+ 
+                 <div onClick={() => limparSelecao()} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-2  text-blue-400 rounded-xl px-4 py-2 justify-center hover:bg-gray-50 text-sm font-medium transition">
+                 <Trash size={16} className="" /> Limpar seleção
+                 </div>
+                 </div>
+
+                 <div>
+                 {pesquisadoresSelecionadosGroupBarema == "" ? (
+        <div className="text-gray-300 mb-4 font-bold text-sm">Nenhum pesquisador selecionado</div>
+      ) : (
+        <div className="mb-4 flex flex-col gap-4  m-[0 auto] w-full">
+          {researcher.map(user => {
+            return (
+              <li key={user.id} className="list-none">
+                <div className="rounded-md p-4 border-[1px] border-gray-300 flex gap-4 items-center justify-between">
+                  <div className="flex gap-4 items-center">
+                    <div className="bg-cover border-[1px] border-gray-300 bg-center bg-no-repeat h-16 w-16 bg-white rounded-md relative" style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${user.lattes_10_id}) ` }}></div>
+
+                    <div className="flex flex-col">
+                      <h4 className="text-base font-medium  mb-1">{user.name}</h4>
+                      <div className="flex items-center gap-2">
+                        <Buildings size={16} className="text-gray-500" />
+                        <p className="text-[13px]  text-gray-500">{user.university}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+
+                  </div>
+                </div>
+              </li>
+            )
+          })}
+        </div>
+      )}
+                 </div>
+        </div>
+       ): ('')}
+
             </div>
-                </div>
-                </div>
-            </div>
-        ): ('')}
+       
+
+      
       
       
     </div>

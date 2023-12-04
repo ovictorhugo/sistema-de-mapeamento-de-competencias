@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { UserContext } from "../contexts/context";
-import { ArrowCircleUp, ArrowRight, BookmarkSimple, Buildings, File, GraduationCap, ListDashes, MagnifyingGlass, MapPin, Star, User, X, YoutubeLogo } from "phosphor-react";
+import { ArrowCircleUp, ArrowRight, BookOpen, BookmarkSimple, Buildings, File, GraduationCap, ListDashes, MagnifyingGlass, MapPin, Star, User, X, YoutubeLogo } from "phosphor-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Circle } from "./Circle";
 import DropdownMultiSelect from "./DropdownMultiSelect";
@@ -478,9 +478,9 @@ console.log('idversao',idVersao)
 
 
   return (
-    <div className="  overflow-y-hidden  overflow-x-hidden flex justify-center flex-col">
+    <div className="   ">
 
-<div className="overflow-hidden absolute top-0   w-full">
+<div className="overflow-hidden absolute   w-full">
        
        <div className="z-[-999999999] w-[120%] absolute top-[0px] left-[-100px]">
          <HighchartsReact highcharts={Highcharts} options={chartOptions} />
@@ -533,7 +533,7 @@ console.log('idversao',idVersao)
      </div>
 
 
-     <div className="pt-[535px] flex flex-1 flex-col relative  items-center w-full ">
+     <div className="pt-[535px] flex flex-1 flex-col relative  items-center  ">
 
     
 
@@ -543,8 +543,8 @@ console.log('idversao',idVersao)
 
       <div
           ref={ref}
-          className={` left-0 flex-col items-center flex flex-1 w-full transition justify-center z-[99999] ${isSticky ? 'pb-6 sticky top-0 left-0 bg-white transition-all shadow-sm' : ' transition-all'}`}
-        >
+          className={` left-0  flex-col items-center flex flex-1 w-full transition justify-center z-[99999] ${isSticky ? 'pb-6 sticky top-0 left-0 bg-white transition-all shadow-sm' : ' transition-all'}`}
+      >
 
           <div className={`${isSticky ? 'flex' : ' hidden'} h-20 w-full`}>
             <Header />
@@ -657,13 +657,14 @@ console.log('idversao',idVersao)
 
                 </div>
 
-               <div className="right-[400px] relative z-[-9] py-6"> <Circle/></div>
+               
+               
             </div>
 
 
             <div className="grid grid-cols-2 py-24 gap-12 px-6 md:px-16">
                 <div className="w-full max-w-[640px] ">
-                    <h3 className="font-medium text-4xl mb-4">1. Use <strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">palavras-chave</strong> específicas</h3>
+                    <h3 className="font-medium text-4xl mb-4 text-gray-400">1. Use <strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">palavras-chave</strong> específicas</h3>
                     <p className="text-lg text-gray-400">
                         Tente usar palavras-chave específicas que descrevem o tópico que você está procurando. Por exemplo, em vez de pesquisar por "robótica", pesquise por "robótica educacional". Você pode fazer a pesquisa com mais de uma palavra-chave
                     </p>
@@ -684,9 +685,12 @@ console.log('idversao',idVersao)
                 </div>
 
                 <div className="w-full max-w-[640px] ">
-                    <h3 className="font-medium text-4xl mb-4">2. Use <strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">filtros</strong> de pesquisa</h3>
+                    <h3 className="font-medium text-4xl text-gray-400 mb-4">2. Use <strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">filtros</strong> de pesquisa</h3>
+                    <p className="text-lg text-gray-400 mb-4">
+                    Limite os resultados da pesquisa usando categorias que possuem diferentes critérios de seleção. Por exemplo, é possível buscar por termos em artigos, em resumo, patentes, nome de pesquisador ou por área de especialidade.
+                    </p>
                     <p className="text-lg text-gray-400">
-                    Você pode usar os filtros de pesquisa na plataforma para limitar os resultados da pesquisa com base em diferentes critérios, como buscar por Pesquisador específico, filtrar por área ou por qualis e ano.
+                    Você pode usar os filtros na plataforma para refinar o resultado da pesquisa por cidade, instituição, qualis, ano ou área de atuação.
                     </p>
                 </div>
 
@@ -694,10 +698,22 @@ console.log('idversao',idVersao)
 
             <div className="grid grid-cols-2 py-24 gap-12 px-6 md:px-16">
                 <div className="w-full max-w-[640px] ">
-                    <h3 className="font-medium text-4xl mb-4">3. Use <strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">palavras-chave</strong> específicas</h3>
-                    <p className="text-lg text-gray-400">
-                        Tente usar palavras-chave específicas que descrevem o tópico que você está procurando. Por exemplo, em vez de pesquisar por "robótica", pesquise por "robótica educacional". Você pode fazer a pesquisa com mais de uma palavra-chave
+                    <h3 className="font-medium text-4xl mb-4 text-gray-400">3. Use o <strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">dicionário</strong> de termos</h3>
+                    <p className="text-lg text-gray-400 mb-8">
+                    Em caso de dúvida de qual palavra utilizar para realizar sua pesquisa, acesse o dicionário de termos com mais de 36 mil palavras disponíveis para refinar a sua busca. Você também pode pesquisar as informações das revistas (ISSN, qualis e JCR).
                     </p>
+
+                   
+
+                    <div className="flex gap-4">
+                    <Link to={`/terms/${idVersao}`} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
+                        <ListDashes size={16} className="text-white" /> Dicionário
+                    </Link>
+
+                    <Link to={`/magazine/${idVersao}`} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4  text-blue-400 rounded-xl px-4 py-2 justify-center hover:bg-gray-300 text-sm font-medium transition">
+                        <BookOpen size={16} className="" /> Revistas
+                    </Link>
+                    </div>
                 </div>
 
 
@@ -713,8 +729,8 @@ console.log('idversao',idVersao)
             <div className="w-full flex flex-col px-6 md:px-16">
             
                 <div className="mb-16 pt-52 pb-0 flex justify-center flex-col items-center">
-                    <h3 className="font-medium text-4xl text-gray-400 text-center mb-4">Veja a lista com todos os <strong className="bg-blue-400 text-white font-medium text-4xl">Termos e Áreas de especialidade</strong> disponíveis </h3>
-                    <p className="mb-6 text-gray-400 text-center max-w-[1100px]">O Sistema de Mapeamento de Competências da Bahia é uma ferramenta que visa identificar e catalogar as habilidades e especialidades dos profissionais do estado. Para ajudar a sua pesquisa, fornecemos uma lista extensa de termos e áreas de especialidade, abrangendo diversos setores.</p>
+                    <h3 className="font-medium text-4xl text-gray-400 text-center mb-4">Conheça a aba <strong className="bg-blue-400 text-white font-medium text-4xl">baremas de avaliação </strong></h3>
+                    <p className="mb-6 text-gray-400 text-center max-w-[1100px]">Quer ranquear quais pesquisadores estão mais capacitados para participação em determinado edital? É simples. Basta ir na aba “baremas” que a plataforma irá fazer baremas de avaliação onde você pode determinar pesos diferentes para cada critério desejado (graduação, produção bibliográfica, participação em eventos, produção técnica, entre outros). </p>
 
                     <div className="flex gap-4">
                     <Link to={`/terms/${idVersao}`} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">

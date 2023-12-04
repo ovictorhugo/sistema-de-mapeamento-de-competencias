@@ -28,7 +28,7 @@ export function TermsSvg() {
       case '3':
         return "#0000FF"; // Blue color for idVersao 3
       case '4':
-        return "#ED1C24"; // Yellow color for idVersao 4
+        return "#8AB4F8"; // Yellow color for idVersao 4
       default:
         return "#FFCF00"; // Default color if idVersao doesn't match any case
     }

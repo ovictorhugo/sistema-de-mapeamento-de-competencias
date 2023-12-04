@@ -27,6 +27,7 @@ import { HomeInicial } from "./HomeInicial";
 import { Circle } from "./Circle";
 import { Circle2 } from "./Circle2";
 import { VisaoPrograma } from "./VisaoPrograma";
+import { Filter } from "./Filter";
 
 interface ButtonStyle extends React.CSSProperties {
   position: 'fixed';
@@ -589,23 +590,10 @@ export function Homepage(props: Props) {
         </div>
       </button>
 
-      <div className="group flex flex-col gap-6   fixed z-[99999999999] left-8 bottom-16" id="uuuuuuuuu">
-        <div className=" group-hover:flex hidden transition-all duration-1000">
-          <PopUpPesquisadoresGroup />
-        </div>
-
-        <button
-          className={`rounded-md p-4  text-white flex items-center justify-center ${expanded ? ' bg-[#F9F9F9] scale-full z-[9999999999999] fixed left-8 bottom-16' : ' w-12 h-12 bg-blue-400 hover:bg-blue-500'
-            } transition-all duration-1000`}
-          onClick={handleClickBtn}
-        >
-          <Users size={24} className={` ${expanded ? ' hidden' : ' text-white flex'
-            } `} />
-        </button>
-      </div>
 
 
-     
+
+     <Filter/>
 
 
     </div>

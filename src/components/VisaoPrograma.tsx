@@ -335,7 +335,7 @@ console.log(urlQualis)
                 
                 {VisaoPrograma.map(props => {
                 
-                return(<h3 className="text-6xl font-medium  text-right">{(props.book * 1) + (props.book_chapter * 0.25)}</h3> )
+                return(<h3 className="text-6xl font-medium  text-right">{((props.book * 1) + (props.book_chapter * 0.25) ) / 4}</h3> )
               })}
                 </div>
             </div>

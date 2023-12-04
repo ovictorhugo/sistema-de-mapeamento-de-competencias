@@ -1119,24 +1119,29 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
 
         </div>
 
-        
+                {valoresSelecionadosExport == "" ? (
                   <div className='testeeeaq mt-4 flex gap-6 items-center'>
-                    <div onClick={() => setEstadoFiltro(true)} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
-                        <SlidersHorizontal size={16} className="text-white" /> Filtros
+                    <div onClick={() => setEstadoFiltro(!EstadoFiltro)} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
+                        {EstadoFiltro ? (
+                          <X size={16} className="text-white" /> 
+                        ): (
+                          <SlidersHorizontal size={16} className="text-white" />
+                        )} Filtros
                     </div>
 
                     <div className='w-[1px] bg-gray-300 h-8'></div>
 
-                    {valoresSelecionadosExport == "" ? (
+                   
                     <div className=' flex gap-3 items-center'>
                     <p className='text-gray-400 text-sm font-bold'>Sugestões:</p>
                     <div className='gap-4 flex'>{checkboxItemsWords}</div>
+                    </div>
                     </div>
                     ):(
                   <div></div>
                 )}
                     
-                  </div>
+                  
                 
 
       </div>

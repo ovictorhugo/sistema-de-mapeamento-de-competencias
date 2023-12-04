@@ -17,7 +17,7 @@ export function Footer() {
   const [isCloseHidden, setIsCloseHidden] = useState(false); //Produção geral
 
   return (
-    <div className="w-full h-8 bg-white border-t-[1px] border-t-gray-300 fixed bottom-0 left-0 z-[9999] justify-between flex">
+    <div className="w-full h-8 bg-white border-t-[1px] border-t-gray-300 fixed bottom-0 left-0 z-[999999999999] justify-between flex">
       <div className="flex items-center h-full px-12 justify-center gap-1">
         {idVersao == '1' || idVersao == '' ? (
           <p className="text-[12px] text-gray-400 font-bold md:flex hidden">Informações Analíticas da Pós-graduação | versão 1.0.1 (beta) | </p>

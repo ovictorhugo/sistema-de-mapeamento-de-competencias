@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import { useLocation } from 'react-router-dom';
 
 
+
 type Research = {
   among: number,
   articles: number,
@@ -140,6 +141,10 @@ console.log(urlTermPesquisadores)
     setResearcher([]);
   }, [location]);
 
+  //contar cidade 
+  const [cityCounts, setCityCounts] = useState<{ [city: string]: number }>({});
+
+
 
   const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
 
@@ -161,6 +166,14 @@ console.log(urlTermPesquisadores)
         if (data) {
           setResearcher(data);
           setCurrentPage(1);
+
+          // Contar a quantidade de pesquisadores por cidade
+        const counts: { [city: string]: number } = {};
+        data.forEach((research: any) => {
+          const city = research.city;
+          counts[city] = (counts[city] || 0) + 1;
+        });
+        setCityCounts(counts);
         }
       } catch (err) {
         console.log(err);
@@ -170,6 +183,8 @@ console.log(urlTermPesquisadores)
     };
     fetchData();
   }, [urlTermPesquisadores]);
+
+  console.log('cityCounts',cityCounts);
 
 
 
@@ -183,6 +198,7 @@ console.log(urlTermPesquisadores)
   const { pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema } = useContext(UserContext);
 
   const handleCheckboxChange = (user: { name: string }) => {
+  
     if (itensSelecionados.includes(user.name)) {
       setItensSelecionados(prevSelecionados =>
         prevSelecionados.filter(selectedItem => selectedItem !== user.name)
@@ -190,6 +206,7 @@ console.log(urlTermPesquisadores)
     } else {
       setItensSelecionados(prevSelecionados => [...prevSelecionados, user.name]);
     }
+
   };
 
   useEffect(() => {
@@ -293,6 +310,9 @@ console.log(pesquisadoresSelecionadosGroupBarema)
   };
 
 
+  //mapaaa
+
+
   return (
     <div className="flex flex-col m-[0 auto] min-w-full  flex justify-center items-center">
 
@@ -350,11 +370,11 @@ console.log(pesquisadoresSelecionadosGroupBarema)
                               className="inline-flex whitespace-nowrap"
                             >
                               <h3
-                                className="items-center p-3 px-6 flex min-h-[20px] gap-4 font-bold rounded-md text-blue-400 bg-white hover:shadow-md transition border-[1px] border-gray-300 border-solid"
+                                className="items-center p-3 px-6 flex min-h-[20px] gap-4 font-bold rounded-2xl text-blue-400 bg-white hover:shadow-md transition border-[1px] border-gray-300 border-solid"
                                 style={{ fontSize: `${fontSize}%` }}
                               >
                                 {user.name}
-                                <div className="border-[1px] bg-blue-400 border-blue-400 py-2 flex px-3 text-white rounded-md text-[10px] font-bold">
+                                <div className="border-[1px] bg-blue-400 border-blue-400 py-2 flex px-3 text-white rounded-lg text-[10px] font-bold">
                                   {user.among} ocorrências
                                 </div>
                               </h3>
@@ -455,7 +475,7 @@ console.log(pesquisadoresSelecionadosGroupBarema)
         </div>
 
         {valoresSelecionadosExport || valorDigitadoPesquisaDireta ? (
-          <div className="w-full gap-1 flex p-6 border-[1px] border-gray-300 rounded-xl mb-9">
+          <div className="w-full gap-1 flex p-6 border-[1px] border-gray-300 rounded-2xl mb-9">
             <p className="text-gray-400">Foram encontrados <strong className="font-bold text-blue-400">{totalPesquisadores}</strong> pesquisadores para <strong className="font-bold text-blue-400">{valorDigitadoPesquisaDireta.replace(/;/g, ' ')}{decodeURIComponent(valoresSelecionadosExport.replace(/;/g, ' ou ')).split('%20').join(' ')}</strong></p>
 
 

@@ -39,6 +39,7 @@ let qualisColor = {
 export function Publicacao(props: Publicacao) {
     const { valoresSelecionadosExport, setValoresSelecionadosExport } = useContext(UserContext);
     const { valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta } = useContext(UserContext);
+    const { valoresSelecionadosPopUp, setValoresSelecionadosPopUp } = useContext(UserContext)
     useEffect(() => {
         if (props.lattes_10_id == "undefined") {
             props.lattes_10_id = ""
@@ -82,35 +83,38 @@ export function Publicacao(props: Publicacao) {
                 {props.lattes_10_id !== 'K4796572P6' && (
   <div className="pt-6 flex flex-wrap">
     <p className="text-gray-400 text-sm font-medium flex-wrap flex gap-1">
-    {normalizedTitle
-        .split(/[\s.,;?!]+/)
-        .map((word, index) => {
-          const formattedWord = unorm.nfkd(word).replace(/[^\w\s]/gi, '').toLowerCase();
-          const ignoredWords = ['a', 'do', 'da', 'o', 'os', 'as', 'de', 'e', 'i', 'na', 'du', 'em'];
+        {valoresSelecionadosPopUp == '' ? (`${props.title}`):(
+normalizedTitle
+    .split(/[\s.,;?!]+/)
+    .map((word, index) => {
+      const formattedWord = unorm.nfkd(word).replace(/[^\w\s]/gi, '').toLowerCase();
+      const ignoredWords = ['a', 'do', 'da', 'o', 'os', 'as', 'de', 'e', 'i', 'na', 'du', 'em', ')', '('];
 
-          if (
-            valoresSelecionadosExport.includes(formattedWord) &&
-            !ignoredWords.includes(formattedWord)
-          ) {
-            return (
-              <span key={index} className="text-blue-400 font-bold">
-                {word.toUpperCase()}{' '}
-              </span>
-            );
-          }
+      if (
+        valoresSelecionadosExport.includes(formattedWord) &&
+        !ignoredWords.includes(formattedWord)
+      ) {
+        return (
+          <span key={index} className="text-blue-400 font-bold">
+            {word.toUpperCase()}{' '}
+          </span>
+        );
+      }
 
-          if (
-            valorDigitadoPesquisaDireta.includes(formattedWord) &&
-            !ignoredWords.includes(formattedWord)
-          ) {
-            return (
-              <span key={index} className="text-blue-400 font-bold">
-                {word.toUpperCase()}{' '}
-              </span>
-            );
-          }
-          return <span key={index}>{word.toUpperCase()} </span>;
-        })}
+      if (
+        valorDigitadoPesquisaDireta.includes(formattedWord) &&
+        !ignoredWords.includes(formattedWord)
+      ) {
+        return (
+          <span key={index} className="text-blue-400 font-bold">
+            {word.toUpperCase()}{' '}
+          </span>
+        );
+      }
+      return <span key={index}>{word.toUpperCase()} </span>;
+    })
+        )}
+    
 
 
     </p>

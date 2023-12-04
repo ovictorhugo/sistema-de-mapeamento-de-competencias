@@ -304,6 +304,7 @@ export function PopUp(props: PesquisadorProps) {
     urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}`;
   }
 
+  console.log('bibliographic_production_researcher', valoresSelecionados)
   useEffect(() => {
     if (botaoResumoClicado) {
       setValoresSelecionadosPopUp('')
@@ -1133,7 +1134,7 @@ export function PopUp(props: PesquisadorProps) {
                       <div></div>
                     )}
 
-                    {botaoAreasClicado || botaoPatentesClicado || botaoPesquisadoresClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta == "") ? (
+                    {botaoAreasClicado || botaoPatentesClicado || botaoPesquisadoresClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta == "" )|| (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta != "") ? (
                       <div className="flex justify-between pb-8 w-full items-center mt-8">
                         <div className="flex gap-4 w-full">
                           <File size={24} className="text-gray-400" />
@@ -1525,7 +1526,7 @@ export function PopUp(props: PesquisadorProps) {
 
 
                 <div className="w-full lg:w-[350px] mb-6 border-[1px] border-gray-300 rounded-md p-6 h-min">
-                  {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoAreasClicado || botaoPatentesClicado ? (
+                  {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoAreasClicado || botaoPatentesClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta != "")? (
                     <div className="text-center font-medium text-xl text-gray-500 mb-6">Todas as publicações por ano</div>
                   ) : (
                     <div className="flex gap-2 w-full flex-col justify-center">
@@ -1578,7 +1579,7 @@ export function PopUp(props: PesquisadorProps) {
                 </div>
 
                 <div className="w-full lg:w-[350px] border-[1px] border-gray-300 rounded-md p-6 h-min">
-                {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoAreasClicado || botaoPatentesClicado ? (
+                {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoAreasClicado || botaoPatentesClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta != "") ? (
                     <div className="text-center font-medium text-xl text-gray-500 mb-6">Todas as publicações por qualis</div>
                   ) : (
                     <div className="flex gap-2 w-full flex-col justify-center">
