@@ -60,16 +60,6 @@ export function Pesquisadores() {
 
   // BTN MOSTRAR RESULTADOS 
   const [currentPage, setCurrentPage] = useState(1);
-  const resultsPerPage = 12;
-
-  const indexOfLastResult = currentPage * resultsPerPage;
-  const indexOfFirstResult = indexOfLastResult - resultsPerPage;
-  const totalPages = Math.ceil(researcher.length / resultsPerPage);
-
-
-
-
-  const currentResults = researcher.slice(indexOfFirstResult, indexOfLastResult);
 
 
   //dropdown
@@ -131,8 +121,11 @@ export function Pesquisadores() {
     urlTermPesquisadores = `${urlGeral}/researcherArea_specialty?area_specialty=${valorDigitadoPesquisaDiretaPesquisadores}&university=${intituicoesSelecionadasCheckbox}&graduate_program_id=${idGraduateProgram}`;
   }
 
+  console.log('urlTermPesquisadores', urlTermPesquisadores)
+
 
 console.log(urlTermPesquisadores)
+ console.log('intituicoesSelecionadasCheckbox',intituicoesSelecionadasCheckbox)
 
   const location = useLocation();
 
@@ -143,7 +136,7 @@ console.log(urlTermPesquisadores)
 
   //contar cidade 
   const [cityCounts, setCityCounts] = useState<{ [city: string]: number }>({});
-
+  const [jsonData, setJsonData] = useState<any[]>([]);
 
 
   const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
@@ -166,6 +159,7 @@ console.log(urlTermPesquisadores)
         if (data) {
           setResearcher(data);
           setCurrentPage(1);
+          setJsonData(data);
 
           // Contar a quantidade de pesquisadores por cidade
         const counts: { [city: string]: number } = {};
@@ -186,10 +180,43 @@ console.log(urlTermPesquisadores)
 
   console.log('cityCounts',cityCounts);
 
+  const {filtroAreas, setFiltroAreas} = useContext(UserContext)
+  
+  
+  const resultsPerPage = 12;
+
+  const indexOfLastResult = currentPage * resultsPerPage;
+  const indexOfFirstResult = indexOfLastResult - resultsPerPage;
+  const totalPages = Math.ceil(researcher.length / resultsPerPage);
+  let filteredResults;
+  const filtroAreasArray = filtroAreas.split(';').map(area => area.trim());;
+  
+  
+
+  // Verifica se o filtro de áreas não está vazio
+  if (filtroAreas.trim() !== '') {
+    // Split nas áreas apenas se o filtro não estiver vazio
+    
+    filteredResults = researcher.filter(user => {
+      // Verifica se a área do usuário é uma string não vazia e está presente no array de áreas filtradas
+      return typeof user.area === 'string' && user.area.trim() !== '' && filtroAreasArray.includes(user.area.trim());
+    });
+    
+  } else {
+    // Se filtroAreas estiver vazio, retorna todos os pesquisadores
+    filteredResults = researcher;
+  }
+
+  console.log('filteredResults', filteredResults)
+
+
+const currentResults = filteredResults.slice(indexOfFirstResult, indexOfLastResult);
+
 
 
 
   //AHHHHHH
+  
 
 
 
@@ -246,32 +273,10 @@ console.log(pesquisadoresSelecionadosGroupBarema)
 
   //btn json
 
-  const [jsonData, setJsonData] = useState<any[]>([]);
-  const [downloadReady, setDownloadReady] = useState(false);
+  
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(urlTermPesquisadores, {
-          mode: 'cors',
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET',
-            'Access-Control-Allow-Headers': 'Content-Type',
-            'Access-Control-Max-Age': '3600',
-            'Content-Type': 'application/json'
-          }
-        });
-        const data = await response.json();
-        setJsonData(data);
-        setDownloadReady(true);
-      } catch (error) {
-        console.error(error);
-      }
-    };
 
-    fetchData();
-  }, [urlTermPesquisadores]);
+
 
   const convertJsonToCsv = (json: any[]): string => {
     const items = json;
@@ -349,7 +354,7 @@ console.log(pesquisadoresSelecionadosGroupBarema)
               ) : (
                 <div className="mb-9  m-[0 auto] w-full">
                   <ul className="gap-4 flex-wrap flex w-full items-end">
-                    {researcher
+                    {filteredResults
                       .slice(0, 10)
                       .sort((a, b) => b.among - a.among)
                       .map((user, index, arr) => {
@@ -539,6 +544,8 @@ console.log(pesquisadoresSelecionadosGroupBarema)
           <button onClick={handleDownloadJson} className="flex items-center gap-4 bg-blue-400 text-white rounded-xl px-6 py-2 ml-auto justify-center hover:bg-blue-500 mb-6 font-medium transition"><FileCsv size={16} className="text-white" />Download CSV</button>
 
         </div>
+
+        
       </div>
 
 

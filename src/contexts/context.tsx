@@ -79,6 +79,9 @@ interface UserContextType {
 
   idVersao:string,
   setIdVersao: React.Dispatch<React.SetStateAction<string>>;
+
+  filtroAreas:string,
+  setFiltroAreas: React.Dispatch<React.SetStateAction<string>>;
   }
 
   
@@ -124,6 +127,8 @@ intituicoesSelecionadasCheckbox: "",
  setIntituicoesSelecionadasCheckbox: () => {},
  areasSelecionadasCheckbox: "",
  setAreasSelecionadasCheckbox: () => {},
+ filtroAreas:"",
+ setFiltroAreas: () => {},
 
  valoresSelecionadosPopUp: "",
   setValoresSelecionadosPopUp: () => {},

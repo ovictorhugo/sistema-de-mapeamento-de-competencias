@@ -769,8 +769,6 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
     //dropdowsn
     const optionsDropdown = ['Universidade Estadual do Sudoeste da Bahia', 'Universidade Estadual de Santa Cruz', 'Universidade do Estado da Bahia', 'Universidade Estadual de Feira de Santana'];
     const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-    const { intituicoesSelecionadasCheckbox, setIntituicoesSelecionadasCheckbox } = useContext(UserContext)
-    setIntituicoesSelecionadasCheckbox(selectedOptions.join(';'))
 
     const optionsDropdownAreas = ['CIENCIAS BIOLOGICAS', 'CIENCIAS AGRARIAS', 'CIENCIAS EXATAS E DA TERRA', 'CIENCIAS DA SAUDE', 'CIENCIAS HUMANAS', 'ENGENHARIAS', 'CIENCIAS SOCIAIS APLICADAS', 'LINGUISTICA LETRAS E ARTES', 'OUTROS']
     const [selectedOptionsAreas, setSelectedOptionsAreas] = useState<string[]>([]);

@@ -73,7 +73,7 @@ export function Header() {
   const location = useLocation();
 
   // Verifica se a URL é "/programa-teste"
-  const isProgramaTeste = location.pathname === `/programas-graduacao/${idVersao}` || location.pathname === `/result`;
+  const isProgramaTeste = location.pathname === `/programas-graduacao/${idVersao}` || location.pathname === `/result` || location.pathname === `/result/4`;
 
 
   

@@ -36,6 +36,7 @@
     "leaflet": "^1.9.4",
     "ngrok": "^4.3.3",
     "papaparse": "^5.4.1",
+    "phosphor-icons": "^1.4.2",
     "phosphor-react": "^1.4.1",
     "powerbi-client-react": "^1.4.0",
     "react": "^18.2.0",

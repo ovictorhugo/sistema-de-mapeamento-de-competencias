@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { UserContext } from "../contexts/context";
-import { ArrowCircleUp, ArrowRight, BookOpen, BookmarkSimple, Buildings, File, GraduationCap, ListDashes, MagnifyingGlass, MapPin, Star, User, X, YoutubeLogo } from "phosphor-react";
+import { ArrowCircleUp, ArrowRight, BookOpen, BookmarkSimple, Buildings, Copyright, CursorText, File, Funnel, GraduationCap, IdentificationCard, Lightbulb, ListDashes, MagnifyingGlass, MapPin, Star, TextAlignLeft, Textbox, User, X, YoutubeLogo } from "phosphor-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Circle } from "./Circle";
 import DropdownMultiSelect from "./DropdownMultiSelect";
@@ -208,29 +208,7 @@ console.log('idversao',idVersao)
 
   const urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=${props.id}`;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(urlGraduateProgram, {
-          mode: "cors",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET",
-            "Access-Control-Allow-Headers": "Content-Type",
-            "Access-Control-Max-Age": "3600",
-            "Content-Type": "text/plain",
-          },
-        });
-        const data = await response.json();
-        if (data) {
-          setGraduatePrograms(data);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchData();
-  }, [urlGraduateProgram]);
+ 
 
 
   //OUTRA LÓGICAAAA
@@ -475,7 +453,73 @@ console.log('idversao',idVersao)
     }
   }, [words]);
   
+//
 
+    //Se o botão Pesquisadores for clicado
+    const handleClickPesquisadores = () => {
+      setBotaoPesquisadoresClicado(true);
+      setBotaoPatentesClicado(false)
+      setBotaoTermosClicado(false);
+      setBotaoAreasClicado(false);
+      setBotaoResumoClicado(false)
+      //Apagar checkbox ao mudar de aba - termos
+
+
+      setSelectedTab(3);
+    };
+
+    //patentes
+    const handleClickPatentes = () => {
+      setBotaoPesquisadoresClicado(false);
+      setBotaoPatentesClicado(true)
+      setBotaoTermosClicado(false);
+      setBotaoAreasClicado(false);
+      setBotaoResumoClicado(false)
+      //Apagar checkbox ao mudar de aba - termos
+
+
+      setSelectedTab(4);
+    };
+
+    //Se o botão Termos for clicado
+    const handleClickTermos = () => {
+      setBotaoPesquisadoresClicado(false);
+      setBotaoPatentesClicado(false)
+      setBotaoTermosClicado(true);
+      setBotaoAreasClicado(false);
+      setBotaoResumoClicado(false)
+      //Apagar checkbox ao mudar de aba - pesqisadores
+
+
+
+      setSelectedTab(0);
+    };
+
+    const handleClickResumo = () => {
+      setBotaoPesquisadoresClicado(false);
+      setBotaoResumoClicado(true);
+      setBotaoPatentesClicado(false)
+      setBotaoAreasClicado(false);
+      setBotaoTermosClicado(false)
+      //Apagar checkbox ao mudar de aba - pesqisadores
+
+
+      setSelectedTab(1);
+
+    };
+
+    //Se o botão Areas for clicado
+    const handleClickAreas = () => {
+      setBotaoAreasClicado(true);
+      setBotaoPesquisadoresClicado(false);
+      setBotaoPatentesClicado(false)
+      setBotaoTermosClicado(false);
+      setBotaoResumoClicado(false)
+      //Apagar checkbox ao mudar de aba - pesqisadores
+
+
+      setSelectedTab(2);
+    };
 
   return (
     <div className="   ">
@@ -537,7 +581,9 @@ console.log('idversao',idVersao)
 
     
 
-      <Filter/>
+      {isSticky ? (
+        <Filter/>
+      ):('')}
 
      
 
@@ -571,7 +617,7 @@ console.log('idversao',idVersao)
       </p>
       <TabList className="w-full">
         <div className={`w-full gap-6  m-0 grid  ${botaoPesquisadoresClicado || botaoPatentesClicado ? 'grid-cols-2' : 'grid-cols-3'}`}>
-          <Tab onClick={() => setSelectedTab(0)} selected={selectedTab === 0} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente" : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all" >
+          <Tab onClick={() => setSelectedTab(0)} selected={selectedTab === 0} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente" : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none   gap-3  transition-all" >
             <User size={16} className="" />
             <p className=" md:flex hidden"> Pesquisadores</p>
             {selectedTab == 0 ? (<div className={` py-1 px-4 rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" :''}`}>{totalPesquisadores}</div>): ('')}
@@ -581,7 +627,7 @@ console.log('idversao',idVersao)
           {botaoPatentesClicado ? (
             <head></head>
           ) : (
-          <Tab onClick={() => setSelectedTab(1)} selected={selectedTab === 1} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente"  : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all"  >
+          <Tab onClick={() => setSelectedTab(1)} selected={selectedTab === 1} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente"  : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none   gap-3  transition-all"  >
             <File size={16} className="" />
 
             <p className=" md:flex hidden">Publicações</p>
@@ -595,7 +641,7 @@ console.log('idversao',idVersao)
           {botaoPesquisadoresClicado ? (
             <head></head>
           ) : (
-            <Tab onClick={() => setSelectedTab(2)} selected={selectedTab === 2} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente"  : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-lg justify-center items-center flex outline-none   gap-3  transition-all"  >
+            <Tab onClick={() => setSelectedTab(2)} selected={selectedTab === 2} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente"  : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none   gap-3  transition-all"  >
               <Buildings size={16} className="" />
               <p className="md:flex hidden">Instituições</p>
 
@@ -671,8 +717,62 @@ console.log('idversao',idVersao)
                 </div>
 
 
-                <div className="flex items-center justify-end">
-                    
+                <div className="flex  gap-4 flex-wrap">
+                <li className='whitespace-nowrap gap-2 bg-[#FEE9E9] border-red-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>Hugo Saba
+                  <button ><X size={16} className="text-gray-400 hover:text-red-400" /></button>
+                </li>
+
+                <li
+      
+        className="whitespace-nowrap gap-2 bg-[#F4FAEC] border-green-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold"
+      >
+        Ciencias Ambientais | Ecologia
+        <button >
+          <X size={16} className="text-gray-400 hover:text-green-400" />
+        </button>
+      </li>
+
+      <li  className='whitespace-nowrap gap-2 bg-blue-100 border-blue-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>Taxonomia
+        <button ><X size={16} className="text-gray-400 hover:text-blue-400" /></button>
+      </li>
+
+      <li className='whitespace-nowrap gap-2 bg-[#FFFAE6] border-yellow-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>Educação
+        <button ><X size={16} className="text-gray-400 hover:text-yellow-400" /></button>
+      </li>
+
+      <li  className='whitespace-nowrap gap-2 bg-[#E9F4F4] border-cyan-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>Sistema
+        <button ><X size={16} className="text-gray-400 hover:text-cyan-400" /></button>
+      </li>
+
+      <li
+      
+        className="whitespace-nowrap gap-2 bg-[#F4FAEC] border-green-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold"
+      >
+        Educação Da Relações Étnico Raciais | Antropologia
+        <button >
+          <X size={16} className="text-gray-400 hover:text-green-400" />
+        </button>
+      </li>
+
+      <li className='whitespace-nowrap gap-2 bg-[#FEE9E9] border-red-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>Carlos Eduardo
+                  <button ><X size={16} className="text-gray-400 hover:text-red-400" /></button>
+                </li>
+
+                <li  className='whitespace-nowrap gap-2 bg-blue-100 border-blue-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>Energia
+        <button ><X size={16} className="text-gray-400 hover:text-blue-400" /></button>
+      </li>
+
+      <li  className='whitespace-nowrap gap-2 bg-blue-100 border-blue-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>Renováveis
+        <button ><X size={16} className="text-gray-400 hover:text-blue-400" /></button>
+      </li>
+
+      <li className='whitespace-nowrap gap-2 bg-[#FFFAE6] border-yellow-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>Modelo
+        <button ><X size={16} className="text-gray-400 hover:text-yellow-400" /></button>
+      </li>
+
+      <li  className='whitespace-nowrap gap-2 bg-[#E9F4F4] border-cyan-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>Modificador
+        <button ><X size={16} className="text-gray-400 hover:text-cyan-400" /></button>
+      </li>
                 </div>
 
             </div>
@@ -680,8 +780,8 @@ console.log('idversao',idVersao)
             <div className="grid grid-cols-2 py-24 gap-12 px-6 md:px-16">
 
 
-                <div className="flex items-center justify-end">
-                    
+                <div className="flex items-center ">
+
                 </div>
 
                 <div className="w-full max-w-[640px] ">
@@ -730,16 +830,16 @@ console.log('idversao',idVersao)
             
                 <div className="mb-16 pt-52 pb-0 flex justify-center flex-col items-center">
                     <h3 className="font-medium text-4xl text-gray-400 text-center mb-4">Conheça a aba <strong className="bg-blue-400 text-white font-medium text-4xl">baremas de avaliação </strong></h3>
-                    <p className="mb-6 text-gray-400 text-center max-w-[1100px]">Quer ranquear quais pesquisadores estão mais capacitados para participação em determinado edital? É simples. Basta ir na aba “baremas” que a plataforma irá fazer baremas de avaliação onde você pode determinar pesos diferentes para cada critério desejado (graduação, produção bibliográfica, participação em eventos, produção técnica, entre outros). </p>
+                    <p className="mb-6 text-gray-400 text-center max-w-[1000px]">Quer ranquear quais pesquisadores estão mais capacitados para participação em determinado edital? É simples. Basta ir na aba “baremas” que a plataforma irá fazer baremas de avaliação onde você pode determinar pesos diferentes para cada critério desejado (graduação, produção bibliográfica, participação em eventos, produção técnica, entre outros). </p>
 
-                    <div className="flex gap-4">
-                    <Link to={`/terms/${idVersao}`} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
-                        <ListDashes size={16} className="text-white" /> Dicionário
+                    <div className="flex gap-4 items-center">
+
+                      <p className="text-gray-400 font-bold">Conheça um mundo de possibilidades. Processe seu primeiro</p>
+                    <Link to={`/barema/${idVersao}`} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
+                        <Textbox size={16} className="text-white" /> Barema
                     </Link>
 
-                    <Link to={`/terms/${idVersao}`} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
-                        <ListDashes size={16} className="text-white" /> Dicionário
-                    </Link>
+                  
                     </div>
                 </div>
 

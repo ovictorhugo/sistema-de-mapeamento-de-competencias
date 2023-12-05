@@ -29,6 +29,7 @@ type Research = {
 export function Filter() {
     const { EstadoFiltro, setEstadoFiltro } = useContext(UserContext);
     const [filtroArea , setFiltroArea] = useState(false);
+    const [infoFiltro, setInfoFiltro] = useState(false);
     const [popupPesquisadores , setPopupPesquisadores] = useState(false);
     const [filtroInstituicao , setFiltroInstituicao] = useState(false);
 
@@ -72,7 +73,7 @@ export function Filter() {
       }
     };
     fetchData();
-  }, [urlTermPesquisadores]);
+  }, [pesquisadoresSelecionadosGroupBarema]);
   
 
     const qualisColor: { [key: string]: string } = {
@@ -162,14 +163,58 @@ export function Filter() {
       const handleClickBtn = () => {
         setPopupPesquisadores(!popupPesquisadores)
         setEstadoFiltro(false)
-
+        setInfoFiltro(false)
        
    
       };
 
+      const handleFiltroBtn = () => {
+        setEstadoFiltro(true)
+        setPopupPesquisadores(false)
+        setInfoFiltro(false)
+      }
+
+      const handleInfoBtn = () => {
+        setEstadoFiltro(false)
+        setPopupPesquisadores(false)
+        setInfoFiltro(true)
+      }
+
+
+      const handlePopUpBtn = () => {
+
+        if(EstadoFiltro == false && popupPesquisadores == false && infoFiltro == false) {
+          setEstadoFiltro(!EstadoFiltro)
+        }
+
+        if(EstadoFiltro == true && popupPesquisadores == false && infoFiltro == false) {
+          
+          setEstadoFiltro(!EstadoFiltro)
+        }
+
+        if(EstadoFiltro == false && popupPesquisadores == true && infoFiltro == false) {
+          setPopupPesquisadores(!popupPesquisadores)
+        }
+
+        if(EstadoFiltro == false && popupPesquisadores == false && infoFiltro == true) {
+          setInfoFiltro(!infoFiltro)
+        }
+        
+        setPopupPesquisadores(false)
+        setInfoFiltro(false)
+      }
+
       const limparSelecao = () => {
         setPesquisadoresSelecionadosGroupBarema('')
        
+   
+      };
+      const {filtroAreas, setFiltroAreas} = useContext(UserContext)
+
+      const limparFiltros = () => {
+        setSelectedOptions([])
+        setFiltroAreas('')
+        setItensSelecionados([])
    
       };
 
@@ -194,20 +239,33 @@ export function Filter() {
       const optionsDropdown = ['Universidade Estadual do Sudoeste da Bahia', 'Universidade Estadual de Santa Cruz', 'Universidade do Estado da Bahia', 'Universidade Estadual de Feira de Santana'];
       const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
       const {intituicoesSelecionadasCheckbox, setIntituicoesSelecionadasCheckbox} = useContext(UserContext)
+      
       setIntituicoesSelecionadasCheckbox(selectedOptions.join(';'))
 
-      console.log(intituicoesSelecionadasCheckbox)
+      
 
+      setFiltroAreas(itensSelecionados.join(';'))
+     
+
+      const [dataModificacao, setDataModificacao] = useState('');
+
+      useEffect(() => {
+        const dataAtual = new Date();
+        const dataFormatada = `${dataAtual.getDate()}/${dataAtual.getMonth() + 1}/${dataAtual.getFullYear()}`;
+    
+        
+        setDataModificacao(dataFormatada);
+      }, []);
   return (
     <div  ref={ref} className={` `} >
 
         
-            <div className='transition pb-8 fixed top-0 flex left-0 h-full z-[999999]  '>
-              <div className={`h-full pb-4 w-16 items-center z-10 flex flex-col justify-between ${EstadoFiltro || popupPesquisadores ? ('bg-gray-50'): ('')}`}>
+            <div className={`transition pb-8 fixed top-0 flex left-0 h-full z-[999999]  ${EstadoFiltro || popupPesquisadores || infoFiltro ? ('w-full'):('')}`}>
+              <div className={`h-full pb-4 w-16 items-center z-10 flex flex-col justify-between ${EstadoFiltro || popupPesquisadores || infoFiltro ? ('bg-gray-50'): ('')}`}>
                 <div>
                 <div className='h-[80px] items-center justify-center flex '>
-                <div onClick={() => setEstadoFiltro(!EstadoFiltro)} className="  h-10 w-10 rounded-xl bg-gray-100 items-center justify-center flex hover:bg-gray-300 cursor-pointer transition-all">
-                    {EstadoFiltro ? (
+                <div onClick={() => handlePopUpBtn()} className="  h-10 w-10 rounded-xl bg-gray-100 items-center justify-center flex hover:bg-gray-300 cursor-pointer transition-all">
+                    {EstadoFiltro || popupPesquisadores || infoFiltro ? (
                       <CaretLeft size={16} className="text-gray-500" />
                     ): (
                       <CaretRight size={16} className="text-gray-500" />
@@ -215,16 +273,16 @@ export function Filter() {
                   </div>
                 </div>
 
-                {EstadoFiltro || popupPesquisadores ? (
-                  <div onClick={() => setEstadoFiltro(!EstadoFiltro)} className="mb-2 h-10 w-10 rounded-xl bg-blue-400 items-center justify-center flex hover:bg-blue-500 cursor-pointer transition-all">
+                {EstadoFiltro || popupPesquisadores || infoFiltro ? (
+                  <div onClick={() => handleFiltroBtn()} className="mb-2 h-10 w-10 rounded-xl bg-blue-400 items-center justify-center flex hover:bg-blue-500 cursor-pointer transition-all">
                   <SlidersHorizontal size={16} className="text-white" />
                 </div>
                 ): ('')}
                 </div>
                 <div>
 
-                <div  className="mb-4  h-10 w-10 rounded-xl bg-gray-100 items-center justify-center flex hover:bg-gray-300 cursor-pointer transition-all">
-                <Info size={16} className="text-gray-500" />
+                <div onClick={() => handleInfoBtn()} className="mb-4  h-10 w-10 rounded-xl bg-gray-100 items-center justify-center flex hover:bg-gray-300 cursor-pointer transition-all">
+                <Info  size={16} className="text-gray-500" />
                   </div>
                
                   <div  onClick={handleClickBtn} className=" h-10 w-10 rounded-xl bg-blue-400 items-center justify-center flex hover:bg-blue-500 cursor-pointer transition-all">
@@ -244,7 +302,7 @@ export function Filter() {
                      <p className='text-gray-400 text-lg '>Filtros</p>
                  </div>
  
-                 <div className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-2  text-blue-400 rounded-xl px-4 py-2 justify-center hover:bg-gray-50 text-sm font-medium transition">
+                 <div onClick={() => limparFiltros()} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-2  text-blue-400 rounded-xl px-4 py-2 justify-center hover:bg-gray-50 text-sm font-medium transition">
                  <Trash size={16} className="" /> Limpar filtros
                  </div>
                  </div>
@@ -292,11 +350,13 @@ export function Filter() {
                    </div>
 
                    {filtroInstituicao ? (
+                   <div className='w-full'>
                     <DropdownMultiSelect
                     options={optionsDropdown}
                     selectedOptions={selectedOptions}
                     setSelectedOptions={setSelectedOptions}
                     />
+                    </div>
                    ): ('')}
 
                  </div>
@@ -308,7 +368,7 @@ export function Filter() {
            <div className='flex items-center gap-6 justify-between mb-8'>
                  <div className='flex items-center gap-4'>
                      <Users size={24} className="text-gray-400" />
-                     <p className='text-gray-400 text-lg '>Pesquisadores selecionados</p>
+                     <p className='text-gray-400 text-lg flex flex-1'>Pesquisadores selecionados</p>
                  </div>
  
                  <div onClick={() => limparSelecao()} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-2  text-blue-400 rounded-xl px-4 py-2 justify-center hover:bg-gray-50 text-sm font-medium transition">
@@ -318,7 +378,7 @@ export function Filter() {
 
                  <div>
                  {pesquisadoresSelecionadosGroupBarema == "" ? (
-        <div className="text-gray-300 mb-4 font-bold text-sm">Nenhum pesquisador selecionado</div>
+        <div className="text-gray-400 mb-4 ">Nenhum pesquisador selecionado</div>
       ) : (
         <div className="mb-4 flex flex-col gap-4  m-[0 auto] w-full">
           {researcher.map(user => {
@@ -346,9 +406,46 @@ export function Filter() {
           })}
         </div>
       )}
+
+      
                  </div>
+                 
         </div>
        ): ('')}
+
+{infoFiltro ? (
+        <div className='bg-white w-[400px] h-full mb-8 p-6 shadow-lg border-r-300 border-r  '>
+           <div className='flex items-center gap-6 justify-between mb-8'>
+                 <div className='flex items-center gap-4 h-10'>
+                     <Info size={24} className="text-gray-400" />
+                     <p className='text-gray-400 flex flex-1 text-lg '>Informações</p>
+                 </div>
+ 
+                 
+                 </div>
+
+                 <div>
+
+                    <p className='text-gray-400 text-justify mb-4'>
+                    O Sistema de Mapeamento de Competências da Bahia - SIMCC é uma iniciativa que visa promover o desenvolvimento e aprimoramento das habilidades e conhecimentos dos profissionais no estado da Bahia. Desenvolvido por uma equipe composta por Victor Hugo de Jesus Oliveira (IFBA), Matheus Souza dos Santos (UNEB), Eduardo Manuel de Freitas Jorge (UNEB), Gesil Sampaio Amarante Segundo (UESC) e Gleidson de Meireles Costa (UFRB), o sistema representa uma abordagem inovadora para entender, organizar e utilizar as competências existentes na região. Têm-se os agradecimentos pela soma de esforços e de conhecimentos para idealização e criação da plataforma como Trabalho de Conclusão de Curso e projeto de Iniciação Científica. 
+
+Agradecimento especial as Instituições de ensino público da Bahia e a Secretaria de Ciência, Tecnologia e Inovação.
+
+Menção a Jônatas Pereira do Nascimento Rosa (UNEB) pela revisão e projeto textual da landing page.
+                    </p>
+
+                    <p className='text-gray-400 font-bold'>Site atualizado em {dataModificacao}</p>
+      
+                 </div>
+                 
+        </div>
+       ): ('')}
+
+{EstadoFiltro || popupPesquisadores || infoFiltro ? (
+  <div className="h-screen w-full bg-[#000] flex-1 flex opacity-25"></div>
+):('')}
+
+
 
             </div>
        

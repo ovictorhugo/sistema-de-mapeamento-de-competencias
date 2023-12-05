@@ -53,6 +53,8 @@ export const App = () => {
   const [estadoSelecionado, setEstadoSelecionado] = useState('');
 
   const [EstadoFiltro, setEstadoFiltro] = useState(false)
+  const [filtroAreas, setFiltroAreas] = useState('')
+
   const [botaoPatentesClicado, setBotaoPatentesClicado] = useState(false)
   const [botaoPesquisadoresClicado, setBotaoPesquisadoresClicado] = useState(false);
   const [botaoTermosClicado, setBotaoTermosClicado] = useState(true);
@@ -107,6 +109,7 @@ console.log('[idVersao', idVersao)
           EstadoFiltro, setEstadoFiltro,
           intituicoesSelecionadasCheckbox, setIntituicoesSelecionadasCheckbox,
           areasSelecionadasCheckbox, setAreasSelecionadasCheckbox,
+          filtroAreas, setFiltroAreas,
 
           valoresSelecionadosPopUp, setValoresSelecionadosPopUp,
           isPopUpVisible, setIsPopUpVisible,
