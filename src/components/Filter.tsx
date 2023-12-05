@@ -324,9 +324,9 @@ export function Filter() {
  
                  <div  className={`cursor-pointer  transition-all flex items-center justify-center `}>
                          {filtroArea ? (
-                          <CaretUp size={20} className={' text-gray-400'} />
+                          <CaretUp size={16} className={' text-gray-400'} />
                          ): (
-                          <CaretDown size={20} className={' text-gray-400'} />
+                          <CaretDown size={16} className={' text-gray-400'} />
                          )}
                          </div>
                  </div>

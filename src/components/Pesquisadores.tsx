@@ -358,8 +358,8 @@ console.log(pesquisadoresSelecionadosGroupBarema)
                       .slice(0, 10)
                       .sort((a, b) => b.among - a.among)
                       .map((user, index, arr) => {
-                        const maxFontSize = 300;
-                        const minFontSize = 150;
+                        const maxFontSize = 200;
+                        const minFontSize = 100;
                         const distinctAmongValues = [...new Set(arr.map(user => user.among))];
                         const distinctAmongCount = distinctAmongValues.length;
                         const fontSize =

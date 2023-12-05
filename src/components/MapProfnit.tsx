@@ -545,7 +545,7 @@ console.log('idversao',idVersao)
         </strong>{" "}
         e veja o que a plataforma pode filtrar para você.
       </h1>
-          <p className=" z-[999] max-w-[620px]  text-lg text-gray-400">Arraste ou clique em um dos pontos no gráfico para selecionar o programa de pós-graduação. Você também pode escolher pela lista abaixo </p>
+          <p className=" z-[999] max-w-[620px]  text-lg text-gray-400">O principal objetivo desse sistema é identificar as competências individuais e coletivas dos profissionais na Bahia. </p>
 
    
           
