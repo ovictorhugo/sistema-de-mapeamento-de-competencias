@@ -1134,7 +1134,7 @@ export function PopUp(props: PesquisadorProps) {
                       <div></div>
                     )}
 
-                    {botaoAreasClicado || botaoPatentesClicado || botaoPesquisadoresClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta == "" )|| (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta != "") ? (
+                    {botaoAreasClicado || botaoPatentesClicado || botaoResumoClicado|| botaoPesquisadoresClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta == "" )|| (botaoResumoClicado && valorDigitadoPesquisaDireta != "") ? (
                       <div className="flex justify-between pb-8 w-full items-center mt-8">
                         <div className="flex gap-4 w-full">
                           <File size={24} className="text-gray-400" />

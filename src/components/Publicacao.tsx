@@ -83,7 +83,7 @@ export function Publicacao(props: Publicacao) {
                 {props.lattes_10_id !== 'K4796572P6' && (
   <div className="pt-6 flex flex-wrap">
     <p className="text-gray-400 text-sm font-medium flex-wrap flex gap-1">
-        {valoresSelecionadosPopUp == '' ? (`${props.title}`):(
+        {valoresSelecionadosPopUp == '' && valorDigitadoPesquisaDireta == '' ? (`${props.title}`):(
 normalizedTitle
     .split(/[\s.,;?!]+/)
     .map((word, index) => {
