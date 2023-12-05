@@ -180,6 +180,12 @@ export function Filter() {
         setInfoFiltro(true)
       }
 
+      const handleBackBtn = () => {
+        setEstadoFiltro(false)
+        setPopupPesquisadores(false)
+        setInfoFiltro(false)
+      }
+
 
       const handlePopUpBtn = () => {
 
@@ -332,24 +338,9 @@ export function Filter() {
                 </div>
                  ): ('')}
 
-<div onClick={() => setFiltroInstituicao(!filtroInstituicao)} className='w-full h-12 border border-gray-300 mb-4 hover:bg-gray-50 transition-all cursor-pointer rounded-xl flex items-center justify-between'>
-                   <div className='flex w-full p-6 items-center gap-6 justify-between'>
-                 <div className='flex items-center gap-4'>
-                     <Buildings size={20} className="text-gray-400" />
-                     <p className='text-gray-400 text-base font-medium '>Instituição</p>
-                 </div>
- 
-                 <div  className={`cursor-pointer  transition-all flex items-center justify-center `}>
-                         {filtroInstituicao ? (
-                          <CaretUp size={20} className={' text-gray-400'} />
-                         ): (
-                          <CaretDown size={20} className={' text-gray-400'} />
-                         )}
-                         </div>
-                 </div>
-                   </div>
 
-                   {filtroInstituicao ? (
+
+                
                    <div className='w-full'>
                     <DropdownMultiSelect
                     options={optionsDropdown}
@@ -357,7 +348,7 @@ export function Filter() {
                     setSelectedOptions={setSelectedOptions}
                     />
                     </div>
-                   ): ('')}
+             
 
                  </div>
                  </div>
@@ -442,7 +433,7 @@ Menção a Jônatas Pereira do Nascimento Rosa (UNEB) pela revisão e projeto te
        ): ('')}
 
 {EstadoFiltro || popupPesquisadores || infoFiltro ? (
-  <div className="h-screen w-full bg-[#000] flex-1 flex opacity-25"></div>
+  <div onClick={() => handleBackBtn()} className="h-screen w-full bg-[#000] flex-1 flex opacity-25"></div>
 ):('')}
 
 

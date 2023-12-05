@@ -1,4 +1,4 @@
-import { CaretDown, X } from 'phosphor-react';
+import { Buildings, CaretDown, X } from 'phosphor-react';
 import React, { useState, useEffect, useRef } from 'react';
 
 type Option = string; // Define the type for each option
@@ -48,14 +48,19 @@ const DropdownMultiSelect: React.FC<DropdownMultiSelectProps> = ({
     <div className="relative w-full inline-block text-left " ref={dropdownRef}>
       <div>
         <span className="rounded-xl h-12 text-xl shadow-sm w-full bg-white">
+        
           <button
             type="button"
-            className=" bg-white truncate justify-between  text-ellipsis gap-4 inline-flex  w-full rounded-xl h-12 border border-gray-300 px-6 py-2 text-gray-400 min-h-[40px]  items-center text-base text-medium  leading-5  text-gray-700   focus:outline-none  focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150"
+            className=" bg-white truncate justify-between  text-ellipsis gap-4 inline-flex  w-full rounded-xl h-12 border border-gray-300 px-6 py-2 text-gray-400 min-h-[40px]  items-center text-base font-medium  leading-5  text-gray-700   focus:outline-none  focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150"
             onClick={() => setIsOpen(!isOpen)}
             aria-haspopup="true"
             aria-expanded="true"
           >
-            {selectedOptions.length > 0 ? selectedOptions.join(', ') : 'Escolha a instuição'}
+
+<div className='gap-4 flex'>
+<Buildings size={20} className="text-gray-400" />
+            {selectedOptions.length > 0 ? selectedOptions.join(', ') : 'Instituição'}
+</div>
 
             {selectedOptions.length > 0 ? (
               <div className=" absolute right-[1px] bg-[#f9f9f9] h-9 flex items-center px-3 rounded-full">
