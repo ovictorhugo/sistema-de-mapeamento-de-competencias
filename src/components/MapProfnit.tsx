@@ -829,12 +829,12 @@ console.log('idversao',idVersao)
             <div className="w-full flex flex-col px-6 md:px-16">
             
                 <div className="mb-16 pt-52 pb-0 flex justify-center flex-col items-center">
-                    <h3 className="font-medium text-4xl text-gray-400 text-center mb-4">Conheça a aba <strong className="bg-blue-400 text-white font-medium text-4xl">baremas de avaliação </strong></h3>
+                    <h3 className="font-medium text-4xl text-gray-400 text-center mb-4">4. Conheça a aba <strong className="bg-blue-400 text-white font-medium text-4xl">baremas de avaliação </strong></h3>
                     <p className="mb-6 text-gray-400 text-center max-w-[1000px]">Quer ranquear quais pesquisadores estão mais capacitados para participação em determinado edital? É simples. Basta ir na aba “baremas” que a plataforma irá fazer baremas de avaliação onde você pode determinar pesos diferentes para cada critério desejado (graduação, produção bibliográfica, participação em eventos, produção técnica, entre outros). </p>
 
                     <div className="flex gap-4 items-center">
 
-                      <p className="text-gray-400 font-bold">4. Conheça um mundo de possibilidades. Processe seu primeiro</p>
+                      <p className="text-gray-400 font-bold"> Conheça um mundo de possibilidades. Processe seu primeiro</p>
                     <Link to={`/barema/${idVersao}`} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
                         <Textbox size={16} className="text-white" /> Barema
                     </Link>

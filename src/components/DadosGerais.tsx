@@ -49,7 +49,7 @@ else {
 
 
 
-  let urlVisaoPrograma = `${urlGeral}/graduate_program_production?graduate_program_id=0&year=${ano5AnosAtras}`;
+  let urlVisaoPrograma = `${urlGeral}/graduate_program_production?graduate_program_id=0&year=1900`;
 
 // Monta a URL com o ano 5 anos atrás
 const urlQualis = `${urlGeral}/qualis_researcher?graduate_program_id=${QualQualis}&year=${ano5AnosAtras}&researcher_id=`;
@@ -82,31 +82,7 @@ console.log(urlVisaoPrograma)
 
   //qualis
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(urlQualis, {
-          mode: "cors",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET",
-            "Access-Control-Allow-Headers": "Content-Type",
-            "Access-Control-Max-Age": "3600",
-            "Content-Type": "text/plain",
-          },
-        });
-        const data = await response.json();
-        if (data) {
-          setQualis(data);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchData();
-  }, [urlQualis]);
 
-  console.log(urlQualis)
 
   //gráfico qualis
   const optionsqualis= {
@@ -253,7 +229,7 @@ console.log(urlVisaoPrograma)
         <h1 className="text-left max-w-[350px] min-w-[350px]  font-medium text-3xl ">
            Visão geral das <strong className="bg-red-400 text-white font-medium">universidades estaduais</strong>
         </h1>
-        <p className="text-sm text-gray-400 mt-2">Informações referentes a produção dos últimos 4 anos</p>
+        <p className="text-sm text-gray-400 mt-2">Informações referentes a todas produções</p>
         </div>
 
         <div className="h-32 w-32 flex items-center">
