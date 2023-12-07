@@ -62,7 +62,7 @@ export const App = () => {
   const [botaoAreasClicado, setBotaoAreasClicado] = useState(false);
   const [botaoTaxonomiaClicado, setBotaoTaxonomiaClicado] = useState(false);
   
-  const [urlGeral, setUrlGeral] = useState('http://200.128.66.226:81/');
+  const [urlGeral, setUrlGeral] = useState('http://200.128.66.226:5001/');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
   const [user, setUser] = useState<User>({} as User)
   const [isOn, setIsOn] = useState(false);
@@ -180,6 +180,10 @@ console.log('[idVersao', idVersao)
             </Route>
 
             <Route path='indicators-pos'>
+              <Route path=':program?' element={<Indicators/>}/>
+            </Route>
+
+            <Route path='taxonomia'>
               <Route path=':program?' element={<Indicators/>}/>
             </Route>
 

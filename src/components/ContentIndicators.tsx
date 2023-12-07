@@ -8,6 +8,8 @@ export function ContentIndicators() {
     // Verifica se a URL é "/programa-teste"
     const isProgramaTeste = location.pathname === `/indicators-pos`;
 
+    const isProgramaTeste2 = ( location.pathname === `/taxonomia`) || (location.pathname === `/taxonomia/4`);
+
     return (
         <div>
             <Header />
@@ -20,7 +22,13 @@ export function ContentIndicators() {
                     className="w-full h-full pt-24 bg-[#f9f9f9]"
                     src="https://app.powerbi.com/view?r=eyJrIjoiYTllNWFhYmUtNzVlYi00ZDNjLTgwMzItM2M3MGIzMzZjOGFiIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9"
                 ></iframe>
-                ): (
+                ):isProgramaTeste2 ? (
+                    <iframe
+                    title="Report Section"
+                    className="w-full h-full pt-24 bg-[#f9f9f9]"
+                    src="https://app.powerbi.com/view?r=eyJrIjoiYzJkMTI3ZjktODU2MC00YThmLTg0NDctNmYxZDkzODcxY2FhIiwidCI6IjcyNjE3ZGQ4LTM3YTUtNDJhMi04YjIwLTU5ZDJkMGM1MDcwNyJ9"
+                ></iframe>
+                ) : (
                     <iframe
                     title="Report Section"
                     className="w-full h-full pt-24 bg-[#f9f9f9]"

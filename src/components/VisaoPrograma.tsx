@@ -241,6 +241,8 @@ console.log(urlQualis)
           console.error(error);
         }
       };
+
+      console.log('URLQUALIS', urlQualis)
     return (
   
     <div className="md:px-16 px-6 pt-12 w-full">
