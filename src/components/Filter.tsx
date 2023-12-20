@@ -41,7 +41,7 @@ export function Filter() {
     const { botaoPesquisadoresClicado, setBotaoPesquisadoresClicado } = useContext(UserContext);
   const { urlGeral, setUrlGeral } = useContext(UserContext);
   const { pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema } = useContext(UserContext);
-
+   
   let urlTermPesquisadores = `${urlGeral}/researcherName?name=${pesquisadoresSelecionadosGroupBarema}`
 
   if (botaoPesquisadoresClicado) {

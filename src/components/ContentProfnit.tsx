@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { UserContext } from "../contexts/context";
-import { ArrowCircleUp, ArrowRight, BookmarkSimple, Buildings, File, GraduationCap, MagnifyingGlass, MapPin, Star, User, X, YoutubeLogo } from "phosphor-react";
-import { Link, useNavigate } from "react-router-dom";
+import { ArrowRight, BookmarkSimple, GraduationCap, MagnifyingGlass, MapPin, Star, X } from "phosphor-react";
+import { Link } from "react-router-dom";
 import { Circle } from "./Circle";
 import DropdownMultiSelect from "./DropdownMultiSelect";
 import { SvgLines } from "./SvgLines";
+
 
 import logo_1 from '../assets/logo_1.png';
 import logo_2 from '../assets/logo_2.png';
@@ -13,7 +14,6 @@ import logo_3 from '../assets/logo_3.png';
 import logo_4 from '../assets/logo_4.png';
 import logo_5 from '../assets/logo_5.png';
 import BrasilMap from "./BrasilMap";
-
 
 
 
@@ -39,12 +39,6 @@ interface Props {
   id: string
 }
 
-interface ResearcherId {
-  lattes_10_id: string
-  lattes: string
-  name: string
-}
-
 interface GraphNode extends GraduateProgram {
   x: number | undefined;
   y: number | undefined;
@@ -60,15 +54,7 @@ interface Graph {
   links: GraphLink[];
 }
 
-interface Post {
-  frequency: string
-  term: string
-  checked: boolean
-  area_expertise: string
-  area_specialty: string
-}
-
-export function Graduations(props: Props) {
+export function ContentProfnit(props: Props) {
   const { urlGeral, setUrlGeral } = useContext(UserContext);
   const { estadoSelecionado, setEstadoSelecionado } = useContext(UserContext);
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -78,39 +64,10 @@ export function Graduations(props: Props) {
 
   const { idGraduateProgram, setIdGraduateProgram } = useContext(UserContext);
 
-   //btns da página search
-
-   const { botaoPesquisadoresClicado, setBotaoPesquisadoresClicado } = useContext(UserContext);
-   const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext);
-   const { botaoTermosClicado, setBotaoTermosClicado } = useContext(UserContext);
-   const { botaoResumoClicado, setBotaoResumoClicado } = useContext(UserContext);
-   const { botaoAreasClicado, setBotaoAreasClicado } = useContext(UserContext);
-   const { botaoTaxonomiaClicado, setBotaoTaxonomiaClicado } = useContext(UserContext);
- 
-   const { totalPublicacoes, setTotalPublicacoes } = useContext(UserContext);
-   const { totalPesquisadores, setTotalPesquisadores } = useContext(UserContext);
-   const { totalInstituicoes, setTotalInstituicoes } = useContext(UserContext);
-   const handleClickTabs = () => {
-    setTotalPesquisadores('')
-    setTotalPublicacoes('')
-    setTotalInstituicoes('')
-  };
-  const [selectedTab, setSelectedTab] = useState(0);
-
-   //btn grupo pesquisadores
-   const [expanded, setExpanded] = useState(false);
-   const history = useNavigate();
-   const { valoresSelecionadosExport, setValoresSelecionadosExport } = useContext(UserContext);
-   const { valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta } = useContext(UserContext);
-  
 
   const { idVersao, setIdVersao } = useContext(UserContext);
-  setIdVersao("4")
-
-
-
-console.log('idversao',idVersao)
-  
+ 
+  setIdVersao(`2`)
 
   
 
@@ -125,10 +82,6 @@ console.log('idversao',idVersao)
     setValueInstPesquisa(name)
     
   }
-
-  const handleClickt = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
 
 
@@ -182,7 +135,7 @@ console.log('idversao',idVersao)
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      handleFilterChange(filterValue)
+      handleFilterChange()
     }
   };
 
@@ -192,10 +145,6 @@ console.log('idversao',idVersao)
    const dropdownRef = useRef<HTMLDivElement>(null);
    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
-
-   //stick search
-  const [isSticky, setIsSticky] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
    
   //idGraduateProgram
   function handleFilterChange(newValue: string) {
@@ -218,63 +167,30 @@ console.log('idversao',idVersao)
     // Definir idGraduateProgram com o id correspondente (ou '0' se não houver correspondência)
     setIdGraduateProgram(matchedId);
   }
-
-
-  //imagens pesquisadores do iapos
-  const urlResearcherImage = urlGeral + 'researcher_image'
-  const [ResearcherImage, setResearcherImage] = useState<ResearcherId[]>([])
-
-  useEffect(() => {
-
-    fetch(urlResearcherImage, {
-      mode: 'cors',
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Max-Age': '3600',
-        'Content-Type': 'text/plain'
-
-      }
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        const newData = data.map((post: Post) => ({
-          ...post,
-          term: post.term
-        }));
-       
-        setResearcherImage(newData);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  }, [urlResearcherImage]);
   
 
 
   return (
-    <div className="  overflow-y-hidden  overflow-x-hidden flex justify-center flex-col">
+    <div className="  overflow-y-hidden  overflow-x-hidden flex items-center">
 
       <div className="backgroundGradient opacity-60 animate-pulse h-screen w-full backdrop-blur-lg absolute top-0 z-[-9999]">
       </div>
 
-      <div className="h-[500px] absolute z-[-9999] bottom-0  right-0"><SvgLines/></div>
+      <div className="h-[70%] absolute z-[-9999]  bottom-0 right-0"><SvgLines/></div>
 
-      <div className="w-full h-screen max-h-screen overflow-y-hidden  overflow-hidden flex items-center absolute top-0 "><BrasilMap/></div>
+      <div className="w-full h-screen max-h-screen overflow-y-hidden  overflow-hidden flex items-center absolute "><BrasilMap/></div>
 
       <div className="px-6 md:px-16 flex justify-center h-screen flex-col  w-fit">
-        <div className="h-[350px] absolute  ml-16 "><Circle/></div>
+        <div className="h-[350px] absolute z-[-9] ml-16 "><Circle/></div>
         <h1 className="z-[999999] text-4xl mb-4 font-medium max-w-[750px] ">
-        <strong className="bg-red-400 text-white font-normal">
+        <strong className="bg-blue-400 text-white font-normal">
         Escolha um programa
         </strong>{" "}
         e veja o que a plataforma filtra para você.
       </h1>
           <p className=" z-[999999] max-w-[620px]  text-lg text-gray-400">Arraste ou clique em um dos pontos no gráfico para selecionar o programa de pós-graduação. Você também pode escolher pela lista abaixo </p>
 
-          <div className="max-w-[700px] flex gap-3 items-center mt-6 z-[999999]">
+          <div className="max-w-[700px] flex-col flex gap-3  mt-6 z-[999999]">
          
           <div className="w-full">
           <div className="flex gap-3 w-full">
@@ -285,7 +201,7 @@ console.log('idversao',idVersao)
                           onKeyPress={handleKeyPress}
                           value={filterValue}
                           onChange={e => setFilterValue(e.target.value)}
-                          placeholder='Nome do programa de pós-graduação'
+                          placeholder={`Nome ou sigla da instituição`}
                           className="w-full outline-none text-sm"
                         />
                       </div>
@@ -312,7 +228,7 @@ console.log('idversao',idVersao)
 
                     
                     <div className="flex items-center gap-3">
-                    <div><img src={`${props.url_image}`} alt="" className="h-12 border-none w-auto flex-1"/></div>
+                    <div><img src={`${props.url_image}`} alt="" className="h-12 border-none w-auto whitespace-nowrap"/></div>
                       <div>
                       <span className=" whitespace-normal text-base text-gray-400 mb-2 font-bold">{props.name}</span>
                       <p className="font-medium flex gap-1 items-center"> {props.instituicao}</p>
@@ -344,24 +260,27 @@ console.log('idversao',idVersao)
           </div>
           )}
           </div>
+
+          <div className=" flex  rounded-md z-[-99] bg-opacity-80 flex-wrap gap-6 mt-4  ">
+        <img src={logo_1} className=" relative w-auto h-12"/>
+        <img src={logo_2} className=" relative w-auto h-12"/>
+        <img src={logo_3} className=" relative w-auto h-12"/>
+        <img src={logo_5} className=" relative w-auto h-12"/>
+        <img src={logo_4} className=" relative w-auto h-12"/>
+        
+    </div>
           </div>
-          
-          {idVersao === "2"  || idVersao === "4" ? (
-              <div className=" flex  rounded-md  bg-opacity-80 z-[99] flex-wrap gap-6 mt-8 relative">
-              <img src={logo_1} className=" relative w-auto h-12"/>
-              <img src={logo_2} className=" relative w-auto h-12"/>
-              <img src={logo_3} className=" relative w-auto h-12"/>
-              <img src={logo_5} className=" relative w-auto h-12"/>
-              <img src={logo_4} className=" relative w-auto h-12"/>
-              
-          </div>
-            ):('')}
+
           
       </div>
 
+     
+       
+
+
       
 
-      <div className="absolute h-screen top-0 right-0 pr-16 items-center justify-center flex">
+      <div className="fixed  right-0 pr-16 items-center justify-center flex">
       <div className="flex flex-col gap-3 max-h-[470px] overflow-y-auto">
         {graduatePrograms.map(props => {
          if (props.state === estadoSelecionado && idGraduateProgram == "0") {
@@ -377,9 +296,9 @@ console.log('idversao',idVersao)
                     
 
                     <div className="flex items-center gap-3">
-                    <div><img src={`${props.url_image}`} alt="" className="h-16 border-none  w-auto"/></div>
-                      <div className="flex-1">
-                      <span className=" whitespace-normal text-base text-gray-400 mb-2  font-bold">{props.name}</span>
+                    <div><img src={`${props.url_image}`} alt="" className="h-16 border-none w-auto whitespace-nowrap flex-1"/></div>
+                      <div className="flex flex-1 flex-col">
+                      <span className=" whitespace-normal text-base text-gray-400 mb-2 font-bold">{props.name}</span>
                       <p className="font-medium flex gap-1 items-center"> <MapPin size={20} className="textwhite" /> {props.city} | {props.state}</p>
                       </div>
                     </div>
@@ -456,10 +375,11 @@ console.log('idversao',idVersao)
                     </div>
 
                     <div>
-                    <Link to={`/result`}  onClick={() => handleClick(props.graduate_program_id)} className="w-full mt-8 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-full px-6 py-2 justify-center hover:bg-blue-500 text-base font-medium transition">
+                    <Link to={"/result"}  onClick={() => handleClick(props.graduate_program_id)} className="w-full mt-8 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-full px-6 py-2 justify-center hover:bg-blue-500 text-base font-medium transition">
                         <ArrowRight size={16} className="text-white" /> Avançar
                     </Link>
                     </div>
+
 
                     <input
                       type="checkbox"
@@ -476,10 +396,6 @@ console.log('idversao',idVersao)
             })}
       </div>
 
-   
-
-      
-   
       
     </div>
   );

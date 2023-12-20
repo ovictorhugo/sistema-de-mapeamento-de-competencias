@@ -1,12 +1,13 @@
 import { ContentLogin } from "../components/ContentLogin";
+import { ContentSignUp } from "../components/ContentSignUp";
 import { Header } from "../components/Header";
 
-export function Login() {
+export function SignUp() {
 
     return  (
         <div>
 
-          <ContentLogin/>
+          <ContentSignUp/>
           
         </div>
     )

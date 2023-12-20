@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { ArrowCircleDown, Info, Funnel, User, File, Buildings, MagnifyingGlass, Rows, Lightbulb, X, CursorText, IdentificationCard, TextAlignLeft, CaretRight, CaretLeft, Copyright, SlidersHorizontal } from "phosphor-react";
+import { ArrowCircleDown, Info, Funnel, User, File, Buildings, MagnifyingGlass, Rows, Lightbulb, X, CursorText, IdentificationCard, TextAlignLeft, CaretRight, CaretLeft, Copyright, SlidersHorizontal, Trash, Quotes, Books, Ticket } from "phosphor-react";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 
 import { UserContext } from '../contexts/context'
@@ -59,10 +59,24 @@ function myWrapperFunction() {
       setPesquisaInput(valorDigitado);
     }
 
+    const [debouncedPesquisaInput, setDebouncedPesquisaInput] = useState('');
+
+    // Função de debounce
+    useEffect(() => {
+      const timerId = setTimeout(() => {
+        setDebouncedPesquisaInput(pesquisaInput);
+      }, 500); // Ajuste o intervalo conforme necessário (500ms neste exemplo)
+
+      return () => {
+        clearTimeout(timerId);
+      };
+    }, [pesquisaInput]);
+
+
 
 
     useEffect(() => {
-      if (pesquisaInput.trim().length >= 3) {
+      if (debouncedPesquisaInput.trim().length >= 2) {
         setResultados([]);
         setResultadosPesquisadores([]);
         setResultadosArea([]);
@@ -75,7 +89,7 @@ function myWrapperFunction() {
 
 
     function handleClick() {
-      setValorDigitadoPesquisaDireta(pesquisaInput.replace(/\s+/g, ";"));
+      setValorDigitadoPesquisaDireta(debouncedPesquisaInput.replace(/\s+/g, ";"));
       setIsOpen(false)
     }
 
@@ -100,15 +114,17 @@ function myWrapperFunction() {
 
     //Enviar resultado da pesquisa
     function enviarRequisicao() {
-      const pesquisaInputFormatado = pesquisaInput.trim().replace(/\s+/g, ";");
+      const pesquisaInputFormatado = debouncedPesquisaInput.trim().replace(/\s+/g, ";");
       const url = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=ARTICLE`;
       const urlResumo = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=ABSTRACT&graduate_program_id=${idGraduateProgram}`;
       const urlPesquisador = urlGeral + `/reasercherInitials?initials=${pesquisaInputFormatado}&graduate_program_id=${idGraduateProgram}`
-      const urlArea = urlGeral + `/area_specialitInitials?initials=${pesquisaInput.trim()}&area=${selectedOptionsAreas}&graduate_program_id=${idGraduateProgram}`;
+      const urlArea = urlGeral + `/area_specialitInitials?initials=${debouncedPesquisaInput.trim()}&area=${selectedOptionsAreas}&graduate_program_id=${idGraduateProgram}`;
       const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
       const urlBigrama = urlGeral +  `secondWord?term=${pesquisaInputFormatado}`
       const urlPatente = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=PATENT`
       console.log('urlResumo', url)
+
+
 
  
      
@@ -288,6 +304,8 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
     const { botaoTermosClicado, setBotaoTermosClicado } = useContext(UserContext);
     const { botaoResumoClicado, setBotaoResumoClicado } = useContext(UserContext);
     const { botaoAreasClicado, setBotaoAreasClicado } = useContext(UserContext);
+    const { botaoLivrosCapitulosClicado, setBotaoLivrosCapitulosClicado } = useContext(UserContext);
+    const { botaoEventosClicado, setBotaoEventosClicado } = useContext(UserContext);
 
     //estado btns 
     const [selectedTab, setSelectedTab] = useState(0);
@@ -299,6 +317,8 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setBotaoTermosClicado(false);
       setBotaoAreasClicado(false);
       setBotaoResumoClicado(false)
+      setBotaoEventosClicado(false)
+      setBotaoLivrosCapitulosClicado(false)
       //Apagar checkbox ao mudar de aba - termos
       setItensSelecionados([]);
       setAreasSelecionados([]);
@@ -322,6 +342,8 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setBotaoTermosClicado(false);
       setBotaoAreasClicado(false);
       setBotaoResumoClicado(false)
+      setBotaoEventosClicado(false)
+      setBotaoLivrosCapitulosClicado(false)
       //Apagar checkbox ao mudar de aba - termos
       setItensSelecionados([]);
       setAreasSelecionados([]);
@@ -343,6 +365,8 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setBotaoTermosClicado(true);
       setBotaoAreasClicado(false);
       setBotaoResumoClicado(false)
+      setBotaoEventosClicado(false)
+      setBotaoLivrosCapitulosClicado(false)
       //Apagar checkbox ao mudar de aba - pesqisadores
       setPesquisadoresSelecionados([]);
       setAreasSelecionados([]);
@@ -366,6 +390,8 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setBotaoPatentesClicado(false)
       setBotaoAreasClicado(false);
       setBotaoTermosClicado(false)
+      setBotaoEventosClicado(false)
+      setBotaoLivrosCapitulosClicado(false)
       //Apagar checkbox ao mudar de aba - pesqisadores
       setPesquisadoresSelecionados([]);
       setAreasSelecionados([]);
@@ -390,6 +416,8 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setBotaoPatentesClicado(false)
       setBotaoTermosClicado(false);
       setBotaoResumoClicado(false)
+      setBotaoEventosClicado(false)
+      setBotaoLivrosCapitulosClicado(false)
       //Apagar checkbox ao mudar de aba - pesqisadores
       setPesquisadoresSelecionados([]);
   
@@ -407,22 +435,57 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setSelectedTab(2);
     };
 
-    const handleAutocompleteClick = () => {
-      // Sort autocompleteOptions by frequency in descending order
-      const sortedOptions = resultadosBigrama.sort((a, b) => b.freq - a.freq);
+    //Se o botão Livros for clicado
+    const handleClickLivrosCapitulos = () => {
+      setBotaoAreasClicado(false);
+      setBotaoPesquisadoresClicado(false);
+      setBotaoPatentesClicado(false)
+      setBotaoTermosClicado(false);
+      setBotaoResumoClicado(false)
+      setBotaoEventosClicado(false)
+      setBotaoLivrosCapitulosClicado(true)
+      //Apagar checkbox ao mudar de aba - pesqisadores
+      setPesquisadoresSelecionados([]);
   
-      // Get the most frequent word
-      const mostFrequentWord = sortedOptions.length > 0 ? sortedOptions[0].word : '';
-  
-      // Set the input to the most frequent word
-      setPesquisaInput(mostFrequentWord);
-  
-      // Close the autocomplete dropdown
-      setIsOpen(false);
+      setItensSelecionados([]);
+      setItensSelecionadosPatente([])
+      setItensSelecionadosResumo([])
+      setPesquisaInput('')
+
+      setResultadosPesquisadores([])
+      setResultados([])
+      setResultadosArea([])
+      setResultadosPatentes([])
+      setResultadosResumo([])
+
+      setSelectedTab(5);
     };
 
-    console.log('resuktados bigrama', resultadosBigrama)
-   
+    const handleClickEventos = () => {
+      setBotaoAreasClicado(false);
+      setBotaoPesquisadoresClicado(false);
+      setBotaoPatentesClicado(false)
+      setBotaoTermosClicado(false);
+      setBotaoResumoClicado(false)
+      setBotaoEventosClicado(true)
+      setBotaoLivrosCapitulosClicado(false)
+      //Apagar checkbox ao mudar de aba - pesqisadores
+      setPesquisadoresSelecionados([]);
+  
+      setItensSelecionados([]);
+      setItensSelecionadosPatente([])
+      setItensSelecionadosResumo([])
+      setPesquisaInput('')
+
+      setResultadosPesquisadores([])
+      setResultados([])
+      setResultadosArea([])
+      setResultadosPatentes([])
+      setResultadosResumo([])
+
+      setSelectedTab(6);
+    };
+
 
     const { idVersao, setIdVersao } = useContext(UserContext);
 
@@ -927,6 +990,22 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       </li>
     ));
 
+    //limpar pesquisa
+    const limparPesquisa = () => {
+      setValorDigitadoPesquisaDireta(``)
+      setValoresSelecionadosExport(``)
+      setPesquisaInput("");
+
+
+      setPesquisadoresSelecionados([]);
+      setAreasSelecionados([]);
+      setPesquisaInput('')
+      setItensSelecionados([])
+      setItensSelecionadosPatente([])
+      setItensSelecionadosResumo([])
+ 
+    };
+
     return (
       <div className=' m-[0 auto] w-full px-6 md:px-16 '>
 
@@ -935,8 +1014,8 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
           <div className='flex flex-wrap md:flex-nowrap top-6 w-full'>
 
             <div className='flex w-full flex-col'>
-              <div className={`flex bg-white  items-center h-14 group w-full  text-base font-medium  justify-center transition border-[1px] border-gray-300 ${botaoTermosClicado ? 'hover:border-blue-400' : ''} ${botaoResumoClicado ? 'hover:border-yellow-400' : ''} ${botaoAreasClicado ? 'hover:border-green-400' : ''} ${botaoPesquisadoresClicado ? 'hover:border-red-400' : ''} ${botaoPatentesClicado ? 'group-hover:border-cyan-400' : ''} ${isOpen && pesquisaInput.length >= 3 ? 'rounded-tl-2xl' : 'rounded-l-2xl'}`}>
-                <MagnifyingGlass size={20} className={`text-gray-400 min-w-[52px] ${botaoTermosClicado ? 'group-hover:text-blue-400' : ''} ${botaoResumoClicado ? 'group-hover:text-yellow-400' : ''} ${botaoAreasClicado ? 'group-hover:text-green-400' : ''} ${botaoPesquisadoresClicado ? 'group-hover:text-red-400' : ''} ${botaoPatentesClicado ? 'group-hover:text-cyan-400' : ''}`} />
+              <div className={`flex bg-white  items-center h-14 group w-full  text-base font-medium  justify-center transition border-[1px] border-gray-300 ${botaoTermosClicado ? 'hover:border-blue-400' : ''} ${botaoLivrosCapitulosClicado ? 'hover:border-pink-400' : ''} ${botaoEventosClicado ? 'hover:border-orange-400' : ''} ${botaoResumoClicado ? 'hover:border-yellow-400' : ''} ${botaoAreasClicado ? 'hover:border-green-400' : ''} ${botaoPesquisadoresClicado ? 'hover:border-red-400' : ''} ${botaoPatentesClicado ? 'group-hover:border-cyan-400' : ''} ${isOpen && pesquisaInput.length >= 3 ? 'rounded-tl-2xl' : 'rounded-l-2xl'}`}>
+                <MagnifyingGlass size={20} className={`text-gray-400 min-w-[52px] ${botaoTermosClicado ? 'group-hover:text-blue-400' : ''} ${botaoResumoClicado ? 'group-hover:text-yellow-400' : ''} ${botaoLivrosCapitulosClicado ? 'group-hover:text-pink-400' : ''} ${botaoEventosClicado ? 'group-hover:text-orange-400' : ''} ${botaoAreasClicado ? 'group-hover:text-green-400' : ''} ${botaoPesquisadoresClicado ? 'group-hover:text-red-400' : ''} ${botaoPatentesClicado ? 'group-hover:text-cyan-400' : ''}`} />
                 <div className='flex gap-2 mx-2'>{valoresSelecionadosJSX}{valoresPesquisadoresSelecionadosJSX}{valoresSelecionadosPatenteJSX}{valoresAreasSelecionadosJSX}{valoresSelecionadosResumoJSX}</div>
                 <input
                   type="text"
@@ -949,7 +1028,13 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
                   placeholder={
                     `${botaoResumoClicado ? 'Pesquise por uma ou mais palavras no resumo do pesquisador (Ex: Robótica, educação, indústria)' : ''} ${botaoTermosClicado ? 'Pesquise um ou mais termos (Ex: Robótica, educação, indústria)' : ''} ${botaoAreasClicado ? 'Pesquise uma ou mais áreas de especialidade (Ex: Astronomia, Ciência de dados)' : ''} ${botaoPesquisadoresClicado ? 'Pesquise o nome de um ou mais pesquisador(es)' : ''} ${botaoPatentesClicado ? 'Pesquise uma ou mais palavras nas patentes do pesquisador (Ex: energia, modelo, sistema)' : ''}`
                   }
-                  id="" className="w-full h-full outline-none" />
+                  id="" className="flex flex-1 h-full outline-none" />
+
+                  {valorDigitadoPesquisaDireta != `` || valoresSelecionadosExport != `` ? (
+                    <div onClick={() => limparPesquisa()} className={`outline-none cursor-pointer text-sm rounded-xl text-gray-400 flex items-center border-[1px] justify-center border-white gap-2  font-semibold transition hover:bg-gray-100 w-[38px] whitespace-nowrap h-[38px] mr-2`}>
+                    <Trash size={16} className="" />
+                    </div>
+                  ):(``)}
               </div>
 
             </div>
@@ -959,13 +1044,23 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
             ${isOpen && pesquisaInput.length >= 3 ? 'rounded-tr-2xl' : 'rounded-r-2xl'}`}>
 
                 <Tab selected={selectedTab === 0} className={`outline-none cursor-pointer text-sm rounded-xl text-gray-400 flex items-center border-[1px] justify-center border-white gap-2  font-semibold transition ${botaoTermosClicado ? "activeTermos px-4 py-2" : ('hover:bg-gray-100 w-[38px]')}`} onClick={handleClickTermos} name="buttontermos">
-                  <CursorText size={16} className="" />
+                  <Quotes size={16} className="" />
                   {selectedTab === 0 && botaoTermosClicado && <span>Termo</span>}
                 </Tab>
 
                 <Tab selected={selectedTab === 1} className={`outline-none cursor-pointer text-sm rounded-xl text-gray-400 flex items-center border-[1px] justify-center border-white gap-2  font-semibold transition ${botaoResumoClicado ? "activeResumo px-4 py-2" : ('hover:bg-gray-100 w-[38px]')}`} onClick={handleClickResumo} name="buttonresumo">
                   <TextAlignLeft size={16} className="" />
                   {selectedTab === 1 && botaoResumoClicado && <span>Resumo</span>}
+                </Tab>
+
+                <Tab selected={selectedTab === 5} className={` whitespace-nowrap outline-none cursor-pointer text-sm text-gray-400 rounded-xl flex items-center gap-2 justify-center font-semibold  transition ${botaoLivrosCapitulosClicado ? "activeLivrosCapitulos px-4 py-2" : ('hover:bg-gray-100 w-[38px]')}`} onClick={handleClickLivrosCapitulos} >
+                  <Books size={16} className="" />
+                  {selectedTab === 5 && botaoLivrosCapitulosClicado && <span>Livros e capítulos</span>}
+                </Tab>
+
+                <Tab selected={selectedTab === 6} className={` whitespace-nowrap outline-none cursor-pointer text-sm text-gray-400 rounded-xl flex items-center gap-2 justify-center font-semibold  transition ${botaoEventosClicado ? "activeEventos px-4 py-2" : ('hover:bg-gray-100 w-[38px]')}`} onClick={handleClickEventos} >
+                  <Ticket size={16} className="" />
+                  {selectedTab === 6 && botaoEventosClicado && <span>Participação em eventos</span>}
                 </Tab>
 
                 <Tab selected={selectedTab === 2} className={`outline-none cursor-pointer text-sm text-gray-400 rounded-xl flex items-center gap-2 justify-center font-semibold  transition ${botaoAreasClicado ? "activeAreas px-4 py-2" : ('hover:bg-gray-100 w-[38px]')}`} onClick={handleClickAreas}>
@@ -985,8 +1080,8 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
 
 
                 <div className='flex items-center justify-center'>
-                  <div className={`absolute z[-999] animate-ping gap-4 text-white rounded-xl h-[28px] w-[28px] justify-center hover:bg-blue-500  font-medium transition ${botaoTermosClicado ? 'bg-blue-400' : ''} ${botaoAreasClicado ? 'bg-green-400' : ''} ${botaoResumoClicado ? 'bg-yellow-400' : ''} ${botaoPesquisadoresClicado ? 'bg-red-400' : ''} ${botaoPatentesClicado ? 'bg-cyan-400' : ''}`}></div>
-                  <div onClick={handleClick} className={`cursor-pointer flex z-[999] relative  items-center gap-4 text-white rounded-xl h-[38px] w-[38px] justify-center  font-medium transition ${botaoTermosClicado ? 'bg-blue-400' : ''} ${botaoResumoClicado ? 'bg-yellow-400' : ''} ${botaoAreasClicado ? 'bg-green-400' : ''} ${botaoPesquisadoresClicado ? 'bg-red-400' : ''} ${botaoPatentesClicado ? 'bg-cyan-400' : ''}`}><Funnel size={16} className="text-white" /></div>
+                  <div className={`absolute z[-999] animate-ping gap-4 text-white rounded-xl h-[28px] w-[28px] justify-center hover:bg-blue-500  font-medium transition ${botaoTermosClicado ? 'bg-blue-400' : ''} ${botaoAreasClicado ? 'bg-green-400' : ''} ${botaoLivrosCapitulosClicado ? 'bg-pink-400' : ''} ${botaoEventosClicado ? 'bg-orange-400' : ''} ${botaoResumoClicado ? 'bg-yellow-400' : ''} ${botaoPesquisadoresClicado ? 'bg-red-400' : ''} ${botaoPatentesClicado ? 'bg-cyan-400' : ''}`}></div>
+                  <div onClick={handleClick} className={`cursor-pointer flex z-[999] relative  items-center gap-4 text-white rounded-xl h-[38px] w-[38px] justify-center  font-medium transition ${botaoTermosClicado ? 'bg-blue-400' : ''} ${botaoResumoClicado ? 'bg-yellow-400' : ''} ${botaoAreasClicado ? 'bg-green-400' : ''} ${botaoEventosClicado ? 'bg-orange-400' : ''} ${botaoLivrosCapitulosClicado ? 'bg-pink-400' : ''} ${botaoPesquisadoresClicado ? 'bg-red-400' : ''} ${botaoPatentesClicado ? 'bg-cyan-400' : ''}`}><Funnel size={16} className="text-white" /></div>
                 </div>
 
               </TabList>
@@ -1011,11 +1106,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
               <div className='grid grid-cols-3 gap-4'>
                 <div className='block  w-full ' >
                 <ul>
-          {resultadosBigrama.map((option) => (
-            <li key={option.word} onClick={handleAutocompleteClick}>
-              {option.word}
-            </li>
-          ))}
+          
         </ul>
                   <p className='mb-4'>Termo</p>
                   {checkboxItems || <p className='text-gray-500 text-lg'>num</p>}

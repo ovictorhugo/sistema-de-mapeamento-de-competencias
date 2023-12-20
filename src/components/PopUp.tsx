@@ -968,6 +968,15 @@ export function PopUp(props: PesquisadorProps) {
                   </strong>{' '}
                   nas publicações
                 </p>
+              ) : botaoPatentesClicado ? (
+                <p className="border-[1px] border-gray-300 w-fit py-2 px-4 text-gray-400 rounded-full text-xs font-bold float-right flex gap-1 items-center ml-auto absolute top-0 left-0">
+                  Pesquisador encontrado com termo{' '}
+                  <strong className="font-bold text-blue-400">
+                    {valoresSelecionadosExport}
+                    {valorDigitadoPesquisaDireta}
+                  </strong>{' '}
+                  nas patentes
+                </p>
               ) : (
                 <div></div>
               )}
@@ -1101,7 +1110,7 @@ export function PopUp(props: PesquisadorProps) {
 
                   <TabPanel>
                     {valoresSelecionadosPopUp == '' || botaoAreasClicado || botaoPesquisadoresClicado || botaoTermosClicado || botaoResumoClicado || valorDigitadoPesquisaDireta || botaoPatentesClicado ? (
-                      <div className=" flex gap-4 p-6 border-[1px] border-gray-300 rounded-md mt-6 items-center w-fit">
+                      <div className=" flex gap-4 p-6 border-[1px] border-gray-300 rounded-xl mt-6 items-center w-fit">
                         <div>
                           <p className="text-gray-400 mb-4  whitespace-nowrap">Selecione os qualis desejados</p>
                           <div className="gap-4 flex flex-wrap ">
@@ -1366,7 +1375,7 @@ export function PopUp(props: PesquisadorProps) {
                       ) : (
                         <>
                           {patente.length === 0 ? (
-                            <p className="text-center text-gray-400 mb-6">Nenhuma patente encontrada</p>
+                            <p className="text-center  mb-6">Nenhuma patente encontrada</p>
                           ) : (
                             <div className={`mb-9 grid grid-cols-1  gap-6  m-[0 auto] w-full `}>
                               {patente.map(props => {
@@ -1525,7 +1534,7 @@ export function PopUp(props: PesquisadorProps) {
               <div className="flex flex-col">
 
 
-                <div className="w-full lg:w-[350px] mb-6 border-[1px] border-gray-300 rounded-md p-6 h-min">
+                <div className="w-full lg:w-[350px] border-[1px] border-gray-300 rounded-xl p-6 h-min">
                   {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoAreasClicado || botaoPatentesClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta != "")? (
                     <div className="text-center font-medium text-xl text-gray-500 mb-6">Todas as publicações por ano</div>
                   ) : (
@@ -1541,7 +1550,7 @@ export function PopUp(props: PesquisadorProps) {
                   <HighchartsReact highcharts={Highcharts} options={options} />
                 </div>
 
-                <div className="w-full lg:w-[350px] border-[1px] border-gray-300 rounded-md p-6 h-min my-6">
+                <div className="w-full lg:w-[350px] border-[1px] border-gray-300 rounded-xl p-6 h-min my-6">
                   <div className="w-full flex justify-center mb-4">
 
                     <ChartBar size={40} className="text-blue-400" />
@@ -1573,12 +1582,12 @@ export function PopUp(props: PesquisadorProps) {
                   </div>
                 </div>
 
-                <div className="w-full lg:w-[350px] mb-6 border-[1px] border-gray-300 rounded-md p-6 h-min">
+                <div className="w-full lg:w-[350px] mb-6 border-[1px] border-gray-300 rounded-xl p-6 h-min">
                   <div className="text-center font-medium text-xl text-gray-500 mb-6">Palavras-chaves mais recorrentes</div>
                   <HighchartsReact highcharts={Highcharts} options={options2} />
                 </div>
 
-                <div className="w-full lg:w-[350px] border-[1px] border-gray-300 rounded-md p-6 h-min">
+                <div className="w-full lg:w-[350px] border-[1px] border-gray-300 rounded-xl p-6 h-min">
                 {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoAreasClicado || botaoPatentesClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta != "") ? (
                     <div className="text-center font-medium text-xl text-gray-500 mb-6">Todas as publicações por qualis</div>
                   ) : (

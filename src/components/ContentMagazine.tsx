@@ -30,10 +30,26 @@ export function ContentMagazine(props: Props) {
       //logica versões
    
       setIdVersao("4")
-  
-  
 
-    let urlMagazine = `${urlGeral}magazine?initials=&issn=`
+      let urlMagazine = `${urlGeral}magazine?initials=nat&issn=`
+  
+ 
+      if (filterValue == "") {
+        urlMagazine = `${urlGeral}magazine?initials=nat&issn=`
+      }
+
+else if (/^\d+$/.test(filterValue)) {
+  // Se filterValue contiver apenas números
+  urlMagazine = `${urlGeral}magazine?initials=&issn=${filterValue}`;
+} else {
+  // Se filterValue contiver uma string
+  urlMagazine = `${urlGeral}magazine?initials=${filterValue}&issn=`;
+}
+
+
+
+
+    
     const [magazine, setMagazine] = useState<Magazine[]>([]);
 
     useEffect(() => {
@@ -90,7 +106,7 @@ const filteredResults = magazine.filter(prop =>
 
   const indexOfLastResult = currentPage * resultsPerPage;
   const indexOfFirstResult = indexOfLastResult - resultsPerPage;
-  const currentResults = filteredResults.slice(indexOfFirstResult, indexOfLastResult);
+  const currentResults = magazine.slice(indexOfFirstResult, indexOfLastResult);
 
     return  (
         <div className="h-screen">
@@ -107,8 +123,8 @@ const filteredResults = magazine.filter(prop =>
                
                 </div>
                 <div className="z-[999] w-full flex justify-center">
-                   <div className="flex bg-white mb-6 w-[70%] items-center justify-center border-gray-300 border-[1px] rounded-xl py-4">
-                        <MagnifyingGlass size={20} className={`text-gray-400 min-w-[52px] `} />
+                   <div className="group flex bg-white mb-6 w-[70%] items-center text-gray-400 justify-center hover:border-blue-400 transition-all border-gray-300 border-[1px] rounded-2xl py-4">
+                        <MagnifyingGlass size={20} className={` min-w-[52px] group-hover:text-blue-400`} />
                         <input
                           type="text"
                           value={filterValue}
@@ -129,8 +145,21 @@ const filteredResults = magazine.filter(prop =>
             </div>
 
              <div className="pt-12">
-        <h2 className="mb-4 text-3xl font-medium text-gray-400">Revistas encontradas <strong className="font-bold text-white bg-green-400">pelo título</strong></h2>
-        {filterValue.length == 0 ? (<p className="text-gray-400 mb-8">Mostrando todas as revistas, digite para aparecer mais</p>) : (<p className="text-gray-400 mb-8">Mostrando todas as revistas com "{filterValue}" contido no título</p>)}
+        <h2 className="mb-4 text-3xl font-medium text-gray-400">Revistas encontradas <strong className="font-bold text-white bg-red-400">pelo título</strong></h2>
+        {filterValue.length === 0 ? (
+  <p className="text-gray-400 mb-8">
+    Mostrando todas as revistas, digite para aparecer mais
+  </p>
+) : /^\d+$/.test(filterValue) ? (
+  <p className="text-gray-400 mb-8">
+    Mostrando a revista pelo ISSN #{filterValue}
+  </p>
+) : (
+  <p className="text-gray-400 mb-8">
+    Mostrando todas as revistas com "{filterValue}" contido no título
+  </p>
+)}
+
       </div>
 
             <div>
@@ -145,8 +174,10 @@ const filteredResults = magazine.filter(prop =>
                           ) : (
                             <div className={`mb-9 grid masonry grid-cols-1 lg:grid-cols-2 gap-6 m-[0 auto] w-full`}>
                               {currentResults.map(props => (
-                                <div className="items-center group bg-white  justify-between border-solid border-gray-300 border-[1px] flex p-6 rounded-md hover:shadow-md transition ">
-                                   <div className="flex items-center justify-between w-full">
+                                <div className="items-center group bg-white  justify-between border-solid border-gray-300 border-[1px] flex  rounded-xl hover:shadow-md transition ">
+                                   <div className={`h-full w-2 min-w-[8px] rounded-l-lg ${qualisColor[props.qualis as keyof typeof qualisColor]}` }></div>
+                                  
+                                   <div className="flex items-center justify-between w-full p-6">
                                     <div className="flex items-center flex-1">
                                         <div className="flex flex-col justify-center">
                                         <div id="mudarCorDiv" className={`  ${qualisColor[props.qualis as keyof typeof qualisColor]} h-10 w-10 rounded-md mr-4 whitespace-nowrap flex items-center justify-center `}>
@@ -195,7 +226,7 @@ const filteredResults = magazine.filter(prop =>
 
                       <div className="mb-9 flex gap-4 w-full justify-center">
                         <button
-                          className="flex items-center gap-4 bg-blue-400 text-white rounded-full px-6 py-2 justify-center hover:bg-blue-500 mb-6 font-medium transition"
+                          className="flex items-center gap-4 bg-blue-400 text-white rounded-xl px-6 py-2 justify-center hover:bg-blue-500 mb-6 font-medium transition"
                           onClick={() => {
                             setCurrentPage(currentPage - 1);
                             if (document) {
@@ -203,7 +234,7 @@ const filteredResults = magazine.filter(prop =>
                             }
                           }}
                           style={{
-                            backgroundColor: currentPage === 1 ? '#ccc' : '#005399',
+                            backgroundColor: currentPage === 1 ? '#ccc' : '#173DFF',
                             opacity: currentPage === 1 ? '0.5' : '1',
                           }}
                           disabled={currentPage === 1}
@@ -212,7 +243,7 @@ const filteredResults = magazine.filter(prop =>
                         </button>
 
                         <button
-                          className="flex items-center gap-4 bg-blue-400 text-white rounded-full px-6 py-2 justify-center hover:bg-blue-500 mb-6 font-medium transition"
+                          className="flex items-center gap-4 bg-blue-400 text-white rounded-xl px-6 py-2 justify-center hover:bg-blue-500 mb-6 font-medium transition"
                           onClick={() => {
                             setCurrentPage(currentPage + 1);
                             if (document) {
@@ -220,7 +251,7 @@ const filteredResults = magazine.filter(prop =>
                             }
                           }}
                           style={{
-                            backgroundColor: indexOfLastResult >= magazine.length ? '#ccc' : '#005399',
+                            backgroundColor: indexOfLastResult >= magazine.length ? '#ccc' : '#173DFF',
                             opacity: indexOfLastResult >= magazine.length ? '0.5' : '1',
                           }}
                           disabled={indexOfLastResult >= magazine.length}

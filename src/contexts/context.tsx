@@ -20,6 +20,12 @@ interface UserContextType {
   botaoTaxonomiaClicado: boolean,
   setBotaoTaxonomiaClicado:  React.Dispatch<React.SetStateAction<boolean>>;
 
+  botaoLivrosCapitulosClicado: boolean,
+  setBotaoLivrosCapitulosClicado: React.Dispatch<React.SetStateAction<boolean>>;
+
+  botaoEventosClicado: boolean,
+  setBotaoEventosClicado: React.Dispatch<React.SetStateAction<boolean>>;
+
   botaoPesquisadoresClicado: boolean,
   setBotaoPesquisadoresClicado: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -55,6 +61,9 @@ interface UserContextType {
   
   enabled: boolean,
   setEnabled:React.Dispatch<React.SetStateAction<boolean>>;
+
+  loggedIn: boolean,
+  setLoggedIn:React.Dispatch<React.SetStateAction<boolean>>;
 
   intituicoesSelecionadasCheckbox: string,
   setIntituicoesSelecionadasCheckbox: React.Dispatch<React.SetStateAction<string>>;
@@ -103,8 +112,15 @@ botaoTermosClicado: false,
 setBotaoTermosClicado: () => {},
 botaoResumoClicado: false,
 setBotaoResumoClicado: () => {},
+loggedIn:false,
+setLoggedIn: () => {},
 botaoAreasClicado: false,
 setBotaoAreasClicado: () => {},
+botaoLivrosCapitulosClicado: false,
+setBotaoLivrosCapitulosClicado: () => {},
+
+botaoEventosClicado: false,
+setBotaoEventosClicado: () => {},
 EstadoFiltro: false,
 setEstadoFiltro: () => {},
 botaoTaxonomiaClicado: false,

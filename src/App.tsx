@@ -18,6 +18,7 @@ import 'firebase/firestore';
 import { auth } from './lib/firebase';
 import { Dashboard } from './pages/Dashboard';
 import {GoogleAuthProvider, signInWithPopup, User} from 'firebase/auth'
+
 import { Chat } from './pages/Chat';
 import { Terms } from './pages/Terms';
 import Researcher from './pages/Researcher';
@@ -28,6 +29,8 @@ import { HomePageSimcc } from './pages/HomePageSimcc';
 import { Magazine } from './pages/Magazine';
 import { Profnit } from './pages/Profnit';
 import { GraduationsMapPage } from './pages/GraduationsMapPage';
+import { PaginaInicial } from './pages/PaginaInicial';
+import { SignUp } from './pages/SignUp';
 
 
 
@@ -40,7 +43,9 @@ import { GraduationsMapPage } from './pages/GraduationsMapPage';
 export const App = () => {
   
   const [urlTermExport, setUrlTermExport] = useState('');
-  const [valoresSelecionadosExport, setValoresSelecionadosExport] = useState('');
+  const [valoresSelecionadosExport, setValoresSelecionadosExport] = useState(``);
+
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const [totalPublicacoes, setTotalPublicacoes] = useState('');
   const [totalPesquisadores, setTotalPesquisadores] = useState('');
@@ -59,10 +64,12 @@ export const App = () => {
   const [botaoPesquisadoresClicado, setBotaoPesquisadoresClicado] = useState(false);
   const [botaoTermosClicado, setBotaoTermosClicado] = useState(true);
   const [botaoResumoClicado, setBotaoResumoClicado] = useState(false);
+  const [botaoLivrosCapitulosClicado, setBotaoLivrosCapitulosClicado] = useState(false);
   const [botaoAreasClicado, setBotaoAreasClicado] = useState(false);
+  const [botaoEventosClicado, setBotaoEventosClicado] = useState(false);
   const [botaoTaxonomiaClicado, setBotaoTaxonomiaClicado] = useState(false);
   
-  const [urlGeral, setUrlGeral] = useState('http://200.128.66.226:5001/');
+  const [urlGeral, setUrlGeral] = useState('http://200.128.66.226:8080/');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
   const [user, setUser] = useState<User>({} as User)
   const [isOn, setIsOn] = useState(false);
@@ -80,9 +87,16 @@ export const App = () => {
   setValoresSelecionadosPopUp(valoresSelecionadosExport)
 }, [valoresSelecionadosExport]);
 
-console.log('[idVersao', idVersao)
 
+useEffect(() => {
+  const storedUser = localStorage.getItem('user');
 
+  if (storedUser) {
+    // If user information is found in local storage, set the user and mark as logged in
+    setUser(JSON.parse(storedUser));
+    setLoggedIn(true);
+  }
+}, []);
 
 
   return (
@@ -91,6 +105,7 @@ console.log('[idVersao', idVersao)
         <UserContext.Provider  
         value={{
           urlTermExport, setUrlTermExport, 
+          loggedIn, setLoggedIn,
           valoresSelecionadosExport, setValoresSelecionadosExport, 
           totalPublicacoes, setTotalPublicacoes, totalPesquisadores, 
           setTotalPesquisadores, totalInstituicoes, setTotalInstituicoes, 
@@ -100,6 +115,8 @@ console.log('[idVersao', idVersao)
           botaoTermosClicado, setBotaoTermosClicado,
           botaoResumoClicado, setBotaoResumoClicado,
           botaoAreasClicado, setBotaoAreasClicado,
+          botaoLivrosCapitulosClicado, setBotaoLivrosCapitulosClicado,
+          botaoEventosClicado, setBotaoEventosClicado,
           botaoTaxonomiaClicado, setBotaoTaxonomiaClicado,
           urlGeral, setUrlGeral,
           pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema,
@@ -125,18 +142,21 @@ console.log('[idVersao', idVersao)
           }}>
           <Routes>
             <Route path='/' >
-            <Route path=':userId?' element={<Profnit/>}/>
+            <Route path=':userId?' element={<PaginaInicial/>}/>
             </Route>
 
 
 
             <Route path='/search' element={<StepTwo/>}/>
+
+            <Route path='/profnit' element={<Profnit/>}/>
             <Route path='/bem-vindo' element={<HomePageSimcc/>}/>
             <Route path='/discover' element={<Discover/>}/>
            
             <Route path='/pesquisadoresSelecionados' element={<PesquisadoresPage/>}/>
            
             <Route path='/login' element={<Login/>}/>
+            <Route path='/signUp' element={<SignUp/>}/>
             <Route path='/chat' element={<Chat/>}/>
 
             <Route path='/export-sucupira' element={<Login/>}/>

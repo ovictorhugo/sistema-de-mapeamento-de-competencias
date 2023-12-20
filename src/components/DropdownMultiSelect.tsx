@@ -51,7 +51,7 @@ const DropdownMultiSelect: React.FC<DropdownMultiSelectProps> = ({
         
           <button
             type="button"
-            className=" bg-white truncate justify-between  text-ellipsis gap-4 inline-flex  w-full rounded-xl h-12 border border-gray-300 px-6 py-2 text-gray-400 min-h-[40px]  items-center text-base font-medium  leading-5  text-gray-700   focus:outline-none  focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150"
+            className=" bg-white truncate justify-between  text-ellipsis gap-4 inline-flex  w-full rounded-xl h-12 border border-gray-300 px-6 py-2 text-gray-400 min-h-[40px]  items-center text-base font-medium  leading-5  text-gray-700   focus:outline-none  focus:shadow-outline-blue active:bg-gray-50 hover:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150"
             onClick={() => setIsOpen(!isOpen)}
             aria-haspopup="true"
             aria-expanded="true"

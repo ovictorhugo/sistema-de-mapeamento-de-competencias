@@ -404,10 +404,7 @@ export function Publicacoes() {
   const quantidadeTotalDePublicacoes = publicacoes.length;
   setTotalPublicacoes(quantidadeTotalDePublicacoes.toString())
 
-  //resetr pesquisa
-  if (valoresSelecionadosExport != "") {
-    setValorDigitadoPesquisaDireta('')
-  }
+ 
 
   //block list
 

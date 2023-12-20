@@ -1,6 +1,7 @@
 import { Book, BookOpen, CalendarBlank, File, Graph, LinkBreak, Quotes } from "phosphor-react";
 import { UserContext } from '../contexts/context'
 import { useEffect, useState, useContext } from "react";
+import unorm from 'unorm';
 
 type Publicacao = {
     id: string,
@@ -31,11 +32,21 @@ export function Livro(props: Publicacao) {
     const { isOn, setIsOn } = useContext(UserContext)
 
     const {distinct, setDistinct} = useContext(UserContext)
+    const { botaoLivrosCapitulosClicado, setBotaoLivrosCapitulosClicado } = useContext(UserContext);
+    const { valoresSelecionadosExport, setValoresSelecionadosExport } = useContext(UserContext);
+    const { valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta } = useContext(UserContext);
+    const { valoresSelecionadosPopUp, setValoresSelecionadosPopUp } = useContext(UserContext)
+    const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext);
+
+    const normalizedTitle = props.title
+    .replace(/&quot;/g, '"')
+    .replace(/&#10;/g, '\n')
+    .toLowerCase();
 
     const ignoredWords = ['a', 'do', 'da', 'o', 'os', 'as', 'de', "e", "i", 'na', 'du', 'em']; // Adicionar outras palavras que devem ser ignoradas
 
     return (
-        <div key={props.id} id="id_perfil" className={`group bg-white  justify-between border-solid border-gray-300 border-[1px] flex p-6 rounded-md hover:shadow-md transition  ${isOn ? "items-center justify-center flex" : "flex-col items-baseline"}`}>
+        <div key={props.id} id="id_perfil" className={`group bg-white  justify-between border-solid border-gray-300 border-[1px] flex p-6 rounded-xl hover:shadow-md transition  ${isOn ? "items-center justify-center flex" : "flex-col items-baseline"}`}>
             <div className="flex justify-between flex-col h-full">
                 <div>
                 <div className="flex">
@@ -58,7 +69,35 @@ export function Livro(props: Publicacao) {
 
                 <div className="pt-6 flex flex-wrap">
     <p className="text-gray-400 text-sm font-medium flex-wrap flex gap-1"><p/>
-   {props.title}
+    {botaoLivrosCapitulosClicado == false ? (
+    `${props.title.toUpperCase()}`
+  ) : (
+    normalizedTitle
+      .split(/[\s.,;?!]+/)
+      .map((word, index) => {
+        const formattedWord = unorm.nfkd(word).replace(/[^\w\s]/gi, '');
+        const alphabet = Array.from({ length: 26 }, (_, index) => String.fromCharCode('a'.charCodeAt(0) + index));
+        const ignoredWords = [...alphabet, 'do', 'da', 'o', 'os', 'as', 'de', 'e', 'i', 'na', 'du', 'em', ')', '('];
+        let formattedSpan;
+
+        if (
+          (valoresSelecionadosExport.includes(formattedWord) ||
+            valorDigitadoPesquisaDireta.includes(formattedWord)) &&
+          !ignoredWords.includes(formattedWord)
+        ) {
+          formattedSpan = (
+            <span key={index} className="text-blue-400 font-bold">
+              {word.toUpperCase()}{' '}
+            </span>
+          );
+        } else {
+          formattedSpan = <span key={index}>{word.toUpperCase()}{' '} </span>;
+        }
+
+        return formattedSpan;
+      })
+   
+  )}
     </p>
                 </div>
             </div>

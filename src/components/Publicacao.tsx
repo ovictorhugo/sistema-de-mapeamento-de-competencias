@@ -57,9 +57,9 @@ export function Publicacao(props: Publicacao) {
     const ignoredWords = ['a', 'do', 'da', 'o', 'os', 'as', 'de', "e", "i", 'na', 'du', 'em']; // Adicionar outras palavras que devem ser ignoradas
 
     return (
-        <div key={props.id} id="id_perfil" className={`group  flex w-full hover:shadow-md transition border-solid border-gray-300 border-[1px] rounded-md `}>
+        <div key={props.id} id="id_perfil" className={`group  flex w-full hover:shadow-md transition border-solid border-gray-300 border-[1px] rounded-xl `}>
             <div className={`h-full w-2 min-w-[8px] rounded-l-lg ${qualisColor[props.qualis as keyof typeof qualisColor]}` }></div>
-            <div className={`bg-white rounded-md  justify-between flex p-4  ${isOn ? "items-center justify-center flex" : "flex-col items-baseline"}`}>
+            <div className={`bg-white rounded-xl  justify-between flex p-4  ${isOn ? "items-center justify-center flex" : "flex-col items-baseline"}`}>
                 <div className="flex">
                     <div className="flex flex-col justify-center">
                         <div id="mudarCorDiv" className={` h-10 w-10 rounded-md mr-4 whitespace-nowrap flex items-center justify-center  ${qualisColor[props.qualis as keyof typeof qualisColor]}`}>
@@ -82,42 +82,39 @@ export function Publicacao(props: Publicacao) {
 
                 {props.lattes_10_id !== 'K4796572P6' && (
   <div className="pt-6 flex flex-wrap">
-    <p className="text-gray-400 text-sm font-medium flex-wrap flex gap-1">
-        {valoresSelecionadosPopUp == '' && valorDigitadoPesquisaDireta == '' ? (`${props.title}`):(
-normalizedTitle
-    .split(/[\s.,;?!]+/)
-    .map((word, index) => {
-      const formattedWord = unorm.nfkd(word).replace(/[^\w\s]/gi, '').toLowerCase();
-      const ignoredWords = ['a', 'do', 'da', 'o', 'os', 'as', 'de', 'e', 'i', 'na', 'du', 'em', ')', '('];
+<p className="text-gray-400 text-sm font-medium flex-wrap flex gap-1">
+  {valoresSelecionadosPopUp === '' && valorDigitadoPesquisaDireta === '' ? (
+    `${props.title.toUpperCase()}`
+  ) : (
+    normalizedTitle
+      .split(/[\s.,;?!]+/)
+      .map((word, index) => {
+        const formattedWord = unorm.nfkd(word).replace(/[^\w\s]/gi, '').toLowerCase();
+        const alphabet = Array.from({ length: 26 }, (_, index) => String.fromCharCode('a'.charCodeAt(0) + index));
+        const ignoredWords = [...alphabet, 'do', 'da', 'o', 'os', 'as', 'de', 'e', 'i', 'na', 'du', 'em', ')', '('];
+        let formattedSpan;
 
-      if (
-        valoresSelecionadosExport.includes(formattedWord) &&
-        !ignoredWords.includes(formattedWord)
-      ) {
-        return (
-          <span key={index} className="text-blue-400 font-bold">
-            {word.toUpperCase()}{' '}
-          </span>
-        );
-      }
+        if (
+          (valoresSelecionadosExport.includes(formattedWord) ||
+            valorDigitadoPesquisaDireta.includes(formattedWord)) &&
+          !ignoredWords.includes(formattedWord)
+        ) {
+          formattedSpan = (
+            <span key={index} className="text-blue-400 font-bold">
+              {word.toUpperCase()}{' '}
+            </span>
+          );
+        } else {
+          formattedSpan = <span key={index}>{word.toUpperCase()} </span>;
+        }
 
-      if (
-        valorDigitadoPesquisaDireta.includes(formattedWord) &&
-        !ignoredWords.includes(formattedWord)
-      ) {
-        return (
-          <span key={index} className="text-blue-400 font-bold">
-            {word.toUpperCase()}{' '}
-          </span>
-        );
-      }
-      return <span key={index}>{word.toUpperCase()} </span>;
-    })
-        )}
-    
+        return formattedSpan;
+      })
+   
+  )}
+</p>
 
 
-    </p>
   </div>
 )}
 

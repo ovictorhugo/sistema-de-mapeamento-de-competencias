@@ -3,9 +3,8 @@ import { MapProfnit } from "../components/MapProfnit";
 import { Route, useParams } from 'react-router-dom';
 import { Footer } from "../components/Footer";
 import { ContentProfnit } from "../components/ContentProfnit";
-import { HeaderProfnit } from "../components/HeaderProfnit";
 
-export function Profnit() {
+export function PaginaInicial() {
 
     const { userId } = useParams<{
         userId: string;
@@ -14,8 +13,8 @@ export function Profnit() {
 
     return  (
         <div>
-            <HeaderProfnit/>
-            < ContentProfnit id={userId || ''}/>
+            <Header/>
+            < MapProfnit id={userId || ''}/>
             <Footer/>
           
         </div>

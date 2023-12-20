@@ -2,12 +2,13 @@ import { Pesquisador } from "./Pesquisador"
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from '../contexts/context'
 import { Link } from "react-router-dom";
-import { CaretCircleLeft, CaretCircleRight, CaretDown, FileArrowDown, FileCsv, GitBranch, ListNumbers, Plus, Rows, SquaresFour, UserList, X } from "phosphor-react";
+import { ArrowSquareOut, CaretCircleLeft, CaretCircleRight, CaretDown, FileArrowDown, FileCsv, GitBranch, ListNumbers, Plus, Rows, SquaresFour, UserList, X } from "phosphor-react";
 import Carregando from "./Carregando";
 
 import Cookies from "js-cookie";
 
 import { useLocation } from 'react-router-dom';
+import { PopUp } from "./PopUp";
 
 
 
@@ -306,16 +307,58 @@ console.log(pesquisadoresSelecionadosGroupBarema)
     }
   };
 
+  const { valoresSelecionadosPopUp, setValoresSelecionadosPopUp } = useContext(UserContext)
+  const { idVersao, setIdVersao } = useContext(UserContext);
+
   // Função para exibir o PopUp
 
-  const { isPopUpVisible, setIsPopUpVisible } = useContext(UserContext);
 
-  const handleOpenPopUp = () => {
+  const [isPopUpVisible, setIsPopUpVisible] = useState(false);
+  // outras variáveis de estado necessárias
+
+  const { EstadoFiltro, setEstadoFiltro } = useContext(UserContext);
+  // Outros códigos do componente
+
+  // Função para exibir o PopUp
+  const [popUpVisibilities, setPopUpVisibilities] = useState([]);
+
+  const handleOpenPopUp = (index) => {
+    const newVisibilities = [...popUpVisibilities];
+    newVisibilities[index] = true;
+    setPopUpVisibilities(newVisibilities);
+    setEstadoFiltro(false);
     setIsPopUpVisible(true);
   };
+  
+  const handleClosePopUp = (index) => {
+    const newVisibilities = [...popUpVisibilities];
+    newVisibilities[index] = false;
+    setPopUpVisibilities(newVisibilities);
+    setEstadoFiltro(false);
+    setIsPopUpVisible(false);
+    setValoresSelecionadosPopUp(valoresSelecionadosExport);
+  };
+  
+
+
+  let linkTo = `/researcher/`;
+
+  if (botaoAreasClicado && valoresSelecionadosExport != "") {
+    linkTo = `/researcher/${idVersao}//${valoresSelecionadosExport}/areas`;
+  } else if (botaoTermosClicado && valoresSelecionadosExport != "") {
+    linkTo = `/researcher/${idVersao}//${valoresSelecionadosExport}/terms`;
+  } else if (botaoResumoClicado && valoresSelecionadosExport != "") {
+    linkTo = `/researcher/${idVersao}//${valoresSelecionadosExport}/abstract`;
+  } else {
+    // Define um valor padrão caso nenhuma variável corresponda
+    linkTo = `/researcher/${idVersao}/`;
+  }
+
 
 
   //mapaaa
+
+  const [popUpVisibleMap, setPopUpVisibleMap] = useState({});
 
 
   return (
@@ -368,11 +411,11 @@ console.log(pesquisadoresSelecionadosGroupBarema)
                           distinctAmongValues.indexOf(user.among);
 
                         return (
-                          <li key={user.id} className="list-none list-item w-min">
-                            <a
-                              href={`https://lattes.cnpq.br/${user.lattes_id}`}
-                              target="_blank"
-                              className="inline-flex whitespace-nowrap"
+                          <div>
+                            <li key={user.id} className="list-none list-item w-min">
+                            <div
+                             onClick={() => handleOpenPopUp(index)}
+                              className="inline-flex whitespace-nowrap cursor-pointer"
                             >
                               <h3
                                 className="items-center p-3 px-6 flex min-h-[20px] gap-4 font-bold rounded-2xl text-blue-400 bg-white hover:shadow-md transition border-[1px] border-gray-300 border-solid"
@@ -383,8 +426,68 @@ console.log(pesquisadoresSelecionadosGroupBarema)
                                   {user.among} ocorrências
                                 </div>
                               </h3>
-                            </a>
+                            </div>
                           </li>
+
+                          {popUpVisibilities[index] && (
+  <div key={user.id} className={"elementPesquisador flex justify-center transition-all fixed top-0 right-0 pb-24 w-full h-screen bg-[#000] z-[99999] bg-opacity-75 pt-20 overflow-y-auto overflow-x-hidden "}>
+
+    <div className="w-screen h-screen absolute top-0 left-0 " onClick={() => handleClosePopUp(index)} ></div>
+    <PopUp
+      isPopUpVisible={isPopUpVisible}
+      among={user.among}
+      articles={user.articles}
+      book={user.book}
+      book_chapters={user.book_chapters}
+      id={user.id}
+      name={user.name}
+      university={user.university}
+      lattes_id={user.lattes_id}
+      area={user.area}
+      abstract={user.abstract}
+      lattes_10_id={user.lattes_10_id}
+      city={user.city}
+      orcid={user.orcid}
+      image={user.image}
+      graduation={user.graduation}
+      patent={user.patent}
+      software={user.software}
+      brand={user.brand}
+      lattes_update={user.lattes_update}
+    />
+
+    <div className=" pt-20 flex flex-col fixed items-center h-screen right-0 top-0 w-32 z-[9999999]">
+
+      <div className="mb-6 flex flex-col justify-center items-center">
+        <div onClick={() => handleClosePopUp(index)} className="mb-2 h-12 w-12 rounded-2xl bg-white items-center justify-center flex hover:bg-gray-100 cursor-pointer transition-all">
+          <X size={16} className="text-gray-500" />
+        </div>
+        <p className="text-[12px] text-white">Fechar</p>
+      </div>
+
+
+
+      <div className="mb-6 flex flex-col justify-center items-center">
+        <div onClick={handleDownloadJson} className="mb-2 h-12 w-12 rounded-2xl bg-white items-center justify-center flex hover:bg-gray-100 cursor-pointer transition-all">
+          <FileCsv size={16} className="text-gray-500" />
+        </div>
+
+        <p className="text-[12px] text-white"> CSV</p>
+      </div>
+
+      <div className="mb-6 flex flex-col justify-center items-center">
+        <Link to={linkTo} target="_blank" className="mb-2 h-12 w-12 rounded-2xl bg-blue-400 items-center justify-center flex hover:bg-blue-500 cursor-pointer transition-all">
+          <ArrowSquareOut size={16} className="text-white" />
+        </Link>
+
+        <p className="text-[12px] text-white"> Mais info</p>
+      </div>
+
+      
+    </div>
+  </div>
+)}
+                          </div>
                         );
                       })}
                   </ul>

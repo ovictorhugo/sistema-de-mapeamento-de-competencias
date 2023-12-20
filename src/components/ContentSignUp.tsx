@@ -10,6 +10,7 @@ import { auth } from "../lib/firebase";
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { UserContext } from "../contexts/context";
 import { Circle } from "./Circle";
 import { Circle2 } from "./Circle2";
@@ -18,7 +19,7 @@ import { AuthWrapper } from "./AuthWrapper";
 
 
 
-export function ContentLogin() {
+export function ContentSignUp() {
   // meial sneha
 
   const [email, setEmail] = useState('');
@@ -27,30 +28,28 @@ export function ContentLogin() {
   const history = useNavigate();
   const { user, setUser } = useContext(UserContext);
 
-  const handleLogin = async () => {
-    try {
-      const result = await signInWithEmailAndPassword(auth, email, password);
-      setLoggedIn(true);
-  
-      // Save user information to local storage
-      localStorage.setItem('user', JSON.stringify(result.user));
 
-      setUser(result.user)
-  
-      setTimeout(() => {
-        history('/dashboard');
-      }, 1000);
-    } catch (error) {
-      console.error('Authentication error:', error);
-    }
-  };
-  
-  
-  
-  console.log(loggedIn)
+  const [createUserWithEmailAndPassword, userw, loading, error] =
+  useCreateUserWithEmailAndPassword(auth);
+
+function handleSignOut(e: any) {
+  e.preventDefault();
+  createUserWithEmailAndPassword(email, password);
+}
+
+if (loading) {
+  return <p>carregando...</p>;
+}
 
 
-  //
+
+  const backgroundImages = [
+   
+    '/src/assets/img2.jpg',
+
+    // Adicione mais URLs de imagens de fundo, se necessário
+  ];
+
 
   function handleGoogleSignIn() {
     const provider = new GoogleAuthProvider();
@@ -71,17 +70,6 @@ export function ContentLogin() {
       })
   }
 
-  console.log("user",user)
-
-
-
-  const backgroundImages = [
-   
-    '/src/assets/img2.jpg',
-
-    // Adicione mais URLs de imagens de fundo, se necessário
-  ];
-
 
 
   //background
@@ -100,8 +88,8 @@ export function ContentLogin() {
 
             <AuthWrapper
             title="Print ('Bem-vindo')"
-            subtitle="Novo usuário?"
-            textLink="Criar conta"
+            subtitle="Já possui uma conta?"
+            textLink="Faca login"
             link="/signup"
             >
                  <div className=" flex items-center flex-col flex-1 ">
@@ -125,7 +113,7 @@ export function ContentLogin() {
                 required
                 className="mb-4 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
 
-              <div onClick={handleLogin} className="whitespace-nowrap flex cursor-pointer items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500  font-medium transition w-full h-12 ml-auto">
+              <div onClick={handleSignOut} className="whitespace-nowrap flex cursor-pointer items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500  font-medium transition w-full h-12 ml-auto">
                 <SignIn size={16} className="text-white" /> Continuar
               </div>
             </form>
@@ -137,7 +125,7 @@ export function ContentLogin() {
             </div>
 
             <div className="w-full">
-              <div   onClick={handleGoogleSignIn}  className="w-full hover:border-blue-400 hover:text-blue-400 text-sm font-bold cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none  hover:bg-blue-100 focus:border-blue-400 gap-3  transition focus:bg-blue-100">
+              <div  onClick={handleGoogleSignIn}    className="w-full hover:border-blue-400 hover:text-blue-400 text-sm font-bold cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none  hover:bg-blue-100 focus:border-blue-400 gap-3  transition focus:bg-blue-100">
                 <GoogleLogo size={16} className="" />Fazer login com o Google
               </div>
             </div>

@@ -100,6 +100,16 @@ input[type=number] {
   color: #fff
 }
 
+.activeLivrosCapitulos {
+  background-color: #FF0090;
+  color: #fff
+}
+
+.activeEventos {
+  background-color: #FF8304;
+  color: #fff
+}
+
 .activePatente {
   background-color: #00BEBF;
   color: #fff

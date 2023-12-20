@@ -113,7 +113,9 @@ export function MapProfnit(props: Props) {
    const { botaoResumoClicado, setBotaoResumoClicado } = useContext(UserContext);
    const { botaoAreasClicado, setBotaoAreasClicado } = useContext(UserContext);
    const { botaoTaxonomiaClicado, setBotaoTaxonomiaClicado } = useContext(UserContext);
- 
+   const { botaoLivrosCapitulosClicado, setBotaoLivrosCapitulosClicado } = useContext(UserContext);
+   const { botaoEventosClicado, setBotaoEventosClicado } = useContext(UserContext);
+
    const { totalPublicacoes, setTotalPublicacoes } = useContext(UserContext);
    const { totalPesquisadores, setTotalPesquisadores } = useContext(UserContext);
    const { totalInstituicoes, setTotalInstituicoes } = useContext(UserContext);
@@ -204,7 +206,7 @@ console.log('idversao',idVersao)
     };
   }, []);
 
-
+  const [chart, setChart] = useState(null);
 
   const urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=${props.id}`;
 
@@ -312,6 +314,25 @@ console.log('idversao',idVersao)
     const [isLoading, setIsLoading] = useState(false);
   
     let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&researcher_id=`
+    let clickedWord =""
+    const handleWordClick = (event: any) => {
+      if (event.point && event.point.name) {
+         clickedWord = event.point.name;
+        setValoresSelecionadosExport(clickedWord);
+        setValorDigitadoPesquisaDireta(clickedWord)
+        setBotaoTermosClicado(true);
+      }
+    };
+
+  
+  
+    useEffect(() => {
+      console.log(`Palavra clicada: `, valoresSelecionadosExport);
+      // Adicione qualquer lógica adicional que você deseja executar quando a palavra é clicada
+    }, [valoresSelecionadosExport]);
+
+
+    
   
     useEffect(() => {
       const fetchData = async () => {
@@ -360,6 +381,9 @@ console.log('idversao',idVersao)
             name: word.term,
             weight: word.among,
           })),
+          events: {
+            click: handleWordClick, // Adiciona o manipulador de eventos para clique em palavras
+          },
   
           style: {
             fontFamily: 'Ubuntu, sans-serif',
@@ -369,12 +393,14 @@ console.log('idversao',idVersao)
       title: {
         text: '',
       },
+
+      
       plotOptions: {
         wordcloud: {
           borderRadius: 3,
           borderWidth: "1px",
           borderColor: 'blue',
-          BackgroundColor: 'red',
+     
           colors: ['#041962', '#0392FA'],
   
         },
@@ -413,6 +439,9 @@ console.log('idversao',idVersao)
           labels: {
             enabled: false, // Remove as legendas do eixo x
           },
+          lineColor: 'transparent', // Torna a linha do eixo x transparente
+  lineWidth: 0,
+  gridLineWidth: 0
         },
         yAxis: {
           labels: {
@@ -526,18 +555,18 @@ console.log('idversao',idVersao)
 
 <div className="overflow-hidden absolute   w-full">
        
-       <div className="z-[-999999999] w-[120%] absolute top-[0px] left-[-100px]">
+       <div className="z-[-999999999] w-[120%] h-[70vh] absolute top-[00px] left-[-100px]">
          <HighchartsReact highcharts={Highcharts} options={chartOptions} />
        </div>
       
 
        <div className="rounded-lg">
-         <div className=" min-h-[340px] flex items-center ">
+         <div className=" min-h-[340px] flex items-center">
            <div className=" w-full h-full items-start justify-start testeeee grid grid-cols-2">
              <div className=" flex flex-col  h-full transition ">
            
               
-             <div className="pl-6 md:pl-16 flex justify-center h-[75vh] flex-col  w-fit">
+             <div className="pl-6 md:pl-16 flex justify-center h-[70vh] flex-col  w-fit">
         <div className="h-[350px] absolute  ml-16 "><Circle/></div>
         <h1 className="z-[999] text-4xl mb-4 font-medium max-w-[750px] ">Experimente
         <strong className="bg-red-400 text-white font-normal">
@@ -564,8 +593,8 @@ console.log('idversao',idVersao)
                  
              </div>
 
-             <div id="nuveeeem" className="flex w-full h-full items-center">
-             <HighchartsReact highcharts={Highcharts} options={options} className="h-full" />
+             <div id="nuveeeem" className="flex w-full h-full items-center  z-[999] ">
+             <HighchartsReact highcharts={Highcharts} options={options} callback={(chart) => setChart(chart)} className="h-full  cursor-pointer" />
              </div>
 
              <div>
@@ -577,7 +606,7 @@ console.log('idversao',idVersao)
      </div>
 
 
-     <div className="pt-[535px] flex flex-1 flex-col relative  items-center  ">
+     <div className="pt-[60vh] flex flex-1 flex-col relative  items-center  ">
 
     
 
@@ -617,21 +646,21 @@ console.log('idversao',idVersao)
       </p>
       <TabList className="w-full">
         <div className={`w-full gap-6  m-0 grid  ${botaoPesquisadoresClicado || botaoPatentesClicado ? 'grid-cols-2' : 'grid-cols-3'}`}>
-          <Tab onClick={() => setSelectedTab(0)} selected={selectedTab === 0} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente" : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none   gap-3  transition-all" >
+          <Tab onClick={() => setSelectedTab(0)} selected={selectedTab === 0} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente": botaoEventosClicado ? "activeEventos" : botaoLivrosCapitulosClicado ? "activeLivrosCapitulos" : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none   gap-3  transition-all" >
             <User size={16} className="" />
             <p className=" md:flex hidden"> Pesquisadores</p>
-            {selectedTab == 0 ? (<div className={` py-1 px-4 rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" :''}`}>{totalPesquisadores}</div>): ('')}
+            {selectedTab == 0 ? (<div className={` py-1 px-4 rounded-full text-xs font-bold bg-white ${botaoEventosClicado ? 'text-orange-400' : ''} ${botaoLivrosCapitulosClicado ? 'text-pink-400' : ''} ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" :''}`}>{totalPesquisadores}</div>): ('')}
           </Tab>
 
 
           {botaoPatentesClicado ? (
             <head></head>
           ) : (
-          <Tab onClick={() => setSelectedTab(1)} selected={selectedTab === 1} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente"  : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none   gap-3  transition-all"  >
+          <Tab onClick={() => setSelectedTab(1)} selected={selectedTab === 1} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente": botaoEventosClicado ? "activeEventos" : botaoLivrosCapitulosClicado ? "activeLivrosCapitulos"  : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none   gap-3  transition-all"  >
             <File size={16} className="" />
 
             <p className=" md:flex hidden">Publicações</p>
-            {selectedTab == 1 ? (<div className={` py-1 px-4  rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" : ''}`}>{totalPublicacoes}</div>): ('')}
+            {selectedTab == 1 ? (<div className={` py-1 px-4  rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoEventosClicado ? 'text-orange-400' : ''} ${botaoLivrosCapitulosClicado ? 'text-pink-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" : ''}`}>{totalPublicacoes}</div>): ('')}
             
           </Tab>
           )}
@@ -641,11 +670,11 @@ console.log('idversao',idVersao)
           {botaoPesquisadoresClicado ? (
             <head></head>
           ) : (
-            <Tab onClick={() => setSelectedTab(2)} selected={selectedTab === 2} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente"  : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none   gap-3  transition-all"  >
+            <Tab onClick={() => setSelectedTab(2)} selected={selectedTab === 2} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente" : botaoEventosClicado ? "activeEventos" : botaoLivrosCapitulosClicado ? "activeLivrosCapitulos"  : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none   gap-3  transition-all"  >
               <Buildings size={16} className="" />
               <p className="md:flex hidden">Instituições</p>
 
-              {selectedTab == 2 ? (<div className={` py-1 px-4  rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" : ''}`}>{totalInstituicoes}</div>): ('')}
+              {selectedTab == 2 ? (<div className={` py-1 px-4  rounded-full text-xs font-bold bg-white ${botaoTermosClicado ? 'text-blue-400' : ''} ${botaoEventosClicado ? 'text-orange-400' : ''} ${botaoLivrosCapitulosClicado ? 'text-pink-400' : ''} ${botaoResumoClicado ? 'text-yellow-400' : ''} ${botaoAreasClicado ? 'text-green-400' : ''} ${botaoPesquisadoresClicado ? 'text-red-400' : botaoPatentesClicado ? "text-cyan-400" : ''}`}>{totalInstituicoes}</div>): ('')}
               
             </Tab>
           )}

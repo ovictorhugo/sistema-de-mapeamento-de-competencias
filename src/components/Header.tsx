@@ -1,7 +1,7 @@
 import { Logo } from "./Logo";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Ilustracao } from "./Ilustracao";
-import { ArrowCircleDown, Info, Funnel, User, File, Buildings, PaperPlaneTilt, ChartLine, Question, SignIn, ListDashes, UserCirclePlus, UserCircle, BookOpen, Textbox, Share, GraduationCap, GitBranch } from "phosphor-react";
+import { ArrowCircleDown, Info, Funnel,  File, Buildings, PaperPlaneTilt, ChartLine, Question, SignIn, ListDashes, UserCirclePlus, UserCircle, BookOpen, Textbox, Share, GraduationCap, GitBranch, UserPlus, SignOut } from "phosphor-react";
 
 import logo_1 from '../assets/logo_1.png';
 import logo_2 from '../assets/logo_2.png';
@@ -11,9 +11,12 @@ import logo_4 from '../assets/logo_4.png';
 import { Pesquisadores } from "./Pesquisadores";
 import { Publicacoes } from "./Publicacoes";
 
+import { auth } from "../lib/firebase";
+
 
 import cimatec from '../assets/cimatec.png';
 import ifba from '../assets/ifba.png';
+import {GoogleAuthProvider, signInWithPopup, User} from 'firebase/auth'
 
 type Total = {
   organizations: string,
@@ -29,6 +32,7 @@ import React, { useEffect } from 'react';
 import { LogoIapos } from "./LogoIapos";
 import { LogoSimcc } from "./LogoSimcc";
 
+
 declare global {
   interface Window {
     googleTranslateElementInit: () => void;
@@ -39,6 +43,7 @@ declare global {
 
 export function Header() {
   const { idVersao, setIdVersao } = useContext(UserContext);
+  const {loggedIn, setLoggedIn} = useContext(UserContext);
 
   useEffect(() => {
     const existingScript = document.getElementById('google-translate-api');
@@ -73,35 +78,55 @@ export function Header() {
   const location = useLocation();
 
   // Verifica se a URL é "/programa-teste"
-  const isProgramaTeste = location.pathname === `/programas-graduacao/${idVersao}` || location.pathname === `/result` || location.pathname === `/result/4`;
+  const isProgramaTeste = location.pathname === `/programas-graduacao` || location.pathname === `/result` || location.pathname === `/result` || location.pathname === `/indicators-pos`;
 
 
   
   const { pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema } = useContext(UserContext);
+
+
+  //sair da conta
+  const { user, setUser } = useContext(UserContext);
+  const history = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+      setLoggedIn(false);
+      setUser({} as User); // Assuming you have a setUser function to update the user context
+
+     // Remove user information from local storage
+    localStorage.removeItem('user');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
+  console.log(loggedIn)
 
   return (
     <header className={` z-[9999] px-6 md:px-16 w-full mb-4 h-20 justify-between items-center flex absolute top-0`}>
       <div className=" w-full flex items-center h-12 ">
         <div className="flex gap-6 items-center h-full justify-center ">
         {idVersao === '1' || idVersao === ''  ? (
-             <Link to={"/1"} className="h-[30px]  " onClick={toggleButtonOff}><LogoIapos /></Link>
+             <Link to={"/"} className="h-[30px]  " onClick={toggleButtonOff}><LogoIapos /></Link>
           ) : (idVersao === '2') ? (
-            <Link to={"/2"} className="h-[30px]  " onClick={toggleButtonOff}><Logo /></Link>
+            <Link to={"/"} className="h-[30px]  " onClick={toggleButtonOff}><Logo /></Link>
           ) : (idVersao == '4') ? (
-            <Link to={"/4"} className="h-[30px]  " onClick={toggleButtonOff}><LogoSimcc /></Link>
+            <Link to={"/"} className="h-[30px]  " onClick={toggleButtonOff}><LogoSimcc /></Link>
           ) : (
            ''
           )}
          
           <div className="w-[1px] h-8 bg-gray-400"></div>
           {idVersao === '1' || idVersao === ''  ? (
-            <Link to={"https://www.senaicimatec.com.br/"} target="_blank" className="h-[32px] "><img src={cimatec} alt="" className="h-[30px]" /></Link>
+            <Link to={"https://www.senaicimatec.com.br/"} target="_blank" className="h-[32px] "><img src={cimatec} alt="" className=" whitespace-nowrap h-[30px]" /></Link>
           ) : (idVersao === "2") ? (
-            <Link to={"https://profnit.org.br/"} target="_blank" className="h-[32px] "><img src={profnit} alt="" className="h-[30px]" /></Link>
+            <Link to={"https://profnit.org.br/"} target="_blank" className="h-[32px] "><img src={profnit} alt="" className=" whitespace-nowrap h-[30px]" /></Link>
           ) : (idVersao === "3") ?(
-            <Link to={"https://profnit.org.br/"} target="_blank" className="h-[32px] "><img src={ifba} alt="" className="h-[30px]" /></Link>
+            <Link to={"https://profnit.org.br/"} target="_blank" className="h-[32px] "><img src={ifba} alt="" className=" whitespace-nowrap h-[30px]" /></Link>
           ) : (idVersao == '4') ? (
-            <Link to={""} target="_blank" className=" "><img src={logo_4} alt="" className="h-[38px]" /></Link>
+            <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={logo_4} alt="" className="whitespace-nowrap flex flex-1 h-[38px]" /></Link>
           ): ('')}
 
         </div>
@@ -109,12 +134,12 @@ export function Header() {
         <div className="md:flex h-full hidden  rounded-md   ml-4">
           
        {idVersao != '1' ? 
-       ( <Link to={`/indicators/${idVersao}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><ChartLine size={16} className="text-gray-400" />Indicadores</Link>)
+       ( <Link to={`/indicators`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><ChartLine size={16} className="text-gray-400" />Indicadores</Link>)
        :('')}
-          <Link to={`/terms/${idVersao}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><ListDashes size={16} className="text-gray-400" />Dicionário</Link>
-          <Link to={`/magazine/${idVersao}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><BookOpen size={16} className="text-gray-400" />Revistas</Link>
-          <Link to={`/barema/${idVersao}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><Textbox size={16} />Barema{ pesquisadoresSelecionadosGroupBarema != '' ? (<div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>):('')}</Link>
-          <Link to={`/programas-graduacao/${idVersao}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><GraduationCap size={16} />Pós-gradução</Link>
+          <Link to={`/terms`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><ListDashes size={16} className="text-gray-400" />Dicionário</Link>
+          <Link to={`/magazine}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><BookOpen size={16} className="text-gray-400" />Revistas</Link>
+          <Link to={`/barema`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><Textbox size={16} />Barema{ pesquisadoresSelecionadosGroupBarema != '' ? (<div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>):('')}</Link>
+          <Link to={`/programas-graduacao`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><GraduationCap size={16} />Pós-gradução</Link>
           <Link to={`/taxonomia`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><GitBranch size={16} className="rotate-180"/>Taxonomia</Link>
        
         </div>
@@ -126,11 +151,65 @@ export function Header() {
       {isProgramaTeste && (
         <Link
           to={`/indicators-pos`}
-          className="w-fit h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-sm text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 font-medium transition"
+          className="w-fit h-10 whitespace-nowrap flex items-center gap-4  text-sm text-blue-400 rounded-xl px-4 py-2 justify-center hover:bg-gray-50 font-medium transition"
         >
-          <ChartLine size={16} className="text-white" /> Indicadores da pós-graduação
+          <ChartLine size={16} className="" /> Indicadores da pós-graduação
         </Link>
       )}
+
+      {loggedIn === false ? (
+        <div className="flex gap-4">
+<Link
+          to={`/signup`}
+          className="w-fit h-10 whitespace-nowrap flex items-center gap-4  text-sm text-blue-400 rounded-xl px-4 py-2 justify-center hover:bg-gray-50 font-medium transition"
+        >
+          <UserPlus size={16} className="" /> Criar conta
+        </Link>
+
+
+<Link to={`/login`} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
+                
+                          <SignIn size={16} className="text-white" />
+                       Fazer login
+                    </Link>
+        </div>
+      ): (
+<div className="flex gap-4 group flex-col justify-end ">
+
+<div onClick={handleLogout} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
+                
+                <SignOut size={16} className="text-white" />
+             Encerrar sessão
+          </div>
+          {user.photoURL ? (
+            <div className="h-10 w-10 rounded-xl bg-cover bg-center bg-no-repeat cursor-pointer" style={{ backgroundImage: `url(${user.photoURL})` }}></div>
+          ): (
+
+            <div className="h-10 w-10 rounded-xl bg-gray-50 text-gray-500 cursor-pointer" >
+              <UserCircle size={16} className="" />
+            </div>
+          )}
+
+          <div className="border-gray-300 border items-center rounded-xl w-[300px] p-2 fixed top-[80px] z-[99999] right-16 hidden group-hover:flex transition-all ">
+          <div  className={`bg-cover bg-top bg-no-repeat backdrop-blur-md backdrop-brightness-150 h-28 bg-gray-400 rounded-t-xl  w-full `} style={{ backgroundImage: `url(${user.photoURL})` }}>
+          <div className={`bg-[#000000] bg-opacity-30 absolute backdrop-blur-sm w-full h-full rounded-t-xl`}></div>
+            <div className="pt-16 w-full items-center flex">
+            <div className={`whitespace-nowrap  bg-cover bg-center bg-no-repeat h-20 w-20 bg-white rounded-xl border-4 border-white  relative `} style={{ backgroundImage: `url(${user.photoURL})` }}>
+
+            </div>
+
+            <div onClick={handleLogout} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
+                
+                <SignOut size={16} className="text-white" />
+             Encerrar sessão
+          </div>
+            </div>
+        </div>
+          </div>
+</div>
+      )}
+
+
 
         
         {/*<LanguageSwitcher/>*/}
