@@ -186,7 +186,10 @@ element.style {
 
 
 
-
+.leaflet-container {
+  height: 500px;
+  width: 100%;
+}
 
 
 #google_translate_element select.goog-te-combo option {

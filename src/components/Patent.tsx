@@ -1,4 +1,4 @@
-import { CalendarBlank, Check, Copyright, SpinnerGap } from "phosphor-react"
+import { CalendarBlank, Check, Copyright, SpinnerGap, Stamp } from "phosphor-react"
 import { useContext } from "react";
 import { UserContext } from "../contexts/context";
 
@@ -26,8 +26,8 @@ export function Patent(props: Patente) {
 
 
     return (
-        <div className="hover:shadow-md transition rounded-md border-[1px] border-gray-300 flex">
-        <div className={`h-full w-2 min-w-[8px] rounded-l-lg ${props.grant_date == "NaT" || props.grant_date == "None" ? ('bg-red-400') : ('bg-green-400')}` }></div>
+        <div className="hover:shadow-md transition rounded-xl border-[1px] border-gray-300 flex">
+        <div className={`h-full w-2 min-w-[8px] rounded-l-xl ${props.grant_date == "NaT" || props.grant_date == "None" ? ('bg-red-400') : ('bg-green-400')}` }></div>
         <div className="w-full   p-6 flex gap-4 items-center">
             <div id="mudarCorDiv" className={` h-10 w-10 rounded-md  whitespace-nowrap flex items-center justify-center border-[1px] border-gray-300`}>
                 <Copyright size={18} className="text-gray-400 whitespace-nowrap  w-10" />
@@ -36,7 +36,7 @@ export function Patent(props: Patente) {
             <div>
                 <h3 className="flex mb-4 text-base font-medium flex-wrap  gap-1">
                
-  {botaoPatentesClicado == false ? (
+  {botaoPatentesClicado == false || valoresSelecionadosPopUp == `` ? (
     `${props.title.toUpperCase()}`
   ) : (
     normalizedTitle
@@ -76,7 +76,7 @@ export function Patent(props: Patente) {
                         )}
                         {props.grant_date == 'NaT' || props.grant_date == "None" ? "Sem concessão" : props.grant_date}</div>
                     <div className={`border-[1px] border-gray-300 py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-2 items-center w-fit `}><CalendarBlank size={12} /> {props.year}</div>
-                    <div className={`border-[1px] border-gray-300 py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-2 items-center w-fit `}><CalendarBlank size={12} /> {props.id}</div>
+                    <div className={`border-[1px] border-gray-300 py-2 px-4 text-gray-400 rounded-md text-xs font-bold flex gap-2 items-center w-fit `}><Stamp size={12} /> {props.id}</div>
                 </div>
 
             </div>

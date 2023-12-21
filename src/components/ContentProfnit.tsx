@@ -291,7 +291,7 @@ export function ContentProfnit(props: Props) {
                   onMouseDown={(e) => e.preventDefault()}
                   
                 >
-                  <label onClick={() => handleClick(props.graduate_program_id)} className={`justify-between w-full p-6 flex-col  cursor-pointer border-[1px] bg-white bg-opacity-70 backdrop-blur-sm border-gray-300 flex text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 `}>
+                  <label onClick={() => handleClick(props.graduate_program_id)} className={`justify-between w-full p-6 flex-col  cursor-pointer border-[1px] bg-white bg-opacity-70 backdrop-blur-sm border-gray-300 flex text-gray-400 rounded-2xl text-xs font-bold hover:border-blue-400 `}>
                     <div className="flex flex-col">
                     
 
@@ -332,11 +332,11 @@ export function ContentProfnit(props: Props) {
                   className=" checkboxLabel group transition-all list-none inline-flex group w-[350px] "
                   onMouseDown={(e) => e.preventDefault()}
                 >
-                  <label className={`justify-between w-full p-6 flex-col cursor-pointer border-[1px] bg-white bg-opacity-70 backdrop-blur-sm border-gray-300 flex text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 `}>
+                  <label className={`justify-between w-full p-6 flex-col cursor-pointer border-[1px] bg-white bg-opacity-70 backdrop-blur-sm border-gray-300 flex text-gray-400 rounded-2xl text-xs font-bold hover:border-blue-400 `}>
                     <div className="flex flex-col">
                     <div className="flex justify-between items-center mb-6">
                     <div className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium w-fit ">{props.area}</div>
-                    <div onClick={toggleButtonOff} className={`cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center `}>
+                    <div onClick={toggleButtonOff} className={`cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center `}>
                         <X size={24} className={'rotate-180 transition-all text-gray-400'} />
                         </div>
                     </div>
@@ -375,7 +375,7 @@ export function ContentProfnit(props: Props) {
                     </div>
 
                     <div>
-                    <Link to={"/result"}  onClick={() => handleClick(props.graduate_program_id)} className="w-full mt-8 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-full px-6 py-2 justify-center hover:bg-blue-500 text-base font-medium transition">
+                    <Link to={"/result"}  onClick={() => handleClick(props.graduate_program_id)} className="w-full mt-8 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-6 py-2 justify-center hover:bg-blue-500 text-base font-medium transition">
                         <ArrowRight size={16} className="text-white" /> Avançar
                     </Link>
                     </div>

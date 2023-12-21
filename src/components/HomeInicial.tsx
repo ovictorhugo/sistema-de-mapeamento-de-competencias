@@ -46,7 +46,9 @@ export function HomeInicial() {
 
   //background
   const { idGraduateProgram, setIdGraduateProgram } = useContext(UserContext)
-  let urlTermPesquisadores = `${urlGeral}researcherName?name=&graduate_program_id=${idGraduateProgram}`
+  let urlTermPesquisadores = `${urlGeral}/researcherName?name=&graduate_program_id=${idGraduateProgram}`
+
+  console.log(urlTermPesquisadores)
 
   useEffect(() => {
     const fetchData = async () => {

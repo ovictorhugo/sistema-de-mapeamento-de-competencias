@@ -14,12 +14,14 @@ import { UserContext } from "../contexts/context";
 import { Circle } from "./Circle";
 import { Circle2 } from "./Circle2";
 import { AuthWrapper } from "./AuthWrapper";
-import { SvgLogin } from "./SvgLogin";
+import { SvgAdmin } from "./SvgAdmin";
+
+import bg_popup from '../assets/bg_admin.png';
 
 
 
 
-export function ContentLogin() {
+export function ContentLoginAdmin() {
   // meial sneha
 
   const [email, setEmail] = useState('');
@@ -83,6 +85,13 @@ export function ContentLogin() {
     // Adicione mais URLs de imagens de fundo, se necessário
   ];
 
+  const ImagesUniLogo = [
+   
+    '/src/assets/img2.jpg',
+
+    // Adicione mais URLs de imagens de fundo, se necessário
+  ];
+
 
 
   //background
@@ -93,22 +102,24 @@ export function ContentLogin() {
 
   return (
     <div>
-            <div className=" min-h-[100vh] bg-blue-400 w-full flex bg-cover bg-center bg-no-repeat items-center flex-col justify-center top-0 left-0 z-[-999] overflow-hidden absolute" style={{ backgroundImage: `url(${backgroundImage})` }}>
+            <div  style={{ backgroundImage: `url(${bg_popup})` }} className=" min-h-[100vh] w-full flex bg-cover bg-center bg-no-repeat items-center flex-col justify-center top-0 left-0 z-[-999] overflow-hidden absolute" >
                 
             </div> 
 
-            <div className="h-[100vh] bg-[#000] w-full absolute top-0 left-0 opacity-20"></div>
+           
 
             <AuthWrapper
-            title="Print ('Bem-vindo/a')"
-            subtitle="Novo usuário?"
-            textLink="Criar conta"
+            title="Bem vindo(a) ao módulo administrativo"
+            subtitle="Projetado para cadastrar informações sobre professores e programas de pós-graduação"
+            textLink=""
             link="/signup"
             >
+
+                
                  <div className=" flex items-center flex-col flex-1 ">
 
-            <form className="w-full ">
-              <p className="text-sm text-gray-500 mb-2">Endereço de email</p>
+            <form className="w-full z-[9999999999999]">
+              <p className="text-sm text-gray-500 mb-2">Usuário </p>
               <input
                 type="text"
                 name="email"
@@ -131,24 +142,14 @@ export function ContentLogin() {
               </div>
             </form>
 
-            <div className="flex items-center w-full justify-center my-8 gap-4 flex-1">
-              <div className="w-full h-[1px] bg-gray-300 flex flex-1"></div>
-              <p className="text-gray-400 bg-white text-center">Ou</p>
-              <div className="w-full h-[1px] bg-gray-300 flex flex-1"></div>
-            </div>
-
-            <div className="w-full">
-            <div  onClick={handleGoogleSignIn}    className="w-full  text-blue-400 text-sm font-bold cursor-pointer h-12 p-4  border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
-                <GoogleLogo size={16} className="" />Fazer login com o Google
-              </div>
-            </div>
+            
 
             <p className="font=bold text-sm text-red-400 pt-4"></p>
    
         </div>
             </AuthWrapper>
 
-            <div className="h-screen fixed top-0 left-0 z-[9]"><SvgLogin></SvgLogin></div>
+            <div className="h-screen fixed top-0 right-0 z-[9]"><SvgAdmin/></div>
         </div>
   );
 }

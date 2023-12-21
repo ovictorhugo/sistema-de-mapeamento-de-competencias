@@ -11,6 +11,7 @@ interface Post {
   frequency: string
   term: string
   checked: boolean
+  type: string
 }
 
 interface Pesquisadores {
@@ -49,6 +50,8 @@ function myWrapperFunction() {
     const [posts, setPosts] = useState<Post[]>([]);
     const [resultados, setResultados] = useState<Post[]>([]);
     const [resultadosResumo, setResultadosResumo] = useState<Post[]>([]);
+    const [resultadosLivros, setResultadosLivros] = useState<Post[]>([]);
+    const [resultadosEventos, setResultadosEventos] = useState<Post[]>([]);
     const [resultadosPesquisadores, setResultadosPesquisadores] = useState<Pesquisadores[]>([]);
     const [resultadosArea, setResultadosArea] = useState<Area[]>([]);
     const [resultadosPatentes, setResultadosPatentes] = useState<Patente[]>([]);
@@ -76,7 +79,7 @@ function myWrapperFunction() {
 
 
     useEffect(() => {
-      if (debouncedPesquisaInput.trim().length >= 2) {
+      if (debouncedPesquisaInput.trim().length >= 1) {
         setResultados([]);
         setResultadosPesquisadores([]);
         setResultadosArea([]);
@@ -122,6 +125,10 @@ function myWrapperFunction() {
       const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
       const urlBigrama = urlGeral +  `secondWord?term=${pesquisaInputFormatado}`
       const urlPatente = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=PATENT`
+      const urlLivro = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=BOOK`
+      const urlEvento = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=SPEAKER`
+
+
       console.log('urlResumo', url)
 
 
@@ -153,10 +160,7 @@ function myWrapperFunction() {
             console.log(err.message);
           });
       
-
-      //Resumo
-
-   
+           //Resumo
 
         fetch(urlResumo, {
           mode: 'cors',
@@ -182,6 +186,64 @@ function myWrapperFunction() {
           .catch((err) => {
             console.log(err.message);
           });
+
+              //Evento
+
+        fetch(urlEvento, {
+          mode: 'cors',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Max-Age': '3600',
+            'Content-Type': 'text/plain'
+
+          }
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            const newData = data.map((post: Post) => ({
+              ...post,
+              term: post.term.replace(/\s+/g, ";")
+            }));
+            setResultadosEventos([]);
+            setResultadosEventos(newData);
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+
+      //Livros e cap
+
+   
+
+        fetch(urlLivro, {
+          mode: 'cors',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Max-Age': '3600',
+            'Content-Type': 'text/plain'
+
+          }
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            const newData = data.map((post: Post) => ({
+              ...post,
+              term: post.term.replace(/\s+/g, ";")
+            }));
+            setResultadosLivros([]);
+            setResultadosLivros(newData);
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+
+          console.log(`urlLivro`, urlLivro)
       
 
       // Pesquisador
@@ -325,12 +387,16 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setPesquisaInput('')
       setItensSelecionadosPatente([])
       setItensSelecionadosResumo([])
+      setItensSelecionadosEvento([])
+      setLivrosSelecionados([])
 
       setResultadosPesquisadores([])
       setResultados([])
       setResultadosPesquisadores([])
       setResultadosResumo([])
       setResultadosPatentes([])
+      setResultadosEventos([])
+      setResultadosLivros([])
 
       setSelectedTab(3);
     };
@@ -349,11 +415,16 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setAreasSelecionados([]);
       setPesquisaInput('')
       setItensSelecionadosResumo([])
+      setItensSelecionadosEvento([])
+      setLivrosSelecionados([])
+      setItensSelecionadosPatente([])
 
       setResultadosPesquisadores([])
       setResultados([])
       setResultadosPesquisadores([])
       setResultadosResumo([])
+      setResultadosEventos([])
+      setResultadosLivros([])
 
       setSelectedTab(4);
     };
@@ -373,12 +444,16 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setPesquisaInput('')
       setItensSelecionadosResumo([])
       setItensSelecionadosPatente([])
+      setItensSelecionadosEvento([])
+      setLivrosSelecionados([])
 
       setResultadosPesquisadores([])
       setResultadosArea([])
       setResultados([])
       setResultadosResumo([])
       setResultadosPatentes([])
+      setResultadosEventos([])
+      setResultadosLivros([])
 
 
       setSelectedTab(0);
@@ -398,12 +473,16 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setPesquisaInput('')
       setItensSelecionados([])
       setItensSelecionadosPatente([])
+      setItensSelecionadosEvento([])
+      setLivrosSelecionados([])
 
       setResultadosPesquisadores([])
       setResultadosArea([])
       setResultados([])
       setResultadosResumo([])
       setResultadosPatentes([])
+      setResultadosEventos([])
+      setResultadosLivros([])
 
       setSelectedTab(1);
 
@@ -420,10 +499,11 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setBotaoLivrosCapitulosClicado(false)
       //Apagar checkbox ao mudar de aba - pesqisadores
       setPesquisadoresSelecionados([]);
-  
       setItensSelecionados([]);
       setItensSelecionadosPatente([])
       setItensSelecionadosResumo([])
+      setItensSelecionadosEvento([])
+      setLivrosSelecionados([])
       setPesquisaInput('')
 
       setResultadosPesquisadores([])
@@ -431,6 +511,8 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setResultadosArea([])
       setResultadosPatentes([])
       setResultadosResumo([])
+      setResultadosEventos([])
+      setResultadosLivros([])
 
       setSelectedTab(2);
     };
@@ -446,10 +528,11 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setBotaoLivrosCapitulosClicado(true)
       //Apagar checkbox ao mudar de aba - pesqisadores
       setPesquisadoresSelecionados([]);
-  
+      setAreasSelecionados([]);
       setItensSelecionados([]);
       setItensSelecionadosPatente([])
       setItensSelecionadosResumo([])
+      setItensSelecionadosEvento([])
       setPesquisaInput('')
 
       setResultadosPesquisadores([])
@@ -457,6 +540,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setResultadosArea([])
       setResultadosPatentes([])
       setResultadosResumo([])
+      setResultadosEventos([])
 
       setSelectedTab(5);
     };
@@ -471,17 +555,19 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setBotaoLivrosCapitulosClicado(false)
       //Apagar checkbox ao mudar de aba - pesqisadores
       setPesquisadoresSelecionados([]);
-  
+      setAreasSelecionados([]);
       setItensSelecionados([]);
       setItensSelecionadosPatente([])
       setItensSelecionadosResumo([])
       setPesquisaInput('')
+      setLivrosSelecionados([])
 
       setResultadosPesquisadores([])
       setResultados([])
       setResultadosArea([])
       setResultadosPatentes([])
       setResultadosResumo([])
+      setResultadosLivros([])
 
       setSelectedTab(6);
     };
@@ -587,6 +673,58 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
 
     const handleRemoverSelecionadoPesquisadores = (index: number) => {
       setPesquisadoresSelecionados((prevSelecionados) =>
+        prevSelecionados.filter((_, i) => i !== index)
+      );
+    };
+
+    // Livro
+    const [livrosSelecionados, setLivrosSelecionados] = useState<string[]>([]);
+
+    const handleCheckboxChangeInputLivros = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { name } = event.target;
+      const isChecked = event.target.checked;
+
+      setLivrosSelecionados((prevSelecionados) => {
+        if (isChecked) {
+          return [...prevSelecionados, name];
+        } else {
+          return prevSelecionados.filter((item) => item !== name);
+        }
+      });
+    };
+
+
+    const checkboxLivros = resultadosLivros.map((resultado) => (
+      <li
+        key={resultado.term}
+        className="checkboxLabel group list-none inline-flex mr-4 mb-4 group overflow-hidden"
+        onMouseDown={(e) => e.preventDefault()}
+      >
+        <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
+          <span className="text-center block">{resultado.term.replace(/%20/g, ' ')}</span>
+          <input
+            type="checkbox"
+            name={resultado.term}
+            className="absolute hidden group"
+            checked={livrosSelecionados.includes(resultado.term)}
+            id={resultado.term}
+            onChange={handleCheckboxChangeInputLivros}
+            onClick={handleClickLivrosCapitulos}
+          />
+        </label>
+      </li>
+    ));
+
+    const valoresLivrosSelecionados = livrosSelecionados.join(';');
+
+    const valoresLivrosSelecionadosJSX = livrosSelecionados.map((valor, index) => (
+      <li key={index} className='whitespace-nowrap gap-2 bg-[#FFF5FB] border-pink-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>{valor.replace(/%20/g, ' ')}
+        <button onClick={() => handleRemoverSelecionadoLivros(index)}><X size={16} className="text-gray-400 hover:text-pink-400" /></button>
+      </li>
+    ));
+
+    const handleRemoverSelecionadoLivros = (index: number) => {
+      setLivrosSelecionados((prevSelecionados) =>
         prevSelecionados.filter((_, i) => i !== index)
       );
     };
@@ -767,6 +905,56 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       );
     };
 
+    // Resumo
+    const [itensSelecionadosEvento, setItensSelecionadosEvento] = useState<string[]>([]);
+
+    const handleCheckboxChangeInputEvento = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { name } = event.target;
+      const isChecked = event.target.checked;
+
+      setItensSelecionadosEvento((prevSelecionados) => {
+        if (isChecked) {
+          return [...prevSelecionados, name];
+        } else {
+          return prevSelecionados.filter((item) => item !== name);
+        }
+      });
+    };
+
+    const checkboxItemsEvento = resultadosEventos.slice(0, 6).map((resultado) => (
+      <li
+        key={resultado.term}
+        className="checkboxLabel group list-none inline-flex mr-4 mb-4 group overflow-hidden"
+        onMouseDown={(e) => e.preventDefault()}
+      >
+        <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
+          <span className="text-center block">{resultado.term.replace(/;/g, ' ')}</span>
+          <input
+            type="checkbox"
+            name={resultado.term}
+            className="absolute hidden group"
+            checked={itensSelecionadosEvento.includes(resultado.term)}
+            id={resultado.term}
+            onChange={handleCheckboxChangeInputEvento}
+            onClick={handleClickEventos}
+          />
+        </label>
+      </li>
+    ));
+    const valoresEventoSelecionados = itensSelecionadosEvento.join(';');
+
+    const valoresSelecionadosEventoJSX = itensSelecionadosEvento.map((valor, index) => (
+      <li key={index} className='whitespace-nowrap gap-2 bg-[#FFF2E6] border-orange-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>{valor.replace(/;/g, ' ')}
+        <button onClick={() => handleRemoverSelecionadoEvento(index)}><X size={16} className="text-gray-400 hover:text-orange-400" /></button>
+      </li>
+    ));
+
+    const handleRemoverSelecionadoEvento = (index: number) => {
+      setItensSelecionadosEvento((prevSelecionados) =>
+        prevSelecionados.filter((_, i) => i !== index)
+      );
+    };
+
     // Patente
     const [itensSelecionadosPatente, setItensSelecionadosPatente] = useState<string[]>([]);
 
@@ -895,6 +1083,14 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setValoresSelecionadosExport(valoresPatenteSelecionados)
     }
 
+    if (botaoLivrosCapitulosClicado) {
+      setValoresSelecionadosExport(valoresLivrosSelecionados)
+    }
+
+    if(botaoEventosClicado) {
+      setValoresSelecionadosExport(valoresEventoSelecionados)
+    }
+
    
 
     useEffect(() => {
@@ -913,7 +1109,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
         handleClick();
       }
     };
-
+    console.log(`valores2`, valoresSelecionadosExport )
 
     //palavras mais pesquisadas
     interface PalavrasChaves {
@@ -1003,6 +1199,9 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setItensSelecionados([])
       setItensSelecionadosPatente([])
       setItensSelecionadosResumo([])
+      setItensSelecionadosEvento([])
+      setLivrosSelecionados([])
+
  
     };
 
@@ -1016,7 +1215,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
             <div className='flex w-full flex-col'>
               <div className={`flex bg-white  items-center h-14 group w-full  text-base font-medium  justify-center transition border-[1px] border-gray-300 ${botaoTermosClicado ? 'hover:border-blue-400' : ''} ${botaoLivrosCapitulosClicado ? 'hover:border-pink-400' : ''} ${botaoEventosClicado ? 'hover:border-orange-400' : ''} ${botaoResumoClicado ? 'hover:border-yellow-400' : ''} ${botaoAreasClicado ? 'hover:border-green-400' : ''} ${botaoPesquisadoresClicado ? 'hover:border-red-400' : ''} ${botaoPatentesClicado ? 'group-hover:border-cyan-400' : ''} ${isOpen && pesquisaInput.length >= 3 ? 'rounded-tl-2xl' : 'rounded-l-2xl'}`}>
                 <MagnifyingGlass size={20} className={`text-gray-400 min-w-[52px] ${botaoTermosClicado ? 'group-hover:text-blue-400' : ''} ${botaoResumoClicado ? 'group-hover:text-yellow-400' : ''} ${botaoLivrosCapitulosClicado ? 'group-hover:text-pink-400' : ''} ${botaoEventosClicado ? 'group-hover:text-orange-400' : ''} ${botaoAreasClicado ? 'group-hover:text-green-400' : ''} ${botaoPesquisadoresClicado ? 'group-hover:text-red-400' : ''} ${botaoPatentesClicado ? 'group-hover:text-cyan-400' : ''}`} />
-                <div className='flex gap-2 mx-2'>{valoresSelecionadosJSX}{valoresPesquisadoresSelecionadosJSX}{valoresSelecionadosPatenteJSX}{valoresAreasSelecionadosJSX}{valoresSelecionadosResumoJSX}</div>
+                <div className='flex gap-2 mx-2'>{valoresSelecionadosJSX}{valoresSelecionadosEventoJSX}{valoresPesquisadoresSelecionadosJSX}{valoresSelecionadosPatenteJSX}{valoresAreasSelecionadosJSX}{valoresLivrosSelecionadosJSX}{valoresSelecionadosResumoJSX}</div>
                 <input
                   type="text"
                   value={pesquisaInput}
@@ -1112,6 +1311,9 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
                   {checkboxItems || <p className='text-gray-500 text-lg'>num</p>}
                   <p className='mb-4'>Resumo</p>
                   {checkboxItemsResumo || <p className='text-gray-500 text-lg'>num</p>}
+
+                  <p className='mb-4'>Participação em eventos</p>
+                  {checkboxItemsEvento || <p className='text-gray-500 text-lg'>num</p>}
                 </div>
 
                 <div className='block  w-full' >
@@ -1201,6 +1403,10 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
                       </button>
                     </div>
                   )}
+
+                  <p className='mb-4'>Livros e capítulos</p>
+                  {checkboxLivros || <p className='text-gray-500 text-lg'>num</p>}
+
                 </div>
               </div>
             </div>

@@ -4,7 +4,7 @@ import { Header } from "./Header";
 import { HighchartsReact } from "highcharts-react-official";
 import Highcharts from 'highcharts'
 import { CursorText, HouseSimple, Lightbulb, ListDashes, MagnifyingGlass, PaperPlaneTilt, TextAlignLeft } from "phosphor-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import footer2 from '../assets/footer2.png';
 import { TermsSvg } from "./TermsSvg";
@@ -195,9 +195,38 @@ export function ContentTerms(props: Props) {
   }, [urlTerms]);
 
   // Termos 
+
+  const history = useNavigate(); // Add this line
+  const { valoresSelecionadosExport, setValoresSelecionadosExport } = useContext(UserContext);
   const [itensSelecionados, setItensSelecionados] = useState<string[]>([]);
 
+  let valoresSelecionados = itensSelecionados.join(';');
+
+  setValoresSelecionadosExport(valoresSelecionados);
+
+  const handleCheckboxChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name } = event.target;
+    const isChecked = event.target.checked;
+  
+    setItensSelecionados((prevSelecionados) => {
+      if (isChecked) {
+        return [...prevSelecionados, name];
+      } else {
+        return prevSelecionados.filter((item) => item !== name);
+      }
+    });
+  
+    // Esta parte deve ser executada após a atualização do estado
+    setTimeout(() => {
+      const valoresSelecionados = itensSelecionados.join(';');
+      setValoresSelecionadosExport(valoresSelecionados);
+      history('/');
+    }, 0); // Adiciona um pequeno atraso para garantir que a atualização do estado seja concluída
+  };
+  
+
   const checkboxItems = resultados.map((resultado) => (
+  
     <li
       key={resultado.term}
       className="checkboxLabel group list-none inline-flex mr-4 mb-4 group overflow-hidden"
@@ -210,12 +239,16 @@ export function ContentTerms(props: Props) {
           type="checkbox"
           name={resultado.term}
           className="absolute hidden group"
-
+          onChange={handleCheckboxChangeInput}
           id={resultado.term}
+          onClick={() => history('/')}
         />
       </label>
     </li>
+    
   ));
+
+  console.log(`valores`, valoresSelecionadosExport )
 
   //Se o botão Termos for clicado
   const handleClickTermos = () => {

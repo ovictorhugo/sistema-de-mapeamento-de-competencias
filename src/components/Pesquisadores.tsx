@@ -2,13 +2,18 @@ import { Pesquisador } from "./Pesquisador"
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from '../contexts/context'
 import { Link } from "react-router-dom";
-import { ArrowSquareOut, CaretCircleLeft, CaretCircleRight, CaretDown, FileArrowDown, FileCsv, GitBranch, ListNumbers, Plus, Rows, SquaresFour, UserList, X } from "phosphor-react";
+import { ArrowSquareOut, CaretCircleLeft, CaretCircleRight, CaretDown, FileArrowDown, FileCsv, GitBranch, ListNumbers, MapPin, MapTrifold, Plus, Rows, SquaresFour, UserList, X } from "phosphor-react";
 import Carregando from "./Carregando";
 
 import Cookies from "js-cookie";
 
 import { useLocation } from 'react-router-dom';
 import { PopUp } from "./PopUp";
+
+import municipios from './municipios.json';
+import { MapContainer, TileLayer, Marker, Popup, CircleMarker, Tooltip } from 'react-leaflet';
+
+import "leaflet/dist/leaflet.css"
 
 
 
@@ -34,6 +39,15 @@ type Research = {
   lattes_update: Date,
 }
 
+type CityData = {
+  nome: string;
+  latitude: number;
+  longitude: number;
+  pesquisadores: number;
+  professores: string[];
+  lattes_10_id: string,
+};
+
 
 
 export function Pesquisadores() {
@@ -52,6 +66,8 @@ export function Pesquisadores() {
   const { botaoTermosClicado, setBotaoTermosClicado } = useContext(UserContext);
   const { botaoResumoClicado, setBotaoResumoClicado } = useContext(UserContext);
   const { botaoAreasClicado, setBotaoAreasClicado } = useContext(UserContext);
+  const { botaoLivrosCapitulosClicado, setBotaoLivrosCapitulosClicado } = useContext(UserContext);
+    const { botaoEventosClicado, setBotaoEventosClicado } = useContext(UserContext);
 
   const [researcher, setResearcher] = useState<Research[]>([]); // Define o estado vazio no início
 
@@ -68,6 +84,7 @@ export function Pesquisadores() {
 
   // habilitar/ desabilitar div
   const [isVisible, setIsVisible] = useState(true);
+  const [isVisibleMap, setIsVisibleMap] = useState(true);
 
   //TOTAL DE PESQUISADORES
   const quantidadeTotalDePesquisadores = researcher.length;
@@ -113,6 +130,22 @@ export function Pesquisadores() {
     urlTermPesquisadores = `${urlGeral}researcher?terms=${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}&type=ABSTRACT&graduate_program_id=${idGraduateProgram}`;
   }
 
+  if (botaoEventosClicado) {
+    urlTermPesquisadores = `${urlGeral}researcherEvent?term=${valoresSelecionadosExport}&university=${intituicoesSelecionadasCheckbox}`
+  }
+
+  if (botaoEventosClicado && valoresSelecionadosExport == "") {
+    urlTermPesquisadores = `${urlGeral}researcherEvent?term=${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}`;
+  }
+
+  if (botaoLivrosCapitulosClicado) {
+    urlTermPesquisadores = `${urlGeral}researcherBook?term=${valoresSelecionadosExport}&university=${intituicoesSelecionadasCheckbox}&type=BOOK`
+  }
+
+  if (botaoLivrosCapitulosClicado && valoresSelecionadosExport == "") {
+    urlTermPesquisadores = `${urlGeral}researcherBook?term=${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}&type=BOOK`;
+  }
+
   if (botaoAreasClicado) {
     urlTermPesquisadores = `${urlGeral}/researcherArea_specialty?area_specialty=${valoresSelecionadosExport}&university=${intituicoesSelecionadasCheckbox}&graduate_program_id=${idGraduateProgram}`;
   }
@@ -139,8 +172,16 @@ console.log(urlTermPesquisadores)
   const [cityCounts, setCityCounts] = useState<{ [city: string]: number }>({});
   const [jsonData, setJsonData] = useState<any[]>([]);
 
+  const [cityData, setCityData] = useState<CityData[]>([]);
 
-  const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
+  const defaultLatitude = Number(-13.29);
+  const defaultLongitude =  Number(-41.71);
+  const defaultZoom = 5.5;
+
+  const [positionInit, setPositionInit ] = useState({lat: -13.29, lng: -41.71 })
+
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -163,12 +204,55 @@ console.log(urlTermPesquisadores)
           setJsonData(data);
 
           // Contar a quantidade de pesquisadores por cidade
-        const counts: { [city: string]: number } = {};
-        data.forEach((research: any) => {
-          const city = research.city;
-          counts[city] = (counts[city] || 0) + 1;
-        });
-        setCityCounts(counts);
+          const counts: { [city: string]: number } = {};
+          const cityProfessors: { [city: string]: string[] } = {}; // Armazena os nomes dos professores por cidade
+          const cityLattess1Ids: { [city: string]: string } = {};
+
+          const normalizedData = data.map((research: any) => ({
+            ...research,
+            city: normalizeCityName(research.city),
+          }));
+
+          normalizedData.forEach((research: any) => {
+            const city = research.city;
+            const codigoUf = municipios.find(
+              (municipio: any) => normalizeCityName(municipio.nome) === city
+            )?.codigo_uf;
+
+            if (codigoUf === 29) {
+              counts[city] = (counts[city] || 0) + 1;
+
+              // Adiciona o nome do professor à lista da cidade
+              if (!cityProfessors[city]) {
+                cityProfessors[city] = [];
+              }
+              cityProfessors[city].push(research.name);
+
+              // Adiciona o lattess_1_id à lista da cidade
+              if (!cityLattess1Ids[city]) {
+                cityLattess1Ids[city] = research.lattes_10_id;
+              }
+            }
+          });
+
+          const updatedCityData: CityData[] = [];
+          municipios.forEach((municipio: any) => {
+            const cityName = normalizeCityName(municipio.nome);
+            const pesquisadores = counts[cityName] || 0;
+
+            if (pesquisadores > 0 && municipio.codigo_uf === 29) {
+              updatedCityData.push({
+                nome: municipio.nome,
+                latitude: municipio.latitude,
+                longitude: municipio.longitude,
+                pesquisadores: pesquisadores,
+                professores: cityProfessors[cityName] || [], // Adiciona a lista de professores
+                lattes_10_id: cityLattess1Ids[cityName] || '',
+              });
+            }
+          });
+
+          setCityData(updatedCityData);
         }
       } catch (err) {
         console.log(err);
@@ -179,7 +263,12 @@ console.log(urlTermPesquisadores)
     fetchData();
   }, [urlTermPesquisadores]);
 
-  console.log('cityCounts',cityCounts);
+  console.log('cityCounts',cityData);
+
+  const normalizeCityName = (cityName: string) => {
+    // Normaliza o nome da cidade (ex: "Ilhéus" -> "Ilheus")
+    return cityName.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
 
   const {filtroAreas, setFiltroAreas} = useContext(UserContext)
   
@@ -322,18 +411,37 @@ console.log(pesquisadoresSelecionadosGroupBarema)
   // Função para exibir o PopUp
   const [popUpVisibilities, setPopUpVisibilities] = useState([]);
 
-  const handleOpenPopUp = (index) => {
+  const [popUpVisibilitiesMap, setPopUpVisibilitiesMap] = useState([]);
+
+  const handleOpenPopUp = (index: any) => {
     const newVisibilities = [...popUpVisibilities];
     newVisibilities[index] = true;
     setPopUpVisibilities(newVisibilities);
     setEstadoFiltro(false);
     setIsPopUpVisible(true);
   };
+
+  const handleOpenPopUpMap = (index: any) => {
+    const newVisibilities = [...popUpVisibilitiesMap];
+    newVisibilities[index] = true;
+    setPopUpVisibilitiesMap(newVisibilities);
+    setEstadoFiltro(false);
+    setIsPopUpVisible(true);
+  };
   
-  const handleClosePopUp = (index) => {
+  const handleClosePopUp = (index: any) => {
     const newVisibilities = [...popUpVisibilities];
     newVisibilities[index] = false;
     setPopUpVisibilities(newVisibilities);
+    setEstadoFiltro(false);
+    setIsPopUpVisible(false);
+    setValoresSelecionadosPopUp(valoresSelecionadosExport);
+  };
+
+  const handleClosePopUpMap = (index: any) => {
+    const newVisibilities = [...popUpVisibilitiesMap];
+    newVisibilities[index] = false;
+    setPopUpVisibilitiesMap(newVisibilities);
     setEstadoFiltro(false);
     setIsPopUpVisible(false);
     setValoresSelecionadosPopUp(valoresSelecionadosExport);
@@ -496,6 +604,147 @@ console.log(pesquisadoresSelecionadosGroupBarema)
             </div>
           )
         )}
+
+
+
+<div className="flex gap-4 w-full pb-8 justify-between items-center min-w-full">
+            <div className="flex gap-4">
+              <MapTrifold size={24} className="text-gray-400" />
+              <p className="text-gray-400">Pesquisadores por cidade</p>
+            </div>
+
+            <div onClick={() => setIsVisibleMap(!isVisibleMap)} className="cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+              <CaretDown size={24} className={isVisibleMap ? "rotate-180 transition-all text-gray-400" : "text-gray-400 transition-all"} />
+            </div>
+
+          </div>
+
+
+{isVisibleMap ? (
+  <div>
+  {isLoading ? (
+    <div className="flex items-center justify-center w-full py-10">
+    <Carregando />
+  </div>
+  ) : (
+    <div className="h-[500px] rounded-2xl mb-8">
+      <MapContainer center={positionInit} style={{ fontFamily: 'Ubuntu, sans-serif' }} zoom={defaultZoom} className="w-full h-full rounded-2xl">
+  <TileLayer
+    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+  />
+
+  {cityData.map((city) => (
+    <CircleMarker
+      center={[city.latitude, city.longitude]}
+      key={city.nome}
+      radius={Math.sqrt(city.pesquisadores) * 3}
+      fillColor="#173DFF"
+      fillOpacity={0.5}
+      color="blue"
+    >
+      
+      <Tooltip>{city.pesquisadores}</Tooltip>
+      <Popup >
+        <div className="p-1 pb-4">
+        <div className="text-base text-medium flex gap-2 items-center"><MapPin size={16} className="text-gray-500" />{city.nome}</div>
+        {researcher.map((user, index) => {
+          if (user.city === city.nome) {
+            return (
+              <div className="">
+                <div onClick={() => handleOpenPopUpMap(index)} className="hover:bg-gray-50 transition-all  p-2 cursor-pointer border w-full flex gap-4 items-center border-gray-300 rounded-md mt-4" key={user.name}>
+                 <div className={`whitespace-nowrap  bg-cover bg-center bg-no-repeat h-6 w-6 bg-white rounded-md  relative `} style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${user.lattes_10_id}) ` }}>
+                  </div>
+                <div className="flex-1 m-0">{user.name}</div>
+              </div>
+
+ 
+              </div>
+            );
+          }
+          return null; // Add this to handle cases where the condition is not met
+        })}
+        </div>
+      </Popup>
+    </CircleMarker>
+  ))}
+</MapContainer>
+
+    </div>
+  )}
+</div>
+):(``)}
+
+{researcher.map((user, index) => {
+       
+            return (
+              <div>
+             
+
+              {popUpVisibilitiesMap[index] && (
+  <div key={user.id} className={"elementPesquisador flex justify-center transition-all fixed top-0 right-0 pb-24 w-full h-screen bg-[#000] z-[999999] bg-opacity-75 pt-20 overflow-y-auto overflow-x-hidden "}>
+
+    <div className="w-screen h-screen fixed top-0 left-0 " onClick={() => handleClosePopUp(index)} ></div>
+    <PopUp
+      isPopUpVisible={isPopUpVisible}
+      among={user.among}
+      articles={user.articles}
+      book={user.book}
+      book_chapters={user.book_chapters}
+      id={user.id}
+      name={user.name}
+      university={user.university}
+      lattes_id={user.lattes_id}
+      area={user.area}
+      abstract={user.abstract}
+      lattes_10_id={user.lattes_10_id}
+      city={user.city}
+      orcid={user.orcid}
+      image={user.image}
+      graduation={user.graduation}
+      patent={user.patent}
+      software={user.software}
+      brand={user.brand}
+      lattes_update={user.lattes_update}
+    />
+
+    <div className=" pt-20 flex flex-col fixed items-center h-screen right-0 top-0 w-32 z-[9999999]">
+
+      <div className="mb-6 flex flex-col justify-center items-center">
+        <div onClick={() => handleClosePopUpMap(index)} className="mb-2 h-12 w-12 rounded-2xl bg-white items-center justify-center flex hover:bg-gray-100 cursor-pointer transition-all">
+          <X size={16} className="text-gray-500" />
+        </div>
+        <p className="text-[12px] text-white">Fechar</p>
+      </div>
+
+
+
+      <div className="mb-6 flex flex-col justify-center items-center">
+        <div onClick={handleDownloadJson} className="mb-2 h-12 w-12 rounded-2xl bg-white items-center justify-center flex hover:bg-gray-100 cursor-pointer transition-all">
+          <FileCsv size={16} className="text-gray-500" />
+        </div>
+
+        <p className="text-[12px] text-white"> CSV</p>
+      </div>
+
+      <div className="mb-6 flex flex-col justify-center items-center">
+        <Link to={linkTo} target="_blank" className="mb-2 h-12 w-12 rounded-2xl bg-blue-400 items-center justify-center flex hover:bg-blue-500 cursor-pointer transition-all">
+          <ArrowSquareOut size={16} className="text-white" />
+        </Link>
+
+        <p className="text-[12px] text-white"> Mais info</p>
+      </div>
+
+      
+    </div>
+  </div>
+)}
+              </div>
+            );
+          
+          return null; // Add this to handle cases where the condition is not met
+        })}
+
+
 
 
 

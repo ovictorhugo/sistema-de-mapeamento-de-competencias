@@ -16,7 +16,6 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import { auth } from './lib/firebase';
-import { Dashboard } from './pages/Dashboard';
 import {GoogleAuthProvider, signInWithPopup, User} from 'firebase/auth'
 
 import { Chat } from './pages/Chat';
@@ -31,6 +30,8 @@ import { Profnit } from './pages/Profnit';
 import { GraduationsMapPage } from './pages/GraduationsMapPage';
 import { PaginaInicial } from './pages/PaginaInicial';
 import { SignUp } from './pages/SignUp';
+import { LoginAdmin } from './pages/LoginAdmin';
+import { Admin } from './pages/Admin';
 
 
 
@@ -69,7 +70,7 @@ export const App = () => {
   const [botaoEventosClicado, setBotaoEventosClicado] = useState(false);
   const [botaoTaxonomiaClicado, setBotaoTaxonomiaClicado] = useState(false);
   
-  const [urlGeral, setUrlGeral] = useState('http://200.128.66.226:8080/');
+  const [urlGeral, setUrlGeral] = useState('http://177.16.237.129:5001/');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
   const [user, setUser] = useState<User>({} as User)
   const [isOn, setIsOn] = useState(false);
@@ -149,13 +150,27 @@ useEffect(() => {
 
             <Route path='/search' element={<StepTwo/>}/>
 
+            <Route path='/admin' element={<LoginAdmin/>}/>
+
             <Route path='/profnit' element={<Profnit/>}/>
             <Route path='/bem-vindo' element={<HomePageSimcc/>}/>
             <Route path='/discover' element={<Discover/>}/>
            
             <Route path='/pesquisadoresSelecionados' element={<PesquisadoresPage/>}/>
            
-            <Route path='/login' element={<Login/>}/>
+          
+
+       
+            <Route
+            path='/login'
+            element={
+              user != ({} as User) ? (
+                <Login/>
+              ) : (
+                <Navigate to='/' replace state={{}} />
+              )
+            }
+          />
             <Route path='/signUp' element={<SignUp/>}/>
             <Route path='/chat' element={<Chat/>}/>
 
@@ -213,9 +228,9 @@ useEffect(() => {
 
 
             {user ? (
-              <Route path='/dashboard' element={<Dashboard/>}/>
+              <Route path='/dashboard' element={<Admin/>}/>
             ) : (
-              <div></div>
+              <Navigate to='/' replace state={{}} />
             )}
             
           </Routes>

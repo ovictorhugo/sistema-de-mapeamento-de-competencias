@@ -37,6 +37,9 @@ export function Pesquisador(props: PesquisadorProps) {
   const { botaoTermosClicado, setBotaoTermosClicado } = useContext(UserContext);
   const { botaoAreasClicado, setBotaoAreasClicado } = useContext(UserContext);
   const { botaoResumoClicado, setBotaoResumoClicado } = useContext(UserContext);
+  const { botaoLivrosCapitulosClicado, setBotaoLivrosCapitulosClicado } = useContext(UserContext);
+  const { botaoEventosClicado, setBotaoEventosClicado } = useContext(UserContext);
+  const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext);
   // habilitar/ desabilitar div
   const [isVisible, setIsVisible] = useState(false);
 
@@ -227,7 +230,7 @@ export function Pesquisador(props: PesquisadorProps) {
         {valoresSelecionadosExport != "" || valorDigitadoPesquisaDireta != "" ? (
           
             <div className="flex gap-3 relative mb-6">
-              {(botaoTermosClicado && props.among != 0) || (botaoAreasClicado && props.among != null) ? (
+              {(botaoTermosClicado && props.among != 0) || (botaoAreasClicado && props.among != null) || (botaoLivrosCapitulosClicado && props.among != null) ? (
                 <div className="text-blue-400 flex text-sm font-bold gap-3">
                   {props.among} ocorrências
                   <p className="text-sm  text-blue-400">|</p>

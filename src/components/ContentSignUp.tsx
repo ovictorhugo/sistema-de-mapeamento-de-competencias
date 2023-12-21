@@ -15,6 +15,7 @@ import { UserContext } from "../contexts/context";
 import { Circle } from "./Circle";
 import { Circle2 } from "./Circle2";
 import { AuthWrapper } from "./AuthWrapper";
+import { SvgSignup } from "./SvgSignup";
 
 
 
@@ -24,6 +25,7 @@ export function ContentSignUp() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confPassword, setConfPassword] = useState('');
   const {loggedIn, setLoggedIn} = useContext(UserContext);
   const history = useNavigate();
   const { user, setUser } = useContext(UserContext);
@@ -33,8 +35,11 @@ export function ContentSignUp() {
   useCreateUserWithEmailAndPassword(auth);
 
 function handleSignOut(e: any) {
-  e.preventDefault();
-  createUserWithEmailAndPassword(email, password);
+  if( password == confPassword && password.length >= 8) {
+    e.preventDefault();
+    createUserWithEmailAndPassword(email, password);
+  }
+  else return <div>Revise sua senha</div>
 }
 
 if (loading) {
@@ -80,17 +85,17 @@ if (loading) {
 
   return (
     <div>
-            <div className=" min-h-[100vh] bg-yellow-400 w-full flex bg-cover bg-center bg-no-repeat items-center flex-col justify-center top-0 left-0 z-[-999] overflow-hidden absolute" style={{ backgroundImage: `url(${backgroundImage})` }}>
+            <div className=" min-h-[100vh] bg-blue-400 w-full flex bg-cover bg-center bg-no-repeat items-center flex-col justify-center top-0 left-0 z-[-999] overflow-hidden absolute" style={{ backgroundImage: `url(${backgroundImage})` }}>
                 
             </div> 
 
-            <div className="h-[100vh] bg-[#000] w-full absolute top-0 left-0 opacity-30"></div>
+            <div className="h-[100vh] bg-[#000] w-full absolute top-0 left-0 opacity-20"></div>
 
             <AuthWrapper
-            title="Print ('Bem-vindo')"
+            title="Crie já sua conta"
             subtitle="Já possui uma conta?"
             textLink="Faca login"
-            link="/signup"
+            link="/login"
             >
                  <div className=" flex items-center flex-col flex-1 ">
 
@@ -113,6 +118,16 @@ if (loading) {
                 required
                 className="mb-4 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
 
+
+<p className="text-sm text-gray-500 mb-2">Confirmar senha</p>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                onChange={(e) => setConfPassword(e.target.value)}
+                required
+                className="mb-4 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+
               <div onClick={handleSignOut} className="whitespace-nowrap flex cursor-pointer items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500  font-medium transition w-full h-12 ml-auto">
                 <SignIn size={16} className="text-white" /> Continuar
               </div>
@@ -125,15 +140,17 @@ if (loading) {
             </div>
 
             <div className="w-full">
-              <div  onClick={handleGoogleSignIn}    className="w-full hover:border-blue-400 hover:text-blue-400 text-sm font-bold cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none  hover:bg-blue-100 focus:border-blue-400 gap-3  transition focus:bg-blue-100">
+              <div  onClick={handleGoogleSignIn}    className="w-full  text-blue-400 text-sm font-bold cursor-pointer h-12 p-4  border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
                 <GoogleLogo size={16} className="" />Fazer login com o Google
               </div>
             </div>
 
-            <p className="font=bold text-sm text-red-400 pt-4"></p>
+            <p className="font=bold text-sm text-red-400 pt-4"> {password.length > 0 && password.length < 8 ? (`A senha precisa ter no mínimo 8 caracteres`): confPassword.length >= 8 && password.length >= 8 && (password != confPassword) ? (`As senhas devem ser iguais`):(``)}</p>
    
         </div>
             </AuthWrapper>
+
+            <div className="h-screen fixed top-0 left-0 z-[9]"><SvgSignup/></div>
         </div>
   );
 }

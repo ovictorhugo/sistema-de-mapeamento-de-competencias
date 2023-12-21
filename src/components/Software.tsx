@@ -29,7 +29,7 @@ export function Software(props: Publicacao) {
     const { isOn, setIsOn } = useContext(UserContext)
 
     return (
-        <div key={props.id} id="id_perfil" className={`items-center group bg-white  justify-center border-solid border-gray-300 border-[1px] flex p-6 rounded-md hover:shadow-md transition  ${isOn ? "items-center justify-center flex" : "flex-col items-baseline"}`}>
+        <div key={props.id} id="id_perfil" className={`items-center group bg-white  justify-center border-solid border-gray-300 border-[1px] flex p-6 rounded-xl hover:shadow-md transition  ${isOn ? "items-center justify-center flex" : "flex-col items-baseline"}`}>
             <div className="w-full">
                 <div className="flex">
                     <div className="flex flex-col justify-center">

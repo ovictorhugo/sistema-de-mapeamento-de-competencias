@@ -26,7 +26,7 @@ type Total = {
 
 import profnit from '../assets/logo_profnit.png';
 import Cookies from "js-cookie";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../contexts/context";
 import React, { useEffect } from 'react';
 import { LogoIapos } from "./LogoIapos";
@@ -102,7 +102,15 @@ export function Header() {
     }
   };
 
-  console.log(loggedIn)
+
+
+  const [popUpUser , setPopUpUser] = useState(false);
+
+  const handlePopkBtn = () => {
+    setPopUpUser(!popUpUser)
+   
+
+  };
 
   return (
     <header className={` z-[9999] px-6 md:px-16 w-full mb-4 h-20 justify-between items-center flex absolute top-0`}>
@@ -137,7 +145,7 @@ export function Header() {
        ( <Link to={`/indicators`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><ChartLine size={16} className="text-gray-400" />Indicadores</Link>)
        :('')}
           <Link to={`/terms`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><ListDashes size={16} className="text-gray-400" />Dicionário</Link>
-          <Link to={`/magazine}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><BookOpen size={16} className="text-gray-400" />Revistas</Link>
+          <Link to={`/magazine`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><BookOpen size={16} className="text-gray-400" />Revistas</Link>
           <Link to={`/barema`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><Textbox size={16} />Barema{ pesquisadoresSelecionadosGroupBarema != '' ? (<div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>):('')}</Link>
           <Link to={`/programas-graduacao`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><GraduationCap size={16} />Pós-gradução</Link>
           <Link to={`/taxonomia`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><GitBranch size={16} className="rotate-180"/>Taxonomia</Link>
@@ -174,38 +182,57 @@ export function Header() {
                     </Link>
         </div>
       ): (
-<div className="flex gap-4 group flex-col justify-end ">
+<div className="flex group justify-end items-center">
+  {user.photoURL ? (
+    <div
+      onClick={handlePopkBtn}
+      className="h-10 w-10 rounded-xl bg-cover bg-center bg-no-repeat cursor-pointer"
+      style={{ backgroundImage: `url(${user.photoURL})` }}
+    ></div>
+  ) : (
+    <div
+      onClick={handlePopkBtn}
+      className="h-10 w-10 rounded-xl bg-gray-50 text-gray-500 cursor-pointer"
+    >
+      <UserCircle size={16} className="" />
+    </div>
+  )}
 
-<div onClick={handleLogout} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
-                
-                <SignOut size={16} className="text-white" />
-             Encerrar sessão
-          </div>
-          {user.photoURL ? (
-            <div className="h-10 w-10 rounded-xl bg-cover bg-center bg-no-repeat cursor-pointer" style={{ backgroundImage: `url(${user.photoURL})` }}></div>
-          ): (
+  <div className="absolute top-[60px] pt-[20px] hidden group-hover:flex transition-all">
+  <div
+    className={`border-gray-300 flex-col bg-white border items-center rounded-xl w-[350px]  z-[9999999999999999999999999999999999999] right-16 transition-all shadow-xl h-auto `}
+  >
+    <div
+      className={`bg-cover bg-top bg-no-repeat backdrop-blur-md backdrop-brightness-150 h-28 bg-gray-400 rounded-t-xl w-full`}
+      style={{ backgroundImage: `url(${user.photoURL})` }}
+    >
+      <div
+        className={`bg-[#000000] bg-opacity-30 absolute backdrop-blur-sm w-full h-full rounded-t-xl`}
+      ></div>
+    </div>
 
-            <div className="h-10 w-10 rounded-xl bg-gray-50 text-gray-500 cursor-pointer" >
-              <UserCircle size={16} className="" />
-            </div>
-          )}
+    <div className="top-[-40px] px-4 w-full relative items-center flex flex-col z-[9999]">
+      <div
+        className={`whitespace-nowrap  bg-cover bg-center bg-no-repeat h-20 w-20 bg-white rounded-xl border-4 border-white  relative `}
+        style={{ backgroundImage: `url(${user.photoURL})` }}
+      ></div>
 
-          <div className="border-gray-300 border items-center rounded-xl w-[300px] p-2 fixed top-[80px] z-[99999] right-16 hidden group-hover:flex transition-all ">
-          <div  className={`bg-cover bg-top bg-no-repeat backdrop-blur-md backdrop-brightness-150 h-28 bg-gray-400 rounded-t-xl  w-full `} style={{ backgroundImage: `url(${user.photoURL})` }}>
-          <div className={`bg-[#000000] bg-opacity-30 absolute backdrop-blur-sm w-full h-full rounded-t-xl`}></div>
-            <div className="pt-16 w-full items-center flex">
-            <div className={`whitespace-nowrap  bg-cover bg-center bg-no-repeat h-20 w-20 bg-white rounded-xl border-4 border-white  relative `} style={{ backgroundImage: `url(${user.photoURL})` }}>
-
-            </div>
-
-            <div onClick={handleLogout} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
-                
-                <SignOut size={16} className="text-white" />
-             Encerrar sessão
-          </div>
-            </div>
+      <div className="w-full relative flex items-center flex-col top-[15px]">
+        <h4 className={`text-lg font-medium  `}>{user.displayName}</h4>
+        <p className="text-[14px]  w-full whitespace-normal h-6 text-center text-gray-500 truncate mt-2 mb-4">
+          {user.email}
+        </p>
+        <div
+          onClick={handleLogout}
+          className="w-full relative top-[6px] cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition"
+        >
+          <SignOut size={16} className="text-white" />
+          Encerrar sessão
         </div>
-          </div>
+      </div>
+    </div>
+  </div>
+  </div>
 </div>
       )}
 

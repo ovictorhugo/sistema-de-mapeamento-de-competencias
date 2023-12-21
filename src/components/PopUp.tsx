@@ -1,4 +1,4 @@
-import { X, User, Buildings, Quotes, Book, Books, ChartBar, ArrowDown, CaretDown, ArrowUDownLeft, PuzzlePiece, MapPin, LinkSimple, IdentificationBadge, SquaresFour, Rows, Calendar, CalendarBlank, CaretCircleRight, CaretCircleLeft, MagnifyingGlass, File, Stamp, Student, GraduationCap, Code, StripeLogo, Files, LinkedinLogo } from "phosphor-react";
+import { X, User, Buildings, Quotes, Book, Books, ChartBar, ArrowDown, CaretDown, ArrowUDownLeft, PuzzlePiece, MapPin, LinkSimple, IdentificationBadge, SquaresFour, Rows, Calendar, CalendarBlank, CaretCircleRight, CaretCircleLeft, MagnifyingGlass, File, Stamp, Student, GraduationCap, Code, StripeLogo, Files, LinkedinLogo, Ticket, Copyright } from "phosphor-react";
 import { Publicacao } from "./Publicacao";
 import { UserContext } from '../contexts/context'
 import { useEffect, useState, useContext, useRef } from "react";
@@ -127,6 +127,9 @@ export function PopUp(props: PesquisadorProps) {
   const { botaoResumoClicado, setBotaoResumoClicado } = useContext(UserContext);
   const { botaoAreasClicado, setBotaoAreasClicado } = useContext(UserContext);
   const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext);
+  const { botaoLivrosCapitulosClicado, setBotaoLivrosCapitulosClicado } = useContext(UserContext);
+    const { botaoEventosClicado, setBotaoEventosClicado } = useContext(UserContext);
+
   const { urlGeral, setUrlGeral } = useContext(UserContext);
 
   //
@@ -311,7 +314,7 @@ export function PopUp(props: PesquisadorProps) {
     }
   }, [botaoResumoClicado]);
 
-  if (botaoResumoClicado) {
+  if (botaoResumoClicado || botaoAreasClicado || botaoPesquisadoresClicado || botaoEventosClicado || botaoLivrosCapitulosClicado) {
     urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=&year=${value}`;
   }
 
@@ -357,8 +360,12 @@ export function PopUp(props: PesquisadorProps) {
 
   //livros 
 
-  const urlLivros = `${urlGeral}book_production_researcher?researcher_id=${props.id}&year=1000`;
+  let urlLivros = `${urlGeral}book_production_researcher?researcher_id=${props.id}&year=1000&term=`;
   const [livros, setLivros] = useState<Livros[]>([]);
+
+  if(botaoLivrosCapitulosClicado) {
+     urlLivros = `${urlGeral}book_production_researcher?researcher_id=${props.id}&year=1000&term=${valoresSelecionadosPopUp}${valorDigitadoPesquisaDireta}`;
+  }
 
   if (props.isPopUpVisible == true) {
     useEffect(() => {
@@ -391,8 +398,12 @@ export function PopUp(props: PesquisadorProps) {
 
   //cap livros 
 
-  const urlCapLivros = `${urlGeral}book_chapter_production_researcher?researcher_id=${props.id}&year=1000`;
+  let urlCapLivros = `${urlGeral}book_chapter_production_researcher?researcher_id=${props.id}&year=1000&term=`;
   const [capLivros, setCapLivros] = useState<Livros[]>([]);
+
+  if(botaoLivrosCapitulosClicado) {
+    urlCapLivros = `${urlGeral}book_chapter_production_researcher?researcher_id=${props.id}&year=1000&term=${valoresSelecionadosPopUp}${valorDigitadoPesquisaDireta}`;
+ }
 
   if (props.isPopUpVisible == true) {
     useEffect(() => {
@@ -495,7 +506,11 @@ export function PopUp(props: PesquisadorProps) {
 
   const [patente, setPatente] = useState<Patente[]>([]);
 
-  const urlPatente = `${urlGeral}patent_production_researcher?researcher_id=${props.id}&year=1000`;
+  let urlPatente = `${urlGeral}patent_production_researcher?researcher_id=${props.id}&year=1000&term=`;
+
+  if(botaoPatentesClicado) {
+    urlPatente = `${urlGeral}patent_production_researcher?researcher_id=${props.id}&year=1000&term=${valoresSelecionadosPopUp}${valorDigitadoPesquisaDireta}`;
+  }
 
   if (props.isPopUpVisible == true) {
     useEffect(() => {
@@ -626,7 +641,7 @@ export function PopUp(props: PesquisadorProps) {
       enabled: false
     },
     chart: {
-      type: valoresSelecionadosPopUp.length === 0 || botaoPesquisadoresClicado || botaoAreasClicado ? 'line' : 'column',
+      type: valoresSelecionadosPopUp.length === 0 || botaoPesquisadoresClicado || botaoPatentesClicado || botaoAreasClicado || botaoLivrosCapitulosClicado || botaoEventosClicado ? 'line' : 'column',
       height: '250px'
     },
     title: {
@@ -649,7 +664,7 @@ export function PopUp(props: PesquisadorProps) {
         name: 'Publicações',
         data: Object.values(groupedPublications).map((value, index) => ({
           y: value,
-          color: valoresSelecionadosPopUp.length === 0 || botaoPesquisadoresClicado || botaoAreasClicado ? '#005399' : getColorForIndex(index),
+          color: valoresSelecionadosPopUp.length === 0 || botaoPesquisadoresClicado || botaoPatentesClicado || botaoAreasClicado || botaoLivrosCapitulosClicado || botaoEventosClicado ? '#005399' : getColorForIndex(index),
         })),
       },
     ],
@@ -906,6 +921,10 @@ export function PopUp(props: PesquisadorProps) {
     setSelectedTab(4)
   }
 
+  function onClickEventos() {
+    setSelectedTab(5)
+  }
+
 
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -914,6 +933,12 @@ export function PopUp(props: PesquisadorProps) {
     setSelectedTab(1)
     onClickProducaoTecnica()
     setTabIndex(2)
+  }
+
+  if(botaoLivrosCapitulosClicado) {
+    setSelectedTab(3)
+    onClickLivros()
+    setTabIndex(1)
   }
 
 }, [botaoPatentesClicado]);
@@ -976,6 +1001,24 @@ export function PopUp(props: PesquisadorProps) {
                     {valorDigitadoPesquisaDireta}
                   </strong>{' '}
                   nas patentes
+                </p>
+              ) : botaoLivrosCapitulosClicado ? (
+                <p className="border-[1px] border-gray-300 w-fit py-2 px-4 text-gray-400 rounded-full text-xs font-bold float-right flex gap-1 items-center ml-auto absolute top-0 left-0">
+                  Pesquisador encontrado com termo{' '}
+                  <strong className="font-bold text-blue-400">
+                    {valoresSelecionadosExport}
+                    {valorDigitadoPesquisaDireta}
+                  </strong>{' '}
+                  nos livros e capítulos
+                </p>
+              ) : botaoEventosClicado ? (
+                <p className="border-[1px] border-gray-300 w-fit py-2 px-4 text-gray-400 rounded-full text-xs font-bold float-right flex gap-1 items-center ml-auto absolute top-0 left-0">
+                  Pesquisador encontrado com termo{' '}
+                  <strong className="font-bold text-blue-400">
+                    {valoresSelecionadosExport}
+                    {valorDigitadoPesquisaDireta}
+                  </strong>{' '}
+                  nas partipações em evento
                 </p>
               ) : (
                 <div></div>
@@ -1105,6 +1148,11 @@ export function PopUp(props: PesquisadorProps) {
                       Orientações
                     </Tab>
 
+                    <Tab selected={selectedTab === 5} className={`whitespace-nowrap outline-none cursor-pointer text-sm text-gray-400 rounded-full flex items-center gap-2 px-4 py-2 font-semibold  transition ${selectedTab == 5 ? "bg-blue-400 text-white hover:bg-blue-500" : ('hover:bg-gray-100')}`} onClick={onClickEventos}>
+                      <Ticket size={16} />
+                      Participação em eventos
+                    </Tab>
+
 
                   </TabList>
 
@@ -1143,7 +1191,7 @@ export function PopUp(props: PesquisadorProps) {
                       <div></div>
                     )}
 
-                    {botaoAreasClicado || botaoPatentesClicado || botaoResumoClicado|| botaoPesquisadoresClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta == "" )|| (botaoResumoClicado && valorDigitadoPesquisaDireta != "") ? (
+                    {botaoAreasClicado || botaoEventosClicado || botaoPatentesClicado || botaoResumoClicado|| botaoPesquisadoresClicado || botaoLivrosCapitulosClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta == "" )|| (botaoResumoClicado && valorDigitadoPesquisaDireta != "") ? (
                       <div className="flex justify-between pb-8 w-full items-center mt-8">
                         <div className="flex gap-4 w-full">
                           <File size={24} className="text-gray-400" />
@@ -1297,10 +1345,49 @@ export function PopUp(props: PesquisadorProps) {
                   </TabPanel>
 
                   <TabPanel>
-                    <div className="flex gap-4 w-full pb-8">
-                      <Book size={24} className="text-gray-400" />
-                      <p className="text-gray-400">Livros</p>
-                    </div>
+ 
+
+                    {botaoAreasClicado || botaoEventosClicado || botaoPatentesClicado || botaoResumoClicado|| botaoPesquisadoresClicado || botaoTermosClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta == "" )|| (botaoResumoClicado && valorDigitadoPesquisaDireta != "") ? (
+                      <div className="flex justify-between pb-8 w-full items-center mt-8">
+                        <div className="flex gap-4 w-full">
+                          <Book size={24} className="text-gray-400" />
+                          <p className="text-gray-400">Todos os livros</p>
+                        </div>
+
+                        <div className="flex gap-4">
+                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+                            <ArrowUDownLeft size={24} className="text-gray-400 transition-all" />
+                          </div>
+
+                         
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex mt-8 justify-between pb-8 w-full items-center">
+                        <div className="flex gap-4 w-full  items-center">
+                          <Book size={24} className="text-gray-400" />
+                          <p className="text-gray-400 flex items-center gap-2">
+                            <strong className="text-blue-400">{livros.length}</strong> ocorrências do termo
+                            <div className="flex gap-2">
+                              {valoresSelecionadosPopUp == "" ? (
+                                <div className="text-blue-400 font-bold">{valorDigitadoPesquisaDireta.replace(/;/g, ' ')}</div>
+                              ) : (
+                                listaValores
+                              )}
+                            </div> em
+
+                            <strong className="text-blue-400"> {Number(props.book) } </strong> livros 
+                          </p>
+                        </div>
+
+                        <div className="flex gap-4">
+                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+                            <ArrowUDownLeft size={24} className="text-gray-400 transition-all" />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
                     <div>
                       {isLoading ? (
                         <div className="flex items-center justify-center w-full py-10">
@@ -1328,10 +1415,46 @@ export function PopUp(props: PesquisadorProps) {
                       )}
                     </div>
 
-                    <div className="flex gap-4 w-full pb-8">
-                      <Books size={24} className="text-gray-400" />
-                      <p className="text-gray-400">Capítulos de livros</p>
-                    </div>
+                    {botaoAreasClicado || botaoEventosClicado || botaoPatentesClicado || botaoResumoClicado|| botaoPesquisadoresClicado || botaoTermosClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta == "" )|| (botaoResumoClicado && valorDigitadoPesquisaDireta != "") ? (
+                      <div className="flex justify-between pb-8 w-full items-center mt-8">
+                        <div className="flex gap-4 w-full">
+                          <Books size={24} className="text-gray-400" />
+                          <p className="text-gray-400">Todos os capítulos de livros</p>
+                        </div>
+
+                        <div className="flex gap-4">
+                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+                            <ArrowUDownLeft size={24} className="text-gray-400 transition-all" />
+                          </div>
+
+                         
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex mt-8 justify-between pb-8 w-full items-center">
+                        <div className="flex gap-4 w-full  items-center">
+                          <Books size={24} className="text-gray-400" />
+                          <p className="text-gray-400 flex items-center gap-2">
+                            <strong className="text-blue-400">{capLivros.length}</strong> ocorrências do termo
+                            <div className="flex gap-2">
+                              {valoresSelecionadosPopUp == "" ? (
+                                <div className="text-blue-400 font-bold">{valorDigitadoPesquisaDireta.replace(/;/g, ' ')}</div>
+                              ) : (
+                                listaValores
+                              )}
+                            </div> em
+
+                            <strong className="text-blue-400"> { Number(props.book_chapters)} </strong> capítulos de livros 
+                          </p>
+                        </div>
+
+                        <div className="flex gap-4">
+                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+                            <ArrowUDownLeft size={24} className="text-gray-400 transition-all" />
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
                     <div>
                       {isLoading ? (
@@ -1362,10 +1485,48 @@ export function PopUp(props: PesquisadorProps) {
 
 
                   <TabPanel>
-                    <div className="flex gap-4 w-full pb-8">
-                      <Books size={24} className="text-gray-400" />
-                      <p className="text-gray-400">Patentes</p>
-                    </div>
+
+
+                    {botaoAreasClicado || botaoEventosClicado || botaoLivrosCapitulosClicado || botaoResumoClicado|| botaoPesquisadoresClicado || botaoTermosClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta == "" )|| (botaoResumoClicado && valorDigitadoPesquisaDireta != "") ? (
+                      <div className="flex justify-between pb-8 w-full items-center mt-8">
+                        <div className="flex gap-4 w-full">
+                          <Copyright size={24} className="text-gray-400" />
+                          <p className="text-gray-400">Todas as patentes</p>
+                        </div>
+
+                        <div className="flex gap-4">
+                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+                            <ArrowUDownLeft size={24} className="text-gray-400 transition-all" />
+                          </div>
+
+                         
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex mt-8 justify-between pb-8 w-full items-center">
+                        <div className="flex gap-4 w-full  items-center">
+                          <Copyright size={24} className="text-gray-400" />
+                          <p className="text-gray-400 flex items-center gap-2">
+                            <strong className="text-blue-400">{props.among}</strong> ocorrências do termo
+                            <div className="flex gap-2">
+                              {valoresSelecionadosPopUp == "" ? (
+                                <div className="text-blue-400 font-bold">{valorDigitadoPesquisaDireta.replace(/;/g, ' ')}</div>
+                              ) : (
+                                listaValores
+                              )}
+                            </div> em
+
+                            <strong className="text-blue-400"> {props.patent } </strong> patentes
+                          </p>
+                        </div>
+
+                        <div className="flex gap-4">
+                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+                            <ArrowUDownLeft size={24} className="text-gray-400 transition-all" />
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
                     <div>
                       {isLoading ? (
@@ -1400,7 +1561,7 @@ export function PopUp(props: PesquisadorProps) {
 
                     <div className="flex gap-4 w-full pb-8">
                       <Code size={24} className="text-gray-400" />
-                      <p className="text-gray-400">Software</p>
+                      <p className="text-gray-400">Todos os software</p>
                     </div>
 
                     <div>
@@ -1431,7 +1592,7 @@ export function PopUp(props: PesquisadorProps) {
 
                     <div className="flex gap-4 w-full pb-8">
                       <StripeLogo size={24} className="text-gray-400" />
-                      <p className="text-gray-400">Marca</p>
+                      <p className="text-gray-400">Todas as marca</p>
                     </div>
 
                     <div>
@@ -1535,7 +1696,7 @@ export function PopUp(props: PesquisadorProps) {
 
 
                 <div className="w-full lg:w-[350px] border-[1px] border-gray-300 rounded-xl p-6 h-min">
-                  {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoAreasClicado || botaoPatentesClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta != "")? (
+                  {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoLivrosCapitulosClicado || botaoEventosClicado || botaoAreasClicado || botaoPatentesClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta != "")? (
                     <div className="text-center font-medium text-xl text-gray-500 mb-6">Todas as publicações por ano</div>
                   ) : (
                     <div className="flex gap-2 w-full flex-col justify-center">
@@ -1588,7 +1749,7 @@ export function PopUp(props: PesquisadorProps) {
                 </div>
 
                 <div className="w-full lg:w-[350px] border-[1px] border-gray-300 rounded-xl p-6 h-min">
-                {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoAreasClicado || botaoPatentesClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta != "") ? (
+                {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoAreasClicado || botaoEventosClicado ||  botaoLivrosCapitulosClicado || botaoPatentesClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta != "") ? (
                     <div className="text-center font-medium text-xl text-gray-500 mb-6">Todas as publicações por qualis</div>
                   ) : (
                     <div className="flex gap-2 w-full flex-col justify-center">

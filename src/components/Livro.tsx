@@ -69,7 +69,7 @@ export function Livro(props: Publicacao) {
 
                 <div className="pt-6 flex flex-wrap">
     <p className="text-gray-400 text-sm font-medium flex-wrap flex gap-1"><p/>
-    {botaoLivrosCapitulosClicado == false ? (
+    {botaoLivrosCapitulosClicado == false || valoresSelecionadosPopUp == ``   ? (
     `${props.title.toUpperCase()}`
   ) : (
     normalizedTitle

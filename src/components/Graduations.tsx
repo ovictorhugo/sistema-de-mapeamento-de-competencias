@@ -13,6 +13,7 @@ import logo_3 from '../assets/logo_3.png';
 import logo_4 from '../assets/logo_4.png';
 import logo_5 from '../assets/logo_5.png';
 import BrasilMap from "./BrasilMap";
+import BahiaMap from "./BahiaMap";
 
 
 
@@ -262,7 +263,7 @@ console.log('idversao',idVersao)
 
       <div className="h-[500px] absolute z-[-9999] bottom-0  right-0"><SvgLines/></div>
 
-      <div className="w-full h-screen max-h-screen overflow-y-hidden  overflow-hidden flex items-center absolute top-0 "><BrasilMap/></div>
+      <div className="w-full h-screen max-h-screen overflow-y-hidden  overflow-hidden flex items-center absolute top-0 "><BahiaMap/></div>
 
       <div className="px-6 md:px-16 flex justify-center h-screen flex-col  w-fit">
         <div className="h-[350px] absolute  ml-16 "><Circle/></div>
@@ -364,7 +365,7 @@ console.log('idversao',idVersao)
       <div className="absolute h-screen top-0 right-0 pr-16 items-center justify-center flex">
       <div className="flex flex-col gap-3 max-h-[470px] overflow-y-auto">
         {graduatePrograms.map(props => {
-         if (props.state === estadoSelecionado && idGraduateProgram == "0") {
+         if (props.city === estadoSelecionado && idGraduateProgram == "0") {
               return (
                 <li
                   key={props.graduate_program_id}
@@ -372,7 +373,7 @@ console.log('idversao',idVersao)
                   onMouseDown={(e) => e.preventDefault()}
                   
                 >
-                  <label onClick={() => handleClick(props.graduate_program_id)} className={`justify-between w-full p-6 flex-col  cursor-pointer border-[1px] bg-white bg-opacity-70 backdrop-blur-sm border-gray-300 flex text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 `}>
+                  <label onClick={() => handleClick(props.graduate_program_id)} className={`justify-between w-full p-6 flex-col  cursor-pointer border-[1px] bg-white bg-opacity-70 backdrop-blur-sm border-gray-300 flex text-gray-400 rounded-2xl text-xs font-bold hover:border-blue-400 `}>
                     <div className="flex flex-col">
                     
 
@@ -406,19 +407,19 @@ console.log('idversao',idVersao)
       </div>
             
       {graduatePrograms.map(props => {
-         if (props.graduate_program_id === idGraduateProgram && props.state == estadoSelecionado ) {
+         if (props.graduate_program_id === idGraduateProgram && props.city == estadoSelecionado ) {
               return (
                 <li
                   key={props.graduate_program_id}
                   className=" checkboxLabel group transition-all list-none inline-flex group w-[350px] "
                   onMouseDown={(e) => e.preventDefault()}
                 >
-                  <label className={`justify-between w-full p-6 flex-col cursor-pointer border-[1px] bg-white bg-opacity-70 backdrop-blur-sm border-gray-300 flex text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 `}>
+                  <label className={`justify-between w-full p-6 flex-col cursor-pointer border-[1px] bg-white bg-opacity-70 backdrop-blur-sm border-gray-300 flex text-gray-400 rounded-2xl text-xs font-bold hover:border-blue-400 `}>
                     <div className="flex flex-col">
                     <div className="flex justify-between items-center mb-6">
                     <div className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium w-fit ">{props.area}</div>
-                    <div onClick={toggleButtonOff} className={`cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center `}>
-                        <X size={24} className={'rotate-180 transition-all text-gray-400'} />
+                    <div onClick={toggleButtonOff} className={`cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center `}>
+                        <X size={20} className={'rotate-180 transition-all text-gray-400'} />
                         </div>
                     </div>
                       <div><img src={`${props.url_image}`} alt="" className="h-16 border-none mb-4 w-auto"/></div>
@@ -456,7 +457,7 @@ console.log('idversao',idVersao)
                     </div>
 
                     <div>
-                    <Link to={`/result`}  onClick={() => handleClick(props.graduate_program_id)} className="w-full mt-8 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-full px-6 py-2 justify-center hover:bg-blue-500 text-base font-medium transition">
+                    <Link to={`/result`}  onClick={() => handleClick(props.graduate_program_id)} className="w-full mt-8 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-6 py-2 justify-center hover:bg-blue-500 text-base font-medium transition">
                         <ArrowRight size={16} className="text-white" /> Avançar
                     </Link>
                     </div>
