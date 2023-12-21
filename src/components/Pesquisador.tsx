@@ -24,6 +24,7 @@ interface PesquisadorProps {
   software: string,
   brand: string,
   lattes_update: Date
+ 
 }
 
 export function Pesquisador(props: PesquisadorProps) {
@@ -230,7 +231,7 @@ export function Pesquisador(props: PesquisadorProps) {
         {valoresSelecionadosExport != "" || valorDigitadoPesquisaDireta != "" ? (
           
             <div className="flex gap-3 relative mb-6">
-              {(botaoTermosClicado && props.among != 0) || (botaoAreasClicado && props.among != null) || (botaoLivrosCapitulosClicado && props.among != null) ? (
+              {(botaoTermosClicado && props.among != 0)  || (botaoLivrosCapitulosClicado && props.among != null) || (botaoPatentesClicado && props.among != null) || (botaoEventosClicado && props.among != null) ? (
                 <div className="text-blue-400 flex text-sm font-bold gap-3">
                   {props.among} ocorrências
                   <p className="text-sm  text-blue-400">|</p>
@@ -238,7 +239,7 @@ export function Pesquisador(props: PesquisadorProps) {
               ) : (
                 <head></head>
               )}
-              <div className=" text-blue-400 text-sm font-bold">{production} produções</div>
+              <div className=" text-blue-400 text-sm font-bold">{botaoTermosClicado ? (`${articlesNum} artigos`): botaoPatentesClicado ? (`${props.patent} patentes`) : botaoLivrosCapitulosClicado ? (`${Number(props.book_chapters) + Number(props.book)} livros e capitulos`) : botaoEventosClicado ? (``) : (``)}</div>
 
             </div>
 
@@ -316,6 +317,8 @@ export function Pesquisador(props: PesquisadorProps) {
 
               <p className="text-[12px] text-white"> CSV</p>
             </div>
+
+            
 
             <div className="mb-6 flex flex-col justify-center items-center">
               <Link to={linkTo} target="_blank" className="mb-2 h-12 w-12 rounded-2xl bg-blue-400 items-center justify-center flex hover:bg-blue-500 cursor-pointer transition-all">

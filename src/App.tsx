@@ -70,7 +70,7 @@ export const App = () => {
   const [botaoEventosClicado, setBotaoEventosClicado] = useState(false);
   const [botaoTaxonomiaClicado, setBotaoTaxonomiaClicado] = useState(false);
   
-  const [urlGeral, setUrlGeral] = useState('http://177.16.237.129:5001/');
+  const [urlGeral, setUrlGeral] = useState('http://200.128.66.226:8080/');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
   const [user, setUser] = useState<User>({} as User)
   const [isOn, setIsOn] = useState(false);

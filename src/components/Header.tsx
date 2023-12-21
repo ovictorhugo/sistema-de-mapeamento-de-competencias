@@ -45,6 +45,14 @@ export function Header() {
   const { idVersao, setIdVersao } = useContext(UserContext);
   const {loggedIn, setLoggedIn} = useContext(UserContext);
 
+  const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext);
+    const { botaoPesquisadoresClicado, setBotaoPesquisadoresClicado } = useContext(UserContext);
+    const { botaoTermosClicado, setBotaoTermosClicado } = useContext(UserContext);
+    const { botaoResumoClicado, setBotaoResumoClicado } = useContext(UserContext);
+    const { botaoAreasClicado, setBotaoAreasClicado } = useContext(UserContext);
+    const { botaoLivrosCapitulosClicado, setBotaoLivrosCapitulosClicado } = useContext(UserContext);
+    const { botaoEventosClicado, setBotaoEventosClicado } = useContext(UserContext);
+
   useEffect(() => {
     const existingScript = document.getElementById('google-translate-api');
     if (!existingScript) {
@@ -73,6 +81,14 @@ export function Header() {
   const toggleButtonOff = () => {
     setIdGraduateProgram("0");
     setEstadoSelecionado("");
+
+    setBotaoPesquisadoresClicado(false);
+      setBotaoPatentesClicado(false)
+      setBotaoTermosClicado(true);
+      setBotaoAreasClicado(false);
+      setBotaoResumoClicado(false)
+      setBotaoEventosClicado(false)
+      setBotaoLivrosCapitulosClicado(false)
   };
 
   const location = useLocation();

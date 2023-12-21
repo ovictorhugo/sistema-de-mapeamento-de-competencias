@@ -19,6 +19,7 @@ import { Software } from "./Software";
 import { Marca } from "./Marca";
 import { Orientacoes } from "./Orientacoes";
 import { Report } from "./Report";
+import unorm from 'unorm';
 
 interface PesquisadorProps {
   among: number,
@@ -267,43 +268,24 @@ export function PopUp(props: PesquisadorProps) {
   }
 
   if (botaoTermosClicado) {
-    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosPopUp}&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}&year=${value}`;
+    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosPopUp}${valorDigitadoPesquisaDireta}&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}&year=${value}`;
   }
 
-  if (botaoTermosClicado && valoresSelecionadosExport == "") {
-    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valorDigitadoPesquisaDireta}&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}&year=${value}`;
-  }
 
   if (botaoResumoClicado) {
     urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}&year=${value}`;
   }
 
-  if (botaoResumoClicado && valoresSelecionadosExport == "") {
-    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}&year=${value}`;
-  }
 
   if (botaoPatentesClicado) {
     urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}&year=${value}`;
   }
 
-  if (botaoPatentesClicado && valoresSelecionadosExport == "") {
-    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}&year=${value}`;
-  }
-
-
   if (botaoPesquisadoresClicado) {
     urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}`;
   }
 
-  if (botaoPesquisadoresClicado && valoresSelecionadosExport == "") {
-    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}`;
-  }
-
   if (botaoAreasClicado) {
-    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}`;
-  }
-
-  if (botaoAreasClicado && valoresSelecionadosExport == "") {
     urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}`;
   }
 
@@ -315,7 +297,7 @@ export function PopUp(props: PesquisadorProps) {
   }, [botaoResumoClicado]);
 
   if (botaoResumoClicado || botaoAreasClicado || botaoPesquisadoresClicado || botaoEventosClicado || botaoLivrosCapitulosClicado) {
-    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=&year=${value}`;
+    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}`;
   }
 
   const [isLoading, setIsLoading] = useState(false);
@@ -608,6 +590,41 @@ export function PopUp(props: PesquisadorProps) {
       };
       fetchData();
     }, [urlRelatorio]);
+  }
+
+  //relatorio tecnico
+
+  const [eventos, setEventos] = useState<Patente[]>([]);
+
+  const urlEvento = `${urlGeral}researcherPatent?term=${props.id}&graduate_program_id=&university=`;
+
+  if (props.isPopUpVisible == true) {
+    useEffect(() => {
+      const fetchData = async () => {
+        setIsLoading(true);
+        try {
+          const response = await fetch(urlEvento, {
+            mode: 'cors',
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'GET',
+              'Access-Control-Allow-Headers': 'Content-Type',
+              'Access-Control-Max-Age': '3600',
+              'Content-Type': 'text/plain'
+            }
+          });
+          const data = await response.json();
+          if (data) {
+            setEventos(data);
+          }
+        } catch (err) {
+          console.log(err);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchData();
+    }, [urlEvento]);
   }
 
 
@@ -941,6 +958,12 @@ export function PopUp(props: PesquisadorProps) {
     setTabIndex(1)
   }
 
+  if(botaoEventosClicado) {
+    setSelectedTab(5)
+    onClickEventos()
+    setTabIndex(5)
+  }
+
 }, [botaoPatentesClicado]);
 
   //data atualização
@@ -966,6 +989,9 @@ export function PopUp(props: PesquisadorProps) {
   }
 
 
+  const normalizedTitle = props.abstract
+  .replace(/&quot;/g, '"')
+  .replace(/&#10;/g, '\n')
 
 
   return (
@@ -1084,29 +1110,43 @@ export function PopUp(props: PesquisadorProps) {
             </div>
 
             <div className={isVisible ? "h-auto transition-all" : "h-[60px] overflow-hidden transition-all"}>
-              <p className="text-sm text-gray-400 text-justify">
-                {props.abstract
-                  .replace(/&quot;/g, '"')
-                  .replace(/&#10;/g, '\n')
-                  .split(' ')
-                  .map((word, index) => {
-                    const formattedWord = word.toLowerCase();
-                    if (valoresSelecionadosExport.includes(formattedWord) && !ignoredWords.includes(formattedWord)) {
-                      return (
-                        <span key={index} className="text-blue-400 font-bold">
-                          {word}{' '}
-                        </span>
-                      );
-                    }
-                    return <span key={index}>{word} </span>;
-                  })}
-              </p>
+            <p className="text-gray-400 text-sm text-justify ">
+  { botaoTermosClicado || botaoAreasClicado || botaoPesquisadoresClicado || botaoEventosClicado || botaoLivrosCapitulosClicado || botaoPatentesClicado ? (
+    `${props.abstract}`
+  ) : (
+    normalizedTitle
+      .split(/[\s.,;?!]+/)
+      .map((word, index) => {
+        const formattedWord = unorm.nfkd(word).replace(/[^\w\s]/gi, '').toLowerCase();;
+        const alphabet = Array.from({ length: 26 }, (_, index) => String.fromCharCode('a'.charCodeAt(0) + index));
+        const ignoredWords = [...alphabet, 'do', 'da', 'o', 'os', 'as', 'de', 'e', 'i', 'na', 'du', 'em', ')', '('];
+        let formattedSpan;
+
+        if (
+          (valoresSelecionadosExport.includes(formattedWord) ||
+            valorDigitadoPesquisaDireta.includes(formattedWord)) &&
+          !ignoredWords.includes(formattedWord)
+        ) {
+          formattedSpan = (
+            <span key={index} className="text-blue-400 font-bold">
+              {word.toUpperCase()}{' '}
+            </span>
+          );
+        } else {
+          formattedSpan = <span key={index}>{word} </span>;
+        }
+
+        return formattedSpan;
+      })
+   
+  )}
+</p>
 
             </div>
 
 
             <div className="flex gap-4 items-center mt-4">
-              <div className="animate-bounce cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+              <div className="animate-bounce cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
                 <CaretDown onClick={() => setIsVisible(!isVisible)} size={24} className={isVisible ? "rotate-180 transition-all text-gray-400" : "text-gray-400 transition-all"} />
               </div>
             </div>
@@ -1157,7 +1197,7 @@ export function PopUp(props: PesquisadorProps) {
                   </TabList>
 
                   <TabPanel>
-                    {valoresSelecionadosPopUp == '' || botaoAreasClicado || botaoPesquisadoresClicado || botaoTermosClicado || botaoResumoClicado || valorDigitadoPesquisaDireta || botaoPatentesClicado ? (
+                    {valoresSelecionadosPopUp == '' || botaoAreasClicado || botaoPesquisadoresClicado || botaoTermosClicado || botaoResumoClicado || valorDigitadoPesquisaDireta || botaoPatentesClicado || botaoLivrosCapitulosClicado || botaoEventosClicado ? (
                       <div className=" flex gap-4 p-6 border-[1px] border-gray-300 rounded-xl mt-6 items-center w-fit">
                         <div>
                           <p className="text-gray-400 mb-4  whitespace-nowrap">Selecione os qualis desejados</p>
@@ -1199,17 +1239,17 @@ export function PopUp(props: PesquisadorProps) {
                         </div>
 
                         <div className="flex gap-4">
-                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
                             <ArrowUDownLeft size={24} className="text-gray-400 transition-all" />
                           </div>
 
                           <div className="bg-gray-300 h-[36px] w-[1px]"></div>
 
-                          <div onClick={toggleButtonOn} className={`cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-transparent" : "bg-gray-300"}`}>
+                          <div onClick={toggleButtonOn} className={`cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-transparent" : "bg-gray-300"}`}>
                             <SquaresFour size={24} className={'rotate-180 transition-all text-gray-400'} />
                           </div>
 
-                          <div onClick={toggleButtonOff} className={`cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-gray-300" : "bg-transparent"}`}>
+                          <div onClick={toggleButtonOff} className={`cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-gray-300" : "bg-transparent"}`}>
                             <Rows size={24} className={'rotate-180 transition-all text-gray-400'} />
                           </div>
                         </div>
@@ -1233,17 +1273,17 @@ export function PopUp(props: PesquisadorProps) {
                         </div>
 
                         <div className="flex gap-4">
-                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
                             <ArrowUDownLeft size={24} className="text-gray-400 transition-all" />
                           </div>
 
                           <div className="bg-gray-300 h-[36px] w-[1px]"></div>
 
-                          <div onClick={toggleButtonOn} className={`cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-transparent" : "bg-gray-300"}`}>
+                          <div onClick={toggleButtonOn} className={`cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-transparent" : "bg-gray-300"}`}>
                             <SquaresFour size={24} className={'rotate-180 transition-all text-gray-400'} />
                           </div>
 
-                          <div onClick={toggleButtonOff} className={`cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-gray-300" : "bg-transparent"}`}>
+                          <div onClick={toggleButtonOff} className={`cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-gray-300" : "bg-transparent"}`}>
                             <Rows size={24} className={'rotate-180 transition-all text-gray-400'} />
                           </div>
                         </div>
@@ -1355,7 +1395,7 @@ export function PopUp(props: PesquisadorProps) {
                         </div>
 
                         <div className="flex gap-4">
-                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
                             <ArrowUDownLeft size={24} className="text-gray-400 transition-all" />
                           </div>
 
@@ -1381,7 +1421,7 @@ export function PopUp(props: PesquisadorProps) {
                         </div>
 
                         <div className="flex gap-4">
-                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
                             <ArrowUDownLeft size={24} className="text-gray-400 transition-all" />
                           </div>
                         </div>
@@ -1423,7 +1463,7 @@ export function PopUp(props: PesquisadorProps) {
                         </div>
 
                         <div className="flex gap-4">
-                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
                             <ArrowUDownLeft size={24} className="text-gray-400 transition-all" />
                           </div>
 
@@ -1449,7 +1489,7 @@ export function PopUp(props: PesquisadorProps) {
                         </div>
 
                         <div className="flex gap-4">
-                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
                             <ArrowUDownLeft size={24} className="text-gray-400 transition-all" />
                           </div>
                         </div>
@@ -1495,7 +1535,7 @@ export function PopUp(props: PesquisadorProps) {
                         </div>
 
                         <div className="flex gap-4">
-                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
                             <ArrowUDownLeft size={24} className="text-gray-400 transition-all" />
                           </div>
 
@@ -1521,7 +1561,7 @@ export function PopUp(props: PesquisadorProps) {
                         </div>
 
                         <div className="flex gap-4">
-                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
                             <ArrowUDownLeft size={24} className="text-gray-400 transition-all" />
                           </div>
                         </div>
@@ -1657,7 +1697,7 @@ export function PopUp(props: PesquisadorProps) {
                   <TabPanel>
                     <div className="flex gap-4 w-full pb-8">
                       <Books size={24} className="text-gray-400" />
-                      <p className="text-gray-400">Orientações</p>
+                      <p className="text-gray-400">Todas as orientações</p>
                     </div>
 
                     <div>
@@ -1687,6 +1727,50 @@ export function PopUp(props: PesquisadorProps) {
                         </>
                       )}
                     </div>
+                  </TabPanel>
+
+
+
+
+                  <TabPanel>
+                    {botaoAreasClicado || botaoPatentesClicado || botaoLivrosCapitulosClicado || botaoResumoClicado|| botaoPesquisadoresClicado || botaoTermosClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta == "" )|| (botaoResumoClicado && valorDigitadoPesquisaDireta != "") ? (
+                      <div className="flex justify-between pb-8 w-full items-center mt-8">
+                        <div className="flex gap-4 w-full">
+                          <Ticket size={24} className="text-gray-400" />
+                          <p className="text-gray-400">Todas as participações em eventos</p>
+                        </div>
+
+                        <div className="flex gap-4">
+                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+                            <ArrowUDownLeft size={24} className="text-gray-400 transition-all" />
+                          </div>
+
+                         
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex mt-8 justify-between pb-8 w-full items-center">
+                        <div className="flex gap-4 w-full  items-center">
+                          <Ticket size={24} className="text-gray-400" />
+                          <p className="text-gray-400 flex items-center gap-2">
+                            <strong className="text-blue-400">{eventos.length}</strong> ocorrências do termo
+                            <div className="flex gap-2">
+                              {valoresSelecionadosPopUp == "" ? (
+                                <div className="text-blue-400 font-bold">{valorDigitadoPesquisaDireta.replace(/;/g, ' ')}</div>
+                              ) : (
+                                listaValores
+                              )}
+                            </div> de participações em eventos
+                          </p>
+                        </div>
+
+                        <div className="flex gap-4">
+                          <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+                            <ArrowUDownLeft size={24} className="text-gray-400 transition-all" />
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </TabPanel>
                 </Tabs>
 
@@ -1718,7 +1802,7 @@ export function PopUp(props: PesquisadorProps) {
                   </div>
 
                   <div className="flex  relative w-full justify-center">
-                    {(botaoTermosClicado && valoresSelecionadosPopUp != "") || (botaoAreasClicado && props.among != null) ? (
+                  {(botaoTermosClicado && props.among != 0)  || (botaoLivrosCapitulosClicado && props.among != null) || (botaoPatentesClicado && props.among != null) || (botaoEventosClicado && props.among != null) ? (
                       <div className="text-blue-400 flex text-md font-bold">
                         {props.among} ocorrências
                         <p className="text-md  text-blue-400 mx-3">|</p>
@@ -1727,7 +1811,7 @@ export function PopUp(props: PesquisadorProps) {
                       <head></head>
                     )}
 
-                    <div className=" text-blue-400 text-md font-bold">{production} produções</div>
+                    <div className=" text-blue-400 text-md font-bold">{botaoTermosClicado ? (`${articlesNum} artigos`): botaoPatentesClicado ? (`${props.patent} patentes`) : botaoLivrosCapitulosClicado ? (`${Number(props.book_chapters) + Number(props.book)} livros e capitulos`) : botaoEventosClicado ? (``) : (``)}</div>
 
                   </div>
 

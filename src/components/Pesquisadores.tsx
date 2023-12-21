@@ -1,8 +1,8 @@
 import { Pesquisador } from "./Pesquisador"
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import { UserContext } from '../contexts/context'
 import { Link } from "react-router-dom";
-import { ArrowSquareOut, CaretCircleLeft, CaretCircleRight, CaretDown, FileArrowDown, FileCsv, GitBranch, ListNumbers, MapPin, MapTrifold, Plus, Rows, SquaresFour, UserList, X } from "phosphor-react";
+import { ArrowSquareOut, CaretCircleLeft, CaretCircleRight, CaretDown, FileArrowDown, FileCsv, GitBranch, ListNumbers, MapPin, MapTrifold, Plus, Rows, SquaresFour, Target, UserList, X } from "phosphor-react";
 import Carregando from "./Carregando";
 
 import Cookies from "js-cookie";
@@ -12,7 +12,7 @@ import { PopUp } from "./PopUp";
 
 import municipios from './municipios.json';
 import { MapContainer, TileLayer, Marker, Popup, CircleMarker, Tooltip } from 'react-leaflet';
-
+import unorm from 'unorm';
 import "leaflet/dist/leaflet.css"
 
 
@@ -97,64 +97,42 @@ export function Pesquisadores() {
   //fetch
 
   if (botaoPesquisadoresClicado) {
-    urlTermPesquisadores = `${urlGeral}/researcherName?name=${valoresSelecionadosExport}`;
+    urlTermPesquisadores = `${urlGeral}/researcherName?name=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}`;
   }
 
-  if (botaoPesquisadoresClicado && valoresSelecionadosExport == "") {
-    let valorDigitadoPesquisaDiretaPesquisadores = valorDigitadoPesquisaDireta.replace(/;/g, '%20')
-    urlTermPesquisadores = `${urlGeral}/researcherName?name=${valorDigitadoPesquisaDireta}`;
-  }
 
   if (botaoPatentesClicado) {
-    urlTermPesquisadores = `${urlGeral}/researcherPatent?term=${valoresSelecionadosExport}&graduate_program_id=${idGraduateProgram}&university=${intituicoesSelecionadasCheckbox}`;
+    urlTermPesquisadores = `${urlGeral}/researcherPatent?term=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&graduate_program_id=${idGraduateProgram}&university=${intituicoesSelecionadasCheckbox}`;
   }
 
-  if (botaoPatentesClicado && valoresSelecionadosExport == "") {
-    let valorDigitadoPesquisaDiretaPesquisadores = valorDigitadoPesquisaDireta.replace(/;/g, '%20')
-    urlTermPesquisadores = `${urlGeral}/researcherPatent?term=${valorDigitadoPesquisaDireta}&graduate_program_id=${idGraduateProgram}&university=${intituicoesSelecionadasCheckbox}`;
-  }
 
   if (botaoTermosClicado) {
-    urlTermPesquisadores = `${urlGeral}researcher?terms=${valoresSelecionadosExport}&university=${intituicoesSelecionadasCheckbox}&type=ARTICLE&graduate_program_id=${idGraduateProgram}`
+    urlTermPesquisadores = `${urlGeral}researcher?terms=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}&type=ARTICLE&graduate_program_id=${idGraduateProgram}`
   }
 
-  if (botaoTermosClicado && valoresSelecionadosExport == "") {
-    urlTermPesquisadores = `${urlGeral}researcher?terms=${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}&type=ARTICLE&graduate_program_id=${idGraduateProgram}`;
-  }
 
   if (botaoResumoClicado) {
-    urlTermPesquisadores = `${urlGeral}researcher?terms=${valoresSelecionadosExport}&university=${intituicoesSelecionadasCheckbox}&type=ABSTRACT&graduate_program_id=${idGraduateProgram}`
+    urlTermPesquisadores = `${urlGeral}researcher?terms=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}&type=ABSTRACT&graduate_program_id=${idGraduateProgram}`
   }
 
-  if (botaoResumoClicado && valoresSelecionadosExport == "") {
-    urlTermPesquisadores = `${urlGeral}researcher?terms=${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}&type=ABSTRACT&graduate_program_id=${idGraduateProgram}`;
-  }
+  
 
   if (botaoEventosClicado) {
-    urlTermPesquisadores = `${urlGeral}researcherEvent?term=${valoresSelecionadosExport}&university=${intituicoesSelecionadasCheckbox}`
+    urlTermPesquisadores = `${urlGeral}researcherParticipationEvent?term=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}`
   }
 
-  if (botaoEventosClicado && valoresSelecionadosExport == "") {
-    urlTermPesquisadores = `${urlGeral}researcherEvent?term=${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}`;
-  }
+
 
   if (botaoLivrosCapitulosClicado) {
-    urlTermPesquisadores = `${urlGeral}researcherBook?term=${valoresSelecionadosExport}&university=${intituicoesSelecionadasCheckbox}&type=BOOK`
+    urlTermPesquisadores = `${urlGeral}researcherBook?term=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}&type=BOOK`
   }
 
-  if (botaoLivrosCapitulosClicado && valoresSelecionadosExport == "") {
-    urlTermPesquisadores = `${urlGeral}researcherBook?term=${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}&type=BOOK`;
-  }
 
   if (botaoAreasClicado) {
-    urlTermPesquisadores = `${urlGeral}/researcherArea_specialty?area_specialty=${valoresSelecionadosExport}&university=${intituicoesSelecionadasCheckbox}&graduate_program_id=${idGraduateProgram}`;
+    urlTermPesquisadores = `${urlGeral}/researcherArea_specialty?area_specialty=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}&graduate_program_id=${idGraduateProgram}`;
   }
 
-  if (botaoAreasClicado && valoresSelecionadosExport == "") {
-    let valorDigitadoPesquisaDiretaPesquisadores = valorDigitadoPesquisaDireta.replace(/;/g, '%20')
-    urlTermPesquisadores = `${urlGeral}/researcherArea_specialty?area_specialty=${valorDigitadoPesquisaDiretaPesquisadores}&university=${intituicoesSelecionadasCheckbox}&graduate_program_id=${idGraduateProgram}`;
-  }
-
+ 
   console.log('urlTermPesquisadores', urlTermPesquisadores)
 
 
@@ -176,11 +154,19 @@ console.log(urlTermPesquisadores)
 
   const defaultLatitude = Number(-13.29);
   const defaultLongitude =  Number(-41.71);
-  const defaultZoom = 5.5;
+  const [defaultZoom, setDefaultZoom] = useState(5.5);
 
   const [positionInit, setPositionInit ] = useState({lat: -13.29, lng: -41.71 })
+  const mapRef = useRef(null);
+  const handleCenterMap = () => {
+    setPositionInit({lat: -13.29, lng: -41.71 })
+    setDefaultZoom(5.5)
 
-
+    mapRef.current.flyTo([defaultLatitude, defaultLongitude], defaultZoom, {
+      duration: 1, // Animation duration in seconds
+      easeLinearity: 0.5, // Animation easing, adjust as needed
+    });
+  };
 
 
   useEffect(() => {
@@ -475,7 +461,7 @@ console.log(pesquisadoresSelecionadosGroupBarema)
       <div className="   m-[0 auto] w-full ">
 
 
-        {botaoPesquisadoresClicado || botaoAreasClicado || botaoResumoClicado || botaoPatentesClicado ? (
+        {botaoPesquisadoresClicado || botaoAreasClicado || botaoResumoClicado  ? (
           <div></div>
         ) : (
           <div className="flex gap-4 w-full pb-8 justify-between items-center min-w-full">
@@ -484,7 +470,7 @@ console.log(pesquisadoresSelecionadosGroupBarema)
               <p className="text-gray-400">Pesquisadores mais relevantes por ordem de ocorrências</p>
             </div>
 
-            <div onClick={() => setIsVisible(!isVisible)} className="cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+            <div onClick={() => setIsVisible(!isVisible)} className="cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
               <CaretDown size={24} className={isVisible ? "rotate-180 transition-all text-gray-400" : "text-gray-400 transition-all"} />
             </div>
 
@@ -493,7 +479,7 @@ console.log(pesquisadoresSelecionadosGroupBarema)
 
 
 
-        {botaoPesquisadoresClicado || botaoAreasClicado || botaoResumoClicado || botaoPatentesClicado ? (
+        {botaoPesquisadoresClicado || botaoAreasClicado || botaoResumoClicado  ? (
           <div></div>
         ) : (
           isVisible && (
@@ -584,6 +570,26 @@ console.log(pesquisadoresSelecionadosGroupBarema)
       </div>
 
       <div className="mb-6 flex flex-col justify-center items-center">
+        <label key={index} className={`mb-2 h-12 w-12 rounded-2xl ${pesquisadoresSelecionadosGroupBarema.includes(user.name) ? 'bg-red-400 hover:bg-red-500 text-white' : 'text-gray-500 bg-white hover:bg-gray-50'} items-center justify-center flex hover:bg-gray-100 cursor-pointer transition-all`}>
+        {pesquisadoresSelecionadosGroupBarema.includes(user.name) ? (
+            <X size={16} className="" />
+          ) : (
+            <Plus size={16} className="" />
+          )}
+
+<input
+            type="checkbox"
+            className="absolute hidden"
+            name={user.name}
+            checked={itensSelecionados.includes(user.name)}
+            onChange={() => handleCheckboxChange(user)}
+          />
+        </label>
+
+        <p className="text-[12px] text-white"> {pesquisadoresSelecionadosGroupBarema.includes(user.name) ? (`Remover`): (`Adicionar`)}</p>
+      </div>
+
+      <div className="mb-6 flex flex-col justify-center items-center">
         <Link to={linkTo} target="_blank" className="mb-2 h-12 w-12 rounded-2xl bg-blue-400 items-center justify-center flex hover:bg-blue-500 cursor-pointer transition-all">
           <ArrowSquareOut size={16} className="text-white" />
         </Link>
@@ -613,8 +619,17 @@ console.log(pesquisadoresSelecionadosGroupBarema)
               <p className="text-gray-400">Pesquisadores por cidade</p>
             </div>
 
-            <div onClick={() => setIsVisibleMap(!isVisibleMap)} className="cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+            <div className="flex gap-4">
+
+            <div onClick={handleCenterMap} className=" cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+                            <Target size={24} className="text-gray-400 transition-all" />
+                          </div>
+
+                          <div className="bg-gray-300 h-[36px] w-[1px]"></div>
+
+            <div onClick={() => setIsVisibleMap(!isVisibleMap)} className="cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
               <CaretDown size={24} className={isVisibleMap ? "rotate-180 transition-all text-gray-400" : "text-gray-400 transition-all"} />
+            </div>
             </div>
 
           </div>
@@ -628,7 +643,7 @@ console.log(pesquisadoresSelecionadosGroupBarema)
   </div>
   ) : (
     <div className="h-[500px] rounded-2xl mb-8">
-      <MapContainer center={positionInit} style={{ fontFamily: 'Ubuntu, sans-serif' }} zoom={defaultZoom} className="w-full h-full rounded-2xl">
+      <MapContainer ref={mapRef} center={positionInit} style={{ fontFamily: 'Ubuntu, sans-serif' }} zoom={defaultZoom} className="w-full h-full rounded-2xl">
   <TileLayer
     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
   />
@@ -644,11 +659,16 @@ console.log(pesquisadoresSelecionadosGroupBarema)
     >
       
       <Tooltip>{city.pesquisadores}</Tooltip>
+      <text x="0" y="0" dy=".3em" style={{ fontSize: '10px', textAnchor: 'middle', fill: 'white' }}>{city.pesquisadores}</text>
+
       <Popup >
         <div className="p-1 pb-4">
         <div className="text-base text-medium flex gap-2 items-center"><MapPin size={16} className="text-gray-500" />{city.nome}</div>
         {researcher.map((user, index) => {
-          if (user.city === city.nome) {
+
+const normalizedUserCity = unorm.nfd(user.city.toUpperCase()).replace(/[\u0300-\u036f]/g, "");
+const normalizedCityNome = unorm.nfd(city.nome.toUpperCase()).replace(/[\u0300-\u036f]/g, "");
+          if (normalizedUserCity === normalizedCityNome) {
             return (
               <div className="">
                 <div onClick={() => handleOpenPopUpMap(index)} className="hover:bg-gray-50 transition-all  p-2 cursor-pointer border w-full flex gap-4 items-center border-gray-300 rounded-md mt-4" key={user.name}>
@@ -727,6 +747,26 @@ console.log(pesquisadoresSelecionadosGroupBarema)
       </div>
 
       <div className="mb-6 flex flex-col justify-center items-center">
+        <label key={index} className={`mb-2 h-12 w-12 rounded-2xl ${pesquisadoresSelecionadosGroupBarema.includes(user.name) ? 'bg-red-400 hover:bg-red-500 text-white' : 'text-gray-500 bg-white hover:bg-gray-50'} items-center justify-center flex hover:bg-gray-100 cursor-pointer transition-all`}>
+        {pesquisadoresSelecionadosGroupBarema.includes(user.name) ? (
+            <X size={16} className="" />
+          ) : (
+            <Plus size={16} className="" />
+          )}
+
+<input
+            type="checkbox"
+            className="absolute hidden"
+            name={user.name}
+            checked={itensSelecionados.includes(user.name)}
+            onChange={() => handleCheckboxChange(user)}
+          />
+        </label>
+
+        <p className="text-[12px] text-white"> {pesquisadoresSelecionadosGroupBarema.includes(user.name) ? (`Remover`): (`Adicionar`)}</p>
+      </div>
+
+      <div className="mb-6 flex flex-col justify-center items-center">
         <Link to={linkTo} target="_blank" className="mb-2 h-12 w-12 rounded-2xl bg-blue-400 items-center justify-center flex hover:bg-blue-500 cursor-pointer transition-all">
           <ArrowSquareOut size={16} className="text-white" />
         </Link>
@@ -755,11 +795,11 @@ console.log(pesquisadoresSelecionadosGroupBarema)
           </div>
 
           <div className="flex gap-4">
-            <div onClick={toggleButtonOn} className={`cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-transparent" : "bg-gray-300"}`}>
+            <div onClick={toggleButtonOn} className={`cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-transparent" : "bg-gray-300"}`}>
               <SquaresFour size={24} className={'rotate-180 transition-all text-gray-400'} />
             </div>
 
-            <div onClick={toggleButtonOff} className={`cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-gray-300" : "bg-transparent"}`}>
+            <div onClick={toggleButtonOff} className={`cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-gray-300" : "bg-transparent"}`}>
               <Rows size={24} className={'rotate-180 transition-all text-gray-400'} />
             </div>
           </div>

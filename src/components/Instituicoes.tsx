@@ -27,22 +27,25 @@ export function Instituicoes() {
   const { botaoTermosClicado, setBotaoTermosClicado } = useContext(UserContext);
   const { botaoResumoClicado, setBotaoResumoClicado } = useContext(UserContext);
   const { botaoAreasClicado, setBotaoAreasClicado } = useContext(UserContext);
+  const { botaoLivrosCapitulosClicado, setBotaoLivrosCapitulosClicado } = useContext(UserContext);
+  const { botaoEventosClicado, setBotaoEventosClicado } = useContext(UserContext);
+  const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext);
 
   const [instituicoes, setInstituicoes] = useState<Instituicoes[]>([]); // Define o estado vazio no início
 
-  let urlTermPublicacoes = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}`;
+  let urlTermPublicacoes = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&type=ARTICLE`;
   const { intituicoesSelecionadasCheckbox, setIntituicoesSelecionadasCheckbox } = useContext(UserContext)
 
 
   if (botaoTermosClicado) {
 
-    urlTermPublicacoes = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}`
+    urlTermPublicacoes = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}&type=ARTICLE`
 
   }
 
   if (botaoResumoClicado) {
 
-    urlTermPublicacoes = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}`
+    urlTermPublicacoes = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}&type=ABSTRACT`
 
   }
 
@@ -50,20 +53,29 @@ export function Instituicoes() {
     urlTermPublicacoes = `${urlGeral}//institutionArea?area_specialty=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&great_area=&university=${intituicoesSelecionadasCheckbox}`;
   }
 
-  if (botaoTermosClicado && valoresSelecionadosExport == "") {
-    `${urlGeral}institutionFrequenci?terms=${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}`;
+  if (botaoLivrosCapitulosClicado) {
+
+    urlTermPublicacoes = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}&type=BOOK`
+
   }
 
-  if (botaoResumoClicado && valoresSelecionadosExport == "") {
-    `${urlGeral}institutionFrequenci?terms=${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}`;
+  if (botaoEventosClicado) {
+
+    urlTermPublicacoes = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}&type=SPEAKER`
+
   }
 
-  if (botaoAreasClicado && valoresSelecionadosExport == "") {
-    urlTermPublicacoes = `${urlGeral}/institutionArea?terms=${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}`;
+  if (botaoPatentesClicado) {
+
+    urlTermPublicacoes = `${urlGeral}institutionFrequenci?terms=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}&type=PATENT`
+
   }
+
+  console.log(urlTermPublicacoes)
+
 
   //fetch
-  const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
+  
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);

@@ -37,6 +37,7 @@ let qualisColor = {
 
 
 export function Publicacao(props: Publicacao) {
+  const { botaoTermosClicado, setBotaoTermosClicado } = useContext(UserContext);
     const { valoresSelecionadosExport, setValoresSelecionadosExport } = useContext(UserContext);
     const { valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta } = useContext(UserContext);
     const { valoresSelecionadosPopUp, setValoresSelecionadosPopUp } = useContext(UserContext)
@@ -83,7 +84,7 @@ export function Publicacao(props: Publicacao) {
                 {props.lattes_10_id !== 'K4796572P6' && (
   <div className="pt-6 flex flex-wrap">
 <p className="text-gray-400 text-sm font-medium flex-wrap flex gap-1">
-  {valoresSelecionadosPopUp === '' && valorDigitadoPesquisaDireta === '' ? (
+  {valoresSelecionadosPopUp === '' && valorDigitadoPesquisaDireta === '' || botaoTermosClicado == false ? (
     `${props.title.toUpperCase()}`
   ) : (
     normalizedTitle

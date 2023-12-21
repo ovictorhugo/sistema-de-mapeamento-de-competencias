@@ -93,13 +93,13 @@ export function HeaderProfnit() {
         <div className="md:flex h-full hidden  rounded-md   ml-4">
           
        {idVersao != '1' ? 
-       ( <Link to={`/indicators`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><ChartLine size={16} className="text-gray-400" />Indicadores</Link>)
+       ( <Link to={`/indicators/profnit`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><ChartLine size={16} className="text-gray-400" />Indicadores</Link>)
        :('')}
-          <Link to={`/terms`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><ListDashes size={16} className="text-gray-400" />Dicionário</Link>
-          <Link to={`/magazine}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><BookOpen size={16} className="text-gray-400" />Revistas</Link>
-          <Link to={`/barema`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><Textbox size={16} />Barema{ pesquisadoresSelecionadosGroupBarema != '' ? (<div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>):('')}</Link>
+          <Link to={`/terms/profnit`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><ListDashes size={16} className="text-gray-400" />Dicionário</Link>
+          <Link to={`/magazine/profnit}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><BookOpen size={16} className="text-gray-400" />Revistas</Link>
+          
         
-          <Link to={`/taxonomia`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><GitBranch size={16} className="rotate-180"/>Taxonomia</Link>
+        
        
         </div>
       </div>

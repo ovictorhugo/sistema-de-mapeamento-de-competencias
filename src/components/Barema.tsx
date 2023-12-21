@@ -832,7 +832,7 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
 
                 <h1 className="text-4xl mb-4 font-normal max-w-[400px] text-white pt-12 ">
 
-                <strong className="bg-green-400 text-white font-normal">
+                <strong className="bg-red-400 text-white font-normal">
                 Barema 
                 </strong>{" "}
                 de avaliação dos pesquisadores
@@ -895,7 +895,7 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
             <div className="mb-[20px] z-[99]">
                 <h1 className="z-[999999] text-4xl mb-4 font-normal max-w-[750px] text-white pt-12 ">
 
-                <strong className="bg-green-400 text-white font-normal">
+                <strong className="bg-red-400 text-white font-normal">
                 Barema 
                 </strong>{" "}
                 de avaliação dos pesquisadores
