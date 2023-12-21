@@ -65,11 +65,14 @@ export function ContentProfnit(props: Props) {
   const { idGraduateProgram, setIdGraduateProgram } = useContext(UserContext);
 
 
+
   const { idVersao, setIdVersao } = useContext(UserContext);
  
   setIdVersao(`2`)
 
-  
+  if(idVersao ==`2` ) {
+    setUrlGeral(`http://200.128.66.226:5001/`)
+  }
 
   function handleClick(name: string) {
     setIdGraduateProgram(name);
