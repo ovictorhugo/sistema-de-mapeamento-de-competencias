@@ -6,6 +6,8 @@ import { useState } from "react";
 import bg_popup from '../assets/bg_popup.png';
 import { Link } from "react-router-dom";
 
+import { getFirestore, doc, getDoc, collection, addDoc } from 'firebase/firestore';
+
 export function Dashboard() {
 
     const [name, setName] = useState('');
@@ -21,7 +23,6 @@ export function Dashboard() {
         if(name != `` && modality != `` && type != ``) {
             setPopUpProgram(true)
         }
-       
    
       };
 
@@ -33,6 +34,46 @@ export function Dashboard() {
 
       const isDashboard = location.pathname === `/dashboard`
       const isPesquisadores = location.pathname === `dashboard/pesquisadores`
+
+
+      //submit
+
+      const handleSubmit = async () => {
+        try {
+          // Aqui você pode adicionar a lógica para tratar os tipos de programa selecionados
+          // programTypes é um array com os tipos selecionados
+      
+          // Crie um objeto com os dados do formulário
+          const formData = {
+            name,
+            modality,
+            type,
+         
+            ranking,
+            area,
+            descricao,
+          };
+      
+          // Submeta os dados para o Firestore
+          const db = getFirestore();
+          const programRef = collection(db, 'graduate_program');
+          await addDoc(programRef, formData);
+      
+          // Limpe os campos do formulário após a submissão
+          setName('');
+          setModality('');
+          setType('');
+          setRanking('');
+          setArea('');
+          setDescricao('');
+      
+          // Feche o pop-up ou faça qualquer outra ação necessária
+          setPopUpProgram(false);
+        } catch (error) {
+          console.error('Erro ao enviar os dados:', error);
+        }
+      };
+      
 
     return  (
         <div className="h-screen w-full pr-6 md:pr-16">
@@ -52,7 +93,7 @@ export function Dashboard() {
                   <SquaresFour size={16} className="t" /> {menu ? (`Dashboard`):(``)}
                 </Link>
 
-                <Link to={`/dashboard/pesquisadores`} className={`mb-5 h-10  gap-4 ${menu ? (`w-full px-4`):(`w-10 justify-center`)} ${isPesquisadores ? (`bg-blue-400 hover:bg-blue-500 text-white`):(`text-gray-400 bg-gray-100 hover:bg-gray-300`)} rounded-xl items-center  flex  cursor-pointer transition-all text-sm font-medium`}>
+                <Link to={`/dashboard/pesquisadores`} className={`mb-5 h-10  gap-4 ${menu ? (`w-full px-4`):(`w-10 justify-center`)} ${isPesquisadores ? (`bg-blue-400 hover:bg-blue-500 text-white`):(`text-gray-400 bg-gray-50 hover:bg-gray-100`)} rounded-xl items-center  flex  cursor-pointer transition-all text-sm font-medium`}>
                   <UsersThree size={16} className="t" /> {menu ? (`Todos os pesquisadores`):(``)}
                 </Link>
           </div>
@@ -153,7 +194,7 @@ export function Dashboard() {
 
                         <div className="">
                             <div className="h-full max-w-[500px] ">
-                                <div className=" border-l h-full pb-[96px] overflow-y-auto border-l-gray-300 p-12 ">
+                                <div className=" border-l h-full pb-[96px] overflow-y-auto elementBarra border-l-gray-300 p-12 ">
                                 <div onClick={() => setPopUpProgram(false)} className={`ml-auto float-right cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center `}>
                         <X size={20} className={'rotate-180 transition-all text-gray-400'} />
                         </div>
@@ -250,7 +291,7 @@ export function Dashboard() {
                                 </div>
 
                                 <div className="flex border-l  border-l-gray-300 gap-6 px-12 py-6 bg-white top-[-96px] z-[99] right-0 relative">
-                            <div onClick={() => setPopUpProgram(true)} className="whitespace-nowrap flex cursor-pointer items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500  font-medium transition flex-1 h-12 ml-auto">
+                            <div onClick={handleSubmit} className="whitespace-nowrap flex cursor-pointer items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500  font-medium transition flex-1 h-12 ml-auto">
                                 <Plus size={16} className="text-white" /> Adicionar
                             </div>
 

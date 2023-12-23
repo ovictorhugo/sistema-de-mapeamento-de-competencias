@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/context';
-import { Buildings, CaretDown, CaretLeft, CaretRight, CaretUp, Info, PuzzlePiece, SlidersHorizontal, Trash, Users, X } from 'phosphor-react';
+import { Buildings, CaretDown, CaretLeft, CaretRight, CaretUp, CheckCircle, FileCsv, Info, PuzzlePiece, SlidersHorizontal, Textbox, Trash, Users, X } from 'phosphor-react';
 import DropdownMultiSelect from './DropdownMultiSelect';
 
 type Research = {
@@ -42,12 +42,12 @@ export function Filter() {
   const { urlGeral, setUrlGeral } = useContext(UserContext);
   const { pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema } = useContext(UserContext);
    
-  let urlTermPesquisadores = `${urlGeral}/researcherName?name=${pesquisadoresSelecionadosGroupBarema}`
-
-  if (botaoPesquisadoresClicado) {
-    urlTermPesquisadores = `${urlGeral}/researcherName?name=${pesquisadoresSelecionadosGroupBarema}`;
+  let urlTermPesquisadores = `${urlGeral}/researcherName?name=${pesquisadoresSelecionadosGroupBarema}&graduate_program_id=`
+  
+  if(pesquisadoresSelecionadosGroupBarema == "") {
+    urlTermPesquisadores = `${urlGeral}/researcherName?name=null&graduate_program_id=`
   }
-
+  const [jsonData, setJsonData] = useState<any[]>([]);
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -65,6 +65,7 @@ export function Filter() {
         const data = await response.json();
         if (data) {
           setResearcher(data);
+          setJsonData(data);
         }
       } catch (err) {
         console.log(err);
@@ -74,6 +75,8 @@ export function Filter() {
     };
     fetchData();
   }, [pesquisadoresSelecionadosGroupBarema]);
+
+  console.log(`PESQUISADORES SELECIOANADOS`, urlTermPesquisadores)
   
 
     const qualisColor: { [key: string]: string } = {
@@ -140,9 +143,9 @@ export function Filter() {
             onMouseDown={(e) => e.preventDefault()}
           >
             <label
-              className={`  ${qualisColor[quali.itens]}  cursor-pointer  gap-3 flex h-8 items-center px-4 text-white rounded-md text-xs font-bold ${isChecked ? 'activeTab' : ''}`}
+              className={`   cursor-pointer  gap-3 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold ${isChecked ? 'activeTab bg-blue-100' : 'border-gray-300 border'}`}
             >
-              <PuzzlePiece size={12} className="text-white" /> 
+              <PuzzlePiece size={12} className="" /> 
               <span className="text-center block">{quali.itens}</span>
               <input
                 type="checkbox"
@@ -212,6 +215,7 @@ export function Filter() {
 
       const limparSelecao = () => {
         setPesquisadoresSelecionadosGroupBarema('')
+        localStorage.setItem('pesquisadoresSelecionadosGroupBarema', JSON.stringify(""))
        
    
       };
@@ -262,12 +266,46 @@ export function Filter() {
         
         setDataModificacao(dataFormatada);
       }, []);
+
+
+      // btn download
+
+      const { valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta } = useContext(UserContext);
+  const convertJsonToCsv = (json: any[]): string => {
+    const items = json;
+    const replacer = (key: string, value: any) => (value === null ? '' : value); // Handle null values
+    const header = Object.keys(items[0]);
+    const csv = [
+      '\uFEFF' + header.join(';'), // Add BOM and CSV header
+      ...items.map((item) =>
+        header.map((fieldName) => JSON.stringify(item[fieldName], replacer)).join(';')
+      ) // CSV data
+    ].join('\r\n');
+
+    return csv;
+  };
+
+  const handleDownloadJson = async () => {
+    try {
+      const csvData = convertJsonToCsv(jsonData);
+      const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.download = `pesquisadores_${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}.csv`;
+      link.href = url;
+      link.click();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
   return (
     <div  ref={ref} className={` `} >
 
         
             <div className={`transition pb-8 fixed top-0 flex left-0 h-full z-[999999]  ${EstadoFiltro || popupPesquisadores || infoFiltro ? ('w-full'):('')}`}>
-              <div className={`h-full pb-4 w-16 items-center z-10 flex flex-col justify-between ${EstadoFiltro || popupPesquisadores || infoFiltro ? ('bg-gray-50'): ('')}`}>
+              <div className={`h-full pb-4 w-16 items-center z-10 flex flex-col justify-between ${EstadoFiltro || popupPesquisadores || infoFiltro ? ('bg-[#000] bg-opacity-25'): ('')}`}>
                 <div>
                 <div className='h-[80px] items-center justify-center flex '>
                 <div onClick={() => handlePopUpBtn()} className="  h-10 w-10 rounded-xl bg-gray-100 items-center justify-center flex hover:bg-gray-300 cursor-pointer transition-all">
@@ -301,7 +339,8 @@ export function Filter() {
               </div>
 
                {EstadoFiltro ? (
-                 <div className='bg-white w-[400px] h-full mb-8 p-6 shadow-lg border-r-300 border-r  '>
+                 <div className='p-2 bg-[#000] pl-0  bg-opacity-25'>
+                  <div className='bg-white w-[400px] rounded-xl h-full mb-8 p-6 shadow-lg border-r-300 border-r  '>
                  <div className='flex items-center gap-6 justify-between mb-8'>
                  <div className='flex items-center gap-4'>
                      <SlidersHorizontal size={24} className="text-gray-400" />
@@ -313,7 +352,7 @@ export function Filter() {
                  </div>
                  </div>
  
-                 <div className=''>
+                 <div className=' overflow-y-auto elementBarra h-full'>
  
                    <div onClick={() => setFiltroArea(!filtroArea)} className='w-full h-12 border border-gray-300 mb-4 hover:bg-gray-50 transition-all cursor-pointer rounded-xl flex items-center justify-between'>
                    <div className='flex w-full p-6 items-center gap-6 justify-between'>
@@ -352,10 +391,13 @@ export function Filter() {
 
                  </div>
                  </div>
+                 </div>
                ):('')}
 
 {popupPesquisadores ? (
-        <div className='bg-white w-[400px] h-full mb-8 p-6 shadow-lg border-r-300 border-r  '>
+  
+  <div className='p-2 bg-[#000] pl-0  bg-opacity-25'>
+    <div className='bg-white w-[400px] h-full rounded-xl mb-8 p-6 shadow-lg border-r-300 border-r  '>
            <div className='flex items-center gap-6 justify-between mb-8'>
                  <div className='flex items-center gap-4'>
                      <Users size={24} className="text-gray-400" />
@@ -367,7 +409,7 @@ export function Filter() {
                  </div>
                  </div>
 
-                 <div>
+                 <div className='h-full overflow-y-auto elementBarra'>
                  {pesquisadoresSelecionadosGroupBarema == "" ? (
         <div className="text-gray-400 mb-4 ">Nenhum pesquisador selecionado</div>
       ) : (
@@ -375,11 +417,11 @@ export function Filter() {
           {researcher.map(user => {
             return (
               <li key={user.id} className="list-none">
-                <div className="rounded-md p-4 border-[1px] border-gray-300 flex gap-4 items-center justify-between">
+                <div className="rounded-xl p-4 border-[1px] border-gray-300 flex gap-4 items-center justify-between">
                   <div className="flex gap-4 items-center">
                     <div className="bg-cover border-[1px] border-gray-300 bg-center bg-no-repeat h-16 w-16 bg-white rounded-md relative" style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${user.lattes_10_id}) ` }}></div>
 
-                    <div className="flex flex-col">
+                    <div className="flex flex-col flex-1">
                       <h4 className="text-base font-medium  mb-1">{user.name}</h4>
                       <div className="flex items-center gap-2">
                         <Buildings size={16} className="text-gray-500" />
@@ -400,12 +442,27 @@ export function Filter() {
 
       
                  </div>
+
+                 <div className='pt-6 bg-white top-[-212px] z-[99] right-0  relative'>
+
+                 <div  onClick={handleDownloadJson} className="w-full mb-4  text-blue-400 text-sm font-medium cursor-pointer h-10 p-4  border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
+                <FileCsv size={16} className="" /> Download dos pesquisadores selecionados
+              </div>
+
+                 <Link to={`/barema`} className="w-full cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
+                
+                <Textbox size={16} className="text-white" />
+             Barema
+          </Link>
+                 </div>
                  
         </div>
+  </div>
        ): ('')}
 
 {infoFiltro ? (
-        <div className='bg-white w-[400px] h-full mb-8 p-6 shadow-lg border-r-300 border-r  '>
+       <div className='p-2 bg-[#000] pl-0  bg-opacity-25'>
+         <div className='bg-white rounded-xl w-[400px] h-full mb-8 p-6 shadow-lg border-r-300 border-r  '>
            <div className='flex items-center gap-6 justify-between mb-8'>
                  <div className='flex items-center gap-4 h-10'>
                      <Info size={24} className="text-gray-400" />
@@ -415,8 +472,9 @@ export function Filter() {
                  
                  </div>
 
-                 <div>
-
+                 <div className=' overflow-y-auto h-full elementBarra pb-24'>
+                 <div className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium gap-2 items-center w-fit mb-4">Versão 2.0.5 (beta) </div>
+                 <div className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium gap-2 items-center w-fit mb-4">Sistema de Mapeamento de Competências da Bahia </div>
                     <p className='text-gray-400 text-justify mb-4'>
                     O Sistema de Mapeamento de Competências da Bahia - SIMCC é uma iniciativa que visa promover o desenvolvimento e aprimoramento das habilidades e conhecimentos dos profissionais no estado da Bahia. Desenvolvido por uma equipe composta por Victor Hugo de Jesus Oliveira (IFBA), Matheus Souza dos Santos (UNEB), Eduardo Manuel de Freitas Jorge (UNEB), Gesil Sampaio Amarante Segundo (UESC) e Gleidson de Meireles Costa (UFRB), o sistema representa uma abordagem inovadora para entender, organizar e utilizar as competências existentes na região. Têm-se os agradecimentos pela soma de esforços e de conhecimentos para idealização e criação da plataforma como Trabalho de Conclusão de Curso e projeto de Iniciação Científica. 
 
@@ -425,11 +483,27 @@ Agradecimento especial as Instituições de ensino público da Bahia e a Secreta
 Menção a Jônatas Pereira do Nascimento Rosa (UNEB) pela revisão e projeto textual da landing page.
                     </p>
 
-                    <p className='text-gray-400 font-bold'>Site atualizado em {dataModificacao}</p>
+                    <p className='text-gray-400 font-bold text-sm'>Site atualizado em {dataModificacao}</p>
       
+                    <div className='flex items-center gap-4 h-10 my-4'>
+                     <CheckCircle size={24} className="text-gray-400" />
+                     <p className='text-gray-400 flex flex-1 text-lg '>Novidades da atualização</p>
+                 </div>
+
+                 <p className='text-gray-400 text-justify mb-4'>
+                 - Mapa de pesquisadores por cidade<br/>
+                 - Pesquisa por livros e capítulos<br/>
+                 - Pesquisa por participações em eventos<br/>
+                 - Barema de avaliação<br/>
+                 - Login e criar conta<br/>
+                 - Login módulo administrativo<br/>
+                 - Revisão visual de componentes<br/>
+                 - Módulo profnit<br/>
+                    </p>
                  </div>
                  
         </div>
+       </div>
        ): ('')}
 
 {EstadoFiltro || popupPesquisadores || infoFiltro ? (

@@ -299,7 +299,7 @@ console.log('idversao',idVersao)
           {filterValue.length <= 2 || filterValue == valueInstPesquisa ? (
             <div></div>
           ) : (
-            <div className="rounded-md bg-white absolute mt-3 p-4 gap-4 flex flex-col max-h-[250px] overflow-y-auto">
+            <div className="rounded-md bg-white absolute mt-3 p-4 gap-4 flex flex-col max-h-[250px] overflow-y-auto elementBarra">
           {filteredResults.map(props => {
         
               return (
@@ -363,7 +363,7 @@ console.log('idversao',idVersao)
       
 
       <div className="absolute h-screen top-0 right-0 pr-16 items-center justify-center flex">
-      <div className="flex flex-col gap-3 max-h-[470px] overflow-y-auto">
+      <div className="flex flex-col gap-3 max-h-[470px] overflow-y-auto elementBarra">
         {graduatePrograms.map(props => {
          if (props.city === estadoSelecionado && idGraduateProgram == "0") {
               return (

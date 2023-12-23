@@ -34,12 +34,24 @@ export function ContentSignUp() {
   const [createUserWithEmailAndPassword, userw, loading, error] =
   useCreateUserWithEmailAndPassword(auth);
 
-function handleSignOut(e: any) {
-  if( password == confPassword && password.length >= 8) {
-    e.preventDefault();
-    createUserWithEmailAndPassword(email, password);
+  const handleSignOut = async (e: any) => {
+  try {
+
+    if( password == confPassword && password.length >= 8) {
+      e.preventDefault();
+      createUserWithEmailAndPassword(email, password);
+   
+      setTimeout(() => {
+        history('/login');
+      }, 0);
+    }
+
+    else return <div>Revise sua senha</div>
+   
+  } catch (error) {
+   console.error('Authentication error:', error);
   }
-  else return <div>Revise sua senha</div>
+  
 }
 
 if (loading) {
@@ -65,7 +77,7 @@ if (loading) {
         setLoggedIn(true);
         setTimeout(() => {
           history('/');
-        }, 1000);
+        }, 0);
 
         // Save user information to local storage
     localStorage.setItem('user', JSON.stringify(result.user));

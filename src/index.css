@@ -45,15 +45,26 @@ input[type=number] {
   margin: 3px;/* creates padding around scroll thumb */
 }
 
-.element::-webkit-scrollbar-track {
-  background: transparent;        /* color of the tracking area */
+.elementBarra::-webkit-scrollbar {
+  height: 5px;  
+  width: 10px; 
+  padding-left: 5px;            /* width of the entire scrollbar */
+
 }
 
-.element::-webkit-scrollbar-thumb {
+.elementBarra::-webkit-scrollbar-track {
+  background: transparent;        /* color of the tracking area */
+  padding-left: 5px;  
+  margin-left: 5px;    
+}
+
+.elementBarra::-webkit-scrollbar-thumb {
   background-color: #E6E6E6;    /* color of the scroll thumb */
         /* roundness of the scroll thumb */
   margin: 3px;/* creates padding around scroll thumb */
 }
+
+
 
 .selectedTabClassName {
   background-color: #F1F4F9;

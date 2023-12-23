@@ -8,6 +8,7 @@ import "firebase/auth";
 
 import { auth } from "../lib/firebase";
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { UserContext } from "../contexts/context";
@@ -18,7 +19,7 @@ import { SvgAdmin } from "./SvgAdmin";
 
 import bg_popup from '../assets/bg_admin.png';
 
-
+import { getDatabase, ref, child, get } from 'firebase/database';
 
 
 export function ContentLoginAdmin() {
@@ -34,6 +35,36 @@ export function ContentLoginAdmin() {
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
       setLoggedIn(true);
+
+       // Recupere dados personalizados do usuário no Firestore
+        const db = getFirestore();
+        const userDocRef = doc(db, 'institution', result.user.uid);
+        const snapshot = await getDoc(userDocRef);
+
+        // Verifique se os dados personalizados existem antes de adicionar ao objeto result.user
+        if (snapshot.exists()) {
+          
+          console.log('existe'); // Adicione este log
+          const userData = snapshot.data();
+          console.log('userData:', userData);
+          // Adicione os dados personalizados diretamente ao objeto result.user
+          result.user = {
+            ...result.user,
+            acronym: userData.acronym,
+            img_url: userData.img_url,
+            institution_id: userData.institution_id,
+            name: userData.name,
+            state: userData.state,
+            uid: result.user.uid
+            // Adicione outros campos personalizados conforme necessário
+            
+          };
+
+          console.log("user",user)
+
+          // Atualize o estado com o objeto modificado
+          setUser(result.user);
+        }
   
       // Save user information to local storage
       localStorage.setItem('user', JSON.stringify(result.user));
@@ -49,8 +80,7 @@ export function ContentLoginAdmin() {
   };
   
   
-  
-  console.log(loggedIn)
+
 
 
   //
@@ -74,7 +104,7 @@ export function ContentLoginAdmin() {
       })
   }
 
-  console.log("user",user)
+  
 
 
 
@@ -116,7 +146,7 @@ export function ContentLoginAdmin() {
             >
 
                 
-                 <div className=" flex items-center flex-col flex-1 ">
+                 <div className=" flex items-center flex-col flex-1 z-[9999999999999]">
 
             <form className="w-full z-[9999999999999]">
               <p className="text-sm text-gray-500 mb-2">Usuário </p>
@@ -142,7 +172,17 @@ export function ContentLoginAdmin() {
               </div>
             </form>
 
-            
+            <div className="flex items-center w-full justify-center my-8 gap-4 flex-1">
+              <div className="w-full h-[1px] bg-gray-300 flex flex-1"></div>
+              <p className="text-gray-400 bg-white text-center">Ou</p>
+              <div className="w-full h-[1px] bg-gray-300 flex flex-1"></div>
+            </div>
+
+            <div className="w-full z-[9999999999999]">
+            <div  onClick={handleGoogleSignIn}    className="w-full  text-blue-400 text-sm font-bold cursor-pointer h-12 p-4  border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
+                <GoogleLogo size={16} className="" />Fazer login com o Google
+              </div>
+            </div>
 
             <p className="font=bold text-sm text-red-400 pt-4"></p>
    

@@ -42,6 +42,7 @@ import { LogoSimcc } from "./LogoSimcc";
 import { PesquisadoresTaxinomia } from "./PesquisadoresTaxonomia";
 import { Filter } from "./Filter";
 import footer from '../assets/footer.png';
+import { PopUpWrapper } from "./PopUpWrapper";
 
 
 interface GraduateProgram {
@@ -115,7 +116,7 @@ export function MapProfnit(props: Props) {
    const { botaoTaxonomiaClicado, setBotaoTaxonomiaClicado } = useContext(UserContext);
    const { botaoLivrosCapitulosClicado, setBotaoLivrosCapitulosClicado } = useContext(UserContext);
    const { botaoEventosClicado, setBotaoEventosClicado } = useContext(UserContext);
-
+   const {loggedIn, setLoggedIn} = useContext(UserContext);
    const { totalPublicacoes, setTotalPublicacoes } = useContext(UserContext);
    const { totalPesquisadores, setTotalPesquisadores } = useContext(UserContext);
    const { totalInstituicoes, setTotalInstituicoes } = useContext(UserContext);
@@ -550,6 +551,29 @@ console.log('idversao',idVersao)
       setSelectedTab(2);
     };
 
+    //popup
+
+    const [popUpProgram, setPopUpProgram] = useState(true);
+
+useEffect(() => {
+  const storedPopUpHome = localStorage.getItem('popUpHome');
+
+  if (storedPopUpHome) {
+    // If user information is found in local storage, set the user and mark as logged in
+    setPopUpProgram(JSON.parse(storedPopUpHome));
+  }
+}, []); // Empty dependency array ensures the effect runs only once during component mount
+
+const handlePopUp = () => {
+  if (popUpProgram) {
+    setPopUpProgram(false);
+    localStorage.setItem('popUpHome', JSON.stringify(false)); // Set to false only on the first visit
+  }
+};
+
+    
+    
+
   return (
     <div className="   ">
 
@@ -888,6 +912,55 @@ console.log('idversao',idVersao)
       
    
       </div>
+
+      {popUpProgram &&  loggedIn == false ? (
+                <PopUpWrapper
+                title="Print ('Bem-vindo/a')"
+                subtitle="Novo usuário?"
+                textLink="Criar conta"
+                link="/signup"
+                >
+                    <div className="w-full h-full flex">
+                        <div className=" flex flex-1 p-6">
+                        <div
+                        className="rounded-xl bg-blue-100 bg-cover flex items-center justify-center bg-right bg-no-repeat w-full h-full mr-6"
+                        
+                        >
+                            
+                        </div>
+                        </div>
+
+                        <div className="">
+                            <div className="h-full max-w-[500px] ">
+                                <div className=" border-l h-full pb-[96px] overflow-y-auto elementBarra border-l-gray-300 p-12 ">
+                                <div onClick={() => handlePopUp()} className={`ml-auto float-right cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center `}>
+                        <X size={20} className={'rotate-180 transition-all text-gray-400'} />
+                        </div>  
+
+                          <div className="h-12 mb-4"><LogoSimcc/></div>
+                                
+                                <h3 className=" font-medium text-2xl mb-4 text-gray-400"><strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">Bem vindo (a)</strong> ao Sistema de Mapeamento de Competências da Bahia</h3>
+                                    <p className="  text-gray-400 mb-2">
+                                    É de interesse das universidades públicas tornar as produções cientificas desenvolvidas acessíveis para aqueles interessados, uma premissa simples com desafios significativos envolvidos. 
+                                    </p>
+
+                                    <p className="  text-gray-400 mb-2">
+                                    É de interesse das universidades públicas tornar as produções cientificas desenvolvidas acessíveis para aqueles interessados, uma premissa simples com desafios significativos envolvidos. 
+                                    </p>
+
+                                   
+                           
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </PopUpWrapper>
+            ):(
+                ``
+            )}
     </div>
   );
 }

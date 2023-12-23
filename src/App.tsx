@@ -32,6 +32,7 @@ import { PaginaInicial } from './pages/PaginaInicial';
 import { SignUp } from './pages/SignUp';
 import { LoginAdmin } from './pages/LoginAdmin';
 import { Admin } from './pages/Admin';
+import { MeusBaremas } from './pages/MeusBaremas';
 
 
 
@@ -70,7 +71,7 @@ export const App = () => {
   const [botaoEventosClicado, setBotaoEventosClicado] = useState(false);
   const [botaoTaxonomiaClicado, setBotaoTaxonomiaClicado] = useState(false);
   
-  const [urlGeral, setUrlGeral] = useState('http://200.128.66.226:8080/');
+  const [urlGeral, setUrlGeral] = useState('http://177.16.235.7:5001/');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
   const [user, setUser] = useState<User>({} as User)
   const [isOn, setIsOn] = useState(false);
@@ -99,9 +100,21 @@ useEffect(() => {
   }
 }, []);
 
+useEffect(() => {
+  const storedPesquisadoresSelecionadosGroupBarema = localStorage.getItem('pesquisadoresSelecionadosGroupBarema');
+
+  if (storedPesquisadoresSelecionadosGroupBarema) {
+    // If user information is found in local storage, set the user and mark as logged in
+    setPesquisadoresSelecionadosGroupBarema(JSON.parse(storedPesquisadoresSelecionadosGroupBarema));
+   
+  }
+}, []);
+
+
+
 
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={client} >
       <Router>
         <UserContext.Provider  
         value={{
@@ -147,7 +160,7 @@ useEffect(() => {
             </Route>
 
 
-
+            <Route path='/meus-baremas' element={<MeusBaremas/>}/>
             <Route path='/search' element={<StepTwo/>}/>
 
             <Route path='/admin' element={<LoginAdmin/>}/>
@@ -161,16 +174,8 @@ useEffect(() => {
           
 
        
-            <Route
-            path='/login'
-            element={
-              user != ({} as User) ? (
-                <Login/>
-              ) : (
-                <Navigate to='/' replace state={{}} />
-              )
-            }
-          />
+<Route path='/login' element={<Login/>}/>
+          
             <Route path='/signUp' element={<SignUp/>}/>
             <Route path='/chat' element={<Chat/>}/>
 
@@ -227,7 +232,7 @@ useEffect(() => {
             </Route>
 
 
-            {user ? (
+            {user  ? (
               <Route path='/dashboard' element={<Admin/>}/>
             ) : (
               <Navigate to='/' replace state={{}} />

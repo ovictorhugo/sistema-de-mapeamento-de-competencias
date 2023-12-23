@@ -46,9 +46,9 @@ export function CapLivro(props: Publicacao) {
     const ignoredWords = ['a', 'do', 'da', 'o', 'os', 'as', 'de', "e", "i", 'na', 'du', 'em']; // Adicionar outras palavras que devem ser ignoradas
 
     return (
-        <div key={props.id} id="id_perfil" className={`group bg-white  justify-between border-solid border-gray-300 border-[1px] flex p-6 rounded-xl hover:shadow-md transition  ${isOn ? "items-center justify-center flex" : "flex-col items-baseline"}`}>
-            <div className="flex justify-between flex-col h-full">
-                <div>
+        <div key={props.id} id="id_perfil" className={`group bg-white  justify-between border-solid border-gray-300 border-[1px] flex  rounded-xl hover:shadow-md transition  ${isOn ? "items-center justify-center flex" : "flex-col items-baseline"}`}>
+            <div className="flex justify-between flex-col h-full w-full">
+                <div className="p-6">
                 <div className="flex">
                     <div className="flex flex-col justify-center">
                         <div id="mudarCorDiv" className={` h-10 w-10 border-gray-300 border rounded-md mr-4 whitespace-nowrap flex items-center justify-center`}>
@@ -102,17 +102,17 @@ export function CapLivro(props: Publicacao) {
                 </div>
             </div>
 
-            <div className={`flex  flex-col flex-nowrap bottom-0 relative  ${isOn ? "ml-6" : ""}`}>
+            <div className={`flex  flex-col bg-gray-50 w-full p-6 flex-nowrap bottom-0 relative  ${isOn ? "ml-6" : ""}`}>
 
             
 
                 <div className="flex  gap-4 items-center justify-between relative bottom-0S flex-wrap">
-                    <div className="flex gap-3 mt-8">
+                    <div className="flex gap-3">
                         <div className=" flex gap-3 flex-wrap">
                             
 
 
-                            <div className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium gap-2 items-center"> <Quotes size={16} className="text-gray-400" /> Livro</div>
+                            <div className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium gap-2 items-center"> <Quotes size={16} className="text-gray-400" /> Capítulo de livro</div>
 
                             {props.isbn && (
                                 <a href={`https://www.cblservicos.org.br/isbn/pesquisa/?page=1&q=${props.isbn}&filtrar_por%5B0%5D=todos&ord%5B0%5D=relevancia&dir%5B0%5D=asc`} target="_blank"  className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium gap-2 items-center whitespace-nowrap "><LinkBreak size={16} className="text-gray-400" />ISBN {props.isbn}</a>

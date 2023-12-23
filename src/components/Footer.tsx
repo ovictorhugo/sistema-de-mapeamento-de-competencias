@@ -29,7 +29,7 @@ export function Footer() {
           <p className="text-[12px] text-gray-400 font-bold md:flex hidden">Sistema de Mapeamento de Competências do Programas de Pós Gradação  IFBA | versão 1.0.5 (beta) </p>
         ):
         idVersao == '4'? (
-          <p className="text-[12px] text-gray-400 font-bold md:flex hidden">Sistema de Mapeamento de Competências da Bahia | versão 1.0.5 (beta) </p>
+          <p className="text-[12px] text-gray-400 font-bold md:flex hidden">Sistema de Mapeamento de Competências da Bahia | versão 2.0.5 (beta) </p>
         ): ('')}
 
 

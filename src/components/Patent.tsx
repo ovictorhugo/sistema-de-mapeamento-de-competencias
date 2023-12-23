@@ -28,7 +28,7 @@ export function Patent(props: Patente) {
     return (
         <div className="hover:shadow-md transition rounded-xl border-[1px] border-gray-300 flex">
         <div className={`h-full w-2 min-w-[8px] rounded-l-xl ${props.grant_date == "NaT" || props.grant_date == "None" ? ('bg-red-400') : ('bg-green-400')}` }></div>
-        <div className="w-full   p-6 flex gap-4 items-center">
+        <div className="w-full   p-6 flex gap-4 ">
             <div id="mudarCorDiv" className={` h-10 w-10 rounded-md  whitespace-nowrap flex items-center justify-center border-[1px] border-gray-300`}>
                 <Copyright size={18} className="text-gray-400 whitespace-nowrap  w-10" />
 
@@ -67,7 +67,7 @@ export function Patent(props: Patente) {
   )}
 
                 </h3>
-                <div className="flex gap-4">
+                <div className="flex gap-4 flex-wrap">
                     <div className={` py-2 px-4 text-white rounded-md text-xs font-bold  flex gap-2 items-center w-fit ${props.grant_date == "NaT" || props.grant_date == "None" ? ('bg-red-400') : ('bg-green-400')}`}>
                         {props.grant_date == "NaT" || props.grant_date == "None" ? (
                             <SpinnerGap size={12} className="textwhite" />

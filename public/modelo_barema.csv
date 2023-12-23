@@ -1,0 +1,25 @@
+﻿codigo;criterio;descricao;ano;pontos;pontuacao_maxima;categoria pai
+1;Titulação ou estágio de estudo e pesquisa;Será considerada, APENAS, pontuação máxima.;;;0;0
+2;Pós-Doutorado;;1900;0;0;1
+3;Doutorado;;1900;0;0;1
+4;Mestrado;;1900;0;0;1
+21;Especialista;;1900;0;0;1
+5;Produção bibliográfica;Será considerada APENAS a produção dos últimos 04 (quatro) anos;2020;;0;0
+6;" Artigo em periódicos qualificados (A ou C)""";;2018;0;0;5
+20;Artigos completos em anais de eventos;;2018;0;0;5
+7;Livro publicado;;1900;0;0;5
+8;Capítulo de livro;;1900;0;0;5
+22;Patente;;1900;0;0;5
+23;Software e Marca;;1900;0;0;5
+24;Projetos de Pesquisa;;1900;0;0;5
+9;Formação de recursos humanos - Orientações em Curso na UNEB;;;;0;0
+10; Pós-Graduação Stricto Sensu;;1900;0;0;9
+11;Iniciação Científica em Andamento;;1900;0;0;9
+12;Formação de Recursos Humanos - Orientação Concluída;;;;0;0
+13;Doutorado;;1900;;0;12
+14;Mestrado;;1900;0;0;12
+16;Iniciação Científica;;1900;0;0;12
+25;Outros (Especia e TCC);;1900;0;0;12
+17;Participação em Eventos;;;;0;0
+18;Organização;;1900;0;0;17
+19;Palestrante/Mesa Redonda/ Conferencista/ Ministrante de Minicurso;;1900;0;0;17

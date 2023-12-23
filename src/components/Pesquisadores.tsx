@@ -322,7 +322,7 @@ const currentResults = filteredResults.slice(indexOfFirstResult, indexOfLastResu
 console.log(pesquisadoresSelecionadosGroupBarema)
  
 
-  
+localStorage.setItem('pesquisadoresSelecionadosGroupBarema', JSON.stringify(pesquisadoresSelecionadosGroupBarema));
  
 
 
@@ -374,7 +374,7 @@ console.log(pesquisadoresSelecionadosGroupBarema)
       const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
-      link.download = `pesquisadores${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}.csv`;
+      link.download = `pesquisadores_${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}.csv`;
       link.href = url;
       link.click();
     } catch (error) {
@@ -454,6 +454,75 @@ console.log(pesquisadoresSelecionadosGroupBarema)
 
   const [popUpVisibleMap, setPopUpVisibleMap] = useState({});
 
+  let id_pesquisador = ""
+  const handleBtnCsv = () => {
+
+    try {
+    let urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosPopUp}&researcher_id=${id_pesquisador}&type=ARTICLE&qualis=&year=1900`;
+
+
+
+    const [jsonData, setJsonData] = useState<any[]>([]);
+
+  
+    
+      const fetchData = async () => {
+        try {
+          const response = await fetch(urlPublicacoesPorPesquisador, {
+            mode: 'cors',
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'GET',
+              'Access-Control-Allow-Headers': 'Content-Type',
+              'Access-Control-Max-Age': '3600',
+              'Content-Type': 'application/json'
+            }
+          });
+          const data = await response.json();
+          setJsonData(data);
+          
+        } catch (error) {
+          console.error(error);
+        }
+      };
+  
+      fetchData();
+   
+  
+    const convertJsonToCsv = (json: any[]): string => {
+      const items = json;
+      const replacer = (key: string, value: any) => (value === null ? '' : value); // Handle null values
+      const header = Object.keys(items[0]);
+      const csv = [
+        '\uFEFF' + header.join(';'), // Add BOM and CSV header
+        ...items.map((item) =>
+          header.map((fieldName) => JSON.stringify(item[fieldName], replacer)).join(';')
+        ) // CSV data
+      ].join('\r\n');
+  
+      return csv;
+    };
+  
+  
+        const csvData = convertJsonToCsv(jsonData);
+        const blob = new Blob([csvData], { type: 'text/csv;charset=windows-1252;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = `${id_pesquisador}.csv`;
+        link.href = url;
+        link.click();
+
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    
+    
+   console.log(`id_pesquisador`,id_pesquisador)
+
+  };
+  
+
+  const [mapFocused, setMapFocused] = useState(false);
 
   return (
     <div className="flex flex-col m-[0 auto] min-w-full  flex justify-center items-center">
@@ -497,6 +566,7 @@ console.log(pesquisadoresSelecionadosGroupBarema)
                       .map((user, index, arr) => {
                         const maxFontSize = 200;
                         const minFontSize = 100;
+                         id_pesquisador = user.id;
                         const distinctAmongValues = [...new Set(arr.map(user => user.among))];
                         const distinctAmongCount = distinctAmongValues.length;
                         const fontSize =
@@ -504,6 +574,7 @@ console.log(pesquisadoresSelecionadosGroupBarema)
                           ((maxFontSize - minFontSize) / (distinctAmongCount - 1)) *
                           distinctAmongValues.indexOf(user.among);
 
+                          
                         return (
                           <div>
                             <li key={user.id} className="list-none list-item w-min">
@@ -562,11 +633,11 @@ console.log(pesquisadoresSelecionadosGroupBarema)
 
 
       <div className="mb-6 flex flex-col justify-center items-center">
-        <div onClick={handleDownloadJson} className="mb-2 h-12 w-12 rounded-2xl bg-white items-center justify-center flex hover:bg-gray-100 cursor-pointer transition-all">
+        <div onClick={handleBtnCsv} className="mb-2 h-12 w-12 rounded-2xl bg-white items-center justify-center flex hover:bg-gray-100 cursor-pointer transition-all">
           <FileCsv size={16} className="text-gray-500" />
         </div>
 
-        <p className="text-[12px] text-white"> CSV</p>
+        <p className="text-[12px] text-white"> CSV publicações</p>
       </div>
 
       <div className="mb-6 flex flex-col justify-center items-center">
@@ -642,8 +713,17 @@ console.log(pesquisadoresSelecionadosGroupBarema)
     <Carregando />
   </div>
   ) : (
-    <div className="h-[500px] rounded-2xl mb-8">
-      <MapContainer ref={mapRef} center={positionInit} style={{ fontFamily: 'Ubuntu, sans-serif' }} zoom={defaultZoom} className="w-full h-full rounded-2xl">
+    <div onClick={() => setMapFocused(true)} className="h-[500px] rounded-2xl mb-8">
+      <MapContainer 
+      ref={mapRef} 
+      center={positionInit} 
+      style={{ fontFamily: 'Ubuntu, sans-serif' }} 
+      zoom={defaultZoom} 
+      scrollWheelZoom={false}
+      
+     
+      
+      className="w-full h-full rounded-2xl">
   <TileLayer
     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
   />
@@ -652,10 +732,11 @@ console.log(pesquisadoresSelecionadosGroupBarema)
     <CircleMarker
       center={[city.latitude, city.longitude]}
       key={city.nome}
-      radius={Math.sqrt(city.pesquisadores) * 3}
+      radius={Math.sqrt(city.pesquisadores) * 4}
       fillColor="#173DFF"
       fillOpacity={0.5}
       color="blue"
+      style={`outline: "none"`}
     >
       
       <Tooltip>{city.pesquisadores}</Tooltip>
@@ -664,6 +745,7 @@ console.log(pesquisadoresSelecionadosGroupBarema)
       <Popup >
         <div className="p-1 pb-4">
         <div className="text-base text-medium flex gap-2 items-center"><MapPin size={16} className="text-gray-500" />{city.nome}</div>
+        <div className="flex flex-col max-h-[250px] overflow-y-auto elementBarra">
         {researcher.map((user, index) => {
 
 const normalizedUserCity = unorm.nfd(user.city.toUpperCase()).replace(/[\u0300-\u036f]/g, "");
@@ -683,6 +765,7 @@ const normalizedCityNome = unorm.nfd(city.nome.toUpperCase()).replace(/[\u0300-\
           }
           return null; // Add this to handle cases where the condition is not met
         })}
+        </div>
         </div>
       </Popup>
     </CircleMarker>
@@ -739,11 +822,11 @@ const normalizedCityNome = unorm.nfd(city.nome.toUpperCase()).replace(/[\u0300-\
 
 
       <div className="mb-6 flex flex-col justify-center items-center">
-        <div onClick={handleDownloadJson} className="mb-2 h-12 w-12 rounded-2xl bg-white items-center justify-center flex hover:bg-gray-100 cursor-pointer transition-all">
+        <div onClick={handleBtnCsv} className="mb-2 h-12 w-12 rounded-2xl bg-white items-center justify-center flex hover:bg-gray-100 cursor-pointer transition-all">
           <FileCsv size={16} className="text-gray-500" />
         </div>
 
-        <p className="text-[12px] text-white"> CSV</p>
+        <p className="text-[12px] text-white"> CSV publicações</p>
       </div>
 
       <div className="mb-6 flex flex-col justify-center items-center">

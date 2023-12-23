@@ -31,6 +31,7 @@ import { UserContext } from "../contexts/context";
 import React, { useEffect } from 'react';
 import { LogoIapos } from "./LogoIapos";
 import { LogoSimcc } from "./LogoSimcc";
+import { LogoWhite } from "./LogoWhite";
 
 
 declare global {
@@ -41,7 +42,7 @@ declare global {
 
 
 
-export function Header() {
+export function HeaderBarema() {
   const { idVersao, setIdVersao } = useContext(UserContext);
   const {loggedIn, setLoggedIn} = useContext(UserContext);
 
@@ -129,20 +130,20 @@ export function Header() {
   };
 
   return (
-    <header className={` z-[9999] px-6 md:px-16 w-full mb-4 h-20 justify-between items-center flex absolute top-0`}>
+    <header className={`   w-full mb-4 h-20 justify-between items-center flex relative  z-[999]`}>
       <div className=" w-full flex items-center h-12 ">
         <div className="flex gap-6 items-center h-full justify-center ">
         {idVersao === '1' || idVersao === ''  ? (
              <Link to={"/"} className="h-[30px]  " onClick={toggleButtonOff}><LogoIapos /></Link>
           ) : (idVersao === '2') ? (
-            <Link to={"/profnit"} className="h-[30px]  " onClick={toggleButtonOff}><Logo /></Link>
+            <Link to={"/"} className="h-[30px]  " onClick={toggleButtonOff}><Logo /></Link>
           ) : (idVersao == '4') ? (
-            <Link to={"/"} className="h-[30px]  " onClick={toggleButtonOff}><LogoSimcc /></Link>
+            <Link to={"/"} className="h-[30px]  " onClick={toggleButtonOff}><LogoWhite /></Link>
           ) : (
            ''
           )}
          
-          <div className="w-[1px] h-8 bg-gray-400"></div>
+          <div className="w-[1px] h-8 bg-white"></div>
           {idVersao === '1' || idVersao === ''  ? (
             <Link to={"https://www.senaicimatec.com.br/"} target="_blank" className="h-[32px] "><img src={cimatec} alt="" className=" whitespace-nowrap h-[30px]" /></Link>
           ) : (idVersao === "2") ? (
@@ -158,13 +159,13 @@ export function Header() {
         <div className="md:flex h-full hidden  rounded-md   ml-4">
           
        {idVersao != '1' ? 
-       ( <Link to={`/indicators`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><ChartLine size={16} className="text-gray-400" />Indicadores</Link>)
+       ( <Link to={`/indicators`} className="flex items-center h-full  px-4 text-white text-sm font-bold transition  gap-2"><ChartLine size={16} className="" />Indicadores</Link>)
        :('')}
-          <Link to={`/terms`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><ListDashes size={16} className="text-gray-400" />Dicionário</Link>
-          <Link to={`/magazine`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><BookOpen size={16} className="text-gray-400" />Revistas</Link>
-          <Link to={`/barema`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><Textbox size={16} />Barema{ pesquisadoresSelecionadosGroupBarema != '' ? (<div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>):('')}</Link>
-          <Link to={`/programas-graduacao`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><GraduationCap size={16} />Pós-gradução</Link>
-          <Link to={`/taxonomia`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><GitBranch size={16} className="rotate-180"/>Taxonomia</Link>
+          <Link to={`/terms`} className="flex items-center h-full  px-4 text-white text-sm font-bold transition  gap-2"><ListDashes size={16} className="" />Dicionário</Link>
+          <Link to={`/magazine`} className="flex items-center h-full  px-4 text-white text-sm font-bold transition  gap-2"><BookOpen size={16} className="" />Revistas</Link>
+          <Link to={`/barema`} className="flex items-center h-full  px-4 text-white text-sm font-bold transition  gap-2"><Textbox size={16} />Barema{ pesquisadoresSelecionadosGroupBarema != '' ? (<div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>):('')}</Link>
+          <Link to={`/programas-graduacao`} className="flex items-center h-full  px-4 text-white text-sm font-bold transition  gap-2"><GraduationCap size={16} />Pós-gradução</Link>
+          <Link to={`/taxonomia`} className="flex items-center h-full  px-4 text-white text-sm font-bold transition  gap-2"><GitBranch size={16} className="rotate-180"/>Taxonomia</Link>
        
         </div>
       </div>
@@ -181,7 +182,7 @@ export function Header() {
         </Link>
       )}
 
-      {loggedIn === false ? (
+{loggedIn === false ? (
         <div className="flex gap-4">
 <Link
           to={`/signup`}

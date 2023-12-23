@@ -46,10 +46,10 @@ export function Livro(props: Publicacao) {
     const ignoredWords = ['a', 'do', 'da', 'o', 'os', 'as', 'de', "e", "i", 'na', 'du', 'em']; // Adicionar outras palavras que devem ser ignoradas
 
     return (
-        <div key={props.id} id="id_perfil" className={`group bg-white  justify-between border-solid border-gray-300 border-[1px] flex p-6 rounded-xl hover:shadow-md transition  ${isOn ? "items-center justify-center flex" : "flex-col items-baseline"}`}>
-            <div className="flex justify-between flex-col h-full">
-                <div>
-                <div className="flex">
+        <div key={props.id} id="id_perfil" className={`group bg-white  justify-between border-solid border-gray-300 border-[1px] flex  rounded-xl hover:shadow-md transition  ${isOn ? "items-center justify-center flex" : "flex-col items-baseline"}`}>
+            <div className="flex justify-between flex-col h-full w-full ">
+                <div className="p-6">
+                <div className="flex ">
                     <div className="flex flex-col justify-center">
                         <div id="mudarCorDiv" className={` h-10 w-10 border-gray-300 border rounded-md mr-4 whitespace-nowrap flex items-center justify-center`}>
                             <Book size={20} className="text-gray-400 whitespace-nowrap  w-10" />
@@ -102,12 +102,12 @@ export function Livro(props: Publicacao) {
                 </div>
             </div>
 
-            <div className={`flex  flex-col flex-nowrap bottom-0 relative  ${isOn ? "ml-6" : ""}`}>
+            <div className={`flex  flex-col bg-gray-50 w-full p-6 flex-nowrap bottom-0 relative  ${isOn ? "ml-6" : ""}`}>
 
             
 
                 <div className="flex  gap-4 items-center justify-between relative bottom-0S flex-wrap">
-                    <div className="flex gap-3 mt-8">
+                    <div className="flex gap-3 ">
                         <div className=" flex gap-3 flex-wrap">
                             
 

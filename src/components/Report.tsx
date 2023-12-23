@@ -31,10 +31,10 @@ export function Report(props: Publicacao) {
     const { isOn, setIsOn } = useContext(UserContext)
 
     return (
-        <div key={props.id} id="id_perfil" className={`group bg-white  justify-between border-solid border-gray-300 border-[1px] flex p-6 rounded-md hover:shadow-md transition  ${isOn ? "items-center justify-center flex" : "flex-col items-baseline"}`}>
-            <div>
+        <div key={props.id} id="id_perfil" className={`group bg-white  justify-between border-solid border-gray-300 border-[1px] flex  rounded-xl hover:shadow-md transition  ${isOn ? "items-center justify-center flex" : "flex-col items-baseline"}`}>
+            <div className="p-6">
                 <div className="flex">
-                    <div className="flex flex-col justify-center">
+                    <div className="flex flex-col ">
                         <div id="mudarCorDiv" className={` h-10 w-10 rounded-md mr-4 border-[1px] border-gray-300 whitespace-nowrap flex items-center justify-center `}>
                             <NotePencil size={18} className="text-gray-400 whitespace-nowrap  w-10" />
 
@@ -57,18 +57,19 @@ export function Report(props: Publicacao) {
 
             </div>
 
-            <div className={` py-2  my-4   text-gray-400 flex rounded-md text-sm font-medium gap-2 items-center ${isOn ? "mt-0 pt-0" : ""}`}>
-             {props.project_name}
+            <div className={`px-6 py-2  my-4   text-gray-400 flex rounded-md text-sm font-medium gap-2 items-center ${isOn ? "mt-0 pt-0" : ""}`}>
+             {props.project_name.toUpperCase()}
             </div>
 
 
-            <div className={`flex  flex-col whitespace-nowrap ${isOn ? "ml-6" : ""}`}>
+            <div className={`flex bg-gray-50 w-full p-6 flex-col whitespace-nowrap ${isOn ? "ml-6" : ""}`}>
 
 
 
 
                 <div className="flex  gap-4 items-center justify-between relative bottom-0S">
                     <div className="flex gap-3">
+     
                         <div className=" flex gap-3 flex-wrap">
                            
                             <div className="qualis border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium gap-2 items-center"><CalendarBlank size={16} className="text-gray-400" />  {props.year}</div>

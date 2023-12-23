@@ -68,7 +68,7 @@ function myWrapperFunction() {
     useEffect(() => {
       const timerId = setTimeout(() => {
         setDebouncedPesquisaInput(pesquisaInput);
-      }, 500); // Ajuste o intervalo conforme necessário (500ms neste exemplo)
+      }, 100); // Ajuste o intervalo conforme necessário (500ms neste exemplo)
 
       return () => {
         clearTimeout(timerId);
@@ -648,7 +648,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
         className="checkboxLabel group list-none inline-flex mr-4 mb-4 group overflow-hidden"
         onMouseDown={(e) => e.preventDefault()}
       >
-        <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
+        <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-blue-100 border-blue-400 hover:text-blue-400 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
           <span className="text-center block">{resultado.name.replace(/%20/g, ' ')}</span>
           <input
             type="checkbox"
@@ -666,7 +666,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
     const valoresPesquisadoresSelecionados = pesquisadoresSelecionados.join(';');
 
     const valoresPesquisadoresSelecionadosJSX = pesquisadoresSelecionados.map((valor, index) => (
-      <li key={index} className='whitespace-nowrap gap-2 bg-[#FEE9E9] border-red-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>{valor.replace(/%20/g, ' ')}
+      <li key={index} className='whitespace-nowrap gap-2 bg-[#FEE9E9] border-red-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold'>{valor.replace(/%20/g, ' ')}
         <button onClick={() => handleRemoverSelecionadoPesquisadores(index)}><X size={16} className="text-gray-400 hover:text-red-400" /></button>
       </li>
     ));
@@ -700,7 +700,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
         className="checkboxLabel group list-none inline-flex mr-4 mb-4 group overflow-hidden"
         onMouseDown={(e) => e.preventDefault()}
       >
-        <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
+        <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-blue-100 border-blue-400 hover:text-blue-400 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
           <span className="text-center block">{resultado.term.replace(/%20/g, ' ')}</span>
           <input
             type="checkbox"
@@ -718,7 +718,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
     const valoresLivrosSelecionados = livrosSelecionados.join(';');
 
     const valoresLivrosSelecionadosJSX = livrosSelecionados.map((valor, index) => (
-      <li key={index} className='whitespace-nowrap gap-2 bg-[#FFF5FB] border-pink-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>{valor.replace(/%20/g, ' ')}
+      <li key={index} className='whitespace-nowrap gap-2 bg-[#FFF5FB] border-pink-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold'>{valor.replace(/%20/g, ' ')}
         <button onClick={() => handleRemoverSelecionadoLivros(index)}><X size={16} className="text-gray-400 hover:text-pink-400" /></button>
       </li>
     ));
@@ -765,7 +765,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
         className="checkboxLabel group list-none inline-flex mr-4 mb-4 group overflow-hidden"
         onMouseDown={(e) => e.preventDefault()}
       >
-        <label className="group-checked:bg-blue-400 border-[1px] cursor-pointer bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
+        <label className="group-checked:bg-blue-400 border-[1px] cursor-pointer bg-blue-100 border-blue-400 hover:text-blue-400 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
           <span className="text-center block">{resultado.area_specialty.replace(/%20/g, ' ')} | {resultado.area_expertise.replace(/%20/g, ' ')}</span>
           <input
             type="checkbox"
@@ -787,7 +787,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
     const valoresAreasSelecionadosJSX = areasSelecionados.map((valor, index) => (
       <li
         key={index}
-        className="whitespace-nowrap gap-2 bg-[#F4FAEC] border-green-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold"
+        className="whitespace-nowrap gap-2 bg-[#F4FAEC] border-green-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold"
       >
         {valor}
         <button onClick={() => handleRemoverSelecionadoAreas(index)}>
@@ -826,7 +826,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
         className="checkboxLabel group list-none inline-flex mr-4 mb-4 group overflow-hidden"
         onMouseDown={(e) => e.preventDefault()}
       >
-        <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
+        <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-blue-100 border-blue-400 hover:text-blue-400 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
           <span className="text-center block">{resultado.term.replace(/;/g, ' ')}</span>
           <input
             type="checkbox"
@@ -844,7 +844,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
     let valoresSelecionados = itensSelecionados.join(';');
 
     const valoresSelecionadosJSX = itensSelecionados.map((valor, index) => (
-      <li key={index} className='whitespace-nowrap gap-2 bg-blue-100 border-blue-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>{valor.replace(/;/g, ' ')}
+      <li key={index} className='whitespace-nowrap gap-2 bg-blue-100 border-blue-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold'>{valor.replace(/;/g, ' ')}
         <button onClick={() => handleRemoverSelecionado(index)}><X size={16} className="text-gray-400 hover:text-blue-400" /></button>
       </li>
     ));
@@ -877,7 +877,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
         className="checkboxLabel group list-none inline-flex mr-4 mb-4 group overflow-hidden"
         onMouseDown={(e) => e.preventDefault()}
       >
-        <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
+        <label className="group-checked:bg-blue-400 cursor-pointer border-[1px]  bg-blue-100 border-blue-400 hover:text-blue-400 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
           <span className="text-center block">{resultado.term.replace(/;/g, ' ')}</span>
           <input
             type="checkbox"
@@ -894,7 +894,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
     const valoresResumoSelecionados = itensSelecionadosResumo.join(';');
 
     const valoresSelecionadosResumoJSX = itensSelecionadosResumo.map((valor, index) => (
-      <li key={index} className='whitespace-nowrap gap-2 bg-[#FFFAE6] border-yellow-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>{valor.replace(/;/g, ' ')}
+      <li key={index} className='whitespace-nowrap gap-2 bg-[#FFFAE6] border-yellow-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold'>{valor.replace(/;/g, ' ')}
         <button onClick={() => handleRemoverSelecionadoResumo(index)}><X size={16} className="text-gray-400 hover:text-yellow-400" /></button>
       </li>
     ));
@@ -927,7 +927,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
         className="checkboxLabel group list-none inline-flex mr-4 mb-4 group overflow-hidden"
         onMouseDown={(e) => e.preventDefault()}
       >
-        <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
+        <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-blue-100 border-blue-400 hover:text-blue-400 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
           <span className="text-center block">{resultado.term.replace(/;/g, ' ')}</span>
           <input
             type="checkbox"
@@ -944,7 +944,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
     const valoresEventoSelecionados = itensSelecionadosEvento.join(';');
 
     const valoresSelecionadosEventoJSX = itensSelecionadosEvento.map((valor, index) => (
-      <li key={index} className='whitespace-nowrap gap-2 bg-[#FFF2E6] border-orange-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>{valor.replace(/;/g, ' ')}
+      <li key={index} className='whitespace-nowrap gap-2 bg-[#FFF2E6] border-orange-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold'>{valor.replace(/;/g, ' ')}
         <button onClick={() => handleRemoverSelecionadoEvento(index)}><X size={16} className="text-gray-400 hover:text-orange-400" /></button>
       </li>
     ));
@@ -977,7 +977,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
         className="checkboxLabel group list-none inline-flex mr-4 mb-4 group overflow-hidden"
         onMouseDown={(e) => e.preventDefault()}
       >
-        <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
+        <label className="group-checked:bg-blue-400 cursor-pointer border-[1px]   flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold bg-blue-100 border-blue-400 hover:text-blue-400 hover:border-blue-400 hover:bg-blue-100">
           <span className="text-center block">{resultado.term.replace(/;/g, ' ')}</span>
           <input
             type="checkbox"
@@ -996,7 +996,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
     const valoresPatenteSelecionados = itensSelecionadosPatente.join(';');
 
     const valoresSelecionadosPatenteJSX = itensSelecionadosPatente.map((valor, index) => (
-      <li key={index} className='whitespace-nowrap gap-2 bg-[#E9F4F4] border-cyan-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>{valor.replace(/;/g, ' ')}
+      <li key={index} className='whitespace-nowrap gap-2 bg-[#E9F4F4] border-cyan-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold'>{valor.replace(/;/g, ' ')}
         <button onClick={() => handleRemoverSelecionadoPatente(index)}><X size={16} className="text-gray-400 hover:text-cyan-400" /></button>
       </li>
     ));
@@ -1171,7 +1171,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
         className="checkboxLabel group list-none inline-flex group overflow-hidden"
         onMouseDown={(e) => e.preventDefault()}
       >
-        <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
+        <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-blue-100 border-blue-400 hover:text-blue-400 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
           <span className="text-center block">{resultado.term.replace(/;/g, ' ')}</span>
           <input
             type="checkbox"
@@ -1213,7 +1213,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
           <div className='flex flex-wrap md:flex-nowrap top-6 w-full'>
 
             <div className='flex w-full flex-col'>
-              <div className={`flex bg-white  items-center h-14 group w-full  text-base font-medium  justify-center transition border-[1px] border-gray-300 ${botaoTermosClicado ? 'hover:border-blue-400' : ''} ${botaoLivrosCapitulosClicado ? 'hover:border-pink-400' : ''} ${botaoEventosClicado ? 'hover:border-orange-400' : ''} ${botaoResumoClicado ? 'hover:border-yellow-400' : ''} ${botaoAreasClicado ? 'hover:border-green-400' : ''} ${botaoPesquisadoresClicado ? 'hover:border-red-400' : ''} ${botaoPatentesClicado ? 'group-hover:border-cyan-400' : ''} ${isOpen && pesquisaInput.length >= 3 ? 'rounded-tl-2xl' : 'rounded-l-2xl'}`}>
+              <div className={`flex  ${isOpen && pesquisaInput.length >= 3 ? 'bg-[#F9F9F9]' : 'bg-white'} items-center h-14 group w-full  text-base font-medium  justify-center transition border-[1px] border-gray-300 ${botaoTermosClicado ? 'hover:border-blue-400' : ''} ${botaoLivrosCapitulosClicado ? 'hover:border-pink-400' : ''} ${botaoEventosClicado ? 'hover:border-orange-400' : ''} ${botaoResumoClicado ? 'hover:border-yellow-400' : ''} ${botaoAreasClicado ? 'hover:border-green-400' : ''} ${botaoPesquisadoresClicado ? 'hover:border-red-400' : ''} ${botaoPatentesClicado ? 'group-hover:border-cyan-400' : ''} ${isOpen && pesquisaInput.length >= 3 ? 'rounded-tl-2xl' : 'rounded-l-2xl'}`}>
                 <MagnifyingGlass size={20} className={`text-gray-400 min-w-[52px] ${botaoTermosClicado ? 'group-hover:text-blue-400' : ''} ${botaoResumoClicado ? 'group-hover:text-yellow-400' : ''} ${botaoLivrosCapitulosClicado ? 'group-hover:text-pink-400' : ''} ${botaoEventosClicado ? 'group-hover:text-orange-400' : ''} ${botaoAreasClicado ? 'group-hover:text-green-400' : ''} ${botaoPesquisadoresClicado ? 'group-hover:text-red-400' : ''} ${botaoPatentesClicado ? 'group-hover:text-cyan-400' : ''}`} />
                 <div className='flex gap-2 mx-2'>{valoresSelecionadosJSX}{valoresSelecionadosEventoJSX}{valoresPesquisadoresSelecionadosJSX}{valoresSelecionadosPatenteJSX}{valoresAreasSelecionadosJSX}{valoresLivrosSelecionadosJSX}{valoresSelecionadosResumoJSX}</div>
                 <input
@@ -1227,7 +1227,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
                   placeholder={
                     `${botaoResumoClicado ? 'Pesquise por uma ou mais palavras no resumo do pesquisador (Ex: Robótica, educação, indústria)' : ''} ${botaoTermosClicado ? 'Pesquise um ou mais termos (Ex: Robótica, educação, indústria)' : ''} ${botaoAreasClicado ? 'Pesquise uma ou mais áreas de especialidade (Ex: Astronomia, Ciência de dados)' : ''} ${botaoPesquisadoresClicado ? 'Pesquise o nome de um ou mais pesquisador(es)' : ''} ${botaoPatentesClicado ? 'Pesquise uma ou mais palavras nas patentes do pesquisador (Ex: energia, modelo, sistema)' : ''}`
                   }
-                  id="" className="flex flex-1 h-full outline-none" />
+                  id="" className={`${isOpen && pesquisaInput.length >= 3 ? 'bg-[#F9F9F9]' : 'bg-white'} flex flex-1 h-full outline-none`} />
 
                   {valorDigitadoPesquisaDireta != `` || valoresSelecionadosExport != `` ? (
                     <div onClick={() => limparPesquisa()} className={`outline-none cursor-pointer text-sm rounded-xl text-gray-400 flex items-center border-[1px] justify-center border-white gap-2  font-semibold transition hover:bg-gray-100 w-[38px] whitespace-nowrap h-[38px] mr-2`}>
@@ -1239,15 +1239,15 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
             </div>
 
             <Tabs>
-              <TabList className={`bg-white  p-2 flex gap-2  border-[1px] border-gray-300 border-l-0
+              <TabList className={` ${isOpen && pesquisaInput.length >= 3 ? 'bg-[#F9F9F9]' : 'bg-white'}  p-2 flex gap-2  border-[1px] border-gray-300 border-l-0
             ${isOpen && pesquisaInput.length >= 3 ? 'rounded-tr-2xl' : 'rounded-r-2xl'}`}>
 
-                <Tab selected={selectedTab === 0} className={`outline-none cursor-pointer text-sm rounded-xl text-gray-400 flex items-center border-[1px] justify-center border-white gap-2  font-semibold transition ${botaoTermosClicado ? "activeTermos px-4 py-2" : ('hover:bg-gray-100 w-[38px]')}`} onClick={handleClickTermos} name="buttontermos">
+                <Tab selected={selectedTab === 0} className={`outline-none cursor-pointer text-sm rounded-xl text-gray-400 flex items-center  justify-center  gap-2  font-semibold transition ${botaoTermosClicado ? "activeTermos px-4 py-2" : ('hover:bg-gray-100 w-[38px]')}`} onClick={handleClickTermos} name="buttontermos">
                   <Quotes size={16} className="" />
                   {selectedTab === 0 && botaoTermosClicado && <span>Termo</span>}
                 </Tab>
 
-                <Tab selected={selectedTab === 1} className={`outline-none cursor-pointer text-sm rounded-xl text-gray-400 flex items-center border-[1px] justify-center border-white gap-2  font-semibold transition ${botaoResumoClicado ? "activeResumo px-4 py-2" : ('hover:bg-gray-100 w-[38px]')}`} onClick={handleClickResumo} name="buttonresumo">
+                <Tab selected={selectedTab === 1} className={`outline-none cursor-pointer text-sm rounded-xl text-gray-400 flex items-center  justify-center  gap-2  font-semibold transition ${botaoResumoClicado ? "activeResumo px-4 py-2" : ('hover:bg-gray-100 w-[38px]')}`} onClick={handleClickResumo} name="buttonresumo">
                   <TextAlignLeft size={16} className="" />
                   {selectedTab === 1 && botaoResumoClicado && <span>Resumo</span>}
                 </Tab>
@@ -1296,7 +1296,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
             <div></div>
           ) : (
             <div id='teste'
-              className={`rounded-b-lg z-[9999999999] flex-col  relative p-6 bg-white border-[1px] border-gray-300 border-t-0 ${isOpen ? 'block' : 'hidden'
+              className={`rounded-b-2xl  bg-[#f9f9f9] z-[9999999999] flex-col  relative p-6  border-[1px] border-gray-300 border-t-0 ${isOpen ? 'block' : 'hidden'
                 }`}
 
 

@@ -247,7 +247,7 @@ console.log(urlQualis)
   
     <div className="md:px-16 px-6 pt-12 w-full">
       {VisaoPrograma.map(props => {
-        
+        const totalProducao = props.article + props.book + props.book_chapter 
         return(
           <div className=" ">
         <div className="flex gap-4 items-center w-full">
@@ -258,18 +258,23 @@ console.log(urlQualis)
         <p className="text-sm text-gray-400 mt-2">Informações referentes a produção dos últimos 4 anos</p>
         </div>
 
-        <div className="h-32 w-32 flex items-center">
+        <div className=" h-24 flex items-center justify-center  gap-4">
+        <div className="h-24 w-24 flex items-center  ">
         <CircularProgressbar
-        value={percentage}
-        text={`${percentage}%`}
+        value={Number(((props.article / totalProducao)* 100).toFixed(2))}
+        text={`${((props.article / totalProducao)* 100).toFixed(2)}%`}
         styles={buildStyles({
-          pathColor: `rgba(23, 61, 255, ${percentage / 100})`,
+          pathColor: `rgba(23, 61, 255, ${((props.article / totalProducao) * 100).toFixed(2)})`,
           textColor: '#173DFF',
           trailColor: '#d6d6d6',
           backgroundColor: '#173DFF',
+  
         })}
         className="text-ubuntu"
       />
+        </div>
+
+      <p className="text-sm text-gray-400  flex-1">Porcentagem de artigo nas prooduções </p>
         </div>
 
         <div className="grid grid-cols-4 gap-4 w-full">
@@ -298,11 +303,11 @@ console.log(urlQualis)
 
         <div className="flex gap-4 w-full py-8 justify-between items-center min-w-full">
             <div className="flex gap-4">
-            <div className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-md font-medium w-fit bg-white items-center gap-2"><UserCircle size={16} className="" />Total de docentes: {props.researcher != "0" ? (props.researcher): (0)}</div>
+            <div className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-xl text-md font-medium w-fit bg-white items-center gap-2"><UserCircle size={16} className="" />Total de docentes: {props.researcher != "0" ? (props.researcher): (0)}</div>
 
-            <div className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-md font-medium w-fit bg-white items-center gap-2"><Books size={16} className="" />Total de capítulos de livros: {props.book_chapter != 0 ? (props.book_chapter): (0)}</div>
+            <div className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-xl text-md font-medium w-fit bg-white items-center gap-2"><Books size={16} className="" />Total de capítulos de livros: {props.book_chapter != 0 ? (props.book_chapter): (0)}</div>
 
-            <div className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-md font-medium w-fit bg-white items-center gap-2"><StripeLogo size={16} className="" />Total de Marcas: {props.brand != 0 ? (props.brand): (0)}</div>
+            <div className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-xl text-md font-medium w-fit bg-white items-center gap-2"><StripeLogo size={16} className="" />Total de Marcas: {props.brand != 0 ? (props.brand): (0)}</div>
             </div>
 
             <div className="flex gap-4">

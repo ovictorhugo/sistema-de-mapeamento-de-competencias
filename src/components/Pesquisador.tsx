@@ -54,7 +54,7 @@ export function Pesquisador(props: PesquisadorProps) {
   const { valoresSelecionadosPopUp, setValoresSelecionadosPopUp } = useContext(UserContext)
   console.log("valoresSelecionadosPopUp" + valoresSelecionadosPopUp)
 
-  let urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosPopUp}&researcher_id=${props.id}&type=ARTICLE&qualis=`;
+  let urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosPopUp}&researcher_id=${props.id}&type=ARTICLE&qualis=&year=1900`;
 
 
 
@@ -105,7 +105,7 @@ export function Pesquisador(props: PesquisadorProps) {
       const blob = new Blob([csvData], { type: 'text/csv;charset=windows-1252;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
-      link.download = `${props.name}.csv`;
+      link.download = `${props.id}.csv`;
       link.href = url;
       link.click();
     } catch (error) {
@@ -155,6 +155,49 @@ export function Pesquisador(props: PesquisadorProps) {
     // Define um valor padrão caso nenhuma variável corresponda
     linkTo = `/researcher/${idVersao}/${props.id}`;
   }
+
+
+  // BTN ADC
+
+  const [itensSelecionados, setItensSelecionados] = useState<string[]>([]);
+
+
+  const handleCheckboxChange = (user: { name: string }) => {
+  
+    if (itensSelecionados.includes(user.name)) {
+      setItensSelecionados(prevSelecionados =>
+        prevSelecionados.filter(selectedItem => selectedItem !== user.name)
+      );
+    } else {
+      setItensSelecionados(prevSelecionados => [...prevSelecionados, user.name]);
+    }
+
+  };
+
+  useEffect(() => {
+    const itensSeparados = pesquisadoresSelecionadosGroupBarema.split(';');
+
+    if (itensSelecionados.includes(props.name)) {
+      // Adiciona props.name ao estado se não estiver presente
+      if (!itensSeparados.includes(props.name)) {
+        setPesquisadoresSelecionadosGroupBarema([...itensSeparados, props.name].join(';'));
+      }
+    } else {
+      // Remove props.name do estado se estiver presente
+      const novosItens = itensSeparados.filter(item => item !== props.name);
+      setPesquisadoresSelecionadosGroupBarema(novosItens.join(';'));
+    }
+    
+   
+  }, [itensSelecionados]);
+
+
+
+  
+console.log(pesquisadoresSelecionadosGroupBarema)
+ 
+
+localStorage.setItem('pesquisadoresSelecionadosGroupBarema', JSON.stringify(pesquisadoresSelecionadosGroupBarema));
 
   return (
 
@@ -234,11 +277,21 @@ export function Pesquisador(props: PesquisadorProps) {
               {(botaoTermosClicado && props.among != 0)  || (botaoLivrosCapitulosClicado && props.among != null) || (botaoPatentesClicado && props.among != null) || (botaoEventosClicado && props.among != null) ? (
                 <div className="text-blue-400 flex text-sm font-bold gap-3">
                   {props.among} ocorrências
-                  <p className="text-sm  text-blue-400">|</p>
+                 
                 </div>
               ) : (
-                <head></head>
+                ``
               )}
+
+{(botaoTermosClicado && props.among != 0)  || (botaoLivrosCapitulosClicado && props.among != null) || (botaoPatentesClicado && props.among != null)  ? (
+              
+                  <p className="text-sm  text-blue-400">|</p>
+               
+              ) : (
+                ``
+              )}
+
+              
               <div className=" text-blue-400 text-sm font-bold">{botaoTermosClicado ? (`${articlesNum} artigos`): botaoPatentesClicado ? (`${props.patent} patentes`) : botaoLivrosCapitulosClicado ? (`${Number(props.book_chapters) + Number(props.book)} livros e capitulos`) : botaoEventosClicado ? (``) : (``)}</div>
 
             </div>
@@ -315,10 +368,28 @@ export function Pesquisador(props: PesquisadorProps) {
                 <FileCsv size={16} className="text-gray-500" />
               </div>
 
-              <p className="text-[12px] text-white"> CSV</p>
+              <p className="text-[12px] text-white"> CSV publicações</p>
             </div>
 
-            
+            <div className="mb-6 flex flex-col justify-center items-center">
+        <label  className={`mb-2 h-12 w-12 rounded-2xl ${pesquisadoresSelecionadosGroupBarema.includes(props.name) ? 'bg-red-400 hover:bg-red-500 text-white' : 'text-gray-500 bg-white hover:bg-gray-50'} items-center justify-center flex hover:bg-gray-100 cursor-pointer transition-all`}>
+        {pesquisadoresSelecionadosGroupBarema.includes(props.name) ? (
+            <X size={16} className="" />
+          ) : (
+            <Plus size={16} className="" />
+          )}
+
+<input
+            type="checkbox"
+            className="absolute hidden"
+            name={props.name}
+            checked={itensSelecionados.includes(props.name)}
+            onChange={() => handleCheckboxChange(props)}
+          />
+        </label>
+
+        <p className="text-[12px] text-white"> {pesquisadoresSelecionadosGroupBarema.includes(props.name) ? (`Remover`): (`Adicionar`)}</p>
+      </div>
 
             <div className="mb-6 flex flex-col justify-center items-center">
               <Link to={linkTo} target="_blank" className="mb-2 h-12 w-12 rounded-2xl bg-blue-400 items-center justify-center flex hover:bg-blue-500 cursor-pointer transition-all">

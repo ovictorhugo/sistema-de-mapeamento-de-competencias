@@ -314,33 +314,16 @@ export function Homepage(props: Props) {
   ;
   //
 
-  useEffect(() => {
-    const fetchData = async () => {
-
-      try {
-        const response = await fetch(urlPalavrasChaves, {
-          mode: 'cors',
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET',
-            'Access-Control-Allow-Headers': 'Content-Type',
-            'Access-Control-Max-Age': '3600',
-            'Content-Type': 'text/plain'
-          }
-        });
-        const data = await response.json();
-        if (data) {
-          setWords(data);
-        }
-      } catch (err) {
-        console.log(err);
-      } finally {
-      }
-    };
-    fetchData();
-  }, [urlPalavrasChaves]);
-
   const [chartOptions, setChartOptions] = useState({});
+
+  const colorStops = idVersao === '2' ? [
+    [0, "#99A7FF"],
+    [1, "#ffffff"],
+    
+  ] : [
+    [0, "#EAB7BA"],
+    [1, "#ffffff"],
+  ];
 
   useEffect(() => {
     // ...
@@ -348,6 +331,7 @@ export function Homepage(props: Props) {
       const categories = words.map((d) => d.term);
       const amongValues = words.map((d) => Number(d.among));
       const sumAmongValues = amongValues.reduce((acc, cur) => acc + cur, 0);
+
 
       setChartOptions({
         chart: {
@@ -397,10 +381,7 @@ export function Homepage(props: Props) {
                 x2: 0,
                 y2: 1,
               },
-              stops: [
-                [0, "#EAB7BA"],   // Cor inicial (transparente)
-                [1, "#ffffff"],       // Cor final (#005399)
-              ],
+              stops: colorStops 
             },
             lineWidth: 0,
           },

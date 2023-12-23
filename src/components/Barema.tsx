@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import { BookOpen, CaretDown, CaretUp, ChartLine, Divide, DownloadSimple, FileCsv, GraduationCap, ListDashes, MagnifyingGlass, Minus, Plus, Textbox, Trash, UserPlus, X } from "phosphor-react";
+import { BookOpen,  Buildings,  CaretDown, CaretUp, ChartBar, ChartLine, CheckCircle, Divide, DownloadSimple, FileCsv, GraduationCap, ListDashes, MagnifyingGlass, Minus, Plus, Textbox, Trash, Upload, UploadSimple, UserList, UserPlus, X } from "phosphor-react";
 
 import cimatec from '../assets/logo_profnit.png';
 import { LogoWhite } from "./LogoWhite";
@@ -12,10 +12,15 @@ import logo_4 from '../assets/logo_4.png';
 import Papa from 'papaparse';
 import Cookies from 'js-cookie';
 
+import bg_popup from '../assets/bg_popup.png';
+
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
 import woman from '../assets/woman_ilus.png';
+import { HeaderBarema } from "./HeaderBarema";
+import { PopUpWrapper } from "./PopUpWrapper";
+import { getFirestore, doc, getDoc, collection, addDoc } from 'firebase/firestore';
 
 type Research = {
   article_A1: string,
@@ -50,7 +55,7 @@ type Research = {
   researcher: string,
   software: string,
   work_in_event: string,
-
+  university: string
   name: string
 
   totalArticlesPoints: number
@@ -77,6 +82,21 @@ type Research = {
   TotalBarema: string
   TotalBaremaFormated: string
 
+  among: number,
+    articles: number,
+    
+    book_chapters: number,
+ 
+    lattes_id: string,
+    area: string,
+  
+    abstract: string
+    city: string,
+    orcid: string,
+    image: string,
+  
+    lattes_update: Date,
+
   }
 
   interface Pesquisadores {
@@ -92,49 +112,61 @@ type Research = {
     pontos: string
     pontuacao_maxima: string
     'categoria pai': string
+
   }
+
 
 
 export function Barema() {
 
   //variaveis
-
+  const { pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema } = useContext(UserContext);
   const { idVersao, setIdVersao } = useContext(UserContext);
   const { urlGeral, setUrlGeral } = useContext(UserContext);
+  const [researcherSelecionados, setResearcherSelecionados] = useState<Research[]>([]); // Define o estado vazio no início
 
-  const urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=5`;
+  let urlTermPesquisadoresSelecionados = `${urlGeral}/researcherName?name=${pesquisadoresSelecionadosGroupBarema}&graduate_program_id=`
+  
+  if(pesquisadoresSelecionadosGroupBarema == "") {
+    urlTermPesquisadoresSelecionados = `${urlGeral}/researcherName?name=null&graduate_program_id=`
+  }
 
+  const [jsonData, setJsonData] = useState<any[]>([]);
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
-        const response = await fetch(urlGraduateProgram, {
-          mode: "cors",
+        const response = await fetch(urlTermPesquisadoresSelecionados, {
+          mode: 'cors',
           headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET",
-            "Access-Control-Allow-Headers": "Content-Type",
-            "Access-Control-Max-Age": "3600",
-            "Content-Type": "text/plain",
-          },
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Max-Age': '3600',
+            'Content-Type': 'text/plain'
+          }
         });
         const data = await response.json();
         if (data) {
-         
+          setResearcherSelecionados(data);
+          setJsonData(data);
         }
       } catch (err) {
         console.log(err);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchData();
-  }, [urlGraduateProgram]);
+  }, [pesquisadoresSelecionadosGroupBarema]);
 
     const [researcher, setResearcher] = useState<Research[]>([]); // Define o estado vazio no início
   const [isLoading, setIsLoading] = useState(false);
 
  
-  const { pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema } = useContext(UserContext);
+  
   const { idGraduateProgram, setIdGraduateProgram } = useContext(UserContext)
-
+  const {loggedIn, setLoggedIn} = useContext(UserContext);
   const [pesquisaInput, setPesquisaInput] = useState('');
   const [categorySums, setCategorySums] = useState({});
 
@@ -163,6 +195,7 @@ export function Barema() {
   }
 
   const [ano, setAno] = useState(4)
+  const [anoOri, setAnoOri] = useState(4)
   const anoAtual = new Date().getFullYear();
   const anoFiltro = anoAtual - ano;
 
@@ -268,7 +301,15 @@ export function Barema() {
 
   
   
-
+  useEffect(() => {
+    const storedPesquisadoresSelecionadosGroupBarema = localStorage.getItem('pesquisadoresSelecionadosGroupBarema');
+  
+    if (storedPesquisadoresSelecionadosGroupBarema) {
+      // If user information is found in local storage, set the user and mark as logged in
+      setPesquisadoresSelecionadosGroupBarema(JSON.parse(storedPesquisadoresSelecionadosGroupBarema));
+     
+    }
+  }, []);
 
  
 
@@ -584,6 +625,7 @@ export function Barema() {
   sortedResearcher.sort((a, b) => Number(b.TotalBarema) - Number(a.TotalBarema));
   
 
+  
   //baixar dados
 
   const generateCSVContent = () => {
@@ -700,7 +742,7 @@ export function Barema() {
   }
 
   const [itensSelecionados, setItensSelecionados] = useState<string[]>([]);
-  console.log(itensSelecionados)
+
   type CheckboxStates = {
     [index: number]: boolean;
   };
@@ -728,6 +770,11 @@ export function Barema() {
     });
   };
 
+  const [qualisSelecionados, setQualisSelecionados ] = useState(``)
+  useEffect(() => {
+  setQualisSelecionados(String(itensSelecionados.join(';')))
+}, [itensSelecionados]);
+
   const checkboxQualis = qualis.map((quali) => {
     const isChecked = checkboxStates[quali.id];
     return (
@@ -737,7 +784,7 @@ export function Barema() {
         onMouseDown={(e) => e.preventDefault()}
       >
         <label
-          className={`group-checked:bg-blue-400 cursor-pointer border-[1px] gap-3 bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 hover:bg-blue-100 ${isChecked ? 'activeTab' : ''}`}
+          className={`group-checked:bg-blue-400 cursor-pointer border-[1px] gap-3 bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold hover:border-blue-400 hover:bg-blue-100 ${isChecked ? 'activeTab' : ''}`}
         >
           <div className={`rounded-sm h-4 w-4 ${qualisColor[quali.itens]}`}></div>
           <span className="text-center block">{quali.itens}</span>
@@ -780,7 +827,7 @@ const options: Highcharts.Options = {
   series: [
     {
       name: 'Pontuação Total',
-      data: sortedResearcher.map((researcher: any) => researcher.TotalBarema),
+      data: sortedResearcher.map((researcher: any) => Number(researcher.TotalBarema)),
       type: 'column', 
       color: '#173DFF'
     },
@@ -811,14 +858,76 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
 
 
 
+  //popup
+
+  const { user, setUser } = useContext(UserContext);
+  const userId = user && user.uid;
+
+  const [name, setName] = useState('');
+
+  const [popUpProgram, setPopUpProgram] = useState(false);
+  const [popUpSuccess, setPopUpSuccess] = useState(false);
+
+  const handleSubmit = async () => {
+    try {
+      // Aqui você pode adicionar a lógica para tratar os tipos de programa selecionados
+      // programTypes é um array com os tipos selecionados
   
+      // Crie um objeto com os dados do formulário
+      const formData = {
+        name,
+        data,
+        ano,
+        anoOri,
+        qualisSelecionados,
+        pesquisadoresSelecionadosGroupBarema,
+        userId,
+        researcher
+        
+      };
+  
+      // Submeta os dados para o Firestore
+      const db = getFirestore();
+      const programRef = collection(db, 'baremas');
+      await addDoc(programRef, formData);
+  
+      // Limpe os campos do formulário após a submissão
+      setName('');
+      setAno(4)
+      setAnoOri(4)
+  
+      // Feche o pop-up ou faça qualquer outra ação necessária
+      setPopUpProgram(false);
+
+      setTimeout(() => {
+        setPopUpSuccess(true);
+
+        // Hide the popup after 5 seconds
+        setTimeout(() => {
+          setPopUpSuccess(false);
+        }, 5000);
+      }, 0);
+    } catch (error) {
+      console.error('Erro ao enviar os dados:', error);
+    }
+  };
+
+  const handleClickAdicionarBtn = () => {
+  
+        setPopUpProgram(true)
+    
+
+  };
+
 
     return  (
         <div className=" min-h-screen ">
 
     <div className="absolute  w-full top-0 left-0 ">
-                <div className="w-full  h-[70vh] bg-blue-400 ">
-                  
+                <div className="w-full  h-[70vh] bg-blue-400   " >
+                  <div className="w-full h-full bg-cover opacity-20 " style={{ backgroundImage: `url(${bg_popup})` }}>
+
+                  </div>
                 </div>
             </div>
 
@@ -840,10 +949,10 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
                 <div className="gap-4 flex">
                 <label htmlFor="fileInput" onChange={handleFileUpload} className="rounded-xl cursor-pointer px-4 h-12 border-white border flex items-center justify-center gap-3 hover:bg-white transition-all text-white hover:text-blue-400">
     <input onChange={handleFileUpload} id="fileInput" type="file" accept=".csv"  hidden />
-    <DownloadSimple size={16} className="" />
+    <UploadSimple size={16} className="" />
     Importar arquivo .csv com barema
   </label>
-                <div onClick={() => apagarGroup()}  className="rounded-xl cursor-pointer w-12 h-12  border-white border flex items-center justify-center hover:bg-white transition-all text-white hover:text-blue-400"><FileCsv size={16} className="" /></div></div>
+                <a href="/public/modelo_barema.csv" download className="rounded-xl cursor-pointer  h-12 px-4 border-white border flex items-center justify-center hover:bg-white transition-all gap-3 text-white hover:text-blue-400"><FileCsv size={16} className="" />Download modelo csv</a></div>
                 </div>
 
                 <div className="flex flex-col gap-8">
@@ -866,28 +975,7 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
             </div>
             ):('')}
 
-            <header className={` z-[9999999999] w-full mb-4 h-20 justify-between items-center flex `}>
-                <div className=" w-full flex items-center h-12  z-[9999999999] ">
-                    <div className="flex gap-6 items-center h-full justify-center ">
-                    <Link to={"/"} className="h-[30px]  "><LogoWhite /></Link>
-                    <div className="w-[1px] h-8 bg-gray-400"></div>
-                    <Link to={""} target="_blank" className="h-[32px] "><img src={logo_4} alt="" className="h-[30px]" /></Link>
-                    </div>
-
-                    <div className="md:flex h-full hidden  rounded-md   ml-4">
-                    
-                    <Link to={"/indicators"} className="flex items-center h-full  px-4 text-white text-sm font-bold transition  gap-2"><ChartLine size={16}  />Indicadores</Link>
-                    <Link to={"/terms"} className="flex items-center h-full  px-4 text-white text-sm font-bold transition  gap-2"><ListDashes size={16}  />Dicionário</Link>
-                    <Link to={"/magazine"} className="flex items-center h-full  px-4 text-white text-sm font-bold transition  gap-2"><BookOpen size={16} />Revistas</Link>
-                    <Link to={"/barema"} className="flex items-center h-full  px-4 text-white text-sm font-bold transition  justify-center gap-2"><Textbox size={16} />Barema {pesquisadoresSelecionadosGroupBarema != ''  ? (<div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>):('')}</Link>
-                    <Link to={`/programas-graduacao/${idVersao}`} className="flex items-center h-full  px-4 text-white text-sm font-bold transition  gap-2"><GraduationCap size={16} />Pós-gradução</Link>
-                    </div>
-                </div>
-
-                <div className="flex gap-4 z-[9999999999]">
-                 
-                    </div>
-                </header>
+            <HeaderBarema/>
 
            <div className="">
 
@@ -962,7 +1050,7 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
             
             </div>
 
-            <div className="top-0 right-0 absolute h-[500px] ml-auto z-[999] "><SvgBarema/></div>
+            
            </div>
 
            
@@ -975,7 +1063,7 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
       <div  className=" flex flex-col gap-8 w-full  p-12 mb-12 bg-white border border-gray-300 rounded-2xl" >
       <div >
       <h1 className=" text-2xl mb-2 font-normal max-w-[750px] ">
-                <strong className="bg-blue-400 text-white font-normal">Configurações da avaliação</strong> 
+                <strong className="bg-red-400 text-white font-normal">Configurações da avaliação</strong> 
               </h1>
               <p className="text-gray-400 max-w-[750px]">Estas configurações incluem o nome do barema para exportação, o período de ano a ser considerado para a análise, a importação de um arquivo CSV contendo os critérios de avaliação e as classificações Qualis atribuídas a cada publicação</p>
       </div>
@@ -987,7 +1075,8 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
                   type="text"
                   min="0" max="100"
                   className="hover:border-blue-400 transition-all border-[1px] min-w-[350px]  bg-white  border-gray-300 flex h-12 items-center px-4 text-gray-400 rounded-xl text-xs font-bold  outline-none"
-                  
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   
                 />
                 </p>
@@ -1003,7 +1092,8 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
                   type="number"
                   min="0" max="100"
                   className="hover:border-blue-400 transition-all border-[1px] w-12 bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold  outline-none"
-                  value={ano}
+                  value={anoOri}
+                  onChange={(e) => setAnoOri(parseInt(e.target.value))}
                   
                 />
                 anos
@@ -1042,7 +1132,7 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
         <div className="flex justify-between">
           <div>
             <h1 className="z-[999999] text-2xl mb-2 font-normal max-w-[750px]">
-              <strong className="bg-blue-400 text-white font-normal">
+              <strong className="bg-red-400 text-white font-normal">
                 {parentCategory.criterio}
               </strong>
             </h1>
@@ -1076,7 +1166,7 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
               .filter((row) => row['categoria pai'] !== "0" && row['categoria pai'] === parentCategory.codigo)
               .map((subCategory) => (
               <div key={subCategory.codigo} className="grid grid-cols-4 gap-4 border-t pt-4 border-gray-300">
-                <div className="border-[1px] bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold w-fit truncate overflow-ellipsis max-w-[100%]">
+                <div className="border-[1px] bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold w-fit truncate overflow-ellipsis max-w-[100%]">
                   {subCategory.criterio}
                 </div>
                 <div>
@@ -1084,7 +1174,7 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
                     type="number"
                     min="0"
                     max="100"
-                    className="hover:border-blue-400 transition-all border-[1px] bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold w-fit outline-none"
+                    className="hover:border-blue-400 transition-all border-[1px] bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold w-fit outline-none"
                     id="pontos"
                     value={subCategory.pontos}
                   />
@@ -1094,7 +1184,7 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
                     type="number"
                     min="0"
                     max="100"
-                    className="hover:border-blue-400 transition-all border-[1px] bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold w-fit outline-none"
+                    className="hover:border-blue-400 transition-all border-[1px] bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold w-fit outline-none"
                     id="pontuacao_maxima"
                     value={subCategory.pontuacao_maxima}
                   />
@@ -1420,7 +1510,7 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
             type="number"
             min="0"
             value={parentCategory.pontuacao_maxima}
-            className="border-[1px] w-12 bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold outline-none"
+            className="border-[1px] w-12 bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 hover:border-blue-400 transition-all rounded-lg text-xs font-bold outline-none"
           />
           pontos)
         </p>
@@ -1434,9 +1524,9 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
     </div> 
 
     <div className="z-[-999999] mb-12 justify-center flex flex-col items-center gap-4 w-full  p-12  bg-white border border-gray-300 rounded-2xl">
-    <h1 className=" w-full text-4xl text-center mb-4 font-normal max-w-[750px]  py-12 ">
+    <h1 className=" w-full text-3xl text-center mb-4 font-normal max-w-[750px]  py-12 ">
 
-      <strong className="bg-green-400 text-white font-normal">
+      <strong className="bg-red-400 text-white font-normal">
       Resultado
       </strong>{" "}
       e classificação dos pesquisadores
@@ -1487,9 +1577,9 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
     </div>  
 
     <div className="z-[-999999] justify-center flex flex-col items-center gap-4 w-full  p-12  bg-white border border-gray-300 rounded-2xl">
-    <h1 className=" w-full text-4xl text-center mb-4 font-normal max-w-[750px]  py-12 ">
+    <h1 className=" text-3xl text-center mb-4 font-normal  py-12 ">
 
-    <strong className="bg-green-400 text-white font-normal">
+    <strong className="bg-red-400 text-white font-normal">
     Gráfico
     </strong>{" "}
     de pontuação total e ranking
@@ -1502,23 +1592,204 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
 
 
     <div className="mt-12 grid grid-cols-2 gap-12">
-      <div className=" justify-center flex flex-col items-center gap-4 w-full  p-12  bg-white border border-gray-300 rounded-2xl">
-      <h1 className=" w-full text-4xl text-left mb-4 font-normal max-w-[750px]  py-12 ">
-
-      <strong className="bg-green-400 text-white font-normal">
-      Exportação
-      </strong>{" "}
-      dos dados
-      </h1>
-
+      <div className=" h-[450px] justify-between flex flex-col gap-4 w-full  p-12  bg-white border border-gray-300 rounded-2xl">
       <div>
-        <button onClick={downloadCSV} className="whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-6 py-2 justify-center hover:bg-blue-500 text-base font-medium transition">Baixar CSV</button>
+      <h1 className=" w-full text-3xl text-left mb-2 font-normal max-w-[750px]  pt-12 ">
+              
+              <strong className="bg-red-400 text-white font-normal">
+              Exportação
+              </strong>{" "}
+              dos dados
+              </h1>
+        
+              <p className="mb-8">Voce pode baixar os dados em uma planilha .csv ou salvar esse barema com os critérios e os pesquisadores selecionados para acessar posteriormente</p>
+      </div>
+
+      <div className="flex gap-4">
+
+        
+        {loggedIn  ? (
+          <div  onClick={() => handleClickAdicionarBtn()} className="w-full mb-2  text-blue-400 text-sm font-bold cursor-pointer h-12 p-6  border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
+          <Textbox size={16} className="" />Salvar barema
+        </div>
+        ):(``)}
+
+<div onClick={downloadCSV} className="w-fit cursor-pointer h-12 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-6 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
+                
+                <DownloadSimple size={16} className="text-white" />
+                Baixar CSV
+          </div>
       </div>
       </div>
     </div>
            
     </div>
            </div>
+
+           {popUpProgram && pesquisadoresSelecionadosGroupBarema != "" ? (
+                <PopUpWrapper
+                title="Print ('Bem-vindo/a')"
+                subtitle="Novo usuário?"
+                textLink="Criar conta"
+                link="/signup"
+                >
+                    <div className="w-full h-full flex">
+                        <div className=" flex flex-1 p-6">
+                        <div
+                        className="rounded-xl flex-col p-6 bg-blue-100 bg-cover flex  bg-right bg-no-repeat w-full h-full mr-6"
+                     
+                        >
+
+<div className="flex gap-4 w-full pb-8 justify-between items-center min-w-full">
+          <div className="flex gap-4">
+            <UserList size={24} className="text-gray-400" />
+            <p className="text-gray-400">Pesquisadores selecionados no barema</p>
+          </div>
+
+          <div className="flex gap-4">
+            
+          </div>
+        </div>
+                           
+                           <div className='h-full overflow-y-auto elementBarra'>
+                 {researcherSelecionados.length == 0 ? (
+        <div className="text-gray-400 mb-4 ">Nenhum pesquisador selecionado</div>
+      ) : (
+        <div className="mb-4 flex flex-col gap-4  m-[0 auto] w-full">
+          {researcherSelecionados.map(user => {
+            return (
+              <li key={user.id} className="list-none">
+                <div className="rounded-xl p-4 border-[1px] bg-white border-gray-300 flex gap-4 items-center justify-between">
+                  <div className="flex gap-4 items-center">
+                    <div className="bg-cover border-[1px] border-gray-300 bg-center bg-no-repeat h-16 w-16 bg-white rounded-md relative" style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${user.lattes_10_id}) ` }}></div>
+
+                    <div className="flex flex-col flex-1">
+                      <h4 className="text-base font-medium  mb-1">{user.name}</h4>
+                      <div className="flex items-center gap-2">
+                        <Buildings size={16} className="text-gray-500" />
+                        <p className="text-[13px]  text-gray-500">{user.university}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex ml-auto"><div className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium gap-2 items-center"> <ChartBar size={16} className="text-gray-400" />
+                  {researcher.map((item) => (
+                    item.id === user.id ? (
+                      <span key={item.id}>{item.TotalBaremaFormated}</span>
+                    ) : null
+                  ))}
+    </div></div>
+
+                  <div>
+
+                  </div>
+                </div>
+              </li>
+            )
+          })}
+        </div>
+      )}
+
+      
+                 </div>
+
+
+
+
+                        </div>
+                        </div>
+
+                        <div className="">
+                            <div className="h-full max-w-[500px] ">
+                                <div className=" border-l h-full pb-[96px] overflow-y-auto elementBarra border-l-gray-300 p-12 ">
+                                <div onClick={() => setPopUpProgram(false)} className={`ml-auto float-right cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center `}>
+                        <X size={20} className={'rotate-180 transition-all text-gray-400'} />
+                        </div>
+                                
+                                <h3 className="max-w-[250px] font-medium text-2xl mb-4 text-gray-400">Cadastrar barema de <strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">avaliação</strong></h3>
+                                    <p className="  text-gray-400 mb-8">
+                                        Adicione as informações básicas do barema para salvá-lo, você poderá acessar posteriormente sempre que estiver logado com sua conta
+                                    </p>
+
+                                    <form className="w-full ">
+                           <div className="flex gap-4 items-center mb-6 justify-center">
+                           <p className="text-sm text-gray-500 ">Nome do barema</p>
+                            <input
+                                type="text"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            
+                                required
+                                className=" flex-1  border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+                           </div>
+
+                            <div className="flex flex-col gap-6">
+
+                            <div className="flex justify-center items-center gap-4 ">
+                                <p className="text-sm text-gray-500 ">Ano das orientações em andamento e concluidas</p>
+                                <input
+                                    type="text"
+                                    value={anoOri}
+                                    onChange={(e) => setAnoOri(parseInt(e.target.value))}
+                                
+                                    required
+                                    className=" border-[1px] flex flex-1 border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+                                </div>
+
+                                <div className="flex justify-center items-center gap-4 mb-6">
+                                <p className="text-sm text-gray-500 mb-2">Ano das produções</p>
+                                <input
+                                    type="number"
+                                    value={ano}
+                                    onChange={(e) => setAno(parseInt(e.target.value))}
+                                
+                                    required
+                                    className=" border-[1px] flex flex-1 border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+                                </div>
+
+                               
+                            </div>
+
+                            <div className="flex gap-4  flex-col">
+                            <p className="text-sm text-gray-500 mb-2">Selecione os qualis desejados</p>
+                            <div className="gap-4 flex flex-wrap ">
+                          {checkboxQualis}
+                        </div>
+                      </div>
+     
+                            </form>
+                                </div>
+
+                                <div className="flex border-l  border-l-gray-300 gap-6 px-12 py-6 bg-white top-[-96px] z-[99] right-0 relative">
+                            <div onClick={handleSubmit} className="whitespace-nowrap flex cursor-pointer items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500  font-medium transition flex-1 h-12 ml-auto">
+                                <Upload size={16} className="text-white" /> Salvar barema
+                            </div>
+
+                            
+
+
+
+                            </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </PopUpWrapper>
+            ):(
+                ``
+            )}
+
+
+{popUpSuccess && (
+        <div className="fixed right-16 bottom-16 z-[99999999999999] ">
+        <div className=" rounded-xl bg-white border shadow-md border-gray-300 p-6 flex items-center justify-center gap-4">
+          <div><CheckCircle size={32} className={' text-green-400'} /></div>
+          <div>Barema submetido com sucesso!</div>
+        </div>
+    </div>
+      )}
+
         </div>
     )
 }

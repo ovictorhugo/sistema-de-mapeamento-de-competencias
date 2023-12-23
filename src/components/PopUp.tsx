@@ -20,6 +20,7 @@ import { Marca } from "./Marca";
 import { Orientacoes } from "./Orientacoes";
 import { Report } from "./Report";
 import unorm from 'unorm';
+import { Eventos } from "./Events";
 
 interface PesquisadorProps {
   among: number,
@@ -79,6 +80,15 @@ type Orientacoes = {
   year: string
 }
 
+
+type Eventos = {
+  event_name: string
+  id: string
+  nature: string
+  participation: string
+  year: string
+}
+
 type Livros = {
   id: string,
   title: string,
@@ -87,29 +97,13 @@ type Livros = {
   publishing_company: string
 }
 
-type CapLivros = {
-  id: string,
-  title: string,
-  year: string,
-  isbn: string,
-  publishing_company: string
-}
 
-interface PublicacoesPorAno {
-  ano: string;
-  quantidade: number;
-}
 
 interface PalavrasChaves {
   term: string;
   among: number;
 }
 
-interface QuantidadeQualis {
-  qualis: string;
-  among: string;
-  year: string
-}
 
 export function PopUp(props: PesquisadorProps) {
   const articlesNum: number = Number(props.articles);
@@ -198,6 +192,27 @@ export function PopUp(props: PesquisadorProps) {
     'SQ': 'bg-[#560B11]',
   }
 
+
+  // natureza
+
+  const [natureza, setNatureza] = useState([
+    { id: 1, itens: 'Oficina' },
+    { id: 2, itens: 'Simpósio' },
+    { id: 3, itens: 'Seminário' },
+    { id: 4, itens: 'Congresso' },
+    { id: 5, itens: 'Encontro' },
+    { id: 6, itens: 'Outra' },
+  ]);
+
+  const naturezaColor: { [key: string]: string } = {
+    'Oficina': 'bg-[#174EA6]',
+    'Simpósio': 'bg-[#1A73E8]',
+    'Seminário': 'bg-[#8AB4F8]',
+    'Congresso': 'bg-[#7386FF]',
+    'Encontro': 'bg-[#1B1464]',
+    'Outra': 'bg-cyan-400',
+  }
+
   //ano range
   const [value, setValue] = useState<number>(2000);
 
@@ -261,24 +276,93 @@ export function PopUp(props: PesquisadorProps) {
   useEffect(() => {
     setValoresSelecionados(itensSelecionados.join(';'));
   }, [itensSelecionados]);
-  let urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosPopUp}&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}&year=${value}`;
+
+
+  // checkbox natureza 
+
+  const [itensSelecionadosNatureza, setItensSelecionadosNatureza] = useState<string[]>([]);
+
+  type CheckboxStatesNatureza = {
+    [index: number]: boolean;
+  };
+
+  const [checkboxStatesNatureza, setCheckboxStatesNatureza] = useState<CheckboxStatesNatureza>({});
+
+  const handleCheckboxChangeInputNatureza = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const itemId = event.target.name;
+    const isChecked = event.target.checked;
+
+    setCheckboxStatesNatureza((prevStates) => ({ ...prevStates, [itemId]: isChecked }));
+
+    setItensSelecionadosNatureza((prevSelecionados) => {
+      const selectedQualis = natureza.find((q) => q.id === parseInt(itemId));
+      if (selectedQualis) {
+        if (isChecked) {
+          return [...prevSelecionados, selectedQualis.itens];
+        } else {
+          return prevSelecionados.filter((item) => item !== selectedQualis.itens);
+        }
+      } else {
+        // handle the case where selectedQualis is undefined
+        return prevSelecionados;
+      }
+    });
+  };
+
+  const checkboxNatureza = natureza.map((quali) => {
+    const isChecked = checkboxStatesNatureza[quali.id];
+    return (
+      <li
+        key={quali.id}
+        className="checkboxLabel group list-none inline-flex  group overflow-hidden"
+        onMouseDown={(e) => e.preventDefault()}
+      >
+        <label
+          className={`group-checked:bg-blue-400 cursor-pointer border-[1px] gap-3 bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 hover:bg-blue-100 ${isChecked ? 'activeTab' : ''}`}
+        >
+          <div className={`rounded-sm h-4 w-4 ${naturezaColor[quali.itens]}`}></div>
+          <span className="text-center block">{quali.itens}</span>
+          <input
+            type="checkbox"
+            name={String(quali.id)}
+            className="absolute hidden group"
+            onChange={handleCheckboxChangeInputNatureza}
+            id={quali.itens}
+            checked={isChecked}
+          />
+        </label>
+      </li>
+    );
+  });
+
+  const [valoresSelecionadosNatureza, setValoresSelecionadosNatureza] = useState('');
+
+  useEffect(() => {
+    setValoresSelecionadosNatureza(itensSelecionadosNatureza.join(';'));
+  }, [itensSelecionadosNatureza]);
+
+
+
+
+
+  let urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosPopUp}&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}`;
 
   if (valoresSelecionadosExport == "") {
-    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valorDigitadoPesquisaDireta}&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}&year=${value}`;
+    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valorDigitadoPesquisaDireta}&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}`;
   }
 
   if (botaoTermosClicado) {
-    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosPopUp}${valorDigitadoPesquisaDireta}&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}&year=${value}`;
+    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosPopUp}${valorDigitadoPesquisaDireta}&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}`;
   }
 
 
   if (botaoResumoClicado) {
-    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}&year=${value}`;
+    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}`;
   }
 
 
   if (botaoPatentesClicado) {
-    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}&year=${value}`;
+    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}`;
   }
 
   if (botaoPesquisadoresClicado) {
@@ -342,11 +426,11 @@ export function PopUp(props: PesquisadorProps) {
 
   //livros 
 
-  let urlLivros = `${urlGeral}book_production_researcher?researcher_id=${props.id}&year=1000&term=`;
+  let urlLivros = `${urlGeral}book_production_researcher?researcher_id=${props.id}&year=${value}&term=`;
   const [livros, setLivros] = useState<Livros[]>([]);
 
   if(botaoLivrosCapitulosClicado) {
-     urlLivros = `${urlGeral}book_production_researcher?researcher_id=${props.id}&year=1000&term=${valoresSelecionadosPopUp}${valorDigitadoPesquisaDireta}`;
+     urlLivros = `${urlGeral}book_production_researcher?researcher_id=${props.id}&year=${value}&term=${valoresSelecionadosPopUp}${valorDigitadoPesquisaDireta}`;
   }
 
   if (props.isPopUpVisible == true) {
@@ -380,11 +464,11 @@ export function PopUp(props: PesquisadorProps) {
 
   //cap livros 
 
-  let urlCapLivros = `${urlGeral}book_chapter_production_researcher?researcher_id=${props.id}&year=1000&term=`;
+  let urlCapLivros = `${urlGeral}book_chapter_production_researcher?researcher_id=${props.id}&year=${value}&term=`;
   const [capLivros, setCapLivros] = useState<Livros[]>([]);
 
   if(botaoLivrosCapitulosClicado) {
-    urlCapLivros = `${urlGeral}book_chapter_production_researcher?researcher_id=${props.id}&year=1000&term=${valoresSelecionadosPopUp}${valorDigitadoPesquisaDireta}`;
+    urlCapLivros = `${urlGeral}book_chapter_production_researcher?researcher_id=${props.id}&year=${value}&term=${valoresSelecionadosPopUp}${valorDigitadoPesquisaDireta}`;
  }
 
   if (props.isPopUpVisible == true) {
@@ -525,7 +609,7 @@ export function PopUp(props: PesquisadorProps) {
 
   //orientacoes
 
-  const urlOrientacoes = `${urlGeral}guidance_researcher?researcher_id=${props.id}&year=1000`;
+  const urlOrientacoes = `${urlGeral}guidance_researcher?researcher_id=${props.id}&year=${value}`;
   const [orientacoes, setOrientacoes] = useState<Orientacoes[]>([]);
 
   if (props.isPopUpVisible == true) {
@@ -561,7 +645,7 @@ export function PopUp(props: PesquisadorProps) {
 
   const [relatorio, setRelatorio] = useState<Patente[]>([]);
 
-  const urlRelatorio = `${urlGeral}researcher_report?researcher_id=${props.id}&year=1000`;
+  const urlRelatorio = `${urlGeral}researcher_report?researcher_id=${props.id}&year=${value}`;
 
   if (props.isPopUpVisible == true) {
     useEffect(() => {
@@ -592,12 +676,16 @@ export function PopUp(props: PesquisadorProps) {
     }, [urlRelatorio]);
   }
 
-  //relatorio tecnico
+  //eventos
 
-  const [eventos, setEventos] = useState<Patente[]>([]);
+  const [eventos, setEventos] = useState<Eventos[]>([]);
 
-  const urlEvento = `${urlGeral}researcherPatent?term=${props.id}&graduate_program_id=&university=`;
+  let urlEvento = `${urlGeral}pevent_researcher?term=researcher_id=${props.id}&year=${value}&nature=${valoresSelecionadosNatureza}`;
 
+  if(botaoEventosClicado) {
+    urlEvento = `${urlGeral}pevent_researcher?term=${valoresSelecionadosPopUp}${valorDigitadoPesquisaDireta}&researcher_id=${props.id}&year=${value}&nature=${valoresSelecionadosNatureza}`;
+  }
+  console.log(valoresSelecionadosNatureza)
   if (props.isPopUpVisible == true) {
     useEffect(() => {
       const fetchData = async () => {
@@ -993,6 +1081,8 @@ export function PopUp(props: PesquisadorProps) {
   .replace(/&quot;/g, '"')
   .replace(/&#10;/g, '\n')
 
+  const dataAtual = new Date();
+
 
   return (
     <div className=" w-full m-[0 auto] lg:px-32 z-[99999] bg-opacity-25">
@@ -1119,7 +1209,7 @@ export function PopUp(props: PesquisadorProps) {
       .map((word, index) => {
         const formattedWord = unorm.nfkd(word).replace(/[^\w\s]/gi, '').toLowerCase();;
         const alphabet = Array.from({ length: 26 }, (_, index) => String.fromCharCode('a'.charCodeAt(0) + index));
-        const ignoredWords = [...alphabet, 'do', 'da', 'o', 'os', 'as', 'de', 'e', 'i', 'na', 'du', 'em', ')', '('];
+        const ignoredWords = [...alphabet, 'do', 'da', 'o', 'os', 'as', 'de', 'e', 'i', 'na', 'du', 'em', ')', '(', 'ao', '-'];
         let formattedSpan;
 
         if (
@@ -1199,7 +1289,7 @@ export function PopUp(props: PesquisadorProps) {
                   <TabPanel>
                     {valoresSelecionadosPopUp == '' || botaoAreasClicado || botaoPesquisadoresClicado || botaoTermosClicado || botaoResumoClicado || valorDigitadoPesquisaDireta || botaoPatentesClicado || botaoLivrosCapitulosClicado || botaoEventosClicado ? (
                       <div className=" flex gap-4 p-6 border-[1px] border-gray-300 rounded-xl mt-6 items-center w-fit">
-                        <div>
+                        <div className="flex flex-col flex-1">
                           <p className="text-gray-400 mb-4  whitespace-nowrap">Selecione os qualis desejados</p>
                           <div className="gap-4 flex flex-wrap ">
                             {checkboxQualis}
@@ -1210,13 +1300,13 @@ export function PopUp(props: PesquisadorProps) {
 
                         </div>
 
-                        <div className="flex-1 ">
+                        <div className=" w-[300px] ">
                           <p className="text-gray-400 mb-4 whitespace-nowrap">Selecione o ano da publicação</p>
                           <div className="flex h-10 items-center">
                             <input
                               type="range"
                               min={2000}
-                              max={2023}
+                              max={Number(dataAtual.getFullYear())}
                               defaultValue={2000}
                               step={1}
                               value={value}
@@ -1385,6 +1475,26 @@ export function PopUp(props: PesquisadorProps) {
                   </TabPanel>
 
                   <TabPanel>
+
+                  <div className=" w-full flex gap-4 p-6 border-[1px] border-gray-300 rounded-xl mt-6 items-center ">
+                      
+                        <div className=" w-full">
+                          <p className="text-gray-400 mb-4 whitespace-nowrap">Selecione o ano dos livros e capítulos</p>
+                          <div className="flex h-10 items-center">
+                            <input
+                              type="range"
+                              min={2000}
+                              max={Number(dataAtual.getFullYear())}
+                              defaultValue={2000}
+                              step={1}
+                              value={value}
+                              onChange={(e) => setValue(Number(e.target.value))}
+                              className="w-full "
+                            />
+                            <p className="ml-4 ">{value}</p>
+                          </div>
+                        </div>
+                      </div>
  
 
                     {botaoAreasClicado || botaoEventosClicado || botaoPatentesClicado || botaoResumoClicado|| botaoPesquisadoresClicado || botaoTermosClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta == "" )|| (botaoResumoClicado && valorDigitadoPesquisaDireta != "") ? (
@@ -1661,12 +1771,33 @@ export function PopUp(props: PesquisadorProps) {
                   </TabPanel>
 
                   <TabPanel>
-                    <div className="flex gap-4 w-full pb-8">
-                    <File size={24} className="text-gray-400" />
+
+                  <div className=" w-full flex gap-4 p-6 border-[1px] border-gray-300 rounded-xl mt-6 items-center ">
+                      
+                      <div className=" w-full">
+                        <p className="text-gray-400 mb-4 whitespace-nowrap">Selecione o ano dos relatórios técnicos</p>
+                        <div className="flex h-10 items-center">
+                          <input
+                            type="range"
+                            min={2000}
+                            max={Number(dataAtual.getFullYear())}
+                            defaultValue={2000}
+                            step={1}
+                            value={value}
+                            onChange={(e) => setValue(Number(e.target.value))}
+                            className="w-full "
+                          />
+                          <p className="ml-4 ">{value}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-4 w-full pb-8 mt-8">
+                    <Files size={24} className="text-gray-400" />
                     <p className="text-gray-400">Todos os relatórios </p>
                   </div>
 
-                  <div>
+                  <div >
                       {isLoading ? (
                         <div className="flex items-center justify-center w-full py-10">
                           <Carregando />
@@ -1710,7 +1841,7 @@ export function PopUp(props: PesquisadorProps) {
                           {orientacoes.length === 0 ? (
                             <p className="text-center">Nenhuma orientação encontrada</p>
                           ) : (
-                            <div className={`mb-9 grid grid-cols-1 md:grid-cols-2 ${isOn ? "lg:grid-cols-1 2xl:grid-cols-1" : "lg:grid-cols-2 2xl:grid-cols-3"} gap-6 m-[0 auto] w-full`}>
+                            <div className={`mb-9 grid grid-cols-1 md:grid-cols-2 ${isOn ? "lg:grid-cols-1 2xl:grid-cols-1" : "lg:grid-cols-2 2xl:grid-cols-2"} gap-6 m-[0 auto] w-full`}>
                               {orientacoes.map(props => (
                                 <Orientacoes
                                   id={props.id}
@@ -1733,6 +1864,38 @@ export function PopUp(props: PesquisadorProps) {
 
 
                   <TabPanel>
+
+                  <div className=" w-full flex gap-4 p-6 border-[1px] border-gray-300 rounded-xl mt-6 items-center ">
+                        <div className="flex-1 flex flex-col">
+                          <p className="text-gray-400 mb-4  whitespace-nowrap">Selecione a natureza desejada</p>
+                          <div className="gap-4 flex flex-wrap ">
+                            {checkboxNatureza}
+                          </div>
+                        </div>
+
+                        <div className="mx-4 h-[80px] min-h-max w-[1px] bg-gray-300 relative ">
+
+                        </div>
+
+                        <div className=" w-[300px]">
+                          <p className="text-gray-400 mb-4 whitespace-nowrap">Selecione o ano do evento</p>
+                          <div className="flex h-10 items-center">
+                            <input
+                              type="range"
+                              min={2000}
+                              max={Number(dataAtual.getFullYear())}
+                              defaultValue={2000}
+                              step={1}
+                              value={value}
+                              onChange={(e) => setValue(Number(e.target.value))}
+                              className="w-full "
+                            />
+                            <p className="ml-4 ">{value}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                    
                     {botaoAreasClicado || botaoPatentesClicado || botaoLivrosCapitulosClicado || botaoResumoClicado|| botaoPesquisadoresClicado || botaoTermosClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta == "" )|| (botaoResumoClicado && valorDigitadoPesquisaDireta != "") ? (
                       <div className="flex justify-between pb-8 w-full items-center mt-8">
                         <div className="flex gap-4 w-full">
@@ -1760,7 +1923,7 @@ export function PopUp(props: PesquisadorProps) {
                               ) : (
                                 listaValores
                               )}
-                            </div> de participações em eventos
+                            </div>nas participações em eventos
                           </p>
                         </div>
 
@@ -1771,6 +1934,33 @@ export function PopUp(props: PesquisadorProps) {
                         </div>
                       </div>
                     )}
+
+<div>
+                      {isLoading ? (
+                        <div className="flex items-center justify-center w-full py-10">
+                          <Carregando />
+                        </div>
+                      ) : (
+                        <>
+                          {eventos.length === 0 ? (
+                            <p className="text-center">Nenhuma participação em eventos encontrada</p>
+                          ) : (
+                            <div className={`mb-9 grid md:grid-cols-2 grid-cols-1  gap-6 m-[0 auto] w-full`}>
+                              {eventos.map(props => (
+                                <Eventos
+                                event_name={props.event_name}
+                                id={props.id}
+                                nature={props.nature}
+                                participation={props.participation}
+                                year={props.year}
+
+                                />
+                              ))}
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
                   </TabPanel>
                 </Tabs>
 
@@ -1805,11 +1995,19 @@ export function PopUp(props: PesquisadorProps) {
                   {(botaoTermosClicado && props.among != 0)  || (botaoLivrosCapitulosClicado && props.among != null) || (botaoPatentesClicado && props.among != null) || (botaoEventosClicado && props.among != null) ? (
                       <div className="text-blue-400 flex text-md font-bold">
                         {props.among} ocorrências
-                        <p className="text-md  text-blue-400 mx-3">|</p>
+                        
                       </div>
                     ) : (
                       <head></head>
                     )}
+
+{(botaoTermosClicado && props.among != 0)  || (botaoLivrosCapitulosClicado && props.among != null) || (botaoPatentesClicado && props.among != null)  ? (
+              
+              <p className="text-blue-400 flex text-md font-bold mx-3">|</p>
+           
+          ) : (
+            ``
+          )}
 
                     <div className=" text-blue-400 text-md font-bold">{botaoTermosClicado ? (`${articlesNum} artigos`): botaoPatentesClicado ? (`${props.patent} patentes`) : botaoLivrosCapitulosClicado ? (`${Number(props.book_chapters) + Number(props.book)} livros e capitulos`) : botaoEventosClicado ? (``) : (``)}</div>
 
