@@ -22,7 +22,7 @@ import { SvgSignup } from "./SvgSignup";
 
 export function ContentSignUp() {
   // meial sneha
-
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confPassword, setConfPassword] = useState('');
@@ -37,7 +37,7 @@ export function ContentSignUp() {
   const handleSignOut = async (e: any) => {
   try {
 
-    if( password == confPassword && password.length >= 8) {
+    if( password == confPassword && password.length >= 8 && email.length != 0 && name.length != 0) {
       e.preventDefault();
       createUserWithEmailAndPassword(email, password);
    
@@ -112,6 +112,17 @@ if (loading) {
                  <div className=" flex items-center flex-col flex-1 ">
 
             <form className="w-full ">
+
+            <p className="text-sm text-gray-500 mb-2">Nome completo</p>
+              <input
+                type="text"
+                name="email"
+                id="email"
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="mb-4 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+
+
               <p className="text-sm text-gray-500 mb-2">Endereço de email</p>
               <input
                 type="text"
@@ -121,7 +132,9 @@ if (loading) {
                 required
                 className="mb-4 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
 
-              <p className="text-sm text-gray-500 mb-2">Senha</p>
+             <div className="grid grid-cols-2 gap-4">
+          <div>
+          <p className="text-sm text-gray-500 mb-2">Senha</p>
               <input
                 type="password"
                 name="password"
@@ -130,7 +143,9 @@ if (loading) {
                 required
                 className="mb-4 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
 
+          </div>
 
+<div>
 <p className="text-sm text-gray-500 mb-2">Confirmar senha</p>
               <input
                 type="password"
@@ -140,6 +155,8 @@ if (loading) {
                 required
                 className="mb-4 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
 
+</div>
+             </div>
               <div onClick={handleSignOut} className="whitespace-nowrap flex cursor-pointer items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500  font-medium transition w-full h-12 ml-auto">
                 <SignIn size={16} className="text-white" /> Continuar
               </div>

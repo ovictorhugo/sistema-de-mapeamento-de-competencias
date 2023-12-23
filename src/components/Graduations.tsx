@@ -348,12 +348,12 @@ console.log('idversao',idVersao)
           </div>
           
           {idVersao === "2"  || idVersao === "4" ? (
-              <div className=" flex  rounded-md  bg-opacity-80 z-[99] flex-wrap gap-6 mt-8 relative">
+              <div className=" flex  rounded-md  bg-opacity-80 z-[99] items-center flex-wrap gap-6 mt-8 relative">
               <img src={logo_1} className=" relative w-auto h-12"/>
               <img src={logo_2} className=" relative w-auto h-12"/>
               <img src={logo_3} className=" relative w-auto h-12"/>
               <img src={logo_5} className=" relative w-auto h-12"/>
-              <img src={logo_4} className=" relative w-auto h-12"/>
+              <img src={logo_4} className=" relative w-auto h-8"/>
               
           </div>
             ):('')}

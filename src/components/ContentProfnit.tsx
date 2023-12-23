@@ -264,12 +264,12 @@ export function ContentProfnit(props: Props) {
           )}
           </div>
 
-          <div className=" flex  rounded-md z-[-99] bg-opacity-80 flex-wrap gap-6 mt-4  ">
+          <div className=" flex  rounded-md z-[-99] items-center bg-opacity-80 flex-wrap gap-6 mt-4  ">
         <img src={logo_1} className=" relative w-auto h-12"/>
         <img src={logo_2} className=" relative w-auto h-12"/>
         <img src={logo_3} className=" relative w-auto h-12"/>
         <img src={logo_5} className=" relative w-auto h-12"/>
-        <img src={logo_4} className=" relative w-auto h-12"/>
+        <img src={logo_4} className=" relative w-auto h-8"/>
         
     </div>
           </div>

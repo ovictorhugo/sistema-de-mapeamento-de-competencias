@@ -6,7 +6,7 @@ import { ArrowCircleDown, Info, Funnel,  File, Buildings, PaperPlaneTilt, ChartL
 import logo_1 from '../assets/logo_1.png';
 import logo_2 from '../assets/logo_2.png';
 import logo_3 from '../assets/logo_3.png';
-import logo_4 from '../assets/logo_4.png';
+import logo_4 from '../assets/logo_4_white.png';
 
 import { Pesquisadores } from "./Pesquisadores";
 import { Publicacoes } from "./Publicacoes";
@@ -151,7 +151,7 @@ export function HeaderBarema() {
           ) : (idVersao === "3") ?(
             <Link to={"https://profnit.org.br/"} target="_blank" className="h-[32px] "><img src={ifba} alt="" className=" whitespace-nowrap h-[30px]" /></Link>
           ) : (idVersao == '4') ? (
-            <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={logo_4} alt="" className="whitespace-nowrap flex flex-1 h-[38px]" /></Link>
+            <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={logo_4} alt="" className="whitespace-nowrap flex flex-1 h-[30px]" /></Link>
           ): ('')}
 
         </div>

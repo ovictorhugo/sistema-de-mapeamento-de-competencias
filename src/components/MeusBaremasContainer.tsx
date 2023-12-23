@@ -3,43 +3,65 @@ import bg_popup from '../assets/bg_popup.png';
 import { HeaderBarema } from './HeaderBarema';
 import { UserContext } from '../contexts/context';
 
-import { getFirestore, doc, getDoc, collection, addDoc } from 'firebase/firestore';
+import { getFirestore, doc, getDocs, collection, addDoc,query,  where,  Query } from 'firebase/firestore';
+import { Article } from 'phosphor-react';
 
-interface User {
-    someProperty: string;
-    // Add other properties based on your data structure
+interface UserData {
+    name: string,
+    data: string,
+    ano: string,
+    anoOr: string,
+    qualisSelecionado: string,
+    pesquisadoresSelecionadosGroupBarema: string,
+    userId: string,
+    researcher: string,
   }
 
 
 export function MeusBaremasContainer() {
     const { user, setUser } = useContext(UserContext);
 
-    const [userData, setUserData] = useState<User[]>([]);
+    const [userData, setUserData] = useState<UserData | null>(null);
+
     const db = getFirestore();
-
    
-  useEffect(() => {
-    // Fetch user data when the component mounts
-    const fetchUserData = async () => {
-      try {
-        // Assuming you have a 'users' collection in your database
-        const userRef = firebase.database().ref(`users/${user.uid}`);
-        const snapshot = await userRef.once('value');
 
-        // Retrieve data from the snapshot
-        const fetchedUserData = snapshot.val();
-        setUserData(fetchedUserData);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
+    const userId = user && user.uid;
 
-    // Check if user is defined before fetching data
-    if (user) {
-      fetchUserData();
-    }
-  }, [user]); // Run the effect when the user object changes
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            if (userId) {
+              console.log('userId:', userId);
+      
+              const userDocsRef = collection(db, 'baremas');
+const userDocsQuery = query(userDocsRef, where('userId', '==', userId));
+const userDocSnapshot = await getDocs(userDocsQuery);
+      
+              console.log('userDocSnapshot:', userDocSnapshot);
+      
+              if (userDocSnapshot.size > 0) {
+               
+                
+                const userData = userDocSnapshot.docs[0].data() as UserData;
+  setUserData(userData);
 
+  console.log('User Data:', userData);
+              } else {
+                console.log('User data not found');
+              }
+            }
+          } catch (error) {
+            console.error('Error fetching user data:', error);
+          }
+        };
+      
+        fetchData();
+      }, [db, userId]);
+      
+
+
+    
     return  (
         <div className=" min-h-screen ">
 
@@ -56,24 +78,25 @@ export function MeusBaremasContainer() {
        <HeaderBarema/>
 
 <div className='mb-[20px] z-[99999999999]'>
-<h1 className="z-[999999] text-4xl mb-4 font-normal max-w-[750px] text-white pt-12 ">
-Meus <strong className="bg-red-400 text-white font-normal"> baremas</strong>{" "} de avaliação 
-</h1>
+<div className="flex gap-4 text-white pt-12">
+              <Article size={24} className=" mb-4" />
+              <p className="text-bold text-2xl">Meus baremas de avaliação</p>
+            </div>
 
-<p className="text-white max-w-[750px] pb-8">O sistema de classificação, é uma estrutura criada para avaliar e classificar pesquisadores com base em critérios específicos como qualidade e quantidade de publicações, impacto da pesquisa, contribuições para a comunidade científica, atividades de ensino e entre outros.</p>
+<p className="text-white max-w-[750px] pb-8 ">O sistema de classificação, é uma estrutura criada para avaliar e classificar pesquisadores com base em critérios específicos como qualidade e quantidade de publicações, impacto da pesquisa, contribuições para a comunidade científica, atividades de ensino e entre outros.</p>
 </div>
        </div>
 
        <div>
         <div className='w-full grid grid-cols-5 gap-6'>
 
-        {userData && userData.map((item, index) => (
-        <div key={index}>
-            {/* Render your item content here */}
-            <p>{item.someProperty}</p>
-            {/* Add other elements based on your data structure */}
-        </div>
-        ))}
+        {userData && (
+  <div>
+    {/* Render your item content here */}
+    <p>{userData.name}</p>
+    {/* Add other elements based on your data structure */}
+  </div>
+)}
         </div>
        </div>
         </div>

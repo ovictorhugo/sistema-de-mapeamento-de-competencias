@@ -150,7 +150,7 @@ export function Header() {
           ) : (idVersao === "3") ?(
             <Link to={"https://profnit.org.br/"} target="_blank" className="h-[32px] "><img src={ifba} alt="" className=" whitespace-nowrap h-[30px]" /></Link>
           ) : (idVersao == '4') ? (
-            <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={logo_4} alt="" className="whitespace-nowrap flex flex-1 h-[38px]" /></Link>
+            <Link to={""} target="_blank" className=" whitespace-nowrap "><img src={logo_4} alt="" className="whitespace-nowrap flex flex-1 h-[30px]" /></Link>
           ): ('')}
 
         </div>

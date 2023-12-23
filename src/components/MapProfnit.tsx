@@ -603,12 +603,12 @@ const handlePopUp = () => {
    
           
           {idVersao === "2"  || idVersao === "4" ? (
-              <div className=" flex  rounded-md  bg-opacity-80 z-[99] flex-wrap gap-6 mt-8 relative">
+              <div className=" flex  rounded-md items-center  bg-opacity-80 z-[99] flex-wrap gap-6 mt-8 relative">
               <img src={logo_1} className=" relative w-auto h-12"/>
               <img src={logo_2} className=" relative w-auto h-12"/>
               <img src={logo_3} className=" relative w-auto h-12"/>
               <img src={logo_5} className=" relative w-auto h-12"/>
-              <img src={logo_4} className=" relative w-auto h-12"/>
+              <img src={logo_4} className=" relative w-auto h-8"/>
               
           </div>
             ):('')}
@@ -863,7 +863,7 @@ const handlePopUp = () => {
                         <ListDashes size={16} className="text-white" /> Dicionário
                     </Link>
 
-                    <Link to={`/magazine/${idVersao}`} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4  text-blue-400 rounded-xl px-4 py-2 justify-center hover:bg-gray-300 text-sm font-medium transition">
+                    <Link to={`/magazine/${idVersao}`} className="w-fit cursor-pointer h-10 whitespace-nowrap flex  items-center gap-4  text-blue-400 rounded-xl px-4 py-2 justify-center hover:bg-gray-300 text-sm font-medium transition">
                         <BookOpen size={16} className="" /> Revistas
                     </Link>
                     </div>

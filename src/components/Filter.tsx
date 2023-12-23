@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/context';
-import { Buildings, CaretDown, CaretLeft, CaretRight, CaretUp, CheckCircle, FileCsv, Info, PuzzlePiece, SlidersHorizontal, Textbox, Trash, Users, X } from 'phosphor-react';
+import { Buildings, CaretDown, CaretLeft, CaretRight, CaretUp, CheckCircle, FileCsv, Info, PuzzlePiece, SlidersHorizontal, Textbox, Trash, Users, UsersThree, X } from 'phosphor-react';
 import DropdownMultiSelect from './DropdownMultiSelect';
 
 type Research = {
@@ -143,7 +143,7 @@ export function Filter() {
             onMouseDown={(e) => e.preventDefault()}
           >
             <label
-              className={`   cursor-pointer  gap-3 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold ${isChecked ? 'activeTab bg-blue-100' : 'border-gray-300 border'}`}
+              className={`   cursor-pointer  gap-3 flex h-10 items-center px-4  rounded-lg text-xs font-bold activeTab bg-blue-100 hover:text-blue-400 transition-all ${isChecked ? ' text-blue-400' : 'border-gray-300 border text-gray-400'}`}
             >
               <PuzzlePiece size={12} className="" /> 
               <span className="text-center block">{quali.itens}</span>
@@ -298,6 +298,15 @@ export function Filter() {
       console.error(error);
     }
   };
+
+  const [colaboradores, setColaboradores] = useState([
+    { id: 1, itens: 'https://www.ufba.br/sites/portal.ufba.br/files/brasao_ufba.jpg', name: `Victor Hugo de Jesus Oliveira`, inst: `Universidade Federal da Bahia` },
+    { id: 2, itens: 'https://upload.wikimedia.org/wikipedia/commons/8/88/Bras%C3%A3o_da_UNEB.png', name: `Matheus Souza dos Santos`, inst: `Universidade do Estado da Bahia` },
+    { id: 3, itens: 'https://upload.wikimedia.org/wikipedia/commons/8/88/Bras%C3%A3o_da_UNEB.png', name: `Eduardo Manuel de Freitas Jorge`, inst: `Universidade do Estado da Bahia` },
+    { id: 4, itens: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Bras%C3%A3o_UESC.svg/1200px-Bras%C3%A3o_UESC.svg.png', name: `Gesil Sampaio Amarante Segundo`, inst: `Universidade Estadual de Santa Cruz` },
+    { id: 5, itens: 'https://www.ufrb.edu.br/ascom/images/documentos/marca/01_-_Preferencial.png', name: `Gleidson de Meireles Costa`, inst: `Universidade Federal do Recôncavo da Bahia` },
+  ]);
+
 
 
   return (
@@ -472,7 +481,8 @@ export function Filter() {
                  
                  </div>
 
-                 <div className=' overflow-y-auto h-full elementBarra pb-24'>
+                <div className=' h-full'>
+                <div className=' overflow-y-auto h-full elementBarra pb-24'>
                  <div className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium gap-2 items-center w-fit mb-4">Versão 2.0.5 (beta) </div>
                  <div className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium gap-2 items-center w-fit mb-4">Sistema de Mapeamento de Competências da Bahia </div>
                     <p className='text-gray-400 text-justify mb-4'>
@@ -500,7 +510,29 @@ Menção a Jônatas Pereira do Nascimento Rosa (UNEB) pela revisão e projeto te
                  - Revisão visual de componentes<br/>
                  - Módulo profnit<br/>
                     </p>
+
+                    <div className='flex items-center gap-4 h-10 my-4'>
+                     <UsersThree size={24} className="text-gray-400" />
+                     <p className='text-gray-400 flex flex-1 text-lg '>Colaboradores</p>
                  </div>
+
+                 <div className='w-full flex flex-col gap-3'>
+                 {colaboradores.map(props => {
+                            return(
+                              <div  className="hover:bg-gray-50 transition-all  p-2 cursor-pointer border w-full flex gap-4 items-center border-gray-300 rounded-md " key={props.name}>
+                              <div className={`whitespace-nowrap bg-contain bg-center bg-no-repeat h-6 w-6  relative `} style={{ backgroundImage: `url(${props.itens}) ` }}>
+                               </div>
+                            <div >
+                            <div className="flex-1 m-0 font-bold text-gray-500">{props.name}</div>
+                            <div className="flex-1 m-0 text-gray-400 text-sm">{props.inst}</div>
+                            </div>
+                           </div>
+
+                            )
+                        })}
+                 </div>
+                 </div>
+                </div>
                  
         </div>
        </div>

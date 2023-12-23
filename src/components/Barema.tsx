@@ -868,6 +868,8 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
   const [popUpProgram, setPopUpProgram] = useState(false);
   const [popUpSuccess, setPopUpSuccess] = useState(false);
 
+  const createdAt = new Date().toISOString()
+
   const handleSubmit = async () => {
     try {
       // Aqui você pode adicionar a lógica para tratar os tipos de programa selecionados
@@ -882,7 +884,8 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
         qualisSelecionados,
         pesquisadoresSelecionadosGroupBarema,
         userId,
-        researcher
+        researcher,
+        createdAt
         
       };
   
