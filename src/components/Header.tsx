@@ -1,12 +1,13 @@
 import { Logo } from "./Logo";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Ilustracao } from "./Ilustracao";
-import { ArrowCircleDown, Info, Funnel,  File, Buildings, PaperPlaneTilt, ChartLine, Question, SignIn, ListDashes, UserCirclePlus, UserCircle, BookOpen, Textbox, Share, GraduationCap, GitBranch, UserPlus, SignOut } from "phosphor-react";
+import { ArrowCircleDown, Info, Funnel,  File, Buildings, PaperPlaneTilt, ChartLine, Question, SignIn, ListDashes, UserCirclePlus, UserCircle, BookOpen, Textbox, Share, GraduationCap, GitBranch, UserPlus, SignOut, X, Gear, ChartBar } from "phosphor-react";
 
 import logo_1 from '../assets/logo_1.png';
 import logo_2 from '../assets/logo_2.png';
 import logo_3 from '../assets/logo_3.png';
 import logo_4 from '../assets/logo_4.png';
+import bg_popup from '../assets/bg_popup.png';
 
 import { Pesquisadores } from "./Pesquisadores";
 import { Publicacoes } from "./Publicacoes";
@@ -31,6 +32,7 @@ import { UserContext } from "../contexts/context";
 import React, { useEffect } from 'react';
 import { LogoIapos } from "./LogoIapos";
 import { LogoSimcc } from "./LogoSimcc";
+import { PopUpWrapper } from "./PopUpWrapper";
 
 
 declare global {
@@ -118,7 +120,7 @@ export function Header() {
     }
   };
 
-
+  const { idBarema, setIdBarema } = useContext(UserContext);
 
   const [popUpUser , setPopUpUser] = useState(false);
 
@@ -127,6 +129,8 @@ export function Header() {
    
 
   };
+
+  const [popUpProgram, setPopUpProgram] = useState(false);
 
   return (
     <header className={` z-[9999] px-6 md:px-16 w-full mb-4 h-20 justify-between items-center flex absolute top-0`}>
@@ -162,7 +166,7 @@ export function Header() {
        :('')}
           <Link to={`/terms`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><ListDashes size={16} className="text-gray-400" />Dicionário</Link>
           <Link to={`/magazine`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><BookOpen size={16} className="text-gray-400" />Revistas</Link>
-          <Link to={`/barema`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><Textbox size={16} />Barema{ pesquisadoresSelecionadosGroupBarema != '' ? (<div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>):('')}</Link>
+          <Link to={`/barema`}  onClick={() => setIdBarema("")} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><Textbox size={16} />Barema{ pesquisadoresSelecionadosGroupBarema != '' ? (<div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>):('')}</Link>
           <Link to={`/programas-graduacao`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><GraduationCap size={16} />Pós-gradução</Link>
           <Link to={`/taxonomia`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><GitBranch size={16} className="rotate-180"/>Taxonomia</Link>
        
@@ -177,7 +181,7 @@ export function Header() {
           to={`/indicators-pos`}
           className="w-fit h-10 whitespace-nowrap flex items-center gap-4  text-sm text-blue-400 rounded-xl px-4 py-2 justify-center hover:bg-gray-50 font-medium transition"
         >
-          <ChartLine size={16} className="" /> Indicadores da pós-graduação
+          <ChartBar size={16} className="" /> Indicadores da pós-graduação
         </Link>
       )}
 
@@ -239,6 +243,18 @@ export function Header() {
           {user.email}
         </p>
 
+        <div className="w-full">
+        <Link to={'/minha-conta'}    className="w-full mb-2  text-gray-400 text-sm font-medium cursor-pointer h-10 p-4 rounded-xl bg-white border-gray-300  items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
+                <Gear size={16} className="" />Minha conta
+              </Link>
+
+              <Link to={'/minhas-taxonomias'}    className="w-full  text-gray-400 text-sm font-medium cursor-pointer h-10 p-4 rounded-xl bg-white border-gray-300  items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
+                <GitBranch size={16} className="rotate-180" />Minhas taxonomias
+              </Link>
+        </div>
+
+        <div className="h-[1px] w-full my-4 bg-gray-300"></div>
+
         <Link to={'/meus-baremas'}    className="w-full mb-2  text-blue-400 text-sm font-medium cursor-pointer h-10 p-4  border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
                 <Textbox size={16} className="" />Meus baremas
               </Link>
@@ -262,6 +278,9 @@ export function Header() {
         
         {/*<LanguageSwitcher/>*/}
         </div>
+
+
+       
     </header>
   )
 }

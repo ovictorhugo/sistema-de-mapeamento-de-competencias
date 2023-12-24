@@ -33,6 +33,8 @@ import { SignUp } from './pages/SignUp';
 import { LoginAdmin } from './pages/LoginAdmin';
 import { Admin } from './pages/Admin';
 import { MeusBaremas } from './pages/MeusBaremas';
+import { Configuracoes } from './pages/Configuracoes';
+import { Taxonomia } from './components/Taxonomia';
 
 
 
@@ -71,7 +73,7 @@ export const App = () => {
   const [botaoEventosClicado, setBotaoEventosClicado] = useState(false);
   const [botaoTaxonomiaClicado, setBotaoTaxonomiaClicado] = useState(false);
   
-  const [urlGeral, setUrlGeral] = useState('http://177.16.235.7:5001/');
+  const [urlGeral, setUrlGeral] = useState('http://200.128.66.226:8080/');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
   const [user, setUser] = useState<User>({} as User)
   const [isOn, setIsOn] = useState(false);
@@ -82,6 +84,7 @@ export const App = () => {
   const [valoresSelecionadosPopUp, setValoresSelecionadosPopUp] = useState('');
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [idVersao, setIdVersao] = useState('4');
+  const [idBarema, setIdBarema] = useState('');
 
   const [idGraduateProgram, setIdGraduateProgram] = useState('0');
 
@@ -133,6 +136,7 @@ useEffect(() => {
           botaoEventosClicado, setBotaoEventosClicado,
           botaoTaxonomiaClicado, setBotaoTaxonomiaClicado,
           urlGeral, setUrlGeral,
+          idBarema, setIdBarema,
           pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema,
           user, setUser,
           isOn, setIsOn,
@@ -160,7 +164,10 @@ useEffect(() => {
             </Route>
 
 
-            <Route path='/meus-baremas' element={<MeusBaremas/>}/>
+            <Route
+        path='/meus-baremas'
+        element={loggedIn ? <MeusBaremas /> : <Navigate to='/' />}
+      />
             <Route path='/search' element={<StepTwo/>}/>
 
             <Route path='/admin' element={<LoginAdmin/>}/>
@@ -172,11 +179,32 @@ useEffect(() => {
             <Route path='/pesquisadoresSelecionados' element={<PesquisadoresPage/>}/>
            
           
+            <Route
+        path='/login'
+        element={loggedIn == false ? <Login/> : <Navigate to='/' />}
+      />
 
+          <Route
+                path='/signUp'
+                element={loggedIn == false ? <SignUp/> : <Navigate to='/' />}
+              />
+
+              <Route
+                  path='/dashboard'
+                  element={loggedIn && user.state == "admin"  ? <Admin/> : <Navigate to='/' />}
+                />
+
+                <Route
+                  path='/minha-conta'
+                  element={loggedIn && user.state != "admin"  ? <Configuracoes/> : <Navigate to='/' />}
+                />
+
+<Route
+                  path='/minhas-taxonomias'
+                  element={loggedIn   ? <Taxonomia/> : <Navigate to='/' />}
+                />
        
-<Route path='/login' element={<Login/>}/>
-          
-            <Route path='/signUp' element={<SignUp/>}/>
+            
             <Route path='/chat' element={<Chat/>}/>
 
             <Route path='/export-sucupira' element={<Login/>}/>
@@ -232,11 +260,7 @@ useEffect(() => {
             </Route>
 
 
-            {user  ? (
-              <Route path='/dashboard' element={<Admin/>}/>
-            ) : (
-              <Navigate to='/' replace state={{}} />
-            )}
+          
             
           </Routes>
         </UserContext.Provider>

@@ -47,6 +47,9 @@ interface UserContextType {
   totalPesquisadores: string,
   setTotalPesquisadores: React.Dispatch<React.SetStateAction<string>>;
 
+  idBarema: string, 
+  setIdBarema: React.Dispatch<React.SetStateAction<string>>;
+
   totalInstituicoes: string,
   setTotalInstituicoes: React.Dispatch<React.SetStateAction<string>>;
 
@@ -151,6 +154,8 @@ intituicoesSelecionadasCheckbox: "",
   isPopUpVisible: false,
   setIsPopUpVisible: () => {},
 
+  idBarema: "", 
+  setIdBarema: () => {},
 
   idGraduateProgram: "",
   setIdGraduateProgram: () => {},

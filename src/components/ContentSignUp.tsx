@@ -7,7 +7,7 @@ import React, { useContext, useState } from 'react';
 import "firebase/auth";
 
 import { auth } from "../lib/firebase";
-import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword,  updateProfile, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
@@ -39,23 +39,22 @@ export function ContentSignUp() {
 
     if( password == confPassword && password.length >= 8 && email.length != 0 && name.length != 0) {
       e.preventDefault();
-      createUserWithEmailAndPassword(email, password);
-   
+      createUserWithEmailAndPassword(email, password)
+      .then(userCredential => {
+        userCredential?.user && updateProfile(userCredential.user, { displayName: name });
+     })
+
+
+
       setTimeout(() => {
         history('/login');
       }, 0);
     }
-
-    else return <div>Revise sua senha</div>
    
   } catch (error) {
    console.error('Authentication error:', error);
   }
   
-}
-
-if (loading) {
-  return <p>carregando...</p>;
 }
 
 

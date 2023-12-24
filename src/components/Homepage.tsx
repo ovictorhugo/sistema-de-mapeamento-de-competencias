@@ -28,6 +28,7 @@ import { Circle } from "./Circle";
 import { Circle2 } from "./Circle2";
 import { VisaoPrograma } from "./VisaoPrograma";
 import { Filter } from "./Filter";
+import { HeaderProfnit } from "./HeaderProfnit";
 
 interface ButtonStyle extends React.CSSProperties {
   position: 'fixed';
@@ -398,7 +399,12 @@ export function Homepage(props: Props) {
 
     <div className="h-screen">
 
-      <Header />
+{idVersao == "2" ? (
+                <HeaderProfnit/>
+            ):(
+                <Header />
+            )}
+
       <div className="overflow-hidden absolute  py-24 px-6 md:px-16 w-full">
        
         <div className="z-[-999999999] w-[120%] absolute top-[30px] left-[-100px]">

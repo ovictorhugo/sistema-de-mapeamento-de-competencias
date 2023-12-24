@@ -30,6 +30,7 @@ export function ContentLogin() {
 
   const handleLogin = async () => {
     try {
+     if(email.length != 0 && password.length != 0 && password.length >= 8 ) {
       const result = await signInWithEmailAndPassword(auth, email, password);
       setLoggedIn(true);
   
@@ -41,6 +42,7 @@ export function ContentLogin() {
       setTimeout(() => {
         history('/');
       }, 0);
+     }
     } catch (error) {
       console.error('Authentication error:', error);
     }

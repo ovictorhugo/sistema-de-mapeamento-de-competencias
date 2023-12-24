@@ -186,15 +186,15 @@ export function HeaderBarema() {
         <div className="flex gap-4">
 <Link
           to={`/signup`}
-          className="w-fit h-10 whitespace-nowrap flex items-center gap-4  text-sm text-blue-400 rounded-xl px-4 py-2 justify-center hover:bg-gray-50 font-medium transition"
+          className="w-fit h-10 whitespace-nowrap flex items-center gap-4  text-sm text-white rounded-xl px-4 py-2 justify-center hover:bg-gray-50 hover:text-blue-400 font-medium transition"
         >
           <UserPlus size={16} className="" /> Criar conta
         </Link>
 
 
-<Link to={`/login`} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
+<Link to={`/login`} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-white text-blue-400 rounded-xl px-4 py-2 justify-center hover:bg-gray-50 text-sm font-medium transition">
                 
-                          <SignIn size={16} className="text-white" />
+                          <SignIn size={16} className="" />
                        Fazer login
                     </Link>
         </div>

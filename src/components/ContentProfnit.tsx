@@ -70,6 +70,15 @@ export function ContentProfnit(props: Props) {
  
   setIdVersao(`2`)
 
+  const isProgramaTeste3 = location.pathname === `/terms/profnit`;
+
+  
+
+  if(isProgramaTeste3) {
+      setIdVersao(`2`)
+      setUrlGeral(`http://200.128.66.226:5001/`)
+  }
+
   if(idVersao ==`2` ) {
     setUrlGeral(`http://200.128.66.226:5001/`)
   }

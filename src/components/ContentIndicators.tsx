@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom";
 import { Header } from "./Header";
 import { useContext } from "react";
 import { UserContext } from "../contexts/context";
+import { HeaderProfnit } from "./HeaderProfnit";
 
 export function ContentIndicators() {
     const { idVersao, setIdVersao } = useContext(UserContext);
@@ -19,7 +20,11 @@ export function ContentIndicators() {
     }
     return (
         <div>
-            <Header />
+            {idVersao == "2" ? (
+                <HeaderProfnit/>
+            ):(
+                <Header />
+            )}
 
 
             <div className="w-full h-[100vh]">

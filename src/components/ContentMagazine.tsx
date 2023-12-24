@@ -5,6 +5,7 @@ import { Header } from "./Header";
 import { CalendarBlank, CaretCircleLeft, CaretCircleRight, CaretDown, File, Graph, Hash, LinkBreak, MagnifyingGlass, Quotes } from "phosphor-react";
 import Carregando from "./Carregando";
 import { MagazineSvg } from "./MagazineSvg";
+import { HeaderProfnit } from "./HeaderProfnit";
 
 type Magazine = {
     id: string,
@@ -29,7 +30,15 @@ export function ContentMagazine(props: Props) {
 
       //logica versões
    
-      setIdVersao("4")
+      const isProgramaTeste3 = location.pathname === `/magazine/profnit`;
+
+  
+
+  if(isProgramaTeste3) {
+      setIdVersao(`2`)
+      setUrlGeral(`http://200.128.66.226:5001/`)
+  }
+
 
       let urlMagazine = `${urlGeral}magazine?initials=nat&issn=`
   
@@ -111,7 +120,12 @@ const filteredResults = magazine.filter(prop =>
     return  (
         <div className="h-screen">
 
-<Header/>
+{idVersao == "2" ? (
+                <HeaderProfnit/>
+            ):(
+                <Header />
+            )}
+
 
             <div className="overflow-hidden absolute   px-6 md:px-16 w-full">
                 <div className="h-screen py-20  flex items-center ">

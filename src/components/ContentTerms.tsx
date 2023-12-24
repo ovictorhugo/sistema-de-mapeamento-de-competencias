@@ -3,11 +3,12 @@ import { UserContext } from "../contexts/context";
 import { Header } from "./Header";
 import { HighchartsReact } from "highcharts-react-official";
 import Highcharts from 'highcharts'
-import { CursorText, HouseSimple, Lightbulb, ListDashes, MagnifyingGlass, PaperPlaneTilt, TextAlignLeft } from "phosphor-react";
+import { CursorText, HouseSimple, Lightbulb, ListDashes, MagnifyingGlass, PaperPlaneTilt, Quotes, TextAlignLeft } from "phosphor-react";
 import { Link, useNavigate } from "react-router-dom";
 
 import footer2 from '../assets/footer2.png';
 import { TermsSvg } from "./TermsSvg";
+import { HeaderProfnit } from "./HeaderProfnit";
 
 
 interface PalavrasChaves {
@@ -45,9 +46,14 @@ export function ContentTerms(props: Props) {
 
   const { idVersao, setIdVersao } = useContext(UserContext);
 
-    //logica versões
- 
-    setIdVersao("4")
+  const isProgramaTeste3 = location.pathname === `/terms/profnit`;
+
+  
+
+  if(isProgramaTeste3) {
+      setIdVersao(`2`)
+      setUrlGeral(`http://200.128.66.226:5001/`)
+  }
 
   
 
@@ -225,14 +231,14 @@ export function ContentTerms(props: Props) {
   };
   
 
-  const checkboxItems = resultados.map((resultado) => (
+  const checkboxItems = resultados.slice(0, 50).map((resultado) => (
   
     <li
       key={resultado.term}
       className="checkboxLabel group list-none inline-flex mr-4 mb-4 group overflow-hidden"
       onMouseDown={(e) => e.preventDefault()}
     >
-      <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
+      <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-blue-100 hover:text-blue-400 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold border-blue-400 hover:bg-blue-100">
         <span className="text-center block">{botaoResumoClicado || botaoTermosClicado ? (resultado.term) : ('')}
           {botaoAreasClicado ? (`${resultado.area_specialty} | ${resultado.area_expertise}`) : ('')}</span>
         <input
@@ -286,7 +292,14 @@ export function ContentTerms(props: Props) {
   return (
     <div className="h-screen ">
 
-      <Header />
+<div className="fixed top-0 w-full bg-white z-[999999999999]">
+{idVersao == "2" ? (
+                <HeaderProfnit/>
+            ):(
+                <Header />
+            )}
+</div>
+
 
       <div className="flex">
       <div className="  h-screen ">
@@ -298,17 +311,17 @@ export function ContentTerms(props: Props) {
                 <h1 className="text-left text-white max-w-[700px] font-light text-4xl mb-2">Dicionário de <strong className="bg-red-400">palavras encontradas</strong> em termos, resumo e área de especialidade</h1>
                 <div className={`z-[999999] flex gap-2 w-full my-4`}>
 
-                  <div onClick={handleClickTermos} className={`outline-none cursor-pointer text-sm rounded-full  flex items-center gap-2 px-4 py-2 font-semibold transition ${botaoTermosClicado ? "activeTermos" : ('text-white')}`}>
-                    <CursorText size={16} className="" />
+                  <div onClick={handleClickTermos} className={`outline-none cursor-pointer text-sm rounded-xl  flex items-center gap-2 px-4 py-2 font-semibold transition ${botaoTermosClicado ? "activeTermos" : ('text-white')}`}>
+                    <Quotes size={16} className="" />
                     Termo
                   </div>
 
-                  <div onClick={handleClickResumo} className={`outline-none cursor-pointer text-sm rounded-full  flex items-center  gap-2 px-4 py-2 font-semibold transition ${botaoResumoClicado ? "activeResumo" : ('text-white')}`} >
+                  <div onClick={handleClickResumo} className={`outline-none cursor-pointer text-sm rounded-xl  flex items-center  gap-2 px-4 py-2 font-semibold transition ${botaoResumoClicado ? "activeResumo" : ('text-white')}`} >
                     <TextAlignLeft size={16} className="" />
                     Resumo
                   </div>
 
-                  <div onClick={handleClickAreas} className={`outline-none cursor-pointer text-sm rounded-full flex items-center gap-2 px-4 py-2 font-semibold  transition ${botaoAreasClicado ? "activeAreas" : ('text-white')}`}>
+                  <div onClick={handleClickAreas} className={`outline-none cursor-pointer text-sm rounded-xl flex items-center gap-2 px-4 py-2 font-semibold  transition ${botaoAreasClicado ? "activeAreas" : ('text-white')}`}>
                     <Lightbulb size={16} className="" />
                     Áreas
                   </div>
@@ -317,7 +330,7 @@ export function ContentTerms(props: Props) {
               
 
                 <div className="flex items-center z-[999999] w-full mt-4">
-                <div className={`rounded-lg flex items-center bg-white h-14 group w-full  text-base font-medium  justify-center transition border-[1px] border-gray-300 ${botaoTermosClicado ? 'hover:border-[#005399]' : ''} ${botaoResumoClicado ? 'hover:border-red-400' : ''} ${botaoAreasClicado ? 'hover:border-[#8FC53E]' : ''} ${botaoPesquisadoresClicado ? 'hover:border-[#20BDBE]' : ''}`}>
+                <div className={`rounded-xl flex items-center bg-white h-14 group w-full  text-base font-medium  justify-center transition border-[1px] border-gray-300 ${botaoTermosClicado ? 'hover:border-[#005399]' : ''} ${botaoResumoClicado ? 'hover:border-red-400' : ''} ${botaoAreasClicado ? 'hover:border-[#8FC53E]' : ''} ${botaoPesquisadoresClicado ? 'hover:border-[#20BDBE]' : ''}`}>
                   <MagnifyingGlass size={20} className={`text-gray-400 min-w-[52px] ${botaoTermosClicado ? 'group-hover:text-[#005399]' : ''} ${botaoResumoClicado ? 'group-hover:text-red-400' : ''} ${botaoAreasClicado ? 'group-hover:text-[#8FC53E]' : ''} ${botaoPesquisadoresClicado ? 'group-hover:text-[#20BDBE]' : ''}`} />
                   <input
                     type="text"
@@ -338,7 +351,7 @@ export function ContentTerms(props: Props) {
            
             </div>
           </div>
-          <div className="h-screen absolute  top-0 -left-4 z-[-9] "><TermsSvg/></div>
+          <div className="h-screen absolute  top-24 -left-4 z-[-9] "><TermsSvg/></div>
         </div>
       </div>
 

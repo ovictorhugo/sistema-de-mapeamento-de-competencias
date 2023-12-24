@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
 
-import { BookOpen,  Buildings,  CaretDown, CaretUp, ChartBar, ChartLine, CheckCircle, Divide, DownloadSimple, FileCsv, GraduationCap, ListDashes, MagnifyingGlass, Minus, Plus, Textbox, Trash, Upload, UploadSimple, UserList, UserPlus, X } from "phosphor-react";
+import { BookOpen,  Buildings,  CaretDown, CaretUp, ChartBar, ChartLine, CheckCircle, Divide, DownloadSimple, FileCsv, GraduationCap, ListDashes, MagnifyingGlass, Minus, Plus, SignIn, Textbox, Trash, Upload, UploadSimple, UserList, UserPlus, X } from "phosphor-react";
 
 import cimatec from '../assets/logo_profnit.png';
 import { LogoWhite } from "./LogoWhite";
-
+import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 import { UserContext } from '../contexts/context'
 import { useEffect, useState, useContext } from "react";
 import { SvgBarema } from "./SvgBarema";
 import logo_4 from '../assets/logo_4.png';
 import Papa from 'papaparse';
 import Cookies from 'js-cookie';
-
+import { getFirestore, doc, getDocs, collection, addDoc, query, deleteDoc,  where,  Query } from 'firebase/firestore';
 import bg_popup from '../assets/bg_popup.png';
 
 import Highcharts from 'highcharts';
@@ -20,7 +20,6 @@ import HighchartsReact from 'highcharts-react-official';
 import woman from '../assets/woman_ilus.png';
 import { HeaderBarema } from "./HeaderBarema";
 import { PopUpWrapper } from "./PopUpWrapper";
-import { getFirestore, doc, getDoc, collection, addDoc } from 'firebase/firestore';
 
 type Research = {
   article_A1: string,
@@ -115,6 +114,19 @@ type Research = {
 
   }
 
+  interface UserData {
+    id: string
+    name: string,
+    data: any,
+    ano: string,
+    anoOri: string,
+    qualisSelecionados: any,
+    pesquisadoresSelecionadosGroupBarema: string,
+    userId: string,
+    researcher: any,
+    createdAt:string
+  }
+
 
 
 export function Barema() {
@@ -124,7 +136,13 @@ export function Barema() {
   const { idVersao, setIdVersao } = useContext(UserContext);
   const { urlGeral, setUrlGeral } = useContext(UserContext);
   const [researcherSelecionados, setResearcherSelecionados] = useState<Research[]>([]); // Define o estado vazio no início
-
+  const { idBarema, setIdBarema } = useContext(UserContext);
+  const [itensSelecionados, setItensSelecionados] = useState<string[]>([]);
+  const [name, setName] = useState('');
+  const [ano, setAno] = useState(4)
+  const [anoOri, setAnoOri] = useState(4)
+  const [data, setData] = useState<Csv[]>([]);
+  const [categories, setCategories] = useState<Csv[]>([]);;
   let urlTermPesquisadoresSelecionados = `${urlGeral}/researcherName?name=${pesquisadoresSelecionadosGroupBarema}&graduate_program_id=`
   
   if(pesquisadoresSelecionadosGroupBarema == "") {
@@ -172,12 +190,7 @@ export function Barema() {
 
   const [csvData, setCsvData] = useState<string>(''); // Variável para armazenar os itens concatenados do CSV LattesId
   
-  useEffect(() => {
-  if(csvData == "") {
-    setPesquisadoresSelecionadosGroupBarema('todos')
-  }
-  }, [csvData]);
-  
+
   const pesquisaInputFormatado = pesquisaInput.trim().replace(/ \s+/g, ";");
   const urlPesquisador = urlGeral + `/reasercherInitials?initials=${pesquisaInputFormatado}`
 
@@ -194,8 +207,7 @@ export function Barema() {
     setPesquisadoresSelecionadosGroupBarema('');
   }
 
-  const [ano, setAno] = useState(4)
-  const [anoOri, setAnoOri] = useState(4)
+
   const anoAtual = new Date().getFullYear();
   const anoFiltro = anoAtual - ano;
 
@@ -300,19 +312,7 @@ export function Barema() {
   };
 
   
-  
-  useEffect(() => {
-    const storedPesquisadoresSelecionadosGroupBarema = localStorage.getItem('pesquisadoresSelecionadosGroupBarema');
-  
-    if (storedPesquisadoresSelecionadosGroupBarema) {
-      // If user information is found in local storage, set the user and mark as logged in
-      setPesquisadoresSelecionadosGroupBarema(JSON.parse(storedPesquisadoresSelecionadosGroupBarema));
-     
-    }
-  }, []);
-
  
-
 
   const checkboxPesquisadores = resultadosPesquisadores.map((resultado) => (
     <li
@@ -336,7 +336,96 @@ export function Barema() {
     </li>
   ));
 
+
+  //FIREBASEE
+
+  const { user, setUser } = useContext(UserContext);
+  const userId = user && user.uid;
+  const [userData, setUserData] = useState<UserData[] | null>(null);
+  const db = getFirestore();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (userId) {
+          console.log('userId:', userId);
   
+          const userDocsRef = collection(db, 'baremas');
+const userDocsQuery = query(userDocsRef, where('userId', '==', userId));
+const userDocSnapshot = await getDocs(userDocsQuery);
+  
+          console.log('userDocSnapshot:', userDocSnapshot);
+  
+          if (userDocSnapshot.size > 0) {
+           
+            
+            const userDataArray = userDocSnapshot.docs.map((doc) => doc.data() as UserData);
+setUserData(userDataArray);
+
+console.log('User Data:', userData);
+          } else {
+            console.log('User data not found');
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+  
+    fetchData();
+  }, [db, userId]);
+
+  
+  useEffect(() => {
+    // Check if idBarema matches the id of any user in userData
+    const matchingUser = userData?.find((user) => user.id === idBarema);
+
+    if (matchingUser) {
+      // Set the data state to the data property of the matching user
+      setData(matchingUser.data);
+      setName(matchingUser.name)
+      setAno(Number(matchingUser.ano))
+      setAnoOri(Number(matchingUser.anoOri))
+      setItensSelecionados(matchingUser.qualisSelecionados.split(";"))
+
+     
+    } else {
+      // Handle the case where no matching user is found
+      // You might want to set data to an empty array or handle it differently
+      setData([]);
+    }
+  }, [idBarema, userData]);
+
+  useEffect(() => {
+    // Check if userData is not null and if data has been set
+    if (userData && data.length > 0) {
+      // Map the data to retrieve all rows where "categoria pai" is an empty string or "0"
+      const parentCategories = data.map((row: any) => {
+        if (row['categoria pai'] === '' || row['categoria pai'] === '0') {
+          return row;
+        }
+        return null; // If the condition is not met, return null
+      }).filter(Boolean); // Filter out the null values
+
+      setCategories(parentCategories);
+    }
+  }, [userData, data]);
+
+   
+  useEffect(() => {
+    const storedPesquisadoresSelecionadosGroupBarema = localStorage.getItem('pesquisadoresSelecionadosGroupBarema');
+  
+    if (storedPesquisadoresSelecionadosGroupBarema && userData && userData.length === 0) {
+      // If user information is found in local storage, set the user and mark as logged in
+      setPesquisadoresSelecionadosGroupBarema(JSON.parse(storedPesquisadoresSelecionadosGroupBarema));
+     
+    }
+  }, [userData]);
+
+  console.log(urlTermPesquisadoresSelecionados)
+
+ 
+
 
   //upload de arquivos
 
@@ -358,8 +447,7 @@ export function Barema() {
     }
   };
 
-  const [data, setData] = useState<Csv[]>([]);
-  const [categories, setCategories] = useState<Csv[]>([]);;
+ 
 
   
 
@@ -399,7 +487,16 @@ export function Barema() {
       const processedResearchers = processResearchers(researcher, data);
       setResearcher(processedResearchers);
     }
-  }, [data, categories, researcher]);
+  }, [researcher]);
+
+
+  useEffect(() => {
+    // Perform data processing when both data and categories are ready
+    if (data.length > 0 && categories.length > 0) {
+      const processedResearchers = processResearchers(researcher, data);
+      setResearcher(processedResearchers);
+    }
+  }, [data]);
 
   //calcular
 
@@ -741,7 +838,7 @@ export function Barema() {
     'SQ': 'bg-[#560B11]',
   }
 
-  const [itensSelecionados, setItensSelecionados] = useState<string[]>([]);
+  
 
   type CheckboxStates = {
     [index: number]: boolean;
@@ -860,10 +957,9 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
 
   //popup
 
-  const { user, setUser } = useContext(UserContext);
-  const userId = user && user.uid;
+  
 
-  const [name, setName] = useState('');
+
 
   const [popUpProgram, setPopUpProgram] = useState(false);
   const [popUpSuccess, setPopUpSuccess] = useState(false);
@@ -874,9 +970,10 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
     try {
       // Aqui você pode adicionar a lógica para tratar os tipos de programa selecionados
       // programTypes é um array com os tipos selecionados
-  
+      const docId = uuidv4();
       // Crie um objeto com os dados do formulário
       const formData = {
+        id: docId,
         name,
         data,
         ano,
@@ -922,12 +1019,12 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
 
   };
 
-
+console.log(`idBarema`, idBarema)
     return  (
         <div className=" min-h-screen ">
 
     <div className="absolute  w-full top-0 left-0 ">
-                <div className="w-full  h-[70vh] bg-blue-400   " >
+                <div className="w-full  h-[50vh] bg-blue-400   " >
                   <div className="w-full h-full bg-cover opacity-20 " style={{ backgroundImage: `url(${bg_popup})` }}>
 
                   </div>
@@ -937,7 +1034,7 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
           <div className="backgroundGradient h-full w-full md:px-16 px-6 pb-16">
             
 
-            {isPopUp == true ? (
+            {isPopUp == true && data.length === 0 ? (
               <div className="fixed px-16 top-0 left-0 h-screen w-full bg-blue-400 z-[9999] bg-opacity-60 backdrop-blur-md">
               <div className="w-full grid grid-cols-2 gap-2 h-creen items-center">
                 <div className="flex justify-center h-screen gap-4 flex-col">
@@ -1043,7 +1140,7 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
                 
 
                 {searchState == true && pesquisaInput != "" ? (
-                  <div className="h-10 overflow-x-auto element relative max-w-[750px]">
+                  <div className="h-10 overflow-x-auto elementBarra relative max-w-[750px]">
                     <div className="w-full flex  gap-4  overflow-x-auto ">{checkboxPesquisadores}</div>
                   </div>
                 ): ('')}
@@ -1066,7 +1163,7 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
       <div  className=" flex flex-col gap-8 w-full  p-12 mb-12 bg-white border border-gray-300 rounded-2xl" >
       <div >
       <h1 className=" text-2xl mb-2 font-normal max-w-[750px] ">
-                <strong className="bg-red-400 text-white font-normal">Configurações da avaliação</strong> 
+                <strong className="bg-red-400 text-white font-normal">Configurações</strong> da avaliação {name}
               </h1>
               <p className="text-gray-400 max-w-[750px]">Estas configurações incluem o nome do barema para exportação, o período de ano a ser considerado para a análise, a importação de um arquivo CSV contendo os critérios de avaliação e as classificações Qualis atribuídas a cada publicação</p>
       </div>
@@ -1193,7 +1290,7 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
                   />
                 </div>
 
-                <div className="flex gap-4 w-full overflow-x-auto element pb-2">
+                <div className="flex gap-4 w-full overflow-x-auto elementBarra pb-2">
                 {researcher.map((props) => {
                   // Titulações
                   if (subCategory.codigo === '2' && props.graduation == "Pós-Doutorado") {
@@ -1518,7 +1615,7 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
           pontos)
         </p>
 
-        <div className="flex gap-4 w-full overflow-x-auto element pb-2"></div>
+        <div className="flex gap-4 w-full overflow-x-auto elementBarra pb-2"></div>
       </div>
     </div>
   ))
@@ -1615,7 +1712,12 @@ const handleFileInputChangeLattesId = (e: React.ChangeEvent<HTMLInputElement>) =
           <div  onClick={() => handleClickAdicionarBtn()} className="w-full mb-2  text-blue-400 text-sm font-bold cursor-pointer h-12 p-6  border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
           <Textbox size={16} className="" />Salvar barema
         </div>
-        ):(``)}
+        ):(
+
+          <Link  to={"/login"} className="w-full mb-2  text-blue-400 text-sm font-bold cursor-pointer h-12 p-6  border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
+          <SignIn size={16} className="" />Fazer login
+        </Link>
+        )}
 
 <div onClick={downloadCSV} className="w-fit cursor-pointer h-12 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-6 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
                 

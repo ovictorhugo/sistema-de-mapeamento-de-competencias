@@ -300,11 +300,11 @@ export function Filter() {
   };
 
   const [colaboradores, setColaboradores] = useState([
-    { id: 1, itens: 'https://www.ufba.br/sites/portal.ufba.br/files/brasao_ufba.jpg', name: `Victor Hugo de Jesus Oliveira`, inst: `Universidade Federal da Bahia` },
-    { id: 2, itens: 'https://upload.wikimedia.org/wikipedia/commons/8/88/Bras%C3%A3o_da_UNEB.png', name: `Matheus Souza dos Santos`, inst: `Universidade do Estado da Bahia` },
-    { id: 3, itens: 'https://upload.wikimedia.org/wikipedia/commons/8/88/Bras%C3%A3o_da_UNEB.png', name: `Eduardo Manuel de Freitas Jorge`, inst: `Universidade do Estado da Bahia` },
-    { id: 4, itens: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Bras%C3%A3o_UESC.svg/1200px-Bras%C3%A3o_UESC.svg.png', name: `Gesil Sampaio Amarante Segundo`, inst: `Universidade Estadual de Santa Cruz` },
-    { id: 5, itens: 'https://www.ufrb.edu.br/ascom/images/documentos/marca/01_-_Preferencial.png', name: `Gleidson de Meireles Costa`, inst: `Universidade Federal do Recôncavo da Bahia` },
+    { id: 1, itens: 'https://www.ufba.br/sites/portal.ufba.br/files/brasao_ufba.jpg', name: `Victor Hugo de Jesus Oliveira`, inst: `Universidade Federal da Bahia`, img:`../col_3.png` },
+    { id: 2, itens: 'https://upload.wikimedia.org/wikipedia/commons/8/88/Bras%C3%A3o_da_UNEB.png', name: `Matheus Souza dos Santos`, inst: `Universidade do Estado da Bahia`, img:`../col_4.png` },
+    { id: 3, itens: 'https://upload.wikimedia.org/wikipedia/commons/8/88/Bras%C3%A3o_da_UNEB.png', name: `Eduardo Manuel de Freitas Jorge`, inst: `Universidade do Estado da Bahia`, img:`../col_2.png` },
+    { id: 4, itens: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Bras%C3%A3o_UESC.svg/1200px-Bras%C3%A3o_UESC.svg.png', name: `Gesil Sampaio Amarante Segundo`, inst: `Universidade Estadual de Santa Cruz`, img:`../col_5.png` },
+    { id: 5, itens: 'https://www.ufrb.edu.br/ascom/images/documentos/marca/01_-_Preferencial.png', name: `Gleidson de Meireles Costa`, inst: `Universidade Federal do Recôncavo da Bahia`, img:`../col_1.png` },
   ]);
 
 
@@ -520,11 +520,15 @@ Menção a Jônatas Pereira do Nascimento Rosa (UNEB) pela revisão e projeto te
                  {colaboradores.map(props => {
                             return(
                               <div  className="hover:bg-gray-50 transition-all  p-2 cursor-pointer border w-full flex gap-4 items-center border-gray-300 rounded-md " key={props.name}>
-                              <div className={`whitespace-nowrap bg-contain bg-center bg-no-repeat h-6 w-6  relative `} style={{ backgroundImage: `url(${props.itens}) ` }}>
+                              <div className={`whitespace-nowrap rounded-md bg-contain bg-center bg-no-repeat h-10 w-10  relative `} style={{ backgroundImage: `url(${props.img}) ` }}>
                                </div>
                             <div >
                             <div className="flex-1 m-0 font-bold text-gray-500">{props.name}</div>
+                            <div className='flex items-center gap-2 mt-1'>
+                            <div className={`whitespace-nowrap bg-contain bg-center bg-no-repeat h-6 w-6  relative `} style={{ backgroundImage: `url(${props.itens}) ` }}></div>
                             <div className="flex-1 m-0 text-gray-400 text-sm">{props.inst}</div>
+                           
+                            </div>
                             </div>
                            </div>
 

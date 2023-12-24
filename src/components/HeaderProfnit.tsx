@@ -96,7 +96,7 @@ export function HeaderProfnit() {
        ( <Link to={`/indicators/profnit`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><ChartLine size={16} className="text-gray-400" />Indicadores</Link>)
        :('')}
           <Link to={`/terms/profnit`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><ListDashes size={16} className="text-gray-400" />Dicionário</Link>
-          <Link to={`/magazine/profnit}`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><BookOpen size={16} className="text-gray-400" />Revistas</Link>
+          <Link to={`/magazine/profnit`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><BookOpen size={16} className="text-gray-400" />Revistas</Link>
           
         
         
@@ -107,14 +107,7 @@ export function HeaderProfnit() {
       <div className="flex gap-4">
       <div id="google_translate_element" ></div>
 
-      {isProgramaTeste && (
-        <Link
-          to={`/indicators-pos`}
-          className="w-fit h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-sm text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 font-medium transition"
-        >
-          <ChartLine size={16} className="text-white" /> Indicadores da pós-graduação
-        </Link>
-      )}
+     
 
 
 
