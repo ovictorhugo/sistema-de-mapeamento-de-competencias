@@ -277,33 +277,7 @@ console.log('idversao',idVersao)
   const urlResearcherImage = urlGeral + 'researcher_image'
   const [ResearcherImage, setResearcherImage] = useState<ResearcherId[]>([])
 
-  useEffect(() => {
 
-    fetch(urlResearcherImage, {
-      mode: 'cors',
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Max-Age': '3600',
-        'Content-Type': 'text/plain'
-
-      }
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        const newData = data.map((post: Post) => ({
-          ...post,
-          term: post.term
-        }));
-       
-        setResearcherImage(newData);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  }, [urlResearcherImage]);
 
 
     // palavras chaves

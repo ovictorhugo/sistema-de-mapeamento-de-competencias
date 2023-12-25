@@ -1,7 +1,7 @@
 import { Logo } from "./Logo";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Ilustracao } from "./Ilustracao";
-import { ArrowCircleDown, Info, Funnel,  File, Buildings, PaperPlaneTilt, ChartLine, Question, SignIn, ListDashes, UserCirclePlus, UserCircle, BookOpen, Textbox, Share, GraduationCap, GitBranch, UserPlus, SignOut, X, Gear, ChartBar } from "phosphor-react";
+import { ArrowCircleDown, Info, Funnel,  File, Buildings, PaperPlaneTilt, ChartLine, Question, SignIn, ListDashes, UserCirclePlus, UserCircle, BookOpen, Textbox, Share, GraduationCap, GitBranch, UserPlus, SignOut, X, Gear, ChartBar, PencilSimpleLine } from "phosphor-react";
 
 import logo_1 from '../assets/logo_1.png';
 import logo_2 from '../assets/logo_2.png';
@@ -202,7 +202,7 @@ export function Header() {
                     </Link>
         </div>
       ): (
-<div className="flex group justify-end items-center">
+<div className="flex group justify-end items-center z-[9999999999999999999999999]">
   {user.photoURL || user.img_url ? (
     <div
       onClick={handlePopkBtn}
@@ -231,7 +231,7 @@ export function Header() {
       ></div>
     </div>
 
-    <div className="top-[-40px] px-4 w-full relative items-center flex flex-col z-[9999]">
+    <div className="top-[-40px] px-4 w-full relative items-center flex flex-col z-[9999999999999999999]">
       <div
         className={`whitespace-nowrap  bg-cover bg-center bg-no-repeat h-20 w-20 bg-white rounded-xl border-4 border-white  relative `}
         style={{ backgroundImage: user.photoURL == null ? (`url(${user.img_url})`):(`url(${user.photoURL})`) }}
@@ -248,16 +248,20 @@ export function Header() {
                 <Gear size={16} className="" />Minha conta
               </Link>
 
-              <Link to={'/minhas-taxonomias'}    className="w-full  text-gray-400 text-sm font-medium cursor-pointer h-10 p-4 rounded-xl bg-white border-gray-300  items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
+              <Link to={'/minhas-taxonomias'}    className="w-full mb-2  text-gray-400 text-sm font-medium cursor-pointer h-10 p-4 rounded-xl bg-white border-gray-300  items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
                 <GitBranch size={16} className="rotate-180" />Minhas taxonomias
+              </Link>
+
+              <Link to={'/meus-baremas'}    className="w-full  text-gray-400 text-sm font-medium cursor-pointer h-10 p-4 rounded-xl bg-white border-gray-300  items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
+                <Textbox size={16} className="" />Meus baremas
               </Link>
         </div>
 
         <div className="h-[1px] w-full my-4 bg-gray-300"></div>
 
-        <Link to={'/meus-baremas'}    className="w-full mb-2  text-blue-400 text-sm font-medium cursor-pointer h-10 p-4  border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
-                <Textbox size={16} className="" />Meus baremas
-              </Link>
+        <div  className="w-full mb-2  text-blue-400 text-sm font-medium cursor-pointer h-10 p-4  border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
+                <PencilSimpleLine size={16} className="" />Editar dados
+              </div>
 
         <div
           onClick={handleLogout}

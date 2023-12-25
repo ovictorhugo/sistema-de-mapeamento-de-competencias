@@ -112,7 +112,7 @@ export function ContentLogin() {
             <form className="w-full ">
               <p className="text-sm text-gray-500 mb-2">Endereço de email</p>
               <input
-                type="text"
+                type="email"
                 name="email"
                 id="email"
                 onChange={(e) => setEmail(e.target.value)}

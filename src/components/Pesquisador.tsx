@@ -216,8 +216,6 @@ localStorage.setItem('pesquisadoresSelecionadosGroupBarema', JSON.stringify(pesq
           <div className={`flex items-center ${isOn && valoresSelecionadosExport != '' ? "" : "flex-col  "}`}>
 
             <div className={`whitespace-nowrap  bg-cover bg-center bg-no-repeat h-20 w-20 bg-white rounded-xl border-4 border-white  relative ${isOn && valoresSelecionadosExport != '' ? "" : "top-[-40px]  mb-3"}`} style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id}) ` }}>
-
-
             </div>
 
             <div className={`flex  flex-col mx-6  relative ${isOn && valoresSelecionadosExport != '' ? "top-0 ml-6" : "top-[-30px] items-center"}`}>

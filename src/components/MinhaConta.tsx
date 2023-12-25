@@ -1,18 +1,21 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Header } from "./Header";
 import { UserContext } from "../contexts/context";
-import { BookOpen, ChartBar, ChartLine, GitBranch, GraduationCap, ListDashes, PencilSimpleLine, Plus, SquaresFour, Textbox, X } from "phosphor-react";
+import { ArrowClockwise, BookOpen, ChartBar, ChartLine, GitBranch, GraduationCap, ListDashes, PencilSimpleLine, Plus, SquaresFour, Textbox, X } from "phosphor-react";
 import { PopUpWrapper } from "./PopUpWrapper";
 import bg_popup from '../assets/bg_popup.png';
 import bg_conta from '../assets/bg_conta.png';
 import { Link } from "react-router-dom";
 import { ProfnitLogoSvg } from "./ProfnirLogoSvg";
+import { getAuth, signInWithEmailAndPassword,  updateProfile, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from "../lib/firebase";
 
 export function MinhaConta() {
     const { user, setUser } = useContext(UserContext);
     const [popUpProgram, setPopUpProgram] = useState(false);
     const { idBarema, setIdBarema } = useContext(UserContext);
     const { idVersao, setIdVersao } = useContext(UserContext);
+    
     setIdVersao(`4`)
 
     const handleSubmit = async () => {
@@ -24,12 +27,32 @@ export function MinhaConta() {
         }
       };
 
+      // forms
+
+      const [name, setName] = useState('');
+      const [passwordAtual, setPasswordAtual] = useState('');
+      const [password, setPassword] = useState('');
+      const [confPassword, setConfPassword] = useState('');
+      const [email, setEmail] = useState('');
+      const [photo, setPhoto] = useState(null);
+
+  const handlePhotoChange = (e: any) => {
+    const selectedPhoto = e.target.files[0];
+    setPhoto(selectedPhoto);
+  };
+
+
+      useEffect(() => {
+      setName(user ? user.displayName || '' : '')
+      setEmail(user ? user.email || '' : '')
+    }, []);
+
     return  (
         <div className="h-screen ">
             <Header/>
 
             <div className="py-24 px-6 md:px-16 w-full">
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center pt-8">
                 <div className="flex gap-6 items-center justify-center">
                 <div
       className="h-16 w-16 rounded-xl bg-contain bg-center bg-no-repeat cursor-pointer border border-gray-300"
@@ -45,7 +68,7 @@ export function MinhaConta() {
           className="w-fit relative cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition"
         >
           <PencilSimpleLine size={16} className="text-white" />
-          Editar conta
+          Editar dados
         </div>
                 </div>
 
@@ -142,20 +165,90 @@ export function MinhaConta() {
                             <div className="h-full max-w-[500px] ">
                                 <div className=" border-l h-full pb-[96px] overflow-y-auto elementBarra border-l-gray-300 p-12 ">
                                 <div onClick={() => setPopUpProgram(false)} className={`ml-auto float-right cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center `}>
-                        <X size={20} className={'rotate-180 transition-all text-gray-400'} />
+                        <X size={20} className={' transition-all text-gray-400'} />
                         </div>
                                 <div className="flex mb-4 items-center gap-4">
                                 <div
-      className="h-16 w-16 rounded-xl bg-contain bg-center bg-no-repeat cursor-pointer border border-gray-300"
+      className="h-16 w-16 rounded-xl p-2 bg-contain bg-center bg-no-repeat  border border-gray-300 flex items-end"
       style={{ backgroundImage: user.photoURL == null ? (`url(${user.img_url})`):(`url(${user.photoURL})`) }}
-    ></div>
+    >
+
+<label  htmlFor="photo" className=" h-6 w-6 rounded-md bg-gray-50 flex items-center justify-center ml-auto right-0 mt-auto relative bottom-0 cursor-pointer">
+<Plus size={16} className="text-gray-400" />
+<input
+            type="file"
+            accept="image/*"
+            name="photo"
+            id="photo"
+            onChange={handlePhotoChange}
+            className=""
+            hidden
+          />
+</label>
+    </div>
 
 <div>
 <h3 className="max-w-[250px] font-medium text-2xl  text-gray-400">{user.displayName}</h3>
-<p className="text-gray-400">{user.email}</p>
+<p className="text-gray-400 text-sm">{user.email}</p>
 </div>
                                 </div>
                                
+                               <div className="mt-8">
+                               <p className="text-sm text-gray-500 mb-2">Nome completo</p>
+                                <input
+                                    type="text"
+                                    onChange={(e) => setName(e.target.value)}
+                                    value={name}
+                                
+                                    required
+                                    className="mb-6 flex-1 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+                               
+
+                               <p className="text-sm text-gray-500 mb-2">Alterar email</p>
+                                <input
+                                    type="email"
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    value={email}
+                                
+                                    required
+                                    className="mb-6 flex-1 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+                               
+                               <p className="text-sm text-gray-500 mb-2">Senha atual</p>
+                                <input
+                                    type="text"
+                                    onChange={(e) => setPasswordAtual(e.target.value)}
+                                    value={passwordAtual}
+                                
+                                    required
+                                    className="mb-6 flex-1 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+                               
+
+                               <div className="grid grid-cols-2 gap-4">
+          <div>
+          <p className="text-sm text-gray-500 mb-2">Nova senha</p>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="mb-4 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+
+          </div>
+
+<div>
+<p className="text-sm text-gray-500 mb-2">Confirmar nova senha</p>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                onChange={(e) => setConfPassword(e.target.value)}
+                required
+                className="mb-4 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+
+</div>
+             </div>
+                               </div>
                                   
 
                                    
@@ -163,7 +256,7 @@ export function MinhaConta() {
 
                                 <div className="flex border-l  border-l-gray-300 gap-6 px-12 py-6 bg-white top-[-96px] z-[99] right-0 relative">
                             <div onClick={handleSubmit} className="whitespace-nowrap flex cursor-pointer items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500  font-medium transition flex-1 h-12 ml-auto">
-                                <Plus size={16} className="text-white" /> Atualizar conta
+                                <ArrowClockwise size={16} className="text-white" /> Atualizar conta
                             </div>
 
       

@@ -151,7 +151,7 @@ export function ContentLoginAdmin() {
             <form className="w-full z-[9999999999999]">
               <p className="text-sm text-gray-500 mb-2">Usuário </p>
               <input
-                type="text"
+                type="email"
                 name="email"
                 id="email"
                 onChange={(e) => setEmail(e.target.value)}

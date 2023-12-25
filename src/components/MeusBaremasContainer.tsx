@@ -150,7 +150,7 @@ const userDocSnapshot = await getDocs(userDocsQuery);
         <div className=" min-h-screen ">
 
         <div className="absolute  w-full top-0 left-0 z-[-9]">
-                <div className="w-full  h-[50vh] bg-blue-400   " >
+                <div className="w-full  h-[45vh] bg-blue-400   " >
                   <div className="w-full h-full bg-cover opacity-20 " style={{ backgroundImage: `url(${bg_popup})` }}>
 
                   </div>
