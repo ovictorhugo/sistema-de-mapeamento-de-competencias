@@ -1,65 +1,134 @@
 import { ChartLine, LinkBreak, PaperPlaneTilt, Question } from "phosphor-react";
 import { Logo } from "./Logo";
-import SearchChat from "./SearchChat";
+import {SearchChat} from "./SearchChat";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/context";
 import { Pesquisadores } from "./Pesquisadores";
+import { Header } from "./Header";
 
+const API_KEY = "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";
 
 export function ChatContent() {
-
     const { valoresSelecionadosExport, setValoresSelecionadosExport } = useContext(UserContext);
+    const [inputMessage, setInputMessage] = useState('');
+    const [messages, setMessages] = useState([
+      {
+        message: "Hello! How can I help you today?",
+        sender: "ChatGPT",
+        direction: "incoming"
+      }
+    ]);
+    const [loading, setLoading] = useState(false);
 
+    useEffect(() => {
+        async function processMessageToChatGPT(chatMessages: any) {
+            const apiMessages = chatMessages.map((messageObject: any) => ({
+              role: messageObject.sender === "ChatGPT" ? "assistant" : "user",
+              content: messageObject.message
+            }));
+          
+            const systemMessage = {
+              role: "system",
+              content: "Explain all concepts like I am 10 years old"
+            };
+          
+            const apiRequestBody = {
+              model: "gpt-3.5-turbo",
+              messages: [systemMessage, ...apiMessages]
+            };
+          
+            try {
+              const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${API_KEY}`,
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify(apiRequestBody)
+              });
+          
+              if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`Error response from OpenAI API: ${errorData.error.message}`);
+              }
+          
+              const data = await response.json();
+              const assistantMessage = data.choices[0]?.message?.content;
+          
+              if (!assistantMessage) {
+                console.error("Unexpected response from OpenAI API:", data);
+                throw new Error("Unexpected response from OpenAI API");
+              }
+          
+              handleReceivedMessage(assistantMessage, "ChatGPT");
+            } catch (error) {
+              console.error("Error processing message to ChatGPT:", error.message);
+              throw error; // Re-throw the error to allow proper handling in the calling function
+            }
+          }
 
-
-    const valoresSelecionadosJSX = valoresSelecionadosExport.split(';').map((valor, index) => (
-        <li key={index} className='whitespace-nowrap gap-2 bg-blue-100 border-blue-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>{valor.replace(/;/g, ' ')}
-
-        </li>
-    ));
-
-
-
+        processMessageToChatGPT(messages);
+      }, []);
+  
+   
+      const handleSend = async () => {
+        const newMessage = {
+          message: inputMessage,
+          sender: "user",
+          direction: "outgoing"
+        };
+    
+        const newMessages = [...messages, newMessage];
+        setMessages(newMessages);
+        setInputMessage('');
+        setLoading(true);
+    
+        try {
+          await processMessageToChatGPT(newMessages);
+        } catch (error) {
+          console.error("Error processing message to ChatGPT:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      
+  
+    const handleReceivedMessage = (content: any, sender: any) => {
+      const newMessage = {
+        message: content,
+        sender: sender,
+        direction: "incoming"
+      };
+  
+      const newMessages = [...messages, newMessage];
+      setMessages(newMessages);
+    };
+  
     return (
-        <div className="h-full items-center flex-col justify-center w-full px-6 md:px-16">
-            <div className={` w-full mb-4 h-20 justify-center items-center flex top-0`}>
-                <div className=" w-full flex items-center h-12 ">
-                    <Link to={"/"} className="h-[25px] "><Logo /></Link>
-
-                    <div className="flex px-6 h-full">
-                        <Link to={"/discover"} className="flex items-center h-full border-y-[2px] border-[#f9f9f9] hover:border-b-blue-400 text-gray-400 text-sm font-bold transition mr-6 gap-2"><PaperPlaneTilt size={16} className="text-gray-400" />Descobrir</Link>
-                        <Link to={"/indicators"} className="flex items-center h-full border-y-[2px] border-[#f9f9f9] hover:border-b-blue-400 text-gray-400 text-sm font-bold transition mr-6 gap-2"> <ChartLine size={16} className="text-gray-400" />Indicadores</Link>
-                        <Link to={""} className="flex items-center h-full border-y-[2px] border-[#f9f9f9] hover:border-b-blue-400 text-gray-400 text-sm font-bold transition mr-6 gap-2"><Question size={16} className="text-gray-400" />Dúvidas frequentes</Link>
-                    </div>
+      <div className="h-screen">
+        <div className="py-24 px-16 w-full">
+          <div>
+            <div>
+              {messages.map((message, i) => (
+                <div key={i} className={message.direction === "incoming" ? "text-blue-600" : "text-green-600"}>
+                  {message.message}
                 </div>
+              ))}
             </div>
-
-            <div className="flex flex-col ">
-                <div className="max-w-[400px] w-fit p-8 border-[1px] border-gray-300 rounded-xl mb-6 rounded-tl-none text-gray-400">Bem-vindo ao SIMCC</div>
-                <div className="max-w-[400px] w-fit p-8 border-[1px] border-gray-300 rounded-xl mb-6 rounded-tl-none text-gray-400">Experimente pesquisar um termo e veja o que a plataforma pode filtrar para você.</div>
-                <div className="max-w-[400px] w-fit p-8 border-[1px] border-gray-300 rounded-xl mb-6 rounded-tl-none text-gray-400">Você pode procurar os termos existente no <a href="" className="text-blue-400 font-bold flex gap-2 items-center">dicionário de palavras <LinkBreak size={16} className="text-blue-400" /></a></div>
-
-                {valoresSelecionadosExport != "" ? (
-                    <div className=" transition-all duration-500 items-center gap-4 max-w-[400px] ml-auto right-0 float-right relative w-fit p-8 border-[1px] border-blue-400 rounded-xl mb-6 rounded-tr-none text-gray-400 flex">Pesquisar pelo termo {valoresSelecionadosJSX}</div>
-                ) : (
-                    <div></div>
-                )}
-
-                <div className="transition-all duration-500 items-center gap-4 max-w-[400px] w-fit p-8 border-[1px] border-gray-300 rounded-xl mb-6 rounded-tl-none text-gray-400">Certo! Deseja pesquisa pelo termo pelos artigos ou resumo do pesquisador?</div>
-
-            </div>
-
-            {valoresSelecionadosExport != "" ? (
-                <Pesquisadores />
-            ) : (
-                <div></div>
-            )}
-
-
-            <div className="fixed bottom-0 right-0  w-full px-[8%] bg-gradient-to-t from-[#f9f9f9] from-90% ">
-                <SearchChat />
-            </div>
+            <form onSubmit={(e) => e.preventDefault()}>
+              <input
+                type="text"
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+              />
+              <button type="button" onClick={handleSend} disabled={loading}>
+                Send
+              </button>
+            </form>
+            {loading && <p>Loading...</p>}
+          </div>
         </div>
-    )
-}
+      </div>
+    );
+  }

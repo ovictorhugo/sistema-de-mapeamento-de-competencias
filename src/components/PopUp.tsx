@@ -680,7 +680,7 @@ export function PopUp(props: PesquisadorProps) {
 
   const [eventos, setEventos] = useState<Eventos[]>([]);
 
-  let urlEvento = `${urlGeral}pevent_researcher?term=researcher_id=${props.id}&year=${value}&nature=${valoresSelecionadosNatureza}`;
+  let urlEvento = `${urlGeral}pevent_researcher?term=&researcher_id=${props.id}&year=${value}&nature=${valoresSelecionadosNatureza}`;
 
   if(botaoEventosClicado) {
     urlEvento = `${urlGeral}pevent_researcher?term=${valoresSelecionadosPopUp}${valorDigitadoPesquisaDireta}&researcher_id=${props.id}&year=${value}&nature=${valoresSelecionadosNatureza}`;
@@ -1349,7 +1349,7 @@ export function PopUp(props: PesquisadorProps) {
                         <div className="flex gap-4 w-full  items-center">
                           <File size={24} className="text-gray-400" />
                           <p className="text-gray-400 flex items-center gap-2">
-                            <strong className="text-blue-400">{props.among}</strong> ocorrências do termo
+                            <strong className="text-blue-400">{publicacoes.length}</strong> ocorrências do termo
                             <div className="flex gap-2">
                               {valoresSelecionadosPopUp == "" ? (
                                 <div className="text-blue-400 font-bold">{valorDigitadoPesquisaDireta.replace(/;/g, ' ')}</div>

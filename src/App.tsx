@@ -191,7 +191,7 @@ useEffect(() => {
 
               <Route
                   path='/dashboard'
-                  element={loggedIn && user.state == "admin"  ? <Admin/> : <Navigate to='/' />}
+                  element={loggedIn && user.state == "admin"  ? <Admin/> : <Navigate to='/admin' />}
                 />
 
                 <Route

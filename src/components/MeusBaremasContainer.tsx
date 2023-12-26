@@ -219,7 +219,7 @@ const userDocSnapshot = await getDocs(userDocsQuery);
             
             </div>
         </div>
-       <div className='ml-auto  z-[99999999999999999999999999999999999999999] absolute float-right w-max '>
+       <div className='ml-auto  z-[9] absolute float-right w-max '>
        <div onClick={() => handleRemoveUserData(user.id, user[`Document ID`])} className={`ml-auto cursor-pointer rounded-md top-[-58px] right-[-24px] float-right relative hover:bg-gray-100 h-8 w-8 transition-all flex items-center justify-center `}>
                     <Trash size={20} className={' transition-all text-gray-400'} />
                     </div>

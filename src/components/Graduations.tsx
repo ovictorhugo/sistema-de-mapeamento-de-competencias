@@ -12,7 +12,6 @@ import logo_2 from '../assets/logo_2.png';
 import logo_3 from '../assets/logo_3.png';
 import logo_4 from '../assets/logo_4.png';
 import logo_5 from '../assets/logo_5.png';
-import BrasilMap from "./BrasilMap";
 import BahiaMap from "./BahiaMap";
 
 
@@ -308,7 +307,7 @@ console.log('idversao',idVersao)
                   className=" checkboxLabel group transition-all list-none inline-flex group w-full"
                   onMouseDown={(e) => e.preventDefault()}
                 >
-                  <label  onClick={() => handleClickPesquisa(props.instituicao, props.graduate_program_id)}  className={`justify-between w-full p-4 flex-col cursor-pointer border-[1px] bg-white bg-opacity-70 backdrop-blur-sm border-gray-300 flex text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 `}>
+                  <label  onClick={() => handleClickPesquisa(props.name, props.graduate_program_id)}  className={`justify-between w-full p-4 flex-col cursor-pointer border-[1px] bg-white bg-opacity-70 backdrop-blur-sm border-gray-300 flex text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 `}>
                     <div className="flex justify-between items-center gap-3">
 
                     

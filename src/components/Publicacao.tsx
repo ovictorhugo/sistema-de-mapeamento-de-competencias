@@ -92,7 +92,7 @@ export function Publicacao(props: Publicacao) {
       .map((word, index) => {
         const formattedWord = unorm.nfkd(word).replace(/[^\w\s]/gi, '').toLowerCase();
         const alphabet = Array.from({ length: 26 }, (_, index) => String.fromCharCode('a'.charCodeAt(0) + index));
-        const ignoredWords = [...alphabet, 'do', 'da', 'o', 'os', 'as', 'de', 'e', 'i', 'na', 'du', 'em', ')', '('];
+        const ignoredWords = [...alphabet, 'do', 'da', `on`, `com`, 'o', 'os', 'as', 'de', 'e', 'i', 'na', 'du', 'em', ')', '('];
         let formattedSpan;
 
         if (

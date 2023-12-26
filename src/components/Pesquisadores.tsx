@@ -454,15 +454,15 @@ localStorage.setItem('pesquisadoresSelecionadosGroupBarema', JSON.stringify(pesq
 
   const [popUpVisibleMap, setPopUpVisibleMap] = useState({});
 
-  let id_pesquisador = ""
-  const handleBtnCsv = () => {
+  const [jsonDataPesquisador, setJsonDataPesquisador] = useState<any[]>([]);
+  const handleBtnCsv = (id_pesquisador: any) => {
 
     try {
     let urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosPopUp}&researcher_id=${id_pesquisador}&type=ARTICLE&qualis=&year=1900`;
 
 
 
-    const [jsonData, setJsonData] = useState<any[]>([]);
+    
 
   
     
@@ -479,7 +479,7 @@ localStorage.setItem('pesquisadoresSelecionadosGroupBarema', JSON.stringify(pesq
             }
           });
           const data = await response.json();
-          setJsonData(data);
+          setJsonDataPesquisador(data);
           
         } catch (error) {
           console.error(error);
@@ -504,7 +504,7 @@ localStorage.setItem('pesquisadoresSelecionadosGroupBarema', JSON.stringify(pesq
     };
   
   
-        const csvData = convertJsonToCsv(jsonData);
+        const csvData = convertJsonToCsv(jsonDataPesquisador);
         const blob = new Blob([csvData], { type: 'text/csv;charset=windows-1252;' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -566,7 +566,7 @@ localStorage.setItem('pesquisadoresSelecionadosGroupBarema', JSON.stringify(pesq
                       .map((user, index, arr) => {
                         const maxFontSize = 200;
                         const minFontSize = 100;
-                         id_pesquisador = user.id;
+                        
                         const distinctAmongValues = [...new Set(arr.map(user => user.among))];
                         const distinctAmongCount = distinctAmongValues.length;
                         const fontSize =
@@ -633,7 +633,7 @@ localStorage.setItem('pesquisadoresSelecionadosGroupBarema', JSON.stringify(pesq
 
 
       <div className="mb-6 flex flex-col justify-center items-center">
-        <div onClick={handleBtnCsv} className="mb-2 h-12 w-12 rounded-2xl bg-white items-center justify-center flex hover:bg-gray-100 cursor-pointer transition-all">
+        <div onClick={() => handleBtnCsv(user.id)} className="mb-2 h-12 w-12 rounded-2xl bg-white items-center justify-center flex hover:bg-gray-100 cursor-pointer transition-all">
           <FileCsv size={16} className="text-gray-500" />
         </div>
 
@@ -822,7 +822,7 @@ const normalizedCityNome = unorm.nfd(city.nome.toUpperCase()).replace(/[\u0300-\
 
 
       <div className="mb-6 flex flex-col justify-center items-center">
-        <div onClick={handleBtnCsv} className="mb-2 h-12 w-12 rounded-2xl bg-white items-center justify-center flex hover:bg-gray-100 cursor-pointer transition-all">
+        <div onClick={() => handleBtnCsv(user.id)} className="mb-2 h-12 w-12 rounded-2xl bg-white items-center justify-center flex hover:bg-gray-100 cursor-pointer transition-all">
           <FileCsv size={16} className="text-gray-500" />
         </div>
 

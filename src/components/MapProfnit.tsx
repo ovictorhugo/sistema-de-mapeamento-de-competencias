@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { UserContext } from "../contexts/context";
-import { ArrowCircleUp, ArrowRight, BookOpen, BookmarkSimple, Buildings, Copyright, CursorText, File, Funnel, GraduationCap, IdentificationCard, Lightbulb, ListDashes, MagnifyingGlass, MapPin, Star, TextAlignLeft, Textbox, User, X, YoutubeLogo } from "phosphor-react";
+import { ArrowCircleUp, ArrowRight, BookOpen, BookmarkSimple, Books, Buildings, Copyright, CursorText, File, Funnel, GraduationCap, IdentificationCard, Lightbulb, ListDashes, MagnifyingGlass, MapPin, Quotes, SignIn, Star, TextAlignLeft, Textbox, Ticket, User, UserPlus, X, YoutubeLogo } from "phosphor-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Circle } from "./Circle";
 import DropdownMultiSelect from "./DropdownMultiSelect";
@@ -616,7 +616,7 @@ const handlePopUp = () => {
 
       <div
           ref={ref}
-          className={` left-0  flex-col items-center flex flex-1 w-full transition justify-center z-[99999] ${isSticky ? 'pb-6 sticky top-0 left-0 bg-white transition-all shadow-sm' : ' transition-all'}`}
+          className={` left-0  flex-col items-center flex flex-1 w-full transition justify-center z-[999] ${isSticky ? 'pb-6 sticky top-0 left-0 bg-white transition-all shadow-sm' : ' transition-all'}`}
       >
 
           <div className={`${isSticky ? 'flex' : ' hidden'} h-20 w-full`}>
@@ -643,7 +643,7 @@ const handlePopUp = () => {
         </strong> por:
       </p>
       <TabList className="w-full">
-        <div className={`w-full gap-6  m-0 grid  ${botaoPesquisadoresClicado || botaoPatentesClicado ? 'grid-cols-2' : 'grid-cols-3'}`}>
+        <div className={`w-full gap-6  m-0 grid  ${botaoPesquisadoresClicado || botaoPatentesClicado || botaoEventosClicado || botaoLivrosCapitulosClicado ? 'grid-cols-2' : 'grid-cols-3'}`}>
           <Tab onClick={() => setSelectedTab(0)} selected={selectedTab === 0} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente": botaoEventosClicado ? "activeEventos" : botaoLivrosCapitulosClicado ? "activeLivrosCapitulos" : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none   gap-3  transition-all" >
             <User size={16} className="" />
             <p className=" md:flex hidden"> Pesquisadores</p>
@@ -651,7 +651,7 @@ const handlePopUp = () => {
           </Tab>
 
 
-          {botaoPatentesClicado ? (
+          {botaoPatentesClicado || botaoEventosClicado || botaoLivrosCapitulosClicado ? (
             <head></head>
           ) : (
           <Tab onClick={() => setSelectedTab(1)} selected={selectedTab === 1} selectedClassName={botaoTermosClicado ? "activeTermos" : (botaoAreasClicado ? "activeAreas" : botaoResumoClicado ? "activeResumo" : (botaoPesquisadoresClicado ? "activePesquisadores" : botaoPatentesClicado ? "activePatente": botaoEventosClicado ? "activeEventos" : botaoLivrosCapitulosClicado ? "activeLivrosCapitulos"  : ""))} className="w-full cursor-pointer h-12 p-4 text-gray-400 border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none   gap-3  transition-all"  >
@@ -685,7 +685,7 @@ const handlePopUp = () => {
                 <Pesquisadores />
               </TabPanel>
 
-              {botaoPatentesClicado ? (''):(
+              {botaoPatentesClicado || botaoEventosClicado || botaoLivrosCapitulosClicado? (''):(
                 <TabPanel className="h-full  mt-9 items-center justify-center w-full px-6 md:px-16">
                 <Publicacoes />
               </TabPanel>
@@ -887,7 +887,140 @@ const handlePopUp = () => {
    
       </div>
 
-     
+      {popUpProgram &&  loggedIn == false ? (
+                <PopUpWrapper
+                title="Print ('Bem-vindo/a')"
+                subtitle="Novo usuário?"
+                textLink="Criar conta"
+                link="/signup"
+                >
+                    <div className="w-full h-full flex">
+                        
+
+                       
+                            <div className="h-full  flex-1 ">
+                                <div className="  h-full  overflow-y-auto elementBarra p-12 ">
+                                <div onClick={() => handlePopUp()} className={`ml-auto float-right cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center `}>
+                        <X size={20} className={'rotate-180 transition-all text-gray-400'} />
+                        </div>  
+
+                          <div className="h-12 mb-4"><LogoSimcc/></div>
+                                
+                                <h3 className=" font-medium text-2xl mb-8 text-gray-400"><strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">Bem vindo (a)</strong> ao Sistema de Mapeamento de Competências da Bahia</h3>
+                                
+                                <div className="flex gap-4 mb-8">
+                                  <div className="rounded-full   opacity-20 border-blue-400 h-16 w-16 border-4 flex items-center justify-center text-blue-400 font-medium text-3xl"> 1</div>
+                                  <div className="flex flex-1 flex-col "><h4 className="text-gray-500 text-xl font-medium  mb-2">Primeiro passo</h4><p className="text-gray-400 text-md mb-4">Ao acessar o Simcc você vai encontrar uma barra de pesquisa em que poderá buscar um ou mais termos a partir do uso de palavras-chave específicas que descrevam o assunto que está procurando. A barra serve para digitar as palavras desejadas e para filtrar sete tipos de pesquisa que são identificados por ícones e cores de maneira visual.</p>
+                                  
+                                  <div className="flex flex-wrap gap-3">
+                                  <div className="w-fit bg-blue-400   h-10 whitespace-nowrap flex items-center gap-4  text-white rounded-xl px-4  justify-center  text-sm font-medium transition">
+                                              <Quotes size={16} className="text-white" />
+                                          Termo
+                                        </div>
+
+                                        <div className="w-fit bg-yellow-400  h-10 whitespace-nowrap flex items-center gap-4  text-white rounded-xl px-4  justify-center  text-sm font-medium transition">
+                                              <TextAlignLeft size={16} className="text-white" />
+                                          Resumo
+                                        </div>
+
+                                        <div className="w-fit bg-red-400 h-10 whitespace-nowrap flex items-center gap-4  text-white rounded-xl px-4 py-2 justify-center  text-sm font-medium transition">
+                                              <IdentificationCard size={16} className="text-white" />
+                                              Nome
+                                        </div>
+
+                                        <div className="w-fit bg-pink-400 h-10 whitespace-nowrap flex items-center gap-4  text-white rounded-xl px-4 py-2 justify-center  text-sm font-medium transition">
+                                              <Books size={16} className="text-white" />
+                                              Livros e capítulos
+                                        </div>
+
+                                        <div className="w-fit bg-green-400  h-10 whitespace-nowrap flex items-center gap-4  text-white rounded-xl px-4 py-2 justify-center  text-sm font-medium transition">
+                                              <Lightbulb size={16} className="text-white" />
+                                              Áreas
+                                        </div>
+
+                                        <div className="w-fit bg-orange-400  h-10 whitespace-nowrap flex items-center gap-4  text-white rounded-xl px-4 py-2 justify-center  text-sm font-medium transition">
+                                              <Ticket size={16} className="text-white" />
+                                              Participação em eventos
+                                        </div>
+
+                                        
+
+                                        <div className="w-fit bg-cyan-400 h-10 whitespace-nowrap flex items-center gap-4  text-white rounded-xl px-4 py-2 justify-center  text-sm font-medium transition">
+                                              <Copyright size={16} className="text-white" />
+                                              Patentes
+                                        </div>
+
+                                       
+                                  </div>
+                                  
+                                  
+                                  </div>
+                                </div>
+
+                                <div className="flex gap-4 mb-8">
+                                  <div className="rounded-full   opacity-40 border-blue-400 h-16 w-16 border-4 flex items-center justify-center text-blue-400 font-medium text-3xl"> 2</div>
+                                  <div className="flex flex-1 flex-col"><h4 className="text-gray-500 text-xl font-medium  mb-2">Segundo passo</h4><p className="text-gray-400 text-md">Após realizar a pesquisa de um dos termos é possível visualizar os resultados de três formas: dados dos pesquisadores, publicações e instituições.</p></div>
+                                </div>
+                                
+                                <div className="flex gap-4 mb-8">
+                                  <div className="rounded-full   opacity-60 border-blue-400 h-16 w-16 border-4 flex items-center justify-center text-blue-400 font-medium text-3xl"> 3</div>
+                                  <div className="flex flex-1 flex-col">
+                                    <h4 className="text-gray-500 text-xl font-medium  mb-2">Terceiro passo</h4>
+                                    <p className="text-gray-400 text-md mb-4">Para ter uma experiência ainda melhor com o Simcc, aproveite e crie sua conta! Algumas funções como criar e salvar baremas e acesso a taxonomia dos termos de pesquisa só podem ser utilizadas se você estiver logado. </p>
+                                    
+                                    <div className="flex gap-4">
+                                      <Link
+                                        to={`/signup`} onClick={() => handlePopUp()}
+                                        className="w-fit h-10 whitespace-nowrap flex items-center gap-4  text-sm text-blue-400 rounded-xl px-4 py-2 justify-center hover:bg-gray-50 font-medium transition"
+                                      >
+                                        <UserPlus size={16} className="" /> Criar conta
+                                      </Link>
+
+
+                                      <Link to={`/login`} onClick={() => handlePopUp()} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
+                                              
+                                                        <SignIn size={16} className="text-white" />
+                                                    Fazer login
+                                                  </Link>
+                                      </div>
+                                    
+                                    </div>
+
+                                    
+                                    
+                                </div>
+
+                                <div className="flex gap-4 mb-8">
+                                  <div className="rounded-full   opacity-80 border-blue-400 h-16 w-16 border-4 flex items-center justify-center text-blue-400 font-medium text-3xl"> 2</div>
+                                  <div className="flex flex-1 flex-col"><h4 className="text-gray-500 text-xl font-medium  mb-2">Quarto passo</h4><p className="text-gray-400 text-md">Navegue pelas páginas de dicionário para encontrar termos em artigos, resumos e áreas de especialidades cadastrados na plataforma, isso te auxiliará na sua pesquisa. Você também pode acessar os indicadores das universidades, e os programas de pós-graduação das universidades públicas do estado da Bahia.</p></div>
+                                </div>
+
+                                <div onClick={() => handlePopUp()} className="whitespace-nowrap flex cursor-pointer items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500  font-medium transition flex-1 h-12 ml-auto">
+                                <X size={16} className="text-white" /> Continuar navegando
+                            </div>
+
+                                   
+                           
+                                </div>
+
+
+                            </div>
+                    
+
+                        <div className=" flex flex-1 p-6 max-w-[600px] w-[600px]">
+                        <div
+                        className="rounded-xl bg-blue-400 bg-cover flex items-center justify-center bg-right bg-no-repeat w-full h-full "
+                        
+                        >
+                            
+                        </div>
+                        </div>
+                    </div>
+
+                </PopUpWrapper>
+            ):(
+                ``
+            )}
     </div>
   );
 }

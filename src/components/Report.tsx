@@ -57,7 +57,7 @@ export function Report(props: Publicacao) {
 
             </div>
 
-            <div className={`px-6 py-2  my-4   text-gray-400 flex rounded-md text-sm font-medium gap-2 items-center ${isOn ? "mt-0 pt-0" : ""}`}>
+            <div className={`px-6 pb-4     text-gray-400 flex rounded-md text-sm font-medium gap-2 items-center ${isOn ? "mt-0 pt-0" : ""}`}>
              {props.project_name.toUpperCase()}
             </div>
 
