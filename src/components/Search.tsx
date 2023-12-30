@@ -1132,7 +1132,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
 
       setValoresSelecionadosExport(valoresSelecionados)
 
-    } else  {
+    } else if (botaoTermosClicado && valoresSelecionadosNuvem != "")  {
       setValoresSelecionadosExport(valoresSelecionadosNuvem)
     }
 
