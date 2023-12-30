@@ -98,9 +98,6 @@ export function ChatContent() {
 
   ///////////////////////////
 
-
-  console.log(`api`, import.meta.env.VITE_OPENAI_API_KEY)
-
   //////////////////////////////////////
 
   const processInput = () => {
