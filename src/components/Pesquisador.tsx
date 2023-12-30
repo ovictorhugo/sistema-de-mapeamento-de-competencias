@@ -192,7 +192,7 @@ export function Pesquisador(props: PesquisadorProps) {
   }, [itensSelecionados]);
 
 
-
+  const {valoresSelecionadosNuvem, setValoresSelecionadosNuvem} = useContext(UserContext);
   
 console.log(pesquisadoresSelecionadosGroupBarema)
  
@@ -203,7 +203,7 @@ localStorage.setItem('pesquisadoresSelecionadosGroupBarema', JSON.stringify(pesq
 
     <div className="w-auto relative " >
 
-      <Link to={linkTo} target="_blank" className={`absolute z-[9]  top-6 hidden group-hover:flex cursor-pointer items-center gap-4 bg-blue-400 hover:bg-blue-500 text-white rounded-xl h-[38px] w-[38px] justify-center  font-medium transition right-20  ${valoresSelecionadosExport != '' ? "right-20" : "right-6"}`}>
+      <Link to={linkTo} target="_blank" className={`absolute z-[9]  top-6 hidden group-hover:flex cursor-pointer items-center gap-4 bg-blue-400 hover:bg-blue-500 text-white rounded-xl h-[38px] w-[38px] justify-center  font-medium transition right-20  ${valoresSelecionadosExport != '' || valoresSelecionadosNuvem != '' ? "right-20" : "right-6"}`}>
         <ArrowSquareOut size={16} className="text-white" />
       </Link>
 

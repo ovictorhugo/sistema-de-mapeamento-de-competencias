@@ -287,24 +287,35 @@ console.log('idversao',idVersao)
     const [words, setWords] = useState<PalavrasChaves[]>([]);
 
     const [isLoading, setIsLoading] = useState(false);
+
+    const {valoresSelecionadosNuvem, setValoresSelecionadosNuvem} = useContext(UserContext)
   
     let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&researcher_id=`
     let clickedWord =""
     const handleWordClick = (event: any) => {
       if (event.point && event.point.name) {
          clickedWord = event.point.name;
-        setValoresSelecionadosExport(clickedWord);
-        setValorDigitadoPesquisaDireta(clickedWord)
-        setBotaoTermosClicado(true);
+         setValoresSelecionadosNuvem(clickedWord);
+         setValoresSelecionadosExport(valoresSelecionadosNuvem)
+
+         
+
+         setBotaoPesquisadoresClicado(false);
+      setBotaoPatentesClicado(false)
+      setBotaoTermosClicado(true);
+      setBotaoAreasClicado(false);
+      setBotaoResumoClicado(false)
+      setBotaoEventosClicado(false)
+      setBotaoLivrosCapitulosClicado(false)
       }
     };
 
   
   
     useEffect(() => {
-      console.log(`Palavra clicada: `, valoresSelecionadosExport);
+      console.log(`Palavra clicada: `, valoresSelecionadosNuvem);
       // Adicione qualquer lógica adicional que você deseja executar quando a palavra é clicada
-    }, [valoresSelecionadosExport]);
+    }, [valoresSelecionadosNuvem]);
 
 
     
@@ -545,8 +556,15 @@ const handlePopUp = () => {
   }
 };
 
+
+
+useEffect(() => {
+  if (valoresSelecionadosNuvem !== "" ) {
+    setValoresSelecionadosExport(valoresSelecionadosNuvem)
+  }
+},[]); // Empty dependency array ensures the effect runs only once during component mount
     
-    
+console.log('valoresSelecionadosNuvem',valoresSelecionadosNuvem)
 
   return (
     <div className="   ">
@@ -627,7 +645,7 @@ const handlePopUp = () => {
         </div>
 
 
-{valoresSelecionadosExport == "" && valorDigitadoPesquisaDireta == "" ? (
+{valoresSelecionadosExport == "" && valorDigitadoPesquisaDireta == "" && valoresSelecionadosNuvem == ""  ? (
   
 
     <DadosGerais/>
@@ -703,7 +721,7 @@ const handlePopUp = () => {
 
   
 
-      {valoresSelecionadosExport == "" && valorDigitadoPesquisaDireta == "" ? (
+      {valoresSelecionadosExport == "" && valorDigitadoPesquisaDireta == "" && valoresSelecionadosNuvem == "" ? (
         <div>
           <div className="w-full flex justify-center my-6  px-6 md:px-16">
                 <div className=" p-24 m-[0 auto] w-full rounded-2xl bg-blue-400 items-center grid grid-cols-2 gap-12 bg-opacity-10 backdrop-blur-sm">
@@ -711,9 +729,9 @@ const handlePopUp = () => {
                         <h3 className="text-3xl font-medium text-gray-400 max-w-[500px] mb-4">O que a plataforma pode <strong className="bg-blue-400 text-white font-medium">fazer</strong> e como ela pode te <strong className="bg-blue-400 text-white font-medium">auxiliar</strong>?</h3>
                         <p className=" text-gray-400 mb-8">O Sistema de Mapeamento de Competências é uma plataforma desenvolvida com o objetivo de auxiliar na seleção e filtragem de pesquisadores. Esta plataforma tem o potencial facilitar o processo de identificação e escolha dos profissionais mais qualificados em suas respectivas áreas de atuação, ver linhas de pesquisas e orientações.</p>
 
-                        <Link to={"/indicators"} className="w-fit mt-8 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-6 py-2 justify-center hover:bg-blue-500 text-base font-medium transition">
+                        <a href="https://youtu.be/dqj4Gr4BM2c?si=HYukMsDJj6VmlM9o" target="_blank" className="w-fit mt-8 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-6 py-2 justify-center hover:bg-blue-500 text-base font-medium transition">
                             <YoutubeLogo size={16} className="text-white" /> Assistir vídeo
-                        </Link>
+                        </a>
                     </div>
 
                     <div className="flex-1 h-full flex items-center justify-center"> 
@@ -991,7 +1009,7 @@ const handlePopUp = () => {
                                 </div>
 
                                 <div className="flex gap-4 mb-8">
-                                  <div className="rounded-full   opacity-80 border-blue-400 h-16 w-16 border-4 flex items-center justify-center text-blue-400 font-medium text-3xl"> 2</div>
+                                  <div className="rounded-full   opacity-80 border-blue-400 h-16 w-16 border-4 flex items-center justify-center text-blue-400 font-medium text-3xl"> 4</div>
                                   <div className="flex flex-1 flex-col"><h4 className="text-gray-500 text-xl font-medium  mb-2">Quarto passo</h4><p className="text-gray-400 text-md">Navegue pelas páginas de dicionário para encontrar termos em artigos, resumos e áreas de especialidades cadastrados na plataforma, isso te auxiliará na sua pesquisa. Você também pode acessar os indicadores das universidades, e os programas de pós-graduação das universidades públicas do estado da Bahia.</p></div>
                                 </div>
 
@@ -1009,10 +1027,12 @@ const handlePopUp = () => {
 
                         <div className=" flex flex-1 p-6 max-w-[600px] w-[600px]">
                         <div
-                        className="rounded-xl bg-blue-400 bg-cover flex items-center justify-center bg-right bg-no-repeat w-full h-full "
+                        className="rounded-xl bg-gray-50 bg-cover flex items-center justify-center bg-right bg-no-repeat w-full h-full "
                         
                         >
-                            
+                           <div className="w-full h-full rounded-xl">
+                           <iframe className="w-full h-full rounded-xl"  src="https://www.youtube.com/embed/dqj4Gr4BM2c?si=O6ZfeuYVWAOVEH5C" title="SIMCC - BA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                           </div>
                         </div>
                         </div>
                     </div>

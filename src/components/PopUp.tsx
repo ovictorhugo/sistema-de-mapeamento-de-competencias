@@ -124,19 +124,19 @@ export function PopUp(props: PesquisadorProps) {
   const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext);
   const { botaoLivrosCapitulosClicado, setBotaoLivrosCapitulosClicado } = useContext(UserContext);
     const { botaoEventosClicado, setBotaoEventosClicado } = useContext(UserContext);
-
+    const {valoresSelecionadosNuvem, setValoresSelecionadosNuvem} = useContext(UserContext);
   const { urlGeral, setUrlGeral } = useContext(UserContext);
-
+  const { valoresSelecionadosPopUp, setValoresSelecionadosPopUp } = useContext(UserContext)
   //
   const [linkedinLinks, setLinkedinLinks] = useState<string[]>([]);
 
-  
 
 
 
   //lógica cjechbox
 
-  const { valoresSelecionadosPopUp, setValoresSelecionadosPopUp } = useContext(UserContext)
+  
+  
 
 
 
@@ -155,6 +155,7 @@ export function PopUp(props: PesquisadorProps) {
   if (valoresSelecionadosPopUp == " ") {
     const listaValores = useState('')
   }
+    
 
 
 
@@ -278,6 +279,8 @@ export function PopUp(props: PesquisadorProps) {
   }, [itensSelecionados]);
 
 
+
+
   // checkbox natureza 
 
   const [itensSelecionadosNatureza, setItensSelecionadosNatureza] = useState<string[]>([]);
@@ -353,6 +356,10 @@ export function PopUp(props: PesquisadorProps) {
 
   if (botaoTermosClicado) {
     urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosPopUp}${valorDigitadoPesquisaDireta}&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}`;
+  }
+
+  if (valoresSelecionadosNuvem !== "") {
+    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosNuvem}&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}`;
   }
 
 
@@ -1087,7 +1094,7 @@ export function PopUp(props: PesquisadorProps) {
   return (
     <div className=" w-full m-[0 auto] lg:px-32 z-[99999] bg-opacity-25">
       <div className="w-full  justify-center flex pb-20" >
-        <div className="bg-white rounded-md p-12 w-full h-full">
+        <div className="bg-white rounded-xl p-12 w-full h-full">
 
           {valoresSelecionadosExport.length >= 1 || valorDigitadoPesquisaDireta.length >= 1 ? (
             <div className="relative flex justify-end">
@@ -1321,7 +1328,7 @@ export function PopUp(props: PesquisadorProps) {
                       <div></div>
                     )}
 
-                    {botaoAreasClicado || botaoEventosClicado || botaoPatentesClicado || botaoResumoClicado|| botaoPesquisadoresClicado || botaoLivrosCapitulosClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta == "" )|| (botaoResumoClicado && valorDigitadoPesquisaDireta != "") ? (
+                    {botaoAreasClicado || botaoEventosClicado || botaoPatentesClicado || botaoResumoClicado|| botaoPesquisadoresClicado || botaoLivrosCapitulosClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta == "" )|| (botaoResumoClicado && valorDigitadoPesquisaDireta != "")   ? (
                       <div className="flex justify-between pb-8 w-full items-center mt-8">
                         <div className="flex gap-4 w-full">
                           <File size={24} className="text-gray-400" />
@@ -1637,7 +1644,7 @@ export function PopUp(props: PesquisadorProps) {
                   <TabPanel>
 
 
-                    {botaoAreasClicado || botaoEventosClicado || botaoLivrosCapitulosClicado || botaoResumoClicado|| botaoPesquisadoresClicado || botaoTermosClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta == "" )|| (botaoResumoClicado && valorDigitadoPesquisaDireta != "") ? (
+                    {botaoAreasClicado || botaoEventosClicado || botaoLivrosCapitulosClicado || botaoResumoClicado|| botaoPesquisadoresClicado || botaoTermosClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta == "" )|| (botaoResumoClicado && valorDigitadoPesquisaDireta != "")  ? (
                       <div className="flex justify-between pb-8 w-full items-center mt-8">
                         <div className="flex gap-4 w-full">
                           <Copyright size={24} className="text-gray-400" />
@@ -1970,7 +1977,7 @@ export function PopUp(props: PesquisadorProps) {
 
 
                 <div className="w-full lg:w-[350px] border-[1px] border-gray-300 rounded-xl p-6 h-min">
-                  {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoLivrosCapitulosClicado || botaoEventosClicado || botaoAreasClicado || botaoPatentesClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta != "")? (
+                  {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoLivrosCapitulosClicado || botaoEventosClicado || botaoAreasClicado || botaoPatentesClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta != "" &&  valoresSelecionadosNuvem == "" ) ||  valoresSelecionadosNuvem == "" ? (
                     <div className="text-center font-medium text-xl text-gray-500 mb-6">Todas as publicações por ano</div>
                   ) : (
                     <div className="flex gap-2 w-full flex-col justify-center">
@@ -2031,7 +2038,7 @@ export function PopUp(props: PesquisadorProps) {
                 </div>
 
                 <div className="w-full lg:w-[350px] border-[1px] border-gray-300 rounded-xl p-6 h-min">
-                {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoAreasClicado || botaoEventosClicado ||  botaoLivrosCapitulosClicado || botaoPatentesClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta != "") ? (
+                {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoAreasClicado || botaoEventosClicado ||  botaoLivrosCapitulosClicado || botaoPatentesClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta != "" && valoresSelecionadosNuvem != "") ? (
                     <div className="text-center font-medium text-xl text-gray-500 mb-6">Todas as publicações por qualis</div>
                   ) : (
                     <div className="flex gap-2 w-full flex-col justify-center">

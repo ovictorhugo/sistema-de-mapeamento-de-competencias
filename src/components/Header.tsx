@@ -354,19 +354,21 @@ const handleSubmit = async () => {
           {user.email}
         </p>
 
-        <div className="w-full">
-        <Link to={'/minha-conta'}    className="w-full mb-2  text-gray-400 text-sm font-medium cursor-pointer h-10 p-4 rounded-xl bg-white border-gray-300  items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
-                <Gear size={16} className="" />Minha conta
-              </Link>
-
-              <Link to={'/minhas-taxonomias'}    className="w-full mb-2  text-gray-400 text-sm font-medium cursor-pointer h-10 p-4 rounded-xl bg-white border-gray-300  items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
-                <GitBranch size={16} className="rotate-180" />Minhas taxonomias
-              </Link>
-
-              <Link to={'/meus-baremas'}    className="w-full  text-gray-400 text-sm font-medium cursor-pointer h-10 p-4 rounded-xl bg-white border-gray-300  items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
-                <Textbox size={16} className="" />Meus baremas
-              </Link>
-        </div>
+        {user.state != `admin` ? (
+          <div className="w-full">
+          <Link to={'/minha-conta'}    className="w-full mb-2  text-gray-400 text-sm font-medium cursor-pointer h-10 p-4 rounded-xl bg-white border-gray-300  items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
+                  <Gear size={16} className="" />Minha conta
+                </Link>
+  
+                <Link to={'/minhas-taxonomias'}    className="w-full mb-2  text-gray-400 text-sm font-medium cursor-pointer h-10 p-4 rounded-xl bg-white border-gray-300  items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
+                  <GitBranch size={16} className="rotate-180" />Minhas taxonomias
+                </Link>
+  
+                <Link to={'/meus-baremas'}    className="w-full  text-gray-400 text-sm font-medium cursor-pointer h-10 p-4 rounded-xl bg-white border-gray-300  items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
+                  <Textbox size={16} className="" />Meus baremas
+                </Link>
+          </div>
+        ): (``)}
 
         <div className="h-[1px] w-full my-4 bg-gray-300"></div>
 

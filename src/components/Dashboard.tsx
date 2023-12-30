@@ -1,26 +1,70 @@
-import { CaretLeft, CaretRight, House, Plus, SquaresFour, Trash, Users, UsersFour, UsersThree, X } from "phosphor-react";
+import { BookmarkSimple, CaretLeft, CaretRight, CheckCircle, FileCsv, GraduationCap, House, MapPin, Plus, SquaresFour, Star, Trash, UserCircle, Users, UsersFour, UsersThree, X } from "phosphor-react";
 import { ChatContent } from "../components/ChatContent";
 import { PopUpWrapper } from "./PopUpWrapper";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import Papa from 'papaparse';
 
 import bg_popup from '../assets/bg_popup.png';
 import { Link } from "react-router-dom";
 
 import { getFirestore, doc, getDoc, collection, addDoc } from 'firebase/firestore';
+import { UserContext } from "../contexts/context";
+import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
+
+interface Program {
+    graduate_program_id: string
+    code: string
+    name: string
+    area: string
+    modality: string
+    type: string
+    rating: string
+    institution_id: string
+    description: string
+    url_image: string
+  }
+
+  interface PesquisadorProps {
+    name: string
+    lattes_id: string
+    descricao: string
+    institution_id: string
+  }
+
 
 export function Dashboard() {
+    const { user, setUser } = useContext(UserContext);
 
     const [name, setName] = useState('');
+    const [city, setCity] = useState('');
     const [modality, setModality] = useState('');
     const [type, setType] = useState('');
     const [ranking, setRanking] = useState('');
     const [area, setArea] = useState('');
+    const [code, setCode] = useState('');
     const [descricao, setDescricao] = useState('');
 
+    const [nomePesquisador, setNomePesquisador] = useState('');
+    const [lattesID, setLattesID] = useState('');
+
     const [popUpProgram, setPopUpProgram] = useState(false);
+    const { urlGeral, setUrlGeral } = useContext(UserContext);
+
+    const [researcher, setResearcher] = useState<PesquisadorProps[]>([]);
+    const [program, setProgram] = useState<Program[]>([]);
+
+    const [popUpSuccess, setPopUpSuccess] = useState(false);
+
+    const handleCheckboxChange = (event:any) => {
+        // Check if the checkbox is checked
+        // If checked, update the 'type' state with the checkbox value
+        // If unchecked, update the 'type' state to an empty string or any other default value
+        setType(event.target.checked ? event.target.value : '');
+      };
+
 
     const handleClickAdicionarBtn = () => {
-        if(name != `` && modality != `` && type != ``) {
+        if(name != `` && modality != `` && city != ``) {
             setPopUpProgram(true)
         }
    
@@ -38,45 +82,270 @@ export function Dashboard() {
 
       //submit
 
-      const handleSubmit = async () => {
-        try {
-          // Aqui você pode adicionar a lógica para tratar os tipos de programa selecionados
-          // programTypes é um array com os tipos selecionados
+      const handleFileUpload = async (e: any) => {
+        const file = e.target.files[0];
       
-          // Crie um objeto com os dados do formulário
-          const formData = {
-            name,
-            modality,
-            type,
-         
-            ranking,
-            area,
-            descricao,
-          };
+        if (file) {
+          try {
+            const result = await parseFile(file);
       
-          // Submeta os dados para o Firestore
-          const db = getFirestore();
-          const programRef = collection(db, 'graduate_program');
-          await addDoc(programRef, formData);
+            // Aqui você pode manipular os dados parseados antes de enviar para o servidor
+            const parsedData = result.data;
       
-          // Limpe os campos do formulário após a submissão
-          setName('');
-          setModality('');
-          setType('');
-          setRanking('');
-          setArea('');
-          setDescricao('');
+            console.log(parsedData);
       
-          // Feche o pop-up ou faça qualquer outra ação necessária
-          setPopUpProgram(false);
-        } catch (error) {
-          console.error('Erro ao enviar os dados:', error);
+            const docId = uuidv4();
+      
+            const dataJson = parsedData.map((item: any) => ({
+              researcher_id: docId,
+              name: item.name,
+              lattes_id: item.lattes_id,
+              institution_id: user.institution_id,
+            }));
+      
+            console.log(dataJson);
+      
+            const urlProgram = `http://200.128.66.226:5000/` + '/Researcher/Insert';
+      
+            const fetchData = async () => {
+              try {
+                const response = await fetch(urlProgram, {
+                  method: 'POST',
+                  headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'Access-Control-Max-Age': '3600',
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(dataJson),
+                });
+      
+                if (response.ok) {
+                  setLattesID('');
+                  setNomePesquisador('');
+                  console.log('Dados enviados com sucesso!');
+                } else {
+                  console.error('Erro ao enviar dados para o servidor.');
+                }
+              } catch (err) {
+                console.log(err);
+              }
+            };
+      
+            fetchData();
+          } catch (error) {
+            console.error('Erro ao processar a requisição:', error);
+          }
         }
       };
       
+      // Função separada para tratar a lógica de análise do arquivo CSV
+      const parseFile = (file: File): Promise<any> => {
+        return new Promise((resolve, reject) => {
+          Papa.parse(file, {
+            complete: (result: any) => {
+              resolve(result);
+            },
+            header: true,
+            skipEmptyLines: true,
+            delimiter: ';',
+            encoding: 'UTF-8',
+          });
+        });
+      };
+
+      const handleSubmit = async () => {
+
+        const docId = uuidv4();
+
+        try {
+          const data = [
+            {
+                graduate_program_id: docId,
+                code: code,
+                name: name.toUpperCase(),
+                area: area.toUpperCase(),
+                modality: modality.toUpperCase(),
+                type: type.toUpperCase(),
+                rating: ranking.toUpperCase(),
+                institution_id: user.institution_id,
+                description: descricao,
+                url_image: user.img_url,
+                city: city
+              }
+          ]
+
+          let urlProgram = `http://200.128.66.226:5000/` + '/GraduateProgramRest/Insert'
+
+          console.log(data)
+
+          const fetchData = async () => {
+          
+            try {
+              const response = await fetch(urlProgram, {
+                mode: 'cors',
+                method: 'POST',
+                headers: {
+                  'Access-Control-Allow-Origin': '*',
+                  'Access-Control-Allow-Methods': 'POST',
+                  'Access-Control-Allow-Headers': 'Content-Type',
+                  'Access-Control-Max-Age': '3600',
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+              });
+
+              if (response.ok) {
+                setPopUpProgram(false)
+                setTimeout(() => {
+                    setPopUpSuccess(true);
+            
+                    // Hide the popup after 5 seconds
+                    setTimeout(() => {
+                      setPopUpSuccess(false);
+                    }, 5000);
+                }, 0);
+                console.log('Dados enviados com sucesso!');
+              } else {
+                console.error('Erro ao enviar dados para o servidor.');
+              }
+              
+            } catch (err) {
+              console.log(err);
+            } 
+          };
+          fetchData();
+    
+          
+        } catch (error) {
+          console.error('Erro ao processar a requisição:', error);
+        }
+      };
+
+      const handleSubmitPesquisador = async () => {
+
+        const docId = uuidv4();
+
+        try {
+          const data = [
+            {
+                researcher_id: docId,
+                name: nomePesquisador,
+                lattes_id: lattesID,
+                institution_id: Number(user.institution_id),
+              }
+          ]
+
+          console.log(data)
+
+          let urlProgram = `http://200.128.66.226:5000/` + '/ResearcherRest/Insert'
+
+          const fetchData = async () => {
+          
+            try {
+              const response = await fetch(urlProgram, {
+                mode: 'cors',
+                method: 'POST',
+                headers: {
+                  'Access-Control-Allow-Origin': '*',
+                  'Access-Control-Allow-Methods': 'POST',
+                  'Access-Control-Allow-Headers': 'Content-Type',
+                  'Access-Control-Max-Age': '3600',
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+              });
+
+              if (response.ok) {
+                setLattesID('')
+               
+                setNomePesquisador('')
+                console.log('Dados enviados com sucesso!');
+              } else {
+                console.error('Erro ao enviar dados para o servidor.');
+              }
+              
+            } catch (err) {
+              console.log(err);
+            } 
+          };
+          fetchData();
+    
+          
+        } catch (error) {
+          console.error('Erro ao processar a requisição:', error);
+        }
+      };
+
+
+      /////////////////////////
+
+      let urlGetResearcher =  `http://200.128.66.226:5000/` + `ResearcherRest/Query?institution_id=${user.institution_id}`
+
+      useEffect(() => {
+          const fetchData = async () => {
+           
+            try {
+              const response = await fetch(urlGetResearcher, {
+                mode: 'cors',
+                headers: {
+                  'Access-Control-Allow-Origin': '*',
+                  'Access-Control-Allow-Methods': 'GET',
+                  'Access-Control-Allow-Headers': 'Content-Type',
+                  'Access-Control-Max-Age': '3600',
+                  'Content-Type': 'text/plain'
+                }
+              });
+              const data = await response.json();
+              if (data) {
+                setResearcher(data);
+             
+              }
+            } catch (err) {
+              console.log(err);
+            } finally {
+           
+            }
+          };
+          fetchData();
+        }, [urlGetResearcher]);
+  
+        console.log(researcher)
+  
+        let urlGetProgram=  `http://200.128.66.226:5000/` + `GraduateProgramRest/Query?institution_id=${user.institution_id}`
+  
+      useEffect(() => {
+          const fetchData = async () => {
+           
+            try {
+              const response = await fetch(urlGetProgram, {
+                mode: 'cors',
+                headers: {
+                  'Access-Control-Allow-Origin': '*',
+                  'Access-Control-Allow-Methods': 'GET',
+                  'Access-Control-Allow-Headers': 'Content-Type',
+                  'Access-Control-Max-Age': '3600',
+                  'Content-Type': 'text/plain'
+                }
+              });
+              const data = await response.json();
+              if (data) {
+                  setProgram(data);
+             
+              }
+            } catch (err) {
+              console.log(err);
+            } finally {
+           
+            }
+          };
+          fetchData();
+        }, [urlGetProgram]);
+      
 
     return  (
-        <div className="h-screen w-full pr-6 md:pr-16">
+        <div className="h-screen max-h-screen overflow-y-hidden w-full pr-6 md:pr-16">
 
 <div className='h-[80px] items-center justify-center flex fixed top-0 left-0 z-[999999] w-16'>
                 <div onClick={() => handleMenuBtn()} className="cursor-pointer  h-10 w-10 rounded-xl bg-gray-100 items-center justify-center flex hover:bg-gray-300  transition-all">
@@ -87,7 +356,7 @@ export function Dashboard() {
                     )}
                   </div>
                 </div>
-          <div className="pt-20 flex h-full">
+          <div className="pt-20 flex h-full pb-12">
           <div className={`h-full flex  flex-col ${menu ? (`w-auto mr-6 pl-4`):(`w-16 items-center`)}`}>
                 <Link to={`/dashboard`} className={`mb-5 h-10  gap-4 ${menu ? (`w-full px-4`):(`w-10 justify-center `)} ${isDashboard ? (`bg-blue-400 hover:bg-blue-500 text-white`):(`text-gray-400 bg-gray-100 hover:bg-gray-300`)} rounded-xl items-center flex  cursor-pointer transition-all text-sm font-medium`}>
                   <SquaresFour size={16} className="t" /> {menu ? (`Dashboard`):(``)}
@@ -98,26 +367,105 @@ export function Dashboard() {
                 </Link>
           </div>
 
-            <div className="flex flex-1 mr-6">
-            <div className="flex gap-6 w-full h-fit items-center">
-            <h1 className="z-[999999] text-4xl  font-medium max-w-[400px] ">
+            <div className="flex flex-1 mr-6 flex-col">
+            <div className="flex gap-6 w-full h-fit items-center ">
+           <div className="flex gap-2 items-center">
+           <h1 className=" text-4xl  font-medium max-w-[400px] ">
             Bem vindo(a) ao Módulo <strong className="bg-red-400 text-white font-normal"> administrativo </strong>{" "}
         </h1>
-                <div className="grid grid-cols-2 gap-6 w-full">
+        <img src={user.img_url} alt="" className="h-20" />
+           </div>
+                <div className="grid grid-cols-2 gap-6 w-full flex-1">
                     <div className="border h-32 border-gray-300 rounded-2xl w-full justify-center px-6 flex flex-col items-end">
                     <p className="text-gray-400">Total de docentes</p>
-                <h3 className="text-6xl font-medium">100</h3>
+                <h3 className="text-6xl font-medium">{researcher.length}</h3>
                     </div>
                     <div className="border h-32 border-gray-300 rounded-2xl w-full justify-center px-6 flex flex-col items-end">
                     <p className="text-gray-400 text-right">Total de  pós-graduação</p>
-                <h3 className="text-6xl font-medium">100</h3>
+                <h3 className="text-6xl font-medium">{program.length}</h3>
                     </div>
                    
                 </div>
             </div>
+
+            <div  style={{ backgroundImage: `url(${bg_popup})` }} className="rounded-2xl bg-cover bg-center bg-no-repeat  mt-6 border p-6 gap-6 border-gray-300 h-64 min-h-[256px] flex items-center justify-center w-full">
+            <h3 className="max-w-[250px] font-medium text-2xl  text-gray-400"><strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">Vincule</strong> os pesquisadores à sua instituição de ensino</h3>
+                        <div className="flex gap-6 items-end">
+                        <div>
+                        <p className="text-sm text-gray-500 mb-2">Nome completo</p>
+                <input
+                    type="text"
+                    onChange={(e) => setNomePesquisador(e.target.value)}
+                        value={nomePesquisador}
+                
+                    required
+                    className=" border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+                        </div>
+
+                        <div>
+                        <p className="text-sm text-gray-500 mb-2">Lattes Id</p>
+                <input
+                    type="text"
+                    onChange={(e) => setLattesID(e.target.value)}
+                        value={lattesID}
+                
+                    required
+                    className=" border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+                        </div>
+
+                        <div onClick={() => handleSubmitPesquisador()} className="whitespace-nowrap flex cursor-pointer items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500  font-medium transition flex-1 h-12 ml-auto">
+                <Plus size={16} className="text-white" /> Adicionar
+              </div>
+
+              <label  htmlFor="fileInput" onChange={handleFileUpload}  className="h-12 w-12 min-w-[48px] border transition-all cursor-pointer border-gray-300 text-blue-400 rounded-xl flex items-center whitespace-nowrap justify-center hover:bg-gray-50">
+              <input onChange={handleFileUpload} id="fileInput" type="file" accept=".csv"  hidden />
+                <FileCsv size={16} className="" />
+              </label>
+                        </div>
+            <div>
+
             </div>
-            <div className="h-full max-w-[500px] ">
-                <div className="rounded-xl border border-gray-300 p-12 ">
+            </div>
+
+
+            <div className="mt-6">
+            <div className='flex gap-6  w-full'>
+       <div className='border border-gray-300 rounded-xl w-1/2 h-full p-6'>
+       <div className=" overflow-y-auto max-h-fit h-full">
+       {researcher.map((props) => {
+          return(
+            <div className="flex justify-between items-center py-4 border-b border-b-gray-300">
+                <div className="flex gap-3 items-center">
+                <div
+    
+            className="h-10 w-10 rounded-xl bg-gray-50 text-gray-500 cursor-pointer flex items-center justify-center"
+            >
+            <UserCircle size={16} className="" />
+            </div>
+
+        <h5 className="font-medium text-gray-500">{props.name}</h5>
+            </div>
+
+            <div className="text-gray-400 text-sm">{props.lattes_id}</div>
+            </div>
+          )
+        })}
+       </div>
+       </div>
+
+       <div className="w-1/2 border rounded-2xl border-gray-300">
+
+       </div>
+      </div>
+            </div>
+
+
+
+
+
+            </div>
+            <div className=" max-w-[500px] ">
+                <div className="rounded-xl  border border-gray-300 p-12 ">
                 <h3 className="max-w-[250px] font-medium text-2xl mb-4 text-gray-400">Cadastrar programa de <strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">pós-graduação</strong></h3>
                     <p className="  text-gray-400 mb-8">
                         Adicione as informações básicas do programa de pós-graduação como o corpo docente envolvido, classificação, descrição e localidade 
@@ -150,8 +498,8 @@ export function Dashboard() {
                 <p className="text-sm text-gray-500 mb-2">Cidade</p>
                 <input
                     type="text"
-                    onChange={(e) => setType(e.target.value)}
-                        value={type.toUpperCase()}
+                    onChange={(e) => setCity(e.target.value)}
+                        value={city.toUpperCase()}
                 
                     required
                     className="mb-6 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
@@ -163,12 +511,80 @@ export function Dashboard() {
                 <Plus size={16} className="text-white" /> Adicionar
               </div>
 
-              <div className="h-12 w-12 border transition-all cursor-pointer border-gray-300 text-blue-400 rounded-xl flex items-center whitespace-nowrap justify-center hover:bg-gray-50">
+              <div  className="h-12 w-12 border transition-all cursor-pointer border-gray-300 text-blue-400 rounded-xl flex items-center whitespace-nowrap justify-center hover:bg-gray-50">
                 <Trash size={16} className="" />
                 <input type="reset" value=""/>
               </div>
               </div>
             </form>
+                </div>
+
+                <div className=" mt-6  flex-1 overflow-y-auto">
+
+                <div className="overflow-y-auto flex flex-col gap-6">
+                {program.map((props) => {
+                return(
+                    <li
+                    key={props.graduate_program_id}
+                    className=" checkboxLabel group transition-all list-none inline-flex group w-full "
+         
+                    
+                  >
+                    <label  className={`justify-between w-full p-6 flex-col  cursor-pointer border-[1px] bg-white bg-opacity-70 backdrop-blur-sm border-gray-300 flex text-gray-400 rounded-2xl text-xs font-bold hover:border-blue-400 transition-all `}>
+                      <div className="flex flex-col">
+                      
+  
+                      <div className="flex items-center gap-3">
+                      <div><img src={`${props.url_image}`} alt="" className="h-16 border-none  w-auto"/></div>
+                        <div className="flex-1">
+                        <div>
+                        <span className=" whitespace-normal text-base text-gray-400 mb-2  font-bold">{props.name}</span>
+                        <p className="font-medium flex gap-1 items-center mt-2"> <MapPin size={16} className="textwhite" /> </p>
+                        </div>
+
+                        <div className="flex items-center justify-between mt-4">
+
+                            <div className="text-xs font-medium">{props.code}</div>
+
+                        <div className="flex gap-2  flex-wrap">
+                      {props.type.split(';').map((value, index) => {
+                        const ratingValues = props.rating.split(';');
+                        const ratingDoutorado = ratingValues[0]; // Valor correspondente a DOUTORADO
+                        const ratingMestrado = ratingValues[1]; // Valor correspondente a MESTRADO
+
+                        return (
+                          <div
+                            key={index}
+                            className={`py-2 px-4 text-white w-fit rounded-md text-xs font-bold flex gap-2 items-center ${value.includes('MESTRADO') ? 'bg-blue-200' : 'bg-blue-300'
+                              }`}
+                          >
+                            <GraduationCap size={12} className="textwhite" />
+                            {value.trim()}
+                            <p className=" flex gap-2 items-center"><Star size={12} className="textwhite" /> {props.type.split(';').length == 2 ? (value.includes('MESTRADO') ? ratingMestrado : ratingDoutorado) : (props.rating)}</p>
+                          </div>
+                        );
+                      })}
+
+                      <div className="bg-blue-400 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
+                        <BookmarkSimple size={12} className="textwhite" />
+                        {props.modality}
+                      </div>
+                    </div>
+
+                        </div>
+                        </div>
+                      </div>
+                        
+                        
+                      </div>
+                    </label>
+                  </li>
+                )
+                })}
+                </div>
+
+
+
                 </div>
             </div>
           </div>
@@ -230,8 +646,8 @@ export function Dashboard() {
                                 <p className="text-sm text-gray-500 mb-2">Cidade</p>
                                 <input
                                     type="text"
-                                    onChange={(e) => setType(e.target.value)}
-                                    value={type.toUpperCase()}
+                                    onChange={(e) => setCity(e.target.value)}
+                                    value={city.toUpperCase()}
                                 
                                     required
                                     className="mb-6 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
@@ -241,12 +657,12 @@ export function Dashboard() {
                             <div className=" w-full h-[1px] bg-gray-300 my-2"></div>
 
 
-                            <p className="text-sm text-gray-500 mb-2">Tipo do programa</p>
+                            <p className="text-sm text-gray-500 mb-2 mt-8">Tipo do programa</p>
                             
                             <div className="flex gap-4 mb-6">
-                            <input type="checkbox" id="vehicle1" name="vehicle1" value="DOUTORADO"/>
+                            <input type="checkbox" id="vehicle1" name="vehicle1" value="DOUTORADO " checked={type === 'DOUTORADO'} onChange={handleCheckboxChange}/>
                             <label htmlFor="vehicle1"> DOUTORADO</label>
-                            <input type="checkbox" id="vehicle2" name="vehicle2" value="MESTRADO"/>
+                            <input type="checkbox" id="vehicle2" name="vehicle2" value="MESTRADO" checked={type === 'MESTRADO'} onChange={handleCheckboxChange}/>
                             <label htmlFor="vehicle2"> MESTRADO</label>
                             </div>
 
@@ -277,6 +693,17 @@ export function Dashboard() {
 
                                
                             </div>
+
+                            <p className="text-sm text-gray-500 mb-2">Código do programa (Sucupira)</p>
+              <input
+                type="text"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+             
+               
+                required
+                className="mb-4 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+
 
                             <p className="text-sm text-gray-500 mb-2">Descrição (não obrigatório)*</p>
                                 <textarea
@@ -309,6 +736,15 @@ export function Dashboard() {
             ):(
                 ``
             )}
+
+{popUpSuccess && (
+        <div className="fixed right-16 bottom-16 z-[99999999999999] ">
+        <div className=" rounded-xl bg-white border shadow-md border-gray-300 p-6 flex items-center justify-center gap-4">
+          <div><CheckCircle size={32} className={' text-green-400'} /></div>
+          <div>Barema submetido com sucesso!</div>
+        </div>
+    </div>
+      )}
           
         </div>
     )

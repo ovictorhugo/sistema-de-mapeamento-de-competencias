@@ -380,7 +380,7 @@ console.log('idversao',idVersao)
                     <div><img src={`${props.url_image}`} alt="" className="h-16 border-none  w-auto"/></div>
                       <div className="flex-1">
                       <span className=" whitespace-normal text-base text-gray-400 mb-2  font-bold">{props.name}</span>
-                      <p className="font-medium flex gap-1 items-center"> <MapPin size={20} className="textwhite" /> {props.city} | {props.state}</p>
+                      <p className="font-medium flex gap-1 items-center mt-2"> <MapPin size={16} className="textwhite" /> {props.city} | {props.state}</p>
                       </div>
                     </div>
                       

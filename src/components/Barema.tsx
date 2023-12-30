@@ -111,7 +111,6 @@ type Research = {
     pontos: string
     pontuacao_maxima: string
     'categoria pai': string
-
   }
 
   interface UserData {

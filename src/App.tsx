@@ -35,6 +35,8 @@ import { Admin } from './pages/Admin';
 import { MeusBaremas } from './pages/MeusBaremas';
 import { Configuracoes } from './pages/Configuracoes';
 import { Taxonomia } from './components/Taxonomia';
+import { POST } from './components/chat/route';
+
 
 
 
@@ -48,6 +50,7 @@ export const App = () => {
   
   const [urlTermExport, setUrlTermExport] = useState('');
   const [valoresSelecionadosExport, setValoresSelecionadosExport] = useState(``);
+  const [valoresSelecionadosNuvem, setValoresSelecionadosNuvem] = useState(``);
 
   const [loggedIn, setLoggedIn] = useState(false);
 
@@ -130,6 +133,7 @@ useEffect(() => {
           botaoPatentesClicado, setBotaoPatentesClicado,
           botaoPesquisadoresClicado, setBotaoPesquisadoresClicado,
           botaoTermosClicado, setBotaoTermosClicado,
+          valoresSelecionadosNuvem, setValoresSelecionadosNuvem,
           botaoResumoClicado, setBotaoResumoClicado,
           botaoAreasClicado, setBotaoAreasClicado,
           botaoLivrosCapitulosClicado, setBotaoLivrosCapitulosClicado,
@@ -169,6 +173,8 @@ useEffect(() => {
         element={loggedIn ? <MeusBaremas /> : <Navigate to='/' />}
       />
             <Route path='/search' element={<StepTwo/>}/>
+
+            <Route path='/api/chat' element={<POST/>}/> 
 
             <Route path='/admin' element={<LoginAdmin/>}/>
 

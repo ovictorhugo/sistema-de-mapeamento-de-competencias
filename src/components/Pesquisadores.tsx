@@ -94,6 +94,7 @@ export function Pesquisadores() {
 
   const { intituicoesSelecionadasCheckbox, setIntituicoesSelecionadasCheckbox } = useContext(UserContext)
   const { idGraduateProgram, setIdGraduateProgram } = useContext(UserContext)
+  const {valoresSelecionadosNuvem, setValoresSelecionadosNuvem} = useContext(UserContext)
   //fetch
 
   if (botaoPesquisadoresClicado) {
@@ -109,6 +110,11 @@ export function Pesquisadores() {
   if (botaoTermosClicado) {
     urlTermPesquisadores = `${urlGeral}researcher?terms=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}&type=ARTICLE&graduate_program_id=${idGraduateProgram}`
   }
+
+  if (valoresSelecionadosNuvem != "" && botaoTermosClicado) {
+    urlTermPesquisadores = `${urlGeral}researcher?terms=${valoresSelecionadosNuvem}&university=${intituicoesSelecionadasCheckbox}&type=ARTICLE&graduate_program_id=${idGraduateProgram}`
+  }
+
 
 
   if (botaoResumoClicado) {
@@ -247,7 +253,7 @@ console.log(urlTermPesquisadores)
       }
     };
     fetchData();
-  }, [urlTermPesquisadores]);
+  }, []);
 
   console.log('cityCounts',cityData);
 

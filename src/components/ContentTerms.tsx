@@ -29,11 +29,15 @@ interface Props {
 }
 
 export function ContentTerms(props: Props) {
-  const [botaoPesquisadoresClicado, setBotaoPesquisadoresClicado] = useState(false)
-  const [botaoTermosClicado, setBotaoTermosClicado] = useState(true)
-  const [botaoResumoClicado, setBotaoResumoClicado] = useState(false)
-  const [botaoAreasClicado, setBotaoAreasClicado] = useState(false)
+  const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext);
+    const { botaoPesquisadoresClicado, setBotaoPesquisadoresClicado } = useContext(UserContext);
+    const { botaoTermosClicado, setBotaoTermosClicado } = useContext(UserContext);
+    const { botaoResumoClicado, setBotaoResumoClicado } = useContext(UserContext);
+    const { botaoAreasClicado, setBotaoAreasClicado } = useContext(UserContext);
+    const { botaoLivrosCapitulosClicado, setBotaoLivrosCapitulosClicado } = useContext(UserContext);
+    const { botaoEventosClicado, setBotaoEventosClicado } = useContext(UserContext);
   const { urlGeral, setUrlGeral } = useContext(UserContext);
+  const {valoresSelecionadosNuvem, setValoresSelecionadosNuvem} = useContext(UserContext)
 
   const [pesquisaInput, setPesquisaInput] = useState('');
 
@@ -208,7 +212,7 @@ export function ContentTerms(props: Props) {
 
   let valoresSelecionados = itensSelecionados.join(';');
 
-  setValoresSelecionadosExport(valoresSelecionados);
+  setValoresSelecionadosNuvem(valoresSelecionados);
 
   const handleCheckboxChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name } = event.target;
@@ -223,13 +227,10 @@ export function ContentTerms(props: Props) {
     });
   
     // Esta parte deve ser executada após a atualização do estado
-    setTimeout(() => {
-      const valoresSelecionados = itensSelecionados.join(';');
-      setValoresSelecionadosExport(valoresSelecionados);
-      history('/');
-    }, 0); // Adiciona um pequeno atraso para garantir que a atualização do estado seja concluída
+   
   };
-  
+  console.log('valoresSelecionadosNuvem',valoresSelecionadosNuvem)
+
 
   const checkboxItems = resultados.slice(0, 50).map((resultado) => (
   
@@ -247,7 +248,7 @@ export function ContentTerms(props: Props) {
           className="absolute hidden group"
           onChange={handleCheckboxChangeInput}
           id={resultado.term}
-          onClick={() => history('/')}
+  
         />
       </label>
     </li>

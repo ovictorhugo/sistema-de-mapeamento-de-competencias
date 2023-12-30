@@ -41,6 +41,8 @@ export function Publicacao(props: Publicacao) {
     const { valoresSelecionadosExport, setValoresSelecionadosExport } = useContext(UserContext);
     const { valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta } = useContext(UserContext);
     const { valoresSelecionadosPopUp, setValoresSelecionadosPopUp } = useContext(UserContext)
+    const {valoresSelecionadosNuvem, setValoresSelecionadosNuvem} = useContext(UserContext)
+
     useEffect(() => {
         if (props.lattes_10_id == "undefined") {
             props.lattes_10_id = ""
@@ -84,20 +86,25 @@ export function Publicacao(props: Publicacao) {
                 {props.lattes_10_id !== 'K4796572P6' && (
   <div className="pt-6 flex flex-wrap">
 <p className="text-gray-400 text-sm font-medium flex-wrap flex gap-1">
-  {valoresSelecionadosPopUp === '' && valorDigitadoPesquisaDireta === '' || botaoTermosClicado == false ? (
+  {valoresSelecionadosPopUp === '' && valorDigitadoPesquisaDireta === '' && valoresSelecionadosNuvem === ''  || botaoTermosClicado == false ? (
     `${props.title.toUpperCase()}`
   ) : (
     normalizedTitle
       .split(/[\s.,;?!]+/)
       .map((word, index) => {
         const formattedWord = unorm.nfkd(word).replace(/[^\w\s]/gi, '').toLowerCase();
+        const formattedValoresSelecionadosNuvem  = unorm.nfkd(valoresSelecionadosNuvem ).replace(/[^\w\s]/gi, '').toLowerCase();
+        const formattedValoresSelecionadosExport = unorm.nfkd(valoresSelecionadosExport).replace(/[^\w\s]/gi, '').toLowerCase();
+        const formattedValorDigitadoPesquisaDireta = unorm.nfkd(valorDigitadoPesquisaDireta).replace(/[^\w\s]/gi, '').toLowerCase();
         const alphabet = Array.from({ length: 26 }, (_, index) => String.fromCharCode('a'.charCodeAt(0) + index));
-        const ignoredWords = [...alphabet, 'do', 'da', `on`, `com`, 'o', 'os', 'as', 'de', 'e', 'i', 'na', 'du', 'em', ')', '('];
+        const ignoredWords = [...alphabet, 'do', 'da', `on`, `com`, 'o', 'os', 'as', 'de', 'e', 'i', 'na', 'du', 'em', ')', '(', 'na', 'a'];
         let formattedSpan;
-
+        
+     
         if (
-          (valoresSelecionadosExport.includes(formattedWord) ||
-            valorDigitadoPesquisaDireta.includes(formattedWord)) &&
+          (formattedValoresSelecionadosNuvem.includes(formattedWord) ||
+          formattedValoresSelecionadosExport.includes(formattedWord) ||
+          formattedValorDigitadoPesquisaDireta.includes(formattedWord)) &&
           !ignoredWords.includes(formattedWord)
         ) {
           formattedSpan = (

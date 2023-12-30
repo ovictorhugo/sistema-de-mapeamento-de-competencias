@@ -69,6 +69,7 @@ export function ContentProfnit(props: Props) {
   const { idVersao, setIdVersao } = useContext(UserContext);
  
   setIdVersao(`2`)
+  setUrlGeral(`http://200.128.66.226:5001/`)
 
   const isProgramaTeste3 = location.pathname === `/terms/profnit`;
 
@@ -89,10 +90,9 @@ export function ContentProfnit(props: Props) {
   }
   const [valueInstPesquisa, setValueInstPesquisa] = useState('')
   function handleClickPesquisa(name: string, id: string) {
-    setIdGraduateProgram(id);
+    setIdGraduateProgram(id)
     setFilterValue(name)
     setValueInstPesquisa(name)
-    
   }
 
 

@@ -43,6 +43,7 @@ function myWrapperFunction() {
     const { valoresSelecionadosExport, setValoresSelecionadosExport } = useContext(UserContext);
     const { valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta } = useContext(UserContext);
     const { urlGeral, setUrlGeral } = useContext(UserContext);
+    const {valoresSelecionadosNuvem, setValoresSelecionadosNuvem} = useContext(UserContext)
 
     //Criação das constantes 
     const [pesquisaInput, setPesquisaInput] = useState('');
@@ -385,6 +386,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setItensSelecionados([]);
       setAreasSelecionados([]);
       setPesquisaInput('')
+      setValoresSelecionadosNuvem(``)
       setItensSelecionadosPatente([])
       setItensSelecionadosResumo([])
       setItensSelecionadosEvento([])
@@ -414,6 +416,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setItensSelecionados([]);
       setAreasSelecionados([]);
       setPesquisaInput('')
+      setValoresSelecionadosNuvem(``)
       setItensSelecionadosResumo([])
       setItensSelecionadosEvento([])
       setLivrosSelecionados([])
@@ -442,6 +445,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setPesquisadoresSelecionados([]);
       setAreasSelecionados([]);
       setPesquisaInput('')
+      setValoresSelecionadosNuvem(``)
       setItensSelecionadosResumo([])
       setItensSelecionadosPatente([])
       setItensSelecionadosEvento([])
@@ -471,6 +475,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setPesquisadoresSelecionados([]);
       setAreasSelecionados([]);
       setPesquisaInput('')
+      setValoresSelecionadosNuvem(``)
       setItensSelecionados([])
       setItensSelecionadosPatente([])
       setItensSelecionadosEvento([])
@@ -505,6 +510,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setItensSelecionadosEvento([])
       setLivrosSelecionados([])
       setPesquisaInput('')
+      setValoresSelecionadosNuvem(``)
 
       setResultadosPesquisadores([])
       setResultados([])
@@ -534,6 +540,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setItensSelecionadosResumo([])
       setItensSelecionadosEvento([])
       setPesquisaInput('')
+      setValoresSelecionadosNuvem(``)
 
       setResultadosPesquisadores([])
       setResultados([])
@@ -560,6 +567,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setItensSelecionadosPatente([])
       setItensSelecionadosResumo([])
       setPesquisaInput('')
+      setValoresSelecionadosNuvem(``)
       setLivrosSelecionados([])
 
       setResultadosPesquisadores([])
@@ -849,10 +857,24 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       </li>
     ));
 
+    const valoresSelecionadosNuvemJSX = valoresSelecionadosNuvem !== ""
+    ? valoresSelecionadosNuvem.split(';').map((valor, index) => (
+        <li key={index} className='whitespace-nowrap gap-2 bg-blue-100 border-blue-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold'>
+          {valor.replace(/;/g, ' ')}
+          <button onClick={() => handleRemoverSelecionadoNuvem()}><X size={16} className="text-gray-400 hover:text-blue-400" /></button>
+        </li>
+      ))
+    : (``);
+  
+
     const handleRemoverSelecionado = (index: number) => {
       setItensSelecionados((prevSelecionados) =>
         prevSelecionados.filter((_, i) => i !== index)
       );
+    };
+
+    const handleRemoverSelecionadoNuvem = () => {
+      setValoresSelecionadosNuvem('')
     };
 
     // Resumo
@@ -1057,41 +1079,63 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setResultadosArea([]);
     };
 
-
+ 
     setValoresSelecionadosExport(valoresSelecionados);
+
+
 
 
     if (botaoPesquisadoresClicado) {
       setValoresSelecionadosExport(valoresPesquisadoresSelecionados)
     }
 
-    if (botaoTermosClicado) {
 
-      setValoresSelecionadosExport(valoresSelecionados)
+   
 
-    }
+   
+
+
+  
 
     if (botaoResumoClicado) {
       setValoresSelecionadosExport(valoresResumoSelecionados)
     }
 
+
+   
+
     if (botaoAreasClicado) {
       setValoresSelecionadosExport(valoresAreasSelecionados)
     }
+
+
+  
 
     if (botaoPatentesClicado) {
       setValoresSelecionadosExport(valoresPatenteSelecionados)
     }
 
+
+
+
     if (botaoLivrosCapitulosClicado) {
       setValoresSelecionadosExport(valoresLivrosSelecionados)
     }
+
+
 
     if(botaoEventosClicado) {
       setValoresSelecionadosExport(valoresEventoSelecionados)
     }
 
-   
+    if (botaoTermosClicado && valoresSelecionadosNuvem === "") {
+
+      setValoresSelecionadosExport(valoresSelecionados)
+
+    } else  {
+      setValoresSelecionadosExport(valoresSelecionadosNuvem)
+    }
+
 
     useEffect(() => {
       if (pesquisaInput.length == 0) {
@@ -1201,7 +1245,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       setItensSelecionadosResumo([])
       setItensSelecionadosEvento([])
       setLivrosSelecionados([])
-
+      setValoresSelecionadosNuvem(``)
  
     };
 
@@ -1215,7 +1259,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
             <div className='flex w-full flex-col'>
               <div className={`flex  ${isOpen && pesquisaInput.length >= 3 ? 'bg-[#F9F9F9]' : 'bg-white'} items-center h-14 group w-full  text-base font-medium  justify-center transition border-[1px] border-gray-300 ${botaoTermosClicado ? 'hover:border-blue-400' : ''} ${botaoLivrosCapitulosClicado ? 'hover:border-pink-400' : ''} ${botaoEventosClicado ? 'hover:border-orange-400' : ''} ${botaoResumoClicado ? 'hover:border-yellow-400' : ''} ${botaoAreasClicado ? 'hover:border-green-400' : ''} ${botaoPesquisadoresClicado ? 'hover:border-red-400' : ''} ${botaoPatentesClicado ? 'group-hover:border-cyan-400' : ''} ${isOpen && pesquisaInput.length >= 3 ? 'rounded-tl-2xl' : 'rounded-l-2xl'}`}>
                 <MagnifyingGlass size={20} className={`text-gray-400 min-w-[52px] ${botaoTermosClicado ? 'group-hover:text-blue-400' : ''} ${botaoResumoClicado ? 'group-hover:text-yellow-400' : ''} ${botaoLivrosCapitulosClicado ? 'group-hover:text-pink-400' : ''} ${botaoEventosClicado ? 'group-hover:text-orange-400' : ''} ${botaoAreasClicado ? 'group-hover:text-green-400' : ''} ${botaoPesquisadoresClicado ? 'group-hover:text-red-400' : ''} ${botaoPatentesClicado ? 'group-hover:text-cyan-400' : ''}`} />
-                <div className='flex gap-2 mx-2'>{valoresSelecionadosJSX}{valoresSelecionadosEventoJSX}{valoresPesquisadoresSelecionadosJSX}{valoresSelecionadosPatenteJSX}{valoresAreasSelecionadosJSX}{valoresLivrosSelecionadosJSX}{valoresSelecionadosResumoJSX}</div>
+                <div className='flex gap-2 mx-2'>{valoresSelecionadosJSX}{valoresSelecionadosNuvemJSX}{valoresSelecionadosEventoJSX}{valoresPesquisadoresSelecionadosJSX}{valoresSelecionadosPatenteJSX}{valoresAreasSelecionadosJSX}{valoresLivrosSelecionadosJSX}{valoresSelecionadosResumoJSX}</div>
                 <input
                   type="text"
                   value={pesquisaInput}
@@ -1414,7 +1458,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
 
         </div>
 
-                {valoresSelecionadosExport == "" ? (
+                {valoresSelecionadosExport == "" && valoresSelecionadosNuvem == "" ? (
                   <div className='testeeeaq mt-4 flex gap-6 items-center'>
                     <div onClick={() => setEstadoFiltro(!EstadoFiltro)} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
                         {EstadoFiltro ? (

@@ -43,13 +43,15 @@ export function Patent(props: Patente) {
       .split(/[\s.,;?!]+/)
       .map((word, index) => {
         const formattedWord = unorm.nfkd(word).replace(/[^\w\s]/gi, '');
+        const formattedValoresSelecionadosExport = unorm.nfkd(valoresSelecionadosExport).replace(/[^\w\s]/gi, '').toLowerCase();
+        const formattedValorDigitadoPesquisaDireta = unorm.nfkd(valorDigitadoPesquisaDireta).replace(/[^\w\s]/gi, '').toLowerCase();
         const alphabet = Array.from({ length: 26 }, (_, index) => String.fromCharCode('a'.charCodeAt(0) + index));
         const ignoredWords = [...alphabet, 'do', 'da', 'o', 'os', 'as', 'de', 'e', 'i', 'na', 'du', 'em', ')', '('];
         let formattedSpan;
 
         if (
-          (valoresSelecionadosExport.includes(formattedWord) ||
-            valorDigitadoPesquisaDireta.includes(formattedWord)) &&
+          (formattedValoresSelecionadosExport.includes(formattedWord) ||
+          formattedValorDigitadoPesquisaDireta.includes(formattedWord)) &&
           !ignoredWords.includes(formattedWord)
         ) {
           formattedSpan = (

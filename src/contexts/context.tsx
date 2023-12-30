@@ -94,6 +94,9 @@ interface UserContextType {
 
   filtroAreas:string,
   setFiltroAreas: React.Dispatch<React.SetStateAction<string>>;
+
+  valoresSelecionadosNuvem:string,
+setValoresSelecionadosNuvem:  React.Dispatch<React.SetStateAction<string>>;
   }
 
   
@@ -105,6 +108,8 @@ urlTermExport: "",
 setUrlTermExport: () => {},
 valorDigitadoPesquisaDireta: "",
 setValorDigitadoPesquisaDireta: () => {},
+valoresSelecionadosNuvem: "",
+setValoresSelecionadosNuvem: () => {},
 urlGeral: "",
 setUrlGeral: () => {},
 botaoPatentesClicado:  false,
@@ -168,4 +173,6 @@ intituicoesSelecionadasCheckbox: "",
 
   idVersao: "", 
   setIdVersao: () => {},
+
+  
 });
