@@ -293,7 +293,7 @@ console.log('idversao',idVersao)
     let urlPalavrasChaves = `${urlGeral}lists_word_researcher?graduate_program_id=&researcher_id=`
     let clickedWord =""
     const handleWordClick = (event: any) => {
-      if (event.point && event.point.name) {
+      if (event.point && event.point.name && valoresSelecionadosExport == "") {
          clickedWord = event.point.name;
          setValoresSelecionadosNuvem(clickedWord);
          setValoresSelecionadosExport(valoresSelecionadosNuvem)

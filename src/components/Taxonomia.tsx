@@ -94,6 +94,7 @@ export function Taxonomia() {
     const pesquisaInputFormatado = pesquisaInput.trim().replace(/\s+/g, ";");
     const url = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=ARTICLE`;
 
+    useEffect(() => {
     fetch(url, {
       mode: 'cors',
       headers: {
@@ -118,6 +119,10 @@ export function Taxonomia() {
       .catch((err) => {
         console.log(err.message);
       });
+
+
+
+    }, []);
 
     const handleTaxChange = (event:any) => {
         let selectedValue = event.target.value;
