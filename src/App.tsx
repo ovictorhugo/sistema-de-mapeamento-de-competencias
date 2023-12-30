@@ -174,7 +174,7 @@ useEffect(() => {
       />
             <Route path='/search' element={<StepTwo/>}/>
 
-            <Route path='/api/chat' element={<POST/>}/> 
+          
 
             <Route path='/admin' element={<LoginAdmin/>}/>
 
