@@ -130,7 +130,7 @@ function myWrapperFunction() {
       const urlEvento = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=SPEAKER`
 
 
-      console.log('urlResumo', url)
+     
 
 
 
@@ -244,7 +244,6 @@ function myWrapperFunction() {
             console.log(err.message);
           });
 
-          console.log(`urlLivro`, urlLivro)
       
 
       // Pesquisador
@@ -1014,7 +1013,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
       </li>
     ));
 
-    console.log(resultadosPatentes)
+  
     const valoresPatenteSelecionados = itensSelecionadosPatente.join(';');
 
     const valoresSelecionadosPatenteJSX = itensSelecionadosPatente.map((valor, index) => (
@@ -1132,7 +1131,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
 
       setValoresSelecionadosExport(valoresSelecionados)
 
-    } else if (botaoTermosClicado && valoresSelecionadosNuvem != "")  {
+    } else if (botaoTermosClicado && valoresSelecionadosNuvem !== "")  {
       setValoresSelecionadosExport(valoresSelecionadosNuvem)
     }
 
@@ -1153,7 +1152,7 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
         handleClick();
       }
     };
-    console.log(`valores2`, valoresSelecionadosExport )
+
 
     //palavras mais pesquisadas
     interface PalavrasChaves {

@@ -138,12 +138,10 @@ export function Pesquisadores() {
     urlTermPesquisadores = `${urlGeral}/researcherArea_specialty?area_specialty=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}&university=${intituicoesSelecionadasCheckbox}&graduate_program_id=${idGraduateProgram}`;
   }
 
- 
-  console.log('urlTermPesquisadores', urlTermPesquisadores)
 
 
-console.log(urlTermPesquisadores)
- console.log('intituicoesSelecionadasCheckbox',intituicoesSelecionadasCheckbox)
+
+
 
   const location = useLocation();
 
@@ -255,7 +253,7 @@ console.log(urlTermPesquisadores)
     fetchData();
   }, []);
 
-  console.log('cityCounts',cityData);
+
 
   const normalizeCityName = (cityName: string) => {
     // Normaliza o nome da cidade (ex: "Ilhéus" -> "Ilheus")
@@ -289,7 +287,7 @@ console.log(urlTermPesquisadores)
     filteredResults = researcher;
   }
 
-  console.log('filteredResults', filteredResults)
+
 
 
 const currentResults = filteredResults.slice(indexOfFirstResult, indexOfLastResult);
@@ -325,7 +323,7 @@ const currentResults = filteredResults.slice(indexOfFirstResult, indexOfLastResu
 
 
   
-console.log(pesquisadoresSelecionadosGroupBarema)
+
  
 
 localStorage.setItem('pesquisadoresSelecionadosGroupBarema', JSON.stringify(pesquisadoresSelecionadosGroupBarema));
@@ -523,7 +521,7 @@ localStorage.setItem('pesquisadoresSelecionadosGroupBarema', JSON.stringify(pesq
       }
     
     
-   console.log(`id_pesquisador`,id_pesquisador)
+  
 
   };
   
@@ -750,16 +748,25 @@ localStorage.setItem('pesquisadoresSelecionadosGroupBarema', JSON.stringify(pesq
 
       <Popup >
         <div className="p-1 pb-4">
-        <div className="text-base text-medium flex gap-2 items-center"><MapPin size={16} className="text-gray-500" />{city.nome}</div>
+        <div className="text-base text-medium flex gap-2 items-center mb-4 bg-white">
+          <MapPin size={16} className="text-gray-500" />{city.nome}
+          <div className="text-xs px-3 rounded-md py-1 roun text-medium  bg-blue-400 text-white">{researcher.filter(user => {
+      const normalizedUserCity = unorm.nfd(user.city.toUpperCase()).replace(/[\u0300-\u036f]/g, "");
+      const normalizedCityNome = unorm.nfd(city.nome.toUpperCase()).replace(/[\u0300-\u036f]/g, "");
+      return normalizedUserCity === normalizedCityNome;
+    }).length}</div>
+          </div>
         <div className="flex flex-col max-h-[250px] overflow-y-auto elementBarra">
+        
         {researcher.map((user, index) => {
 
 const normalizedUserCity = unorm.nfd(user.city.toUpperCase()).replace(/[\u0300-\u036f]/g, "");
 const normalizedCityNome = unorm.nfd(city.nome.toUpperCase()).replace(/[\u0300-\u036f]/g, "");
+
           if (normalizedUserCity === normalizedCityNome) {
             return (
               <div className="">
-                <div onClick={() => handleOpenPopUpMap(index)} className="hover:bg-gray-50 transition-all  p-2 cursor-pointer border w-full flex gap-4 items-center border-gray-300 rounded-md mt-4" key={user.name}>
+                <div onClick={() => handleOpenPopUpMap(index)} className="hover:bg-gray-50 transition-all  p-2 cursor-pointer border w-full flex gap-4 items-center border-gray-300 rounded-md my-2" key={user.name}>
                  <div className={`whitespace-nowrap  bg-cover bg-center bg-no-repeat h-6 w-6 bg-white rounded-md  relative `} style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${user.lattes_10_id}) ` }}>
                   </div>
                 <div className="flex-1 m-0">{user.name}</div>

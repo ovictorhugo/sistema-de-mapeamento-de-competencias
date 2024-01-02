@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { UserContext } from "../contexts/context";
-import { ArrowCircleUp, ArrowRight, BookOpen, BookmarkSimple, Books, Buildings, Copyright, CursorText, File, Funnel, GraduationCap, IdentificationCard, Lightbulb, ListDashes, MagnifyingGlass, MapPin, Quotes, SignIn, Star, TextAlignLeft, Textbox, Ticket, User, UserPlus, X, YoutubeLogo } from "phosphor-react";
+import { ArrowCircleUp, ArrowRight, BookOpen, BookmarkSimple, Books, Buildings, Copyright, CursorText, File, Funnel, GitMerge, GraduationCap, IdentificationCard, Lightbulb, ListDashes, MagnifyingGlass, MapPin, Quotes, SignIn, Star, TextAlignLeft, Textbox, Ticket, User, UserPlus, X, YoutubeLogo } from "phosphor-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Circle } from "./Circle";
 import DropdownMultiSelect from "./DropdownMultiSelect";
@@ -43,6 +43,10 @@ import { PesquisadoresTaxinomia } from "./PesquisadoresTaxonomia";
 import { Filter } from "./Filter";
 import footer from '../assets/footer.png';
 import { PopUpWrapper } from "./PopUpWrapper";
+import { Pinterest } from "./Pinterest";
+import { GridHome } from "./GridHome";
+import { SvgHome } from "./SvgHome";
+import { Cities } from "./Cities";
 
 
 interface GraduateProgram {
@@ -145,7 +149,6 @@ export function MapProfnit(props: Props) {
 
 
 
-console.log('idversao',idVersao)
   
 
   
@@ -312,10 +315,7 @@ console.log('idversao',idVersao)
 
   
   
-    useEffect(() => {
-      console.log(`Palavra clicada: `, valoresSelecionadosNuvem);
-      // Adicione qualquer lógica adicional que você deseja executar quando a palavra é clicada
-    }, [valoresSelecionadosNuvem]);
+  
 
 
     
@@ -564,7 +564,7 @@ useEffect(() => {
   }
 },[]); // Empty dependency array ensures the effect runs only once during component mount
     
-console.log('valoresSelecionadosNuvem',valoresSelecionadosNuvem)
+
 
   return (
     <div className="   ">
@@ -652,7 +652,12 @@ console.log('valoresSelecionadosNuvem',valoresSelecionadosNuvem)
    
  
 ) : (
-  <Tabs className="w-full items-center flex flex-col " >
+  <div className="w-full">
+     <div className="px-16 my-8">
+    
+     </div>
+
+    <Tabs className="w-full items-center flex flex-col " >
     <div className="flex items-center justify-between w-full mt-6  px-6 md:px-16 m-[0 auto]">
       <p className="text-gray-400 mr-6 min-w-[350px] lg:flex gap-1">
         Resultados da pesquisa em {' '}
@@ -717,14 +722,16 @@ console.log('valoresSelecionadosNuvem',valoresSelecionadosNuvem)
             </div>
 
   </Tabs>
+  </div>
 )}
 
   
 
       {valoresSelecionadosExport == "" && valorDigitadoPesquisaDireta == "" && valoresSelecionadosNuvem == "" ? (
         <div>
-          <div className="w-full flex justify-center my-6  px-6 md:px-16">
-                <div className=" p-24 m-[0 auto] w-full rounded-2xl bg-blue-400 items-center grid grid-cols-2 gap-12 bg-opacity-10 backdrop-blur-sm">
+          <div className="w-full flex justify-center my-6  ">
+                <div className="px-6 md:px-16 relative z-[9]">
+                <div className=" p-24 m-[0 auto] w-full  rounded-2xl bg-blue-400 items-center grid grid-cols-2 gap-12 bg-opacity-10 backdrop-blur-sm">
                     <div>
                         <h3 className="text-3xl font-medium text-gray-400 max-w-[500px] mb-4">O que a plataforma pode <strong className="bg-blue-400 text-white font-medium">fazer</strong> e como ela pode te <strong className="bg-blue-400 text-white font-medium">auxiliar</strong>?</h3>
                         <p className=" text-gray-400 mb-8">O Sistema de Mapeamento de Competências é uma plataforma desenvolvida com o objetivo de auxiliar na seleção e filtragem de pesquisadores. Esta plataforma tem o potencial facilitar o processo de identificação e escolha dos profissionais mais qualificados em suas respectivas áreas de atuação, ver linhas de pesquisas e orientações.</p>
@@ -747,13 +754,31 @@ console.log('valoresSelecionadosNuvem',valoresSelecionadosNuvem)
                   </div>
 
                 </div>
+                </div>
 
                
-               
+               <div className="w-full absolute opacity-70">
+                <div className="">
+                <SvgHome/>
+                </div>
+               </div>
             </div>
 
+            <Pinterest/>
 
-            <div className="grid grid-cols-2 py-24 gap-12 px-6 md:px-16">
+            <div className="relative top-[-160px] px-16">
+              <GridHome/>
+
+            </div>
+
+            <div className="relative top-[-160px]  px-16">
+              <Cities/>
+            </div>
+
+            
+
+
+            <div className="grid grid-cols-2 pb-24 gap-12 px-6 md:px-16">
                 <div className="w-full max-w-[640px] ">
                     <h3 className="font-medium text-4xl mb-4 text-gray-400">1. Use <strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">palavras-chave</strong> específicas</h3>
                     <p className="text-lg text-gray-400">
@@ -873,13 +898,13 @@ console.log('valoresSelecionadosNuvem',valoresSelecionadosNuvem)
       
             <div className="w-full flex flex-col px-6 md:px-16">
             
-                <div className="mb-16 pt-52 pb-0 flex justify-center flex-col items-center">
+                <div className="mb-16 pb-0 flex justify-center flex-col items-center">
                     <h3 className="font-medium text-4xl text-gray-400 text-center mb-4">4. Conheça a aba <strong className="bg-blue-400 text-white font-medium text-4xl">baremas de avaliação </strong></h3>
-                    <p className="mb-6 text-gray-400 text-center max-w-[1000px]">Quer ranquear quais pesquisadores estão mais capacitados para participação em determinado edital? É simples. Basta ir na aba “baremas” que a plataforma irá fazer baremas de avaliação onde você pode determinar pesos diferentes para cada critério desejado (graduação, produção bibliográfica, participação em eventos, produção técnica, entre outros). </p>
+                    <p className="mb-6 text-gray-400 text-lg text-center max-w-[1000px]">Quer ranquear quais pesquisadores estão mais capacitados para participação em determinado edital? É simples. Basta ir na aba “baremas” que a plataforma irá fazer baremas de avaliação onde você pode determinar pesos diferentes para cada critério desejado (graduação, produção bibliográfica, participação em eventos, produção técnica, entre outros). </p>
 
                     <div className="flex gap-4 items-center">
 
-                      <p className="text-gray-400 font-bold"> Conheça um mundo de possibilidades. Processe seu primeiro</p>
+                      <p className="text-gray-400 font-bold text-lg"> Conheça um mundo de possibilidades. Processe seu primeiro</p>
                     <Link to={`/barema/${idVersao}`} className="w-fit cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
                         <Textbox size={16} className="text-white" /> Barema
                     </Link>

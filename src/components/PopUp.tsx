@@ -358,9 +358,6 @@ export function PopUp(props: PesquisadorProps) {
     urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosPopUp}${valorDigitadoPesquisaDireta}&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}`;
   }
 
-  if (valoresSelecionadosNuvem !== "") {
-    urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosNuvem}&researcher_id=${props.id}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}`;
-  }
 
 
   if (botaoResumoClicado) {
@@ -1080,6 +1077,7 @@ export function PopUp(props: PesquisadorProps) {
       setValoresSelecionadosPopUp(valoresSelecionadosExport)
     }
     setValoresSelecionados('');
+  
     setItensSelecionados([])
   }
 

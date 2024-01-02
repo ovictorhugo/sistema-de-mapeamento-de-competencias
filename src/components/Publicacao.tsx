@@ -86,7 +86,7 @@ export function Publicacao(props: Publicacao) {
                 {props.lattes_10_id !== 'K4796572P6' && (
   <div className="pt-6 flex flex-wrap">
 <p className="text-gray-400 text-sm font-medium flex-wrap flex gap-1">
-  {valoresSelecionadosPopUp === '' && valorDigitadoPesquisaDireta === '' && valoresSelecionadosNuvem === ''  || botaoTermosClicado == false ? (
+  {valoresSelecionadosPopUp === '' && valorDigitadoPesquisaDireta === ''  || botaoTermosClicado == false ? (
     `${props.title.toUpperCase()}`
   ) : (
     normalizedTitle
@@ -102,8 +102,8 @@ export function Publicacao(props: Publicacao) {
         
      
         if (
-          (formattedValoresSelecionadosNuvem.includes(formattedWord) ||
-          formattedValoresSelecionadosExport.includes(formattedWord) ||
+         
+          (formattedValoresSelecionadosExport.includes(formattedWord) ||
           formattedValorDigitadoPesquisaDireta.includes(formattedWord)) &&
           !ignoredWords.includes(formattedWord)
         ) {

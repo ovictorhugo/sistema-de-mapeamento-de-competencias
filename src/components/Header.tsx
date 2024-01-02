@@ -1,7 +1,7 @@
 import { Logo } from "./Logo";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Ilustracao } from "./Ilustracao";
-import { ArrowCircleDown, Info, Funnel,  File, Buildings, PaperPlaneTilt, ChartLine, Question, SignIn, ListDashes, UserCirclePlus, UserCircle, BookOpen, Textbox, Share, GraduationCap, GitBranch, UserPlus, SignOut, X, Gear, ChartBar, PencilSimpleLine, ArrowClockwise, Password, Plus } from "phosphor-react";
+import { ArrowCircleDown, Info, Funnel,  File, Buildings, PaperPlaneTilt, ChartLine, Question, SignIn, ListDashes, UserCirclePlus, UserCircle, BookOpen, Textbox, Share, GraduationCap, GitBranch, UserPlus, SignOut, X, Gear, ChartBar, PencilSimpleLine, ArrowClockwise, Password, Plus, Chats } from "phosphor-react";
 
 import logo_1 from '../assets/logo_1.png';
 import logo_2 from '../assets/logo_2.png';
@@ -270,6 +270,10 @@ const handleSubmit = async () => {
           <Link to={`/barema`}  onClick={() => setIdBarema("")} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><Textbox size={16} />Barema{ pesquisadoresSelecionadosGroupBarema != '' ? (<div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>):('')}</Link>
           <Link to={`/programas-graduacao`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><GraduationCap size={16} />Pós-gradução</Link>
           <Link to={`/taxonomia`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><GitBranch size={16} className="rotate-180"/>Taxonomia</Link>
+          <div className="gap-1 flex items-center">
+         <Link to={`/chat`} className="flex items-center h-full  px-4 text-gray-400 text-sm font-bold transition  gap-2"><Chats size={16} className=""/>MarIA <div className="bg-blue-400 text-xs text-white rounded-full py-1 px-2">Novo!</div></Link>
+         
+         </div>
        
         </div>
       </div>

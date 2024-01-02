@@ -52,7 +52,7 @@ export function Pesquisador(props: PesquisadorProps) {
 
 
   const { valoresSelecionadosPopUp, setValoresSelecionadosPopUp } = useContext(UserContext)
-  console.log("valoresSelecionadosPopUp" + valoresSelecionadosPopUp)
+
 
   let urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=${valoresSelecionadosPopUp}&researcher_id=${props.id}&type=ARTICLE&qualis=&year=1900`;
 
@@ -194,7 +194,7 @@ export function Pesquisador(props: PesquisadorProps) {
 
   const {valoresSelecionadosNuvem, setValoresSelecionadosNuvem} = useContext(UserContext);
   
-console.log(pesquisadoresSelecionadosGroupBarema)
+
  
 
 localStorage.setItem('pesquisadoresSelecionadosGroupBarema', JSON.stringify(pesquisadoresSelecionadosGroupBarema));

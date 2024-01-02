@@ -76,7 +76,7 @@ export function Filter() {
     fetchData();
   }, [pesquisadoresSelecionadosGroupBarema]);
 
-  console.log(`PESQUISADORES SELECIOANADOS`, urlTermPesquisadores)
+
   
 
     const qualisColor: { [key: string]: string } = {
@@ -452,13 +452,13 @@ export function Filter() {
       
                  </div>
 
-                 <div className='pt-6 bg-white top-[-212px] z-[99] right-0  relative'>
+                 <div className='pt-6 bg-white top-[-226px] z-[99] right-0  relative'>
 
-                 <div  onClick={handleDownloadJson} className="w-full mb-4  text-blue-400 text-sm font-medium cursor-pointer h-10 p-4  border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
+                 <div  onClick={handleDownloadJson} className="w-full mb-4  text-blue-400 text-sm font-medium cursor-pointer h-12 p-4  border-[1px] border-solid bg-white border-gray-300 rounded-xl justify-center items-center flex outline-none  hover:bg-gray-50  gap-3  transition ">
                 <FileCsv size={16} className="" /> Download dos pesquisadores selecionados
               </div>
 
-                 <Link to={`/barema`} className="w-full cursor-pointer h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
+                 <Link to={`/barema`} className="w-full cursor-pointer h-12 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500 text-sm font-medium transition">
                 
                 <Textbox size={16} className="text-white" />
              Barema

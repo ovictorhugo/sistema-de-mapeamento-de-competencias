@@ -11,6 +11,7 @@ import { getAuth, signInWithEmailAndPassword,  updateProfile, GoogleAuthProvider
 import { auth, app } from "../lib/firebase";
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { GridHome } from "./GridHome";
 
 
 export function MinhaConta() {
@@ -219,6 +220,10 @@ export function MinhaConta() {
                     </div>
                     <p className="text-gray-400 font-medium text-sm text-center">Profnit</p>
                 </Link>
+            </div>
+
+            <div className="mt-8">
+                <GridHome/>
             </div>
             </div>
 

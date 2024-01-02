@@ -97,6 +97,9 @@ interface UserContextType {
 
   valoresSelecionadosNuvem:string,
 setValoresSelecionadosNuvem:  React.Dispatch<React.SetStateAction<string>>;
+
+cidadeSelecionada:string, 
+setCidadeSelecionada:  React.Dispatch<React.SetStateAction<string>>;
   }
 
   
@@ -108,6 +111,8 @@ urlTermExport: "",
 setUrlTermExport: () => {},
 valorDigitadoPesquisaDireta: "",
 setValorDigitadoPesquisaDireta: () => {},
+cidadeSelecionada:"",
+setCidadeSelecionada: () => {},
 valoresSelecionadosNuvem: "",
 setValoresSelecionadosNuvem: () => {},
 urlGeral: "",

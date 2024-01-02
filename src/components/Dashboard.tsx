@@ -1,4 +1,4 @@
-import { BookmarkSimple, CaretLeft, CaretRight, CheckCircle, FileCsv, GraduationCap, House, MapPin, Plus, SquaresFour, Star, Trash, UserCircle, Users, UsersFour, UsersThree, X } from "phosphor-react";
+import { BookmarkSimple, CaretLeft, CaretRight, CheckCircle, Eye, EyeClosed, EyeSlash, FileCsv, GraduationCap, House, MapPin, Plus, SquaresFour, Star, Trash, UserCircle, Users, UsersFour, UsersThree, X } from "phosphor-react";
 import { ChatContent } from "../components/ChatContent";
 import { PopUpWrapper } from "./PopUpWrapper";
 import { useContext, useEffect, useState } from "react";
@@ -22,6 +22,8 @@ interface Program {
     institution_id: string
     description: string
     url_image: string
+    city:string
+    visible: boolean
   }
 
   interface PesquisadorProps {
@@ -48,6 +50,7 @@ export function Dashboard() {
     const [lattesID, setLattesID] = useState('');
 
     const [popUpProgram, setPopUpProgram] = useState(false);
+    const [popUpProgramEdit, setPopUpProgramEdit] = useState(false);
     const { urlGeral, setUrlGeral } = useContext(UserContext);
 
     const [researcher, setResearcher] = useState<PesquisadorProps[]>([]);
@@ -342,6 +345,20 @@ export function Dashboard() {
           };
           fetchData();
         }, [urlGetProgram]);
+
+        const [popUpVisibilities, setPopUpVisibilities] = useState([]);
+
+        const handleOpenPopUp = (index: any) => {
+          const newVisibilities = [...popUpVisibilities];
+          newVisibilities[index] = true;
+          setPopUpVisibilities(newVisibilities);
+        };
+
+        const handleClosePopUp = (index: any) => {
+          const newVisibilities = [...popUpVisibilities];
+          newVisibilities[index] = false;
+          setPopUpVisibilities(newVisibilities);
+        };
       
 
     return  (
@@ -428,10 +445,10 @@ export function Dashboard() {
             </div>
 
 
-            <div className="mt-6">
-            <div className='flex gap-6  w-full'>
+            <div className="mt-6 h-full overflow-y-auto elementBarra">
+            <div className='flex gap-6  w-full h-full overflow-y-auto elementBarra'>
        <div className='border border-gray-300 rounded-xl w-1/2 h-full p-6'>
-       <div className=" overflow-y-auto max-h-fit h-full">
+       <div className=" overflow-y-auto max-h-fit h-full elementBarra pr-2">
        {researcher.map((props) => {
           return(
             <div className="flex justify-between items-center py-4 border-b border-b-gray-300">
@@ -464,7 +481,7 @@ export function Dashboard() {
 
 
             </div>
-            <div className=" max-w-[500px] ">
+            <div className=" max-w-[500px] overflow-y-auto elementBarra pr-2">
                 <div className="rounded-xl  border border-gray-300 p-12 ">
                 <h3 className="max-w-[250px] font-medium text-2xl mb-4 text-gray-400">Cadastrar programa de <strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">pós-graduação</strong></h3>
                     <p className="  text-gray-400 mb-8">
@@ -519,12 +536,14 @@ export function Dashboard() {
             </form>
                 </div>
 
-                <div className=" mt-6  flex-1 overflow-y-auto">
+                <div className=" mt-6  grid grid-rows-1 overflow-y-auto">
 
-                <div className="overflow-y-auto flex flex-col gap-6">
-                {program.map((props) => {
+                <div className="overflow-y-auto flex flex-col gap-6 h-fit">
+                {program.map((props, index) => {
                 return(
-                    <li
+                    <div>
+                      <li
+                    onClick={() => handleOpenPopUp(index)}
                     key={props.graduate_program_id}
                     className=" checkboxLabel group transition-all list-none inline-flex group w-full "
          
@@ -535,7 +554,7 @@ export function Dashboard() {
                       
   
                       <div className="flex items-center gap-3">
-                      <div><img src={`${props.url_image}`} alt="" className="h-16 border-none  w-auto"/></div>
+                      
                         <div className="flex-1">
                         <div>
                         <span className=" whitespace-normal text-base text-gray-400 mb-2  font-bold">{props.name}</span>
@@ -546,7 +565,7 @@ export function Dashboard() {
 
                             <div className="text-xs font-medium">{props.code}</div>
 
-                        <div className="flex gap-2  flex-wrap">
+                        <div className="flex gap-2  flex-wrap group-hover:hidden">
                       {props.type.split(';').map((value, index) => {
                         const ratingValues = props.rating.split(';');
                         const ratingDoutorado = ratingValues[0]; // Valor correspondente a DOUTORADO
@@ -555,7 +574,8 @@ export function Dashboard() {
                         return (
                           <div
                             key={index}
-                            className={`py-2 px-4 text-white w-fit rounded-md text-xs font-bold flex gap-2 items-center ${value.includes('MESTRADO') ? 'bg-blue-200' : 'bg-blue-300'
+                            
+                            className={`py-2 h-[34px] px-4 text-white w-fit rounded-md text-xs font-bold flex gap-2 items-center ${value.includes('MESTRADO') ? 'bg-blue-200' : 'bg-blue-300'
                               }`}
                           >
                             <GraduationCap size={12} className="textwhite" />
@@ -571,6 +591,22 @@ export function Dashboard() {
                       </div>
                     </div>
 
+                    <div className="group-hover:flex hidden gap-3">
+                    <div className="bg-blue-400 hover:bg-blue-500 transition-all  w-[34px] h-[34px] justify-center text-white rounded-md text-xs font-bold flex gap-2 items-center">
+                        {props.visible ? (
+                          <Eye size={16} className="textwhite" />
+                        ): (
+                          <EyeSlash size={16} className="textwhite" />
+                        )}
+                      
+                      </div>
+
+                      <div className="bg-red-400 hover:bg-red-500 transition-all  w-[34px] h-[34px] justify-center text-white rounded-md text-xs font-bold flex gap-2 items-center">
+                        <Trash size={16} className="textwhite" />
+                      
+                      </div>
+                    </div>
+
                         </div>
                         </div>
                       </div>
@@ -579,6 +615,34 @@ export function Dashboard() {
                       </div>
                     </label>
                   </li>
+
+
+
+                  <div>
+
+                  {popUpVisibilities[index] && (
+                    <PopUpWrapper
+                   title="Print ('Bem-vindo/a')"
+                   subtitle="Novo usuário?"
+                   textLink="Criar conta"
+                   link="/signup"
+                  >
+
+
+                  </PopUpWrapper>
+
+                  )}
+                  
+
+
+
+
+
+
+
+
+                  </div>
+                    </div>
                 )
                 })}
                 </div>

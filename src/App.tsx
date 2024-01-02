@@ -36,6 +36,7 @@ import { MeusBaremas } from './pages/MeusBaremas';
 import { Configuracoes } from './pages/Configuracoes';
 import { Taxonomia } from './components/Taxonomia';
 import { POST } from './components/chat/route';
+import { Cidades } from './pages/Cidades';
 
 
 
@@ -51,6 +52,8 @@ export const App = () => {
   const [urlTermExport, setUrlTermExport] = useState('');
   const [valoresSelecionadosExport, setValoresSelecionadosExport] = useState(``);
   const [valoresSelecionadosNuvem, setValoresSelecionadosNuvem] = useState(``);
+
+  const [cidadeSelecionada, setCidadeSelecionada] = useState(``);
 
   const [loggedIn, setLoggedIn] = useState(false);
 
@@ -153,6 +156,7 @@ useEffect(() => {
           valoresSelecionadosPopUp, setValoresSelecionadosPopUp,
           isPopUpVisible, setIsPopUpVisible,
           distinct, setDistinct,
+          cidadeSelecionada, setCidadeSelecionada,
 
           estadoSelecionado, setEstadoSelecionado,
           
@@ -177,6 +181,8 @@ useEffect(() => {
           
 
             <Route path='/admin' element={<LoginAdmin/>}/>
+
+            <Route path='/cidades' element={<Cidades/>}/>
 
             <Route path='/profnit' element={<Profnit/>}/>
             <Route path='/bem-vindo' element={<HomePageSimcc/>}/>

@@ -274,7 +274,7 @@ console.log(urlQualis)
       />
         </div>
 
-      <p className="text-sm text-gray-400  flex-1">Porcentagem de artigo nas produções </p>
+      <p className="text-sm text-gray-400  flex-1">Porcentagem de artigo nas produções científicas (livro, capítulo e artigo) </p>
         </div>
 
         <div className="grid grid-cols-4 gap-4 w-full">

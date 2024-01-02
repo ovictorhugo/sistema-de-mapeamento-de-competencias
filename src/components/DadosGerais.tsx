@@ -54,7 +54,7 @@ else {
 // Monta a URL com o ano 5 anos atrás
 const urlQualis = `${urlGeral}/qualis_researcher?graduate_program_id=${QualQualis}&year=${ano5AnosAtras}&researcher_id=`;
 
-console.log(urlVisaoPrograma)
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -180,7 +180,7 @@ console.log(urlVisaoPrograma)
     return total + researcher;
   }, 0);
 
-  console.log(pontuacaoTotal)
+
   
   // Calcula o índice de produção artigos
   const indiceProducaoArtigos = (pontuacaoTotal / numeroTotalDocentes/5).toFixed(2);
@@ -250,7 +250,7 @@ console.log(urlVisaoPrograma)
       />
         </div>
 
-      <p className="text-sm text-gray-400  flex-1">Porcentagem de artigo nas produções </p>
+      <p className="text-sm text-gray-400  flex-1">Porcentagem de artigo nas produções científicas (livro, capítulo e artigo)</p>
         </div>
 
         <div className="grid grid-cols-4 gap-4 w-full">
@@ -289,7 +289,7 @@ console.log(urlVisaoPrograma)
             <div className="flex gap-4">
            
 
-            <div onClick={handleDownloadJson} className="cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+            <div onClick={handleDownloadJson} className="cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
               <DownloadSimple size={24} className={" transition-all text-gray-400"} />
             </div>
             </div>

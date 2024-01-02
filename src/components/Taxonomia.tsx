@@ -72,6 +72,7 @@ export function Taxonomia() {
     const { urlGeral, setUrlGeral } = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(false);
     const [isTab, setIsTab] = useState(false);
+    const [palavraProcessada, setPalavraProcessada] = useState(``);
     const { isOn, setIsOn } = useContext(UserContext)
     
 
@@ -90,6 +91,47 @@ export function Taxonomia() {
 
     const [pesquisaInput, setPesquisaInput] = useState('');
     const [resultados, setResultados] = useState<Post[]>([]);
+
+    
+  //checkbox term
+
+  const [itensSelecionadosTerm, setItensSelecionadosTerm] = useState<string[]>([]);
+console.log(itensSelecionadosTerm)
+  const handleCheckboxChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name } = event.target;
+    const isChecked = event.target.checked;
+
+    setItensSelecionadosTerm((prevSelecionados) => {
+      if (isChecked) {
+        return [...prevSelecionados, name];
+      } else {
+        return prevSelecionados.filter((item) => item !== name);
+      }
+    });
+  };
+
+  const checkboxItems = resultados.slice(0, 6).map((resultado) => (
+    <li
+      key={resultado.term}
+      className="checkboxLabel group list-none inline-flex  group overflow-hidden"
+      onMouseDown={(e) => e.preventDefault()}
+    >
+      <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-blue-100 border-blue-400 hover:text-blue-400 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
+        <span className="text-center block">{resultado.term.replace(/;/g, ' ')}</span>
+        <input
+          type="checkbox"
+          name={resultado.term}
+          className="absolute hidden group"
+          checked={itensSelecionadosTerm.includes(resultado.term)}
+          id={resultado.term}
+          onChange={handleCheckboxChangeInput}
+       
+        />
+      </label>
+    </li>
+  ));
+
+
 
     const pesquisaInputFormatado = pesquisaInput.trim().replace(/\s+/g, ";");
     const url = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=ARTICLE`;
@@ -159,13 +201,28 @@ export function Taxonomia() {
                 setTaxValues(uniqueTaxValues);
                     setOriginalItems(parsedData);
 
-                    // Defina o primeiro valor como selecionado por padrão
+
                     if (uniqueTaxValues.length > 0) {
-                        setSelectedTax(uniqueTaxValues[0]);
-                        // Filtrar os itens com base no valor selecionado usando a lista original
-                        const filtered = parsedData.filter((item:any) => item.tax === uniqueTaxValues[0]);
-                        setFilteredItems(filtered);
-                      }
+                      setSelectedTax(uniqueTaxValues[0]);
+                      // Filtrar os itens com base no valor selecionado usando a lista original
+                      const filtered = parsedData.filter((item:any) => item.tax === uniqueTaxValues[0]);
+
+                      
+
+                      const filteredTotal = [
+                        ...filtered,
+                        ...itensSelecionadosTerm.map((term) => ({
+                          tax: selectedTax,
+                          termos: term,
+                          termos_tax: term,
+                          terms: term
+                          // Add other properties as needed
+                        })),
+                      ];
+
+                      console.log(`filtered`, filteredTotal)
+                      setFilteredItems(filteredTotal);
+                    }
               },
               header: true,
               skipEmptyLines: true,
@@ -178,7 +235,7 @@ export function Taxonomia() {
         };
     
         fetchData();
-      }, []);
+      }, [itensSelecionadosTerm]);
      
       console.log(`filteredItems`,filteredItems)
 
@@ -196,6 +253,7 @@ export function Taxonomia() {
 
             // Iterar sobre cada termo em filteredItems
             for (const item of filteredItems) {
+              setPalavraProcessada(item.termos)
               const urlTermPesquisadores = `${urlGeral}researcher?terms=${item.termos}&university=${intituicoesSelecionadasCheckbox}&type=ARTICLE&graduate_program_id=`;
               console.log(urlTermPesquisadores)
               const response = await fetch(urlTermPesquisadores, {
@@ -258,7 +316,7 @@ export function Taxonomia() {
         if (filteredItems.length > 0) {
           fetchData();
         }
-      }, [ intituicoesSelecionadasCheckbox, filteredItems ]);
+      }, [ intituicoesSelecionadasCheckbox, filteredItems, itensSelecionadosTerm ]);
 
       const [isPopUpVisible, setIsPopUpVisible] = useState(false);
       const { EstadoFiltro, setEstadoFiltro } = useContext(UserContext);
@@ -472,45 +530,8 @@ const onDragEnd = (result: any) => {
   const [isCategorias , setIsCategorias] = useState(false);
 
 
-  //checkbox term
 
-  const [itensSelecionadosTerm, setItensSelecionadosTerm] = useState<string[]>([]);
 
-    const handleCheckboxChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const { name } = event.target;
-      const isChecked = event.target.checked;
-
-      setItensSelecionadosTerm((prevSelecionados) => {
-        if (isChecked) {
-          return [...prevSelecionados, name];
-        } else {
-          return prevSelecionados.filter((item) => item !== name);
-        }
-      });
-    };
-
-    const checkboxItems = resultados.slice(0, 6).map((resultado) => (
-      <li
-        key={resultado.term}
-        className="checkboxLabel group list-none inline-flex  group overflow-hidden"
-        onMouseDown={(e) => e.preventDefault()}
-      >
-        <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-blue-100 border-blue-400 hover:text-blue-400 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
-          <span className="text-center block">{resultado.term.replace(/;/g, ' ')}</span>
-          <input
-            type="checkbox"
-            name={resultado.term}
-            className="absolute hidden group"
-            checked={itensSelecionadosTerm.includes(resultado.term)}
-            id={resultado.term}
-            onChange={handleCheckboxChangeInput}
-         
-          />
-        </label>
-      </li>
-    ));
-
-    let valoresSelecionados = itensSelecionados.join(';');
  
     
     return  (
@@ -704,14 +725,59 @@ const onDragEnd = (result: any) => {
 <div className="flex items-center justify-center  w-full py-10 ">
 <div className="w-[700px]">
 <Lottie animationData={search_animation} loop={true}/>
-<p className="text-gray-400 font-medium text-center">Estamos fazendo a busca dos melhores termo para a taxonomia de {selectedTax}. Aguarde um momento...</p>
+<p className="text-gray-400 font-medium text-center">Estamos fazendo a busca dos melhores termo para a taxonomia de {selectedTax}. Aguarde um momento enquanto processamos <span className="text-blue-400 text-lg font-bold">{palavraProcessada.replace(/;/g, ' ')}</span></p>
 </div>
 </div>
 ):(
 <div className="flex">
 <div className="flex flex-1 h-full">
 
+<div className="flex gap-6 flex-nowrap overflow-x-auto elementBarra">
+           {isLoading? (
+               <div className="w-full">
+                <Carregando/>
+               </div>
+           ):(
+            Object.keys(researcher).map((termo, index) => (
+                  <div >
+                   
+ <div className=" flex h-fit flex-col" key={index}>
+ {/* Renderizar a lista de pesquisadores para cada termo */}
 
+<ul className="flex rounded-r-xl gap-2 items-center mb-2">
+{researcher[termo].slice(0,1).map((researcher: any, researcherIndex: any) => (
+  <div className=" p-1 border border-blue-400 rounded-2xl">
+    <div className={`whitespace-nowrap bg-gray-50 flex items-center justify-center bg-cover bg-center bg-no-repeat h-[56px] w-[56px]  rounded-xl border-1 border-white  `} style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${researcher.lattes_10_id}) ` }}>
+            <div className="h-[56px] w-[56px]  rounded-xl bg-[#000] absolute opacity-40"></div>
+            <div className="h-[56px] w-[56px]  rounded-xl z-[99] flex items-center justify-center">
+            <CursorText size={24} className="text-white" />
+            </div>
+            </div>
+
+            
+  </div>
+))}
+
+{researcher[termo].slice(1,3).map((researcher: any, researcherIndex: any) => (
+  <div className={`whitespace-nowrap bg-gray-50 bg-cover bg-center bg-no-repeat h-12 w-12  rounded-xl border-1 border-white  `} style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${researcher.lattes_10_id}) ` }}>
+            </div>
+))}
+</ul>
+
+<div className="flex gap-3 items-center">
+<p className="p-1 px-3 bg-blue-400 rounded-md text-white text-xs font-medium ">+ {researcherCountsByTerm[termo] - 3}</p>
+<h3 className="font-medium text-xs">{termo.replace(/;/g, ' ')}</h3>
+</div>
+
+
+</div>
+
+                 
+                  </div>
+                     ))
+)}
+
+           </div>
 
 
 
@@ -744,12 +810,12 @@ const onDragEnd = (result: any) => {
                <div className="flex items-center justify-center h-full w-full py-10">
                <div className="w-[700px]">
                <Lottie animationData={search_animation} loop={true}/>
-               <p className="text-gray-400 font-medium text-center">Estamos fazendo a busca dos melhores termos para a taxonomia de {selectedTax}. Aguarde um momento...</p>
+               <p className="text-gray-400 font-medium text-center">Estamos fazendo a busca dos melhores termo para a taxonomia de {selectedTax}. Aguarde um momento enquanto processamos <span className="text-blue-400 text-lg font-bold">{palavraProcessada.replace(/;/g, ' ')}</span></p>
                </div>
            </div>
            ):(
             Object.keys(researcher).map((termo, index) => (
-                  <Droppable direction="horizontal" droppableId={termo} index={index} key={termo}  direction="horizontal" type="PERSON">
+                  <Droppable droppableId={termo} index={index} key={termo}  direction="horizontal" type="PERSON">
                     {(provided: any, snapshot: any) => (
  <div id={`trellobox${index}`} ref={provided.innerRef}  {...provided.dragHandleProps}  {...provided.droppableProps}  style={{ maxHeight: `calc(90vh - 196px )`,  ...snapshot.isDraggingOver }} className="min-w-[370px] w-[370px]  gap-3 flex flex-col h-fit bg-white border border-gray-300 p-4 rounded-xl" key={index}>
  {/* Renderizar a lista de pesquisadores para cada termo */}

@@ -8,14 +8,22 @@ import axios from 'axios';
 
 import {AiChat} from '@nlux/react';
 import {useAdapter} from '@nlux/openai-react';
-
 import Typical from 'react-typical'
 import {useChat} from 'ai/react'
 
 
 
+import { Configuration, OpenAIApi} from 'openai-edge'
+import {OpenAIStream, StreamingTextResponse} from 'ai'
 
 
+const config = new Configuration({
+  apiKey: import.meta.env.OPENAI_API_KEY
+})
+
+const openai = new OpenAIApi(config)
+
+console.log(import.meta.env.OPENAI_API_KEY)
 
 // Definindo os tipos disponíveis
 type ResourceType =
@@ -35,12 +43,10 @@ type ResourceType =
     area_specialty: string
   }
 
+
 export function ChatContent() {
 
-  const {messages, input, handleInputChange, handleSubmit} = useChat({
-    api: `/api/chat`
-  })
-
+  const {messages, input, handleInputChange, handleSubmit} = useChat()
   
   const [inputValue, setInputValue] = useState<string>('');
   const [result, setResult] = useState<{ term: string; type: ResourceType } | null>(null);
@@ -97,6 +103,9 @@ export function ChatContent() {
 
 
   ///////////////////////////
+
+
+
 
   //////////////////////////////////////
 
@@ -211,13 +220,17 @@ export function ChatContent() {
 
       <div className='flex flex-col'>
         {messages.map((message, i) => {
-          if (message.role === 'assistant') {
+          if (message.sender === 'MarIA') {
             return (
               <div key={i} className='flex gap-4 max-w-[650px] mb-6'>
                 <div className='h-10 min-w-10 w-10 rounded-xl border botder-gray-300'></div>
                 <div className='flex flex-1 flex-col'>
-                <div className='flex w-full gap-2 items-center mb-2'><h5 className='font-medium text-gray-400 text-lg'>{message.role}</h5><p className='text-xs'></p></div>
-                {message.content}
+                <div className='flex w-full gap-2 items-center mb-2'><h5 className='font-medium text-gray-400 text-lg'>{message.sender}</h5><p className='text-xs'>{message.horario}</p></div>
+                <Typical
+        steps={[ message.message, 3000]}
+        wrapper="p"
+        className={`p-2 w-fit px-4 rounded-xl rounded-tl-none font-medium text-gray-400 bg-blue-100`}
+      />
                 </div>
               </div>
             );
@@ -226,8 +239,8 @@ export function ChatContent() {
               <div key={i} className='flex gap-4 max-w-[300px] ml-auto mb-6 float-right'>
               
               <div>
-              <div className='flex w-full gap-2 ml-auto items-center justify-end mb-2'><p className='text-xs'></p><h5 className='font-medium text-gray-400 text-lg'>{message.role}</h5></div>
-              <p className='p-2 px-4 rounded-xl rounded-tr-none font-medium text-white bg-blue-400'>{message.content}</p>
+              <div className='flex w-full gap-2 ml-auto items-center justify-end mb-2'><p className='text-xs'>{message.horario}</p><h5 className='font-medium text-gray-400 text-lg'>{message.sender}</h5></div>
+              <p className='p-2 px-4 rounded-xl rounded-tr-none font-medium text-white bg-blue-400'>{message.message}</p>
               </div>
 
               <div className='h-10 w-10 rounded-xl border botder-gray-300'></div>
@@ -244,20 +257,17 @@ export function ChatContent() {
      <div className={`flex  items-center h-10  w-full  text-base font-medium  justify-center transition  `}>
                 <MagnifyingGlass size={20} className={`text-gray-400 min-w-[38px] ${botaoTermosClicado ? 'group-hover:text-blue-400' : ''} ${botaoResumoClicado ? 'group-hover:text-yellow-400' : ''} ${botaoLivrosCapitulosClicado ? 'group-hover:text-pink-400' : ''} ${botaoEventosClicado ? 'group-hover:text-orange-400' : ''} ${botaoAreasClicado ? 'group-hover:text-green-400' : ''} ${botaoPesquisadoresClicado ? 'group-hover:text-red-400' : ''} ${botaoPatentesClicado ? 'group-hover:text-cyan-400' : ''}`} />
               
-               <form onSubmit={handleSubmit} className='w-full flex ml-4 '>
-               <input
+                <input
                   type="text"
-                  value={input}
-                  onChange={handleInputChange}
+                  onChange={(e) => setInputValue(e.target.value)}
                   name=""
                   placeholder={`Digite sua mensagem para que a MarIA consiga selecionar os pesquisadores`}
-                  id="inputQuestion" className={`flex w-full h-10 flex-1  outline-none`} />
+                  id="inputQuestion" className={`flex flex-1 h-full outline-none`} />
 
 <div className='flex items-center justify-center'>
                   <div className={`absolute z[-999] animate-ping gap-4 text-white rounded-xl h-[28px] w-[28px] justify-center hover:bg-blue-500  font-medium transition ${botaoTermosClicado ? 'bg-blue-400' : ''} ${botaoResumoClicado ? 'bg-yellow-400' : ''} ${botaoAreasClicado ? 'bg-green-400' : ''} ${botaoEventosClicado ? 'bg-orange-400' : ''} ${botaoLivrosCapitulosClicado ? 'bg-pink-400' : ''} ${botaoPesquisadoresClicado ? 'bg-red-400' : ''} ${botaoPatentesClicado ? 'bg-cyan-400' : ''}`}></div>
-                  <button type='submit' className={`cursor-pointer flex z-[999] relative  items-center gap-4 text-white rounded-xl h-[38px] w-[38px] justify-center  font-medium transition ${botaoTermosClicado ? 'bg-blue-400' : ''} ${botaoResumoClicado ? 'bg-yellow-400' : ''} ${botaoAreasClicado ? 'bg-green-400' : ''} ${botaoEventosClicado ? 'bg-orange-400' : ''} ${botaoLivrosCapitulosClicado ? 'bg-pink-400' : ''} ${botaoPesquisadoresClicado ? 'bg-red-400' : ''} ${botaoPatentesClicado ? 'bg-cyan-400' : ''}`}><PaperPlaneTilt size={16} className="text-white" /></button>
+                  <div onClick={processInput} className={`cursor-pointer flex z-[999] relative  items-center gap-4 text-white rounded-xl h-[38px] w-[38px] justify-center  font-medium transition ${botaoTermosClicado ? 'bg-blue-400' : ''} ${botaoResumoClicado ? 'bg-yellow-400' : ''} ${botaoAreasClicado ? 'bg-green-400' : ''} ${botaoEventosClicado ? 'bg-orange-400' : ''} ${botaoLivrosCapitulosClicado ? 'bg-pink-400' : ''} ${botaoPesquisadoresClicado ? 'bg-red-400' : ''} ${botaoPatentesClicado ? 'bg-cyan-400' : ''}`}><PaperPlaneTilt size={16} className="text-white" /></div>
                 </div>
-               </form>
               </div>
 
      
