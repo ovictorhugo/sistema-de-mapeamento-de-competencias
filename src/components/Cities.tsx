@@ -52,7 +52,7 @@ const selecionarCidade = (event:any) => {
       </Link>
     ))}
 
-<Link to={`/cidades`} onClick={() => setCidadeSelecionada(``)} className="flex-shrink-0  hover:scale-[95%] w-48 text-gray-400 hover:bg-gray-50 transition-all h-[260px] border p-6 flex justify-between flex-col border-gray-300 bg-cover cursor-pointer rounded-xl relative">
+<Link to={`/cidades`} onClick={() => setCidadeSelecionada(``)} className="flex-shrink-0 bg-white  hover:scale-[95%] w-48 text-gray-400 hover:bg-gray-50 transition-all h-[260px] border p-6 flex justify-between flex-col border-gray-300 bg-cover cursor-pointer rounded-xl relative">
 <PlusCircle size={24} className="" />
 <h5 className=" font-medium text-xl">Ver mais cidades</h5>
       </Link>

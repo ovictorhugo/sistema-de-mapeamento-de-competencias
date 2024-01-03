@@ -1,4 +1,4 @@
-import { BookmarkSimple, CaretLeft, CaretRight, CheckCircle, Eye, EyeClosed, EyeSlash, FileCsv, GraduationCap, House, MapPin, Plus, SquaresFour, Star, Trash, UserCircle, Users, UsersFour, UsersThree, X } from "phosphor-react";
+import { ArrowClockwise, BookmarkSimple, CaretLeft, CaretRight, CheckCircle, Eye, EyeClosed, EyeSlash, FileCsv, GraduationCap, House, MapPin, Plus, SquaresFour, Star, Trash, UserCircle, UserMinus, UserPlus, Users, UsersFour, UsersThree, X } from "phosphor-react";
 import { ChatContent } from "../components/ChatContent";
 import { PopUpWrapper } from "./PopUpWrapper";
 import { useContext, useEffect, useState } from "react";
@@ -29,7 +29,7 @@ interface Program {
   interface PesquisadorProps {
     name: string
     lattes_id: string
-    descricao: string
+    researcher_id: string
     institution_id: string
   }
 
@@ -175,7 +175,8 @@ export function Dashboard() {
                 institution_id: user.institution_id,
                 description: descricao,
                 url_image: user.img_url,
-                city: city
+                city: city,
+                visible: false
               }
           ]
 
@@ -312,7 +313,7 @@ export function Dashboard() {
             }
           };
           fetchData();
-        }, [urlGetResearcher]);
+        }, [urlGetResearcher, handleSubmitPesquisador]);
   
         console.log(researcher)
   
@@ -344,20 +345,221 @@ export function Dashboard() {
             }
           };
           fetchData();
-        }, [urlGetProgram]);
+        }, [urlGetProgram, handleSubmit]);
 
         const [popUpVisibilities, setPopUpVisibilities] = useState([]);
 
-        const handleOpenPopUp = (index: any) => {
+        const handleOpenPopUp = (index: any, props: any) => {
           const newVisibilities = [...popUpVisibilities];
           newVisibilities[index] = true;
           setPopUpVisibilities(newVisibilities);
+          setName(props.name);
+          setCity(props.city)
+          setModality(props.modality);
+          setType(props.type)
+          setRanking(props.rating)
+          setArea(props.area)
+          setCode(props.code)
+          setDescricao(props.description)
         };
 
         const handleClosePopUp = (index: any) => {
           const newVisibilities = [...popUpVisibilities];
           newVisibilities[index] = false;
           setPopUpVisibilities(newVisibilities);
+          setName(``);
+          setCity(``)
+          setModality(``);
+          setType(``)
+          setRanking(``)
+          setArea(``)
+          setCode(``)
+          setDescricao(``)
+        };
+
+        const handleDeleteProgram = (index:any, id: any) => {
+
+          let urlDeleteProgram =  `http://200.128.66.226:5000/` + `GraduateProgramRest/Delete?graduate_program_id=${id}`
+          const fetchData = async () => {
+           
+            try {
+              const response = await fetch(urlDeleteProgram, {
+                mode: 'cors',
+                method: 'DELETE',
+                headers: {
+                  'Access-Control-Allow-Origin': '*',
+                  'Access-Control-Allow-Methods': 'DELETE',
+                  'Access-Control-Allow-Headers': 'Content-Type',
+                  'Access-Control-Max-Age': '3600',
+                  'Content-Type': 'text/plain'
+                }
+              });
+              if (response.ok) {
+                setPopUpProgram(false)
+                setTimeout(() => {
+                    setPopUpSuccess(true);
+            
+                    // Hide the popup after 5 seconds
+                    setTimeout(() => {
+                      setPopUpSuccess(false);
+                    }, 5000);
+                }, 0);
+                console.log('Dados deletados com sucesso!');
+              }
+            } catch (err) {
+              console.log(err);
+            } 
+          };
+          fetchData();
+
+          handleClosePopUp(index)
+        };
+
+        const handleDeleteResearcher = (index:any, id: any) => {
+
+          let urlDeleteProgram =  `http://200.128.66.226:5000/` + `ResearcherRest/Delete?researcher_id=${id}`
+          const fetchData = async () => {
+           
+            try {
+              const response = await fetch(urlDeleteProgram, {
+                mode: 'cors',
+                method: 'DELETE',
+                headers: {
+                  'Access-Control-Allow-Origin': '*',
+                  'Access-Control-Allow-Methods': 'DELETE',
+                  'Access-Control-Allow-Headers': 'Content-Type',
+                  'Access-Control-Max-Age': '3600',
+                  'Content-Type': 'text/plain'
+                }
+              });
+              if (response.ok) {
+                setPopUpProgram(false)
+                setTimeout(() => {
+                    setPopUpSuccess(true);
+            
+                    // Hide the popup after 5 seconds
+                    setTimeout(() => {
+                      setPopUpSuccess(false);
+                    }, 5000);
+                }, 0);
+                console.log('Dados deletados com sucesso!');
+              }
+            } catch (err) {
+              console.log(err);
+            } 
+          };
+          
+          fetchData()
+
+        };
+
+        const handleVisibleProgram = (index:any, id: any) => {
+
+          let urlVisibleProgram =  `http://200.128.66.226:5000/` + `GraduateProgramRest/Update?graduate_program_id=${id}`
+          const fetchData = async () => {
+           
+            try {
+              const response = await fetch(urlVisibleProgram, {
+                mode: 'cors',
+                method: 'POST',
+                headers: {
+                  'Access-Control-Allow-Origin': '*',
+                  'Access-Control-Allow-Methods': 'POST',
+                  'Access-Control-Allow-Headers': 'Content-Type',
+                  'Access-Control-Max-Age': '3600',
+                  'Content-Type': 'text/plain'
+                }
+              });
+              if (response.ok) {
+                setPopUpProgram(false)
+                setTimeout(() => {
+                    setPopUpSuccess(true);
+            
+                    // Hide the popup after 5 seconds
+                    setTimeout(() => {
+                      setPopUpSuccess(false);
+                    }, 5000);
+                }, 0);
+                console.log('Dados visibilidade com sucesso!');
+              }
+            } catch (err) {
+              console.log(err);
+            } 
+          };
+          fetchData();
+
+      
+        };
+
+
+        
+        const handleChangeProgram = (index:any, props: any) => {
+
+          try {
+            const data = [
+              {
+                  graduate_program_id: props.graduate_program_id,
+                  code: code,
+                  name: name.toUpperCase(),
+                  area: area.toUpperCase(),
+                  modality: modality.toUpperCase(),
+                  type: type.toUpperCase(),
+                  rating: ranking.toUpperCase(),
+                  institution_id: props.institution_id,
+                  description: descricao,
+                  url_image: user.img_url,
+                  city: city,
+                  visible: false
+                }
+            ]
+  
+            let urlProgramFix = `http://200.128.66.226:5000/` + '/GraduateProgramRest/Fix'
+  
+            console.log(data)
+  
+            const fetchData = async () => {
+            
+              try {
+                const response = await fetch(urlProgramFix, {
+                  mode: 'cors',
+                  method: 'POST',
+                  headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'Access-Control-Max-Age': '3600',
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(data),
+                });
+  
+                if (response.ok) {
+                  setPopUpProgram(false)
+                  setTimeout(() => {
+                      setPopUpSuccess(true);
+              
+                      // Hide the popup after 5 seconds
+                      setTimeout(() => {
+                        setPopUpSuccess(false);
+                      }, 5000);
+                  }, 0);
+                  console.log('Dados enviados com sucesso!');
+                } else {
+                  console.error('Erro ao enviar dados para o servidor.');
+                }
+                
+              } catch (err) {
+                console.log(err);
+              } 
+            };
+            fetchData();
+      
+            
+          } catch (error) {
+            console.error('Erro ao processar a requisição:', error);
+          }
+
+      
         };
       
 
@@ -449,9 +651,9 @@ export function Dashboard() {
             <div className='flex gap-6  w-full h-full overflow-y-auto elementBarra'>
        <div className='border border-gray-300 rounded-xl w-1/2 h-full p-6'>
        <div className=" overflow-y-auto max-h-fit h-full elementBarra pr-2">
-       {researcher.map((props) => {
+       {researcher.map((props, index) => {
           return(
-            <div className="flex justify-between items-center py-4 border-b border-b-gray-300">
+            <div className="flex justify-between items-center py-4 border-b border-b-gray-300 group">
                 <div className="flex gap-3 items-center">
                 <div
     
@@ -463,7 +665,12 @@ export function Dashboard() {
         <h5 className="font-medium text-gray-500">{props.name}</h5>
             </div>
 
-            <div className="text-gray-400 text-sm">{props.lattes_id}</div>
+            <div className="text-gray-400 text-sm group-hover:hidden flex">{props.lattes_id}</div>
+
+            <div onClick={() => handleDeleteResearcher(index, props.researcher_id)} className="cursor-pointer transition-all group-hover:flex hidden  w-[34px] h-[34px] justify-center text-blue-400 border border-gray-300 hover:bg-gray-50 rounded-md text-xs font-bold gap-2 items-center">
+                        <Trash size={16} className="textwhite" />
+                      
+                      </div>
             </div>
           )
         })}
@@ -492,7 +699,7 @@ export function Dashboard() {
               <p className="text-sm text-gray-500 mb-2">Nome do programa</p>
               <input
                 type="text"
-                value={name.toUpperCase()}
+                value={name}
                 onChange={(e) => setName(e.target.value)}
              
                
@@ -505,7 +712,7 @@ export function Dashboard() {
                 <input
                     type="text"
                     onChange={(e) => setModality(e.target.value)}
-                        value={modality.toUpperCase()}
+                        value={modality}
                 
                     required
                     className="mb-6 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
@@ -516,7 +723,7 @@ export function Dashboard() {
                 <input
                     type="text"
                     onChange={(e) => setCity(e.target.value)}
-                        value={city.toUpperCase()}
+                        value={city}
                 
                     required
                     className="mb-6 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
@@ -543,7 +750,7 @@ export function Dashboard() {
                 return(
                     <div>
                       <li
-                    onClick={() => handleOpenPopUp(index)}
+                    onClick={() => handleOpenPopUp(index, props)}
                     key={props.graduate_program_id}
                     className=" checkboxLabel group transition-all list-none inline-flex group w-full "
          
@@ -591,9 +798,9 @@ export function Dashboard() {
                       </div>
                     </div>
 
-                    <div className="group-hover:flex hidden gap-3">
-                    <div className="bg-blue-400 hover:bg-blue-500 transition-all  w-[34px] h-[34px] justify-center text-white rounded-md text-xs font-bold flex gap-2 items-center">
-                        {props.visible ? (
+                    <div className="group-hover:flex hidden gap-2">
+                    <div onClick={() => handleVisibleProgram(index, props.graduate_program_id)} className="bg-blue-400 hover:bg-blue-500 transition-all  w-[34px] h-[34px] justify-center text-white rounded-md text-xs font-bold flex gap-2 items-center">
+                        {props.visible == true ? (
                           <Eye size={16} className="textwhite" />
                         ): (
                           <EyeSlash size={16} className="textwhite" />
@@ -601,7 +808,7 @@ export function Dashboard() {
                       
                       </div>
 
-                      <div className="bg-red-400 hover:bg-red-500 transition-all  w-[34px] h-[34px] justify-center text-white rounded-md text-xs font-bold flex gap-2 items-center">
+                      <div onClick={() => handleDeleteProgram(index, props.graduate_program_id)} className=" transition-all  w-[34px] h-[34px] justify-center text-blue-400 border border-gray-300 hover:bg-gray-50 rounded-md text-xs font-bold flex gap-2 items-center">
                         <Trash size={16} className="textwhite" />
                       
                       </div>
@@ -627,7 +834,155 @@ export function Dashboard() {
                    textLink="Criar conta"
                    link="/signup"
                   >
+ <div className="w-full h-full flex">
+                        <div className=" flex flex-1 p-6">
+                        <div
+                        className="rounded-xl bg-blue-100 bg-cover flex items-center justify-center bg-right bg-no-repeat w-full h-full mr-6"
+                        style={{ backgroundImage: `url(${bg_popup})` }}
+                        >
+                            <div className="whitespace-nowrap w-fit flex cursor-pointer items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500  font-medium transition  h-12 ">
+                                <Plus size={16} className="text-white" /> Importar csv
+                            </div>
+                        </div>
+                        </div>
 
+                        <div className="">
+                            <div className="h-full max-w-[500px] ">
+                                <div className=" border-l h-full pb-[96px] overflow-y-auto elementBarra border-l-gray-300 p-12 ">
+                                <div onClick={() => handleClosePopUp(index)} className={`ml-auto float-right cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center `}>
+                        <X size={20} className={'rotate-180 transition-all text-gray-400'} />
+                        </div>
+                                
+                        <div className="flex mb-4 items-center gap-4">
+                               
+                               
+                          
+                    <div className="h-16 w-16 p-2 bg-cover bg-center bg-no-repeat " style={{ backgroundImage: `url(${props.url_image})` }}></div>
+             
+               
+              
+
+<div>
+<h3 className="max-w-[250px] font-medium text-2xl  text-gray-400">{props.name}</h3>
+<p className="text-gray-400 text-sm">{props.code}</p>
+</div>
+                               </div>
+
+                                    <p className="  text-gray-400 mb-8">
+                                        {props.description}
+                                    </p>
+
+                                    <form className="w-full ">
+                            <p className="text-sm text-gray-500 mb-2">Nome do programa</p>
+                            <input
+                                type="text"
+                                onChange={(e) => setName(e.target.value)}
+                                value={name}
+                            
+                                required
+                                className="mb-6 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+
+                            <div className="flex gap-6">
+                                <div>
+                                <p className="text-sm text-gray-500 mb-2">Modalidade</p>
+                                <input
+                                    type="text"
+                                    onChange={(e) => setModality(e.target.value)}
+                                    value={modality}
+                                
+                                    required
+                                    className="mb-6 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+                                </div>
+
+                                <div>
+                                <p className="text-sm text-gray-500 mb-2">Cidade</p>
+                                <input
+                                    type="text"
+                                    onChange={(e) => setCity(e.target.value)}
+                                    value={city}
+                                
+                                    required
+                                    className="mb-6 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+                                </div>
+                            </div>
+
+                            <div className=" w-full h-[1px] bg-gray-300 my-2"></div>
+
+
+                            <p className="text-sm text-gray-500 mb-2 mt-8">Tipo do programa</p>
+                            
+                            <div className="flex gap-4 mb-6">
+                            <input type="checkbox" id="vehicle1" name="vehicle1" value="DOUTORADO " checked={type === 'DOUTORADO'} onChange={handleCheckboxChange}/>
+                            <label htmlFor="vehicle1"> DOUTORADO</label>
+                            <input type="checkbox" id="vehicle2" name="vehicle2" value="MESTRADO" checked={type === 'MESTRADO'} onChange={handleCheckboxChange}/>
+                            <label htmlFor="vehicle2"> MESTRADO</label>
+                            </div>
+
+                            <div className="flex gap-6">
+                            <div>
+                                <p className="text-sm text-gray-500 mb-2">Ranking</p>
+                                <input
+                                    type="number"
+                                    onChange={(e) => setRanking(e.target.value)}
+                                    value={ranking}
+                                
+                                    required
+                                    className="mb-6 border-[1px] border-gray-300 w-12 h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+                                </div>
+                                
+                                <div className="w-full">
+                                <p className="text-sm text-gray-500 mb-2">Área</p>
+                                <input
+                                    type="text"
+                                    onChange={(e) => setArea(e.target.value)}
+                                    value={area}
+                                
+                                    required
+                                    className="mb-6 flex-1 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+                                </div>
+
+            
+
+                               
+                            </div>
+
+                            <p className="text-sm text-gray-500 mb-2">Código do programa (Sucupira)</p>
+              <input
+                type="text"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+             
+               
+                required
+                className="mb-4 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+
+
+                            <p className="text-sm text-gray-500 mb-2">Descrição (não obrigatório)*</p>
+                                <textarea
+                                   
+                                    onChange={(e) => setDescricao(e.target.value)}
+                                    value={descricao}
+                                
+                                    required
+                                    className="mb-6 flex-1 border-[1px] border-gray-300 w-full h-32 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
+
+                            </form>
+                                </div>
+
+                                <div className="flex border-l  border-l-gray-300 gap-6 px-12 py-6 bg-white top-[-96px] z-[99] right-0 relative">
+                            <div onClick={() => handleChangeProgram(index, props)} className="whitespace-nowrap flex cursor-pointer items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500  font-medium transition flex-1 h-12 ml-auto">
+                                <ArrowClockwise size={16} className="text-white" /> Atualizar dados
+                            </div>
+
+                            <div onClick={() => handleDeleteProgram(index, props.graduate_program_id)} className="h-12 w-12 border transition-all cursor-pointer border-gray-300 text-blue-400 rounded-xl flex items-center whitespace-nowrap justify-center hover:bg-gray-50">
+                                <Trash size={16} className="" />
+                                <input type="reset" value=""/>
+                            </div>
+                            </div>
+
+                            </div>
+                        </div>
+                    </div>
 
                   </PopUpWrapper>
 
@@ -689,7 +1044,7 @@ export function Dashboard() {
                             <input
                                 type="text"
                                 onChange={(e) => setName(e.target.value)}
-                                value={name.toUpperCase()}
+                                value={name}
                             
                                 required
                                 className="mb-6 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
@@ -700,7 +1055,7 @@ export function Dashboard() {
                                 <input
                                     type="text"
                                     onChange={(e) => setModality(e.target.value)}
-                                    value={modality.toUpperCase()}
+                                    value={modality}
                                 
                                     required
                                     className="mb-6 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
@@ -711,7 +1066,7 @@ export function Dashboard() {
                                 <input
                                     type="text"
                                     onChange={(e) => setCity(e.target.value)}
-                                    value={city.toUpperCase()}
+                                    value={city}
                                 
                                     required
                                     className="mb-6 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
@@ -736,7 +1091,7 @@ export function Dashboard() {
                                 <input
                                     type="number"
                                     onChange={(e) => setRanking(e.target.value)}
-                                    value={ranking.toUpperCase()}
+                                    value={ranking}
                                 
                                     required
                                     className="mb-6 border-[1px] border-gray-300 w-12 h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
@@ -747,7 +1102,7 @@ export function Dashboard() {
                                 <input
                                     type="text"
                                     onChange={(e) => setArea(e.target.value)}
-                                    value={area.toUpperCase()}
+                                    value={area}
                                 
                                     required
                                     className="mb-6 flex-1 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
@@ -805,7 +1160,26 @@ export function Dashboard() {
         <div className="fixed right-16 bottom-16 z-[99999999999999] ">
         <div className=" rounded-xl bg-white border shadow-md border-gray-300 p-6 flex items-center justify-center gap-4">
           <div><CheckCircle size={32} className={' text-green-400'} /></div>
-          <div>Barema submetido com sucesso!</div>
+          <div>Programa de pós-graduação enviado com sucesso!</div>
+        </div>
+    </div>
+      )}
+
+
+{popUpSuccess && (
+        <div className="fixed right-16 bottom-16 z-[99999999999999] ">
+        <div className=" rounded-xl bg-white border shadow-md border-gray-300 p-6 flex items-center justify-center gap-4">
+          <div><UserPlus size={32} className={' text-green-400'} /></div>
+          <div>Pesquisador(es) enviado(s) com sucesso!</div>
+        </div>
+    </div>
+      )}
+
+{popUpSuccess && (
+        <div className="fixed right-16 bottom-16 z-[99999999999999] ">
+        <div className=" rounded-xl bg-white border shadow-md border-gray-300 p-6 flex items-center justify-center gap-4">
+          <div><UserMinus size={32} className={' text-red-400'} /></div>
+          <div>Pesquisador deletado</div>
         </div>
     </div>
       )}

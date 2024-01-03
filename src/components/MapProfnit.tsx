@@ -5,6 +5,7 @@ import { ArrowCircleUp, ArrowRight, BookOpen, BookmarkSimple, Books, Buildings, 
 import { Link, useNavigate } from "react-router-dom";
 import { Circle } from "./Circle";
 import DropdownMultiSelect from "./DropdownMultiSelect";
+import bg_passo from '../assets/bg_passo.png';
 import { SvgLines } from "./SvgLines";
 
 import logo_1 from '../assets/logo_1.png';
@@ -773,6 +774,10 @@ useEffect(() => {
 
             <div className="relative top-[-160px]  px-16">
               <Cities/>
+            </div>
+
+            <div className="h-[50vh] top-[-160px] relative bg-center bg-cover bg-no-repeat flex items-center justify-center" style={{ backgroundImage: `url(${bg_passo})` }}>
+            <h3 className="font-medium px=16 text-5xl mb-4 text-gray-400">Como <strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">pesquisar</strong> na plataforma?</h3>
             </div>
 
             

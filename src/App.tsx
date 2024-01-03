@@ -203,7 +203,7 @@ useEffect(() => {
 
               <Route
                   path='/dashboard'
-                  element={loggedIn && user.state == "admin"  ? <Admin/> : <Navigate to='/admin' />}
+                  element={loggedIn   ? <Admin/> : <Navigate to='/admin' />}
                 />
 
                 <Route
