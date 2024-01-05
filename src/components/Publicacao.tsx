@@ -17,6 +17,7 @@ type Publicacao = {
     lattes_10_id: string,
     jif: string,
     jcr_link: string
+    researcher_id: string
 }
 
 let qualisColor = {
@@ -37,6 +38,7 @@ let qualisColor = {
 
 
 export function Publicacao(props: Publicacao) {
+  const { urlGeral, setUrlGeral } = useContext(UserContext);
   const { botaoTermosClicado, setBotaoTermosClicado } = useContext(UserContext);
     const { valoresSelecionadosExport, setValoresSelecionadosExport } = useContext(UserContext);
     const { valorDigitadoPesquisaDireta, setValorDigitadoPesquisaDireta } = useContext(UserContext);
@@ -133,7 +135,7 @@ export function Publicacao(props: Publicacao) {
                     <a href={`https://lattes.cnpq.br/${props.lattes_id}`} target="_blank" rel="noopener noreferrer" className={` py-2  my-4   text-gray-400 rounded-md text-xs font-medium gap-2 items-center ${isOn ? "mt-0 pt-0" : ""}`}>
                         Aparece no Lattes de
                         <div className="flex mt-2 items-center gap-2">
-                            <div className={`border-[1px] border-gray-300 rounded-sm h-6 w-6 bg-cover bg-center bg-no-repeat`} style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id}) ` }}></div>
+                            <div className={`border-[1px] border-gray-300 rounded-sm h-6 w-6 bg-cover bg-center bg-no-repeat`} style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.researcher_id}) ` }}></div>
                             {props.researcher}
                         </div>
                     </a>

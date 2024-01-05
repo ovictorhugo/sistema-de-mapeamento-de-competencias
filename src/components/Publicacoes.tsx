@@ -24,6 +24,7 @@ type Publicacao = {
   lattes_10_id: string,
   jcr_link: string,
   jif: string
+  researcher_id: string
 }
 
 
@@ -598,6 +599,7 @@ export function Publicacoes() {
                     lattes_10_id={props.lattes_10_id}
                     jcr_link={props.jcr_link}
                     jif={props.jif}
+                    researcher_id={props.researcher_id}
                   />
 
                 )

@@ -767,7 +767,7 @@ const normalizedCityNome = unorm.nfd(city.nome.toUpperCase()).replace(/[\u0300-\
             return (
               <div className="">
                 <div onClick={() => handleOpenPopUpMap(index)} className="hover:bg-gray-50 transition-all  p-2 cursor-pointer border w-full flex gap-4 items-center border-gray-300 rounded-md my-2" key={user.name}>
-                 <div className={`whitespace-nowrap  bg-cover bg-center bg-no-repeat h-6 w-6 bg-white rounded-md  relative `} style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${user.lattes_10_id}) ` }}>
+                 <div className={`whitespace-nowrap  bg-cover bg-center bg-no-repeat h-6 w-6 bg-white rounded-md  relative `} style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${user.id}) ` }}>
                   </div>
                 <div className="flex-1 m-0">{user.name}</div>
               </div>

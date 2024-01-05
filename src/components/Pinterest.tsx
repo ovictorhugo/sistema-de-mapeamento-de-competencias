@@ -6,6 +6,7 @@ interface ResearcherId {
     lattes_10_id: string
     lattes: string
     name: string
+    id:string
   }
 
 export function Pinterest() {
@@ -90,7 +91,7 @@ export function Pinterest() {
            <div className="items-center delay-200 flex flex-col w-full gap-6 top-60 relative">
            {ResearcherImage.slice(8, 10).map((props, index) => (
             <div className="w-full h-[300px] border border-gray-300 bg-gray-50 bg-cover bg-center bg-no-repeat rounded-xl"
-            style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id}) ` }}
+            style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) `}}
             ></div>
          ))}
            </div>
@@ -98,7 +99,7 @@ export function Pinterest() {
            <div className="items-center delay-300 flex flex-col w-full gap-6  top-[400px] relative">
            {ResearcherImage.slice(12, 14).map((props, index) => (
             <div className="w-full h-[300px] border border-gray-300 bg-gray-50 bg-cover bg-center bg-no-repeat rounded-xl"
-            style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id}) ` }}
+            style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}
             ></div>
          ))}
            </div>
@@ -106,7 +107,7 @@ export function Pinterest() {
            <div className="items-center  delay-500 flex flex-col w-full gap-6  top-60 relative">
            {ResearcherImage.slice(16, 18).map((props, index) => (
             <div className="w-full h-[300px] border border-gray-300 bg-gray-50 bg-cover bg-center bg-no-repeat rounded-xl"
-            style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id}) ` }}
+            style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}
             ></div>
          ))}
            </div>
@@ -114,7 +115,7 @@ export function Pinterest() {
            <div className="items-center delay-700 flex flex-col w-full gap-6  top-40 relative">
            {ResearcherImage.slice(20, 22).map((props, index) => (
             <div className="w-full h-[300px] border border-gray-300 bg-gray-50 bg-cover bg-center bg-no-repeat rounded-xl"
-            style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id}) ` }}
+            style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}
             ></div>
          ))}
            </div>
@@ -122,7 +123,7 @@ export function Pinterest() {
            <div className="items-center delay-1000 flex flex-col w-full gap-6 top-10 relative">
            {ResearcherImage.slice(24, 26).map((props, index) => (
             <div className="w-full h-[300px] border border-gray-300 bg-gray-50 bg-cover bg-center bg-no-repeat rounded-xl"
-            style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id}) ` }}
+            style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}
             ></div>
          ))}
            </div>

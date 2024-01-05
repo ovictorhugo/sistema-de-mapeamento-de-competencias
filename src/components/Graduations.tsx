@@ -221,38 +221,6 @@ console.log('idversao',idVersao)
 
 
   //imagens pesquisadores do iapos
-  const urlResearcherImage = urlGeral + 'researcher_image'
-  const [ResearcherImage, setResearcherImage] = useState<ResearcherId[]>([])
-
-  useEffect(() => {
-
-    fetch(urlResearcherImage, {
-      mode: 'cors',
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Max-Age': '3600',
-        'Content-Type': 'text/plain'
-
-      }
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        const newData = data.map((post: Post) => ({
-          ...post,
-          term: post.term
-        }));
-       
-        setResearcherImage(newData);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  }, [urlResearcherImage]);
-  
-
 
   return (
     <div className="  overflow-y-hidden  overflow-x-hidden flex justify-center flex-col">
@@ -278,7 +246,7 @@ console.log('idversao',idVersao)
          
           <div className="w-full">
           <div className="flex gap-3 w-full">
-          <div className="flex  items-center w-full  justify-center h-10 border-gray-300 border-[1px] rounded-xl bg-white hover:border-blue-400">
+          <div className="flex  items-center w-full  justify-center h-12 border-gray-300 border-[1px] rounded-xl bg-white hover:border-blue-400 group-focus:border-blue-400">
                         <MagnifyingGlass size={20} className={`text-gray-400 min-w-[52px] `} />
                         <input
                           type="text"
@@ -286,11 +254,11 @@ console.log('idversao',idVersao)
                           value={filterValue}
                           onChange={e => setFilterValue(e.target.value)}
                           placeholder='Nome do programa de pós-graduação'
-                          className="w-full outline-none text-sm"
+                          className="w-full outline-none text-sm group"
                         />
                       </div>
 
-                      <Link onClick={() => handleFilterChange(filterValue)} to={"/result"} className="w-fit h-10 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-6 py-2 justify-center hover:bg-blue-500 text-base font-medium transition">
+                      <Link onClick={() => handleFilterChange(filterValue)} to={"/result"} className="w-fit h-12 whitespace-nowrap flex items-center gap-4 bg-blue-400 text-white rounded-xl px-6 py-2 justify-center hover:bg-blue-500 text-base font-medium transition">
                         <ArrowRight size={16} className="text-white" /> Avançar
                     </Link>
           </div>

@@ -59,6 +59,7 @@ type Publicacao = {
   lattes_10_id: string,
   jcr_link: string,
   jif: string
+  researcher_id: string
 }
 
 type Patente = {
@@ -144,7 +145,7 @@ export function PopUp(props: PesquisadorProps) {
   const valoresArray = valoresSelecionadosPopUp.split(';');
 
   const listaValores = valoresArray.map((valor, index) => (
-    <li key={index} className='whitespace-nowrap gap-2 bg-blue-100 border-blue-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>
+    <li key={index} className='whitespace-nowrap gap-2 bg-blue-100 border-blue-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-xl text-xs font-bold'>
       {valor.replace(/%20/g, ' ')}
       <button onClick={() => handleRemoverSelecionado(index)}>
         <X size={16} className="text-gray-400 hover:text-blue-400" />
@@ -1154,7 +1155,7 @@ export function PopUp(props: PesquisadorProps) {
           </div>
 
           <div className="w-full flex justify-center ">
-            <div className="bg-cover bg-center bg-no-repeat h-28 w-28 bg-white rounded-2xl mb-3 border-4 border-white top-[-75px] relative " style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id}) ` }}></div>
+            <div className="bg-cover bg-center bg-no-repeat h-28 w-28 bg-white rounded-2xl mb-3 border-4 border-white top-[-75px] relative " style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}></div>
           </div>
 
           <div className="flex items-center flex-col  top-[-50px] relative">
@@ -1427,6 +1428,7 @@ export function PopUp(props: PesquisadorProps) {
                                   lattes_10_id={props.lattes_10_id}
                                   jcr_link={props.jcr_link}
                                   jif={props.jif}
+                                  researcher_id={props.researcher_id}
                                 />
                               ))}
                             </div>
@@ -1975,7 +1977,7 @@ export function PopUp(props: PesquisadorProps) {
 
 
                 <div className="w-full lg:w-[350px] border-[1px] border-gray-300 rounded-xl p-6 h-min">
-                  {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoLivrosCapitulosClicado || botaoEventosClicado || botaoAreasClicado || botaoPatentesClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta != "" &&  valoresSelecionadosNuvem == "" ) ||  valoresSelecionadosNuvem == "" ? (
+                {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoAreasClicado || botaoEventosClicado ||  botaoLivrosCapitulosClicado || botaoPatentesClicado || (valoresSelecionadosPopUp == "" && valorDigitadoPesquisaDireta != "" && valoresSelecionadosNuvem != "") ? (
                     <div className="text-center font-medium text-xl text-gray-500 mb-6">Todas as publicações por ano</div>
                   ) : (
                     <div className="flex gap-2 w-full flex-col justify-center">

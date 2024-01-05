@@ -33,6 +33,7 @@ export function Pesquisador(props: PesquisadorProps) {
   const chaptersNum: number = Number(props.book_chapters);
   const production: number = articlesNum + bookNum + chaptersNum;
   const { urlGeral, setUrlGeral } = useContext(UserContext);
+  const { cidadeSelecionada, setCidadeSelecionada } = useContext(UserContext);
 
   const { botaoPesquisadoresClicado, setBotaoPesquisadoresClicado } = useContext(UserContext);
   const { botaoTermosClicado, setBotaoTermosClicado } = useContext(UserContext);
@@ -203,19 +204,19 @@ localStorage.setItem('pesquisadoresSelecionadosGroupBarema', JSON.stringify(pesq
 
     <div className="w-auto relative " >
 
-      <Link to={linkTo} target="_blank" className={`absolute z-[9]  top-6 hidden group-hover:flex cursor-pointer items-center gap-4 bg-blue-400 hover:bg-blue-500 text-white rounded-xl h-[38px] w-[38px] justify-center  font-medium transition right-20  ${valoresSelecionadosExport != '' || valoresSelecionadosNuvem != '' ? "right-20" : "right-6"}`}>
+      <Link to={linkTo} target="_blank" className={`absolute z-[9]  top-6 hidden group-hover:flex cursor-pointer items-center gap-4 bg-blue-400 hover:bg-blue-500 text-white rounded-xl h-[38px] w-[38px] justify-center  font-medium transition right-20  ${valoresSelecionadosExport != '' || valoresSelecionadosNuvem != '' || cidadeSelecionada != '' ? "right-20" : "right-6"}`}>
         <ArrowSquareOut size={16} className="text-white" />
       </Link>
 
       <div onClick={handleOpenPopUp} id="id_perfil" className={`cursor-pointer group bg-white  border-gray-300 border-[1px]  items-center rounded-2xl hover:shadow-md transition w-full   ${isOn && valoresSelecionadosExport != '' ? "flex items-center justify-between" : "flex flex-col"}`}>
-        <div  className={`bg-cover bg-top bg-no-repeat backdrop-blur-md backdrop-brightness-150 h-28 bg-gray-400 rounded-t-xl  w-full ${isOn && valoresSelecionadosExport != '' ? "hidden" : "flex "}`} style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id}) ` }}>
+        <div  className={`bg-cover bg-top bg-no-repeat backdrop-blur-md backdrop-brightness-150 h-28 bg-gray-400 rounded-t-xl  w-full ${isOn && valoresSelecionadosExport != '' ? "hidden" : "flex "}`} style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}>
           <div className={`bg-[#000000] bg-opacity-30 absolute backdrop-blur-sm w-full h-full rounded-t-xl`}></div>
 
         </div>
         <div className={`flex ${isOn && valoresSelecionadosExport != '' ? "" : "flex-col"}`}>
           <div className={`flex items-center ${isOn && valoresSelecionadosExport != '' ? "" : "flex-col  "}`}>
 
-            <div className={`whitespace-nowrap  bg-cover bg-center bg-no-repeat h-20 w-20 bg-white rounded-xl border-4 border-white  relative ${isOn && valoresSelecionadosExport != '' ? "" : "top-[-40px]  mb-3"}`} style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id}) ` }}>
+            <div className={`whitespace-nowrap  bg-cover bg-center bg-no-repeat h-20 w-20 bg-white rounded-xl border-4 border-white  relative ${isOn && valoresSelecionadosExport != '' ? "" : "top-[-40px]  mb-3"}`} style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}>
             </div>
 
             <div className={`flex  flex-col mx-6  relative ${isOn && valoresSelecionadosExport != '' ? "top-0 ml-6" : "top-[-30px] items-center"}`}>

@@ -611,7 +611,7 @@ useEffect(() => {
              </div>
 
              <div id="nuveeeem" className="flex w-full h-full items-center  z-[999] ">
-             <HighchartsReact highcharts={Highcharts} options={options} callback={(chart) => setChart(chart)} className="h-full  cursor-pointer" />
+             <HighchartsReact highcharts={Highcharts} options={options} callback={(chart: any) => setChart(chart)} className="h-full  cursor-pointer" />
              </div>
 
              <div>
@@ -1061,7 +1061,7 @@ useEffect(() => {
                         
                         >
                            <div className="w-full h-full rounded-xl">
-                           <iframe className="w-full h-full rounded-xl"  src="https://www.youtube.com/embed/dqj4Gr4BM2c?si=O6ZfeuYVWAOVEH5C" title="SIMCC - BA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                           <iframe className="w-full h-full rounded-xl"  src="https://www.youtube.com/embed/dqj4Gr4BM2c?si=O6ZfeuYVWAOVEH5C" title="SIMCC - BA" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                            </div>
                         </div>
                         </div>
