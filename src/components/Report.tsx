@@ -75,7 +75,7 @@ export function Report(props: Publicacao) {
                             <div className="qualis border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium gap-2 items-center"><CalendarBlank size={16} className="text-gray-400" />  {props.year}</div>
 
 
-                            <div className="border-[1px] whitespace-normal border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium gap-2 items-center"> <CurrencyCircleDollar size={16} className="text-gray-400" /> {props.financing}</div>
+                            <div className="border-[1px]  border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs truncate font-medium gap-2 items-center "> <CurrencyCircleDollar size={16} className="text-gray-400 " /> <div className="flex flex-1 whitespace-nowrap max-w-[300px]">{props.financing}</div></div>
 
 
                         </div>

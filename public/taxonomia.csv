@@ -1,40 +1,30 @@
 ﻿tax;termos;terms;termos_tax;group
-Energias Renováveis;"Célula;a;combustível";"fuel;cell";Célula a combustível;Equipamentos
-Energias Renováveis;"Célula;fotovoltaica";"Photovoltaic;cell";Célula fotovoltaica;Equipamentos
 Energias Renováveis;"Painel;solar";"Solar;panel";Painel solar;Equipamentos
-Energias Renováveis;Aerogerador;"Wind;turbine";Aerogerador;Equipamentos
-Energias Renováveis;Turbina;Turbine;Turbina;Equipamentos
 Energias Renováveis;Biomassa;Biomass;Biomassa;Geração
-Energias Renováveis;"Biomassa;Biocombustivél";"Biomass;biofuel";Biomassa como biocombustível;Geração
-Energias Renováveis;"Biomassa;Biocombustivél;Biodisel";"Biomass;biofuel;Biodiesel";Biomassa como biocombustível Biodiesel;Geração
 Energias Renováveis;Eólica;Wind;Eólica;Geração
 Energias Renováveis;Hídraulica;Hydraulics;Hidráulica;Geração
-Energias Renováveis;"Hídraulica;Hidrelétrica";"Hydroelectric;hydraulics";Hidráulica hidrelétrica;Geração
 Energias Renováveis;Nuclear;Nuclear;Nuclear;Geração
-Energias Renováveis;"Gás;Natural";"Natural;gas";Gás Natural;Geração
-Energias Renováveis;Maremotriz;"tidal;wave";Maremotriz;Geração
 Energias Renováveis;Hidrogénio;Hydrogen;Hidrogênio;Geração
-Energias Renováveis;"Hidrogénio;Verde";"green;hydrogen";Hidrogênio verde;Geração
-Energias Renováveis;"Hidrogénio;Cinza";"gray;hydrogen";Hidrogênio cinza;Geração
-Energias Renováveis;"Hidrogénio;Azul";"blue;hydrogen";Hidrogênio azul;Geração
-Energias Renováveis;"Energia;Limpa";"Clean;energy";Energia limpa;Termos
 Energias Renováveis;Bioeconomia;Bioeconomy;Bioeconomia;Termos
-Energias Renováveis;Biorrefinarias;Biorefineries;Biorrefinarias;Termos
 Energias Renováveis;"Economia;Circular";"Circular;economy";Economia circular;Termos
 Energias Renováveis;Sustentabilidade;Sustainability;Sustentabilidade;Termos
-Energias Renováveis;"Geração;Distribuída";"Distributed;generation";Geração distribuída;Termos
 Energias Renováveis;Sol;Sun;Sol;Termos
-Energias Renováveis;"Combustíveis;fósseis";"Fossil;fuels";Combustíveis fósseis;Fontes
 Energias Renováveis;Vento;Wind;Vento;Fontes
 Energias Renováveis;Onda;Wave;Onda;Fontes
-Energias Renováveis;"Onda;Máres";"tidal;wave";Onda de marés;Fontes
 Energias Renováveis;Água;Water;Água;Fontes
+Energias Renováveis;	"Energia;Limpa";	;	Energia Limpa	;
+Energias Renováveis;	Sustentabilidade;	;	Sustentabilidade	;
+Energias Renováveis;	Bioeconomia	;	;Bioeconomia	;
+Energias Renováveis;	"Geracao;distribuida";	;Geracao distribuida	;
+Energias Renováveis;Bioenergia	;;	Bioenergia	;
+Energias Renováveis;"Energia;Renovaveis";;Energia Renováveis;	
+Energias Renováveis;	Energia	;;	Energia	;
+Energias Renováveis;	"Tecnologia;Verde";	;	Tecnologia Verde;	
+Energias Renováveis;	Decomposicao	;;	Decomposicao	;
+Energias Renováveis;	Térmica	;	;Térmica	;
+Energias Renováveis;	Combustível	;	;Combustível	;
 Energias Renováveis;Soja;Soy;Soja;Matéria-Prima
-Energias Renováveis;Macaúba;Macaúba;Macaúba;Matéria-Prima
-Energias Renováveis;"Macaúba;Acrocomia;aculeata";"Macaúba;Acrocomia;aculeata";Macaúba Acrocomia aculeata;Matéria-Prima
 Energias Renováveis;Fermentação;Fermentation;Fermentação;Processos
-Energias Renováveis;"Combustão;Direta";"Direct;combustion";Combustão direta;Processos
-Energias Renováveis;Gaseficação;Gasification;Gaseificação;Processos
 Energias Renováveis;Eletrólise;Electrolysis;Eletrólise;Processos
 Educação 5.0;"Ensino;Híbrido";"Hybrid;Teaching";Ensino Híbrido;Tecnologias Educacionais e Inovação Pedagógica
 Educação 5.0;"Avaliação;Formativa";"Formative;Assessment";Avaliação Formativa;Tecnologias Educacionais e Inovação Pedagógica

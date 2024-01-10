@@ -48,7 +48,7 @@ export function Pinterest() {
         })
           .then((response) => response.json())
           .then((data) => {
-            console.log(data);
+        
             const newData = data.map((post: any) => ({
               ...post,
               term: post.term

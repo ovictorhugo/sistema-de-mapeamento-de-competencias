@@ -17,8 +17,8 @@ interface UserContextType {
   botaoPatentesClicado: boolean, 
   setBotaoPatentesClicado: React.Dispatch<React.SetStateAction<boolean>>;
 
-  botaoTaxonomiaClicado: boolean,
-  setBotaoTaxonomiaClicado:  React.Dispatch<React.SetStateAction<boolean>>;
+  botaoTaxonomiaClicado: string,
+  setBotaoTaxonomiaClicado:  React.Dispatch<React.SetStateAction<string>>;
 
   botaoLivrosCapitulosClicado: boolean,
   setBotaoLivrosCapitulosClicado: React.Dispatch<React.SetStateAction<boolean>>;
@@ -136,7 +136,7 @@ botaoEventosClicado: false,
 setBotaoEventosClicado: () => {},
 EstadoFiltro: false,
 setEstadoFiltro: () => {},
-botaoTaxonomiaClicado: false,
+botaoTaxonomiaClicado: "",
 setBotaoTaxonomiaClicado:  () => {},
 totalPublicacoes: "", 
 setTotalPublicacoes: () => {},

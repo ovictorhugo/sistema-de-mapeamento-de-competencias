@@ -1,7 +1,7 @@
 import { Pesquisador } from "./Pesquisador"
 import { useEffect, useState, useContext, useRef } from "react";
 import { UserContext } from '../contexts/context'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowSquareOut, CaretCircleLeft, CaretCircleRight, CaretDown, FileArrowDown, FileCsv, GitBranch, ListNumbers, MapPin, MapTrifold, Plus, Rows, SquaresFour, Target, UserList, X } from "phosphor-react";
 import Carregando from "./Carregando";
 
@@ -439,18 +439,28 @@ localStorage.setItem('pesquisadoresSelecionadosGroupBarema', JSON.stringify(pesq
   
 
 
-  let linkTo = `/researcher/`;
+  const history = useNavigate();
 
-  if (botaoAreasClicado && valoresSelecionadosExport != "") {
-    linkTo = `/researcher/${idVersao}//${valoresSelecionadosExport}/areas`;
-  } else if (botaoTermosClicado && valoresSelecionadosExport != "") {
-    linkTo = `/researcher/${idVersao}//${valoresSelecionadosExport}/terms`;
-  } else if (botaoResumoClicado && valoresSelecionadosExport != "") {
-    linkTo = `/researcher/${idVersao}//${valoresSelecionadosExport}/abstract`;
-  } else {
-    // Define um valor padrão caso nenhuma variável corresponda
-    linkTo = `/researcher/${idVersao}/`;
-  }
+ 
+
+  const handleLinkResearcher = (index: any) => {
+    let linkTo = `/researcher/`;
+
+    if (botaoAreasClicado && valoresSelecionadosExport != "") {
+      linkTo = `/researcher/${idVersao}/${index}/${valoresSelecionadosExport}/areas`;
+    } else if (botaoTermosClicado && valoresSelecionadosExport != "") {
+      linkTo = `/researcher/${idVersao}/${index}/${valoresSelecionadosExport}/terms`;
+    } else if (botaoResumoClicado && valoresSelecionadosExport != "") {
+      linkTo = `/researcher/${idVersao}/${index}/${valoresSelecionadosExport}/abstract`;
+    } else {
+      // Define um valor padrão caso nenhuma variável corresponda
+      linkTo = `/researcher/${idVersao}/${index}`;
+    }
+
+    setTimeout(() => {
+      history(linkTo);
+    }, 0);
+  };
 
 
 
@@ -665,9 +675,9 @@ localStorage.setItem('pesquisadoresSelecionadosGroupBarema', JSON.stringify(pesq
       </div>
 
       <div className="mb-6 flex flex-col justify-center items-center">
-        <Link to={linkTo} target="_blank" className="mb-2 h-12 w-12 rounded-2xl bg-blue-400 items-center justify-center flex hover:bg-blue-500 cursor-pointer transition-all">
+        <div onClick={() => handleLinkResearcher(user.id)}  className="mb-2 h-12 w-12 rounded-2xl bg-blue-400 items-center justify-center flex hover:bg-blue-500 cursor-pointer transition-all">
           <ArrowSquareOut size={16} className="text-white" />
-        </Link>
+        </div>
 
         <p className="text-[12px] text-white"> Mais info</p>
       </div>
@@ -863,9 +873,9 @@ const normalizedCityNome = unorm.nfd(city.nome.toUpperCase()).replace(/[\u0300-\
       </div>
 
       <div className="mb-6 flex flex-col justify-center items-center">
-        <Link to={linkTo} target="_blank" className="mb-2 h-12 w-12 rounded-2xl bg-blue-400 items-center justify-center flex hover:bg-blue-500 cursor-pointer transition-all">
+        <div onClick={() => handleLinkResearcher(user.id)}  className="mb-2 h-12 w-12 rounded-2xl bg-blue-400 items-center justify-center flex hover:bg-blue-500 cursor-pointer transition-all">
           <ArrowSquareOut size={16} className="text-white" />
-        </Link>
+        </div>
 
         <p className="text-[12px] text-white"> Mais info</p>
       </div>

@@ -48,6 +48,7 @@ import { Pinterest } from "./Pinterest";
 import { GridHome } from "./GridHome";
 import { SvgHome } from "./SvgHome";
 import { Cities } from "./Cities";
+import { Recomendadas } from "./Recomendadas";
 
 
 interface GraduateProgram {
@@ -566,7 +567,6 @@ useEffect(() => {
 },[]); // Empty dependency array ensures the effect runs only once during component mount
     
 
-
   return (
     <div className="   ">
 
@@ -654,9 +654,11 @@ useEffect(() => {
  
 ) : (
   <div className="w-full">
-     <div className="px-16 my-8">
-    
-     </div>
+    {botaoTermosClicado && botaoTaxonomiaClicado.length > 0 && (
+       <div className="px-16 mt-8 w-full">
+       <Recomendadas/>
+        </div>
+    )}
 
     <Tabs className="w-full items-center flex flex-col " >
     <div className="flex items-center justify-between w-full mt-6  px-6 md:px-16 m-[0 auto]">
@@ -776,7 +778,7 @@ useEffect(() => {
               <Cities/>
             </div>
 
-            <div className="h-[50vh] top-[-160px] relative bg-center bg-cover bg-no-repeat flex items-center justify-center" style={{ backgroundImage: `url(${bg_passo})` }}>
+            <div className="h-[50vh] top-[-120px] relative bg-center bg-cover bg-no-repeat flex items-center justify-center" style={{ backgroundImage: `url(${bg_passo})` }}>
             <h3 className="font-medium px=16 text-5xl mb-4 text-gray-400">Como <strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">pesquisar</strong> na plataforma?</h3>
             </div>
 

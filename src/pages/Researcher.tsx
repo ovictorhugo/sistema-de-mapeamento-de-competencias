@@ -15,9 +15,7 @@ function Researcher() {
 
   return (
     <div>
-      <div className=''>
-        <Header />
-      </div>
+      
       <ResearcherPage program={program || ''} id={userId || ''} term={term || ''} type={type || ''} />
       <Footer />
     </div>

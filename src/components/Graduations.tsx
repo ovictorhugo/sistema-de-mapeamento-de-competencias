@@ -266,7 +266,7 @@ console.log('idversao',idVersao)
           {filterValue.length <= 2 || filterValue == valueInstPesquisa ? (
             <div></div>
           ) : (
-            <div className="rounded-md bg-white absolute mt-3 p-4 gap-4 flex flex-col max-h-[250px] overflow-y-auto elementBarra">
+            <div className="rounded-md bg-white absolute mt-3 p-4 gap-4 flex flex-col max-h-[250px] overflow-y-auto pr-2 elementBarra">
           {filteredResults.map(props => {
         
               return (
@@ -330,7 +330,7 @@ console.log('idversao',idVersao)
       
 
       <div className="absolute h-screen top-0 right-0 pr-16 items-center justify-center flex">
-      <div className="flex flex-col gap-3 max-h-[470px] overflow-y-auto elementBarra">
+      <div className="flex flex-col gap-3 max-h-[470px] overflow-y-auto pr-2 elementBarra">
         {graduatePrograms.map(props => {
          if (props.city === estadoSelecionado && idGraduateProgram == "0") {
               return (
@@ -340,7 +340,7 @@ console.log('idversao',idVersao)
                   onMouseDown={(e) => e.preventDefault()}
                   
                 >
-                  <label onClick={() => handleClick(props.graduate_program_id)} className={`justify-between w-full p-6 flex-col  cursor-pointer border-[1px] bg-white bg-opacity-70 backdrop-blur-sm border-gray-300 flex text-gray-400 rounded-2xl text-xs font-bold hover:border-blue-400 `}>
+                  <label onClick={() => handleClick(props.graduate_program_id)} className={`justify-between w-full p-6 flex-col  cursor-pointer border bg-white bg-opacity-70 backdrop-blur-sm border-gray-300 flex text-gray-400 rounded-2xl text-xs font-bold hover:border-blue-400 `}>
                     <div className="flex flex-col">
                     
 

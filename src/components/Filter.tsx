@@ -482,7 +482,7 @@ export function Filter() {
                  </div>
 
                 <div className=' h-full'>
-                <div className=' overflow-y-auto h-full elementBarra pb-24'>
+                <div className=' overflow-y-auto h-full elementBarra pb-24 pr-2'>
                  <div className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium gap-2 items-center w-fit mb-4">Versão 2.0.5 (beta) </div>
                  <div className="border-[1px] border-gray-300 py-2 flex px-4 text-gray-400 rounded-md text-xs font-medium gap-2 items-center w-fit mb-4">Sistema de Mapeamento de Competências da Bahia </div>
                     <p className='text-gray-400 text-justify mb-4'>
@@ -522,11 +522,11 @@ Menção a Jônatas Pereira do Nascimento Rosa (UNEB) pela revisão e projeto te
                               <div  className="hover:bg-gray-50 transition-all  p-2 cursor-pointer border w-full flex gap-4 items-center border-gray-300 rounded-md " key={props.name}>
                               <div className={`whitespace-nowrap rounded-md bg-contain bg-center bg-no-repeat h-10 w-10  relative `} style={{ backgroundImage: `url(${props.img}) ` }}>
                                </div>
-                            <div >
+                            <div className='flex flex-1 flex-col' >
                             <div className="flex-1 m-0 font-bold text-gray-500">{props.name}</div>
                             <div className='flex items-center gap-2 mt-1'>
                             <div className={`whitespace-nowrap bg-contain bg-center bg-no-repeat h-6 w-6  relative `} style={{ backgroundImage: `url(${props.itens}) ` }}></div>
-                            <div className="flex-1 m-0 text-gray-400 text-sm">{props.inst}</div>
+                            <div className="flex-1 m-0 text-gray-400 text-sm truncate max-w-[225px]">{props.inst}</div>
                            
                             </div>
                             </div>

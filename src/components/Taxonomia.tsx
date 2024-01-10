@@ -440,6 +440,61 @@ const handleBtnCsv = (id_pesquisador: any) => {
 
   };
 
+  const handleBtnCsvTaxonomia = () => {
+    try {
+      const convertJsonToCsvTaxonomia = (researcherData: Record<string, Research[]>): string => {
+          const replacer = (key: string, value: any) => (value === null ? '' : value); // Handle null values
+
+          let csv = '';
+
+          // Iterate over each term and its associated researchers
+          Object.keys(researcherData).forEach((term) => {
+              const items = researcherData[term];
+              const header = Object.keys(items[0]);
+
+              // Add CSV header for each term
+              csv += `\uFEFF${term}\r\n${header.join(';')}\r\n`;
+
+              // Add CSV data for each researcher
+              csv += items
+                  .map((item) => header.map((fieldName) => JSON.stringify(item[fieldName], replacer)).join(';'))
+                  .join('\r\n');
+              
+              // Add a line break between terms
+              csv += '\r\n';
+          });
+
+          return csv;
+      };
+      if (!researcher) {
+        throw new Error('Researcher data is undefined or null.');
+    }
+
+    // Group researchers by term
+    const researcherData: Record<string, Research[]> = {};
+    researcher.forEach((item) => {
+        const term = item.termo;
+        if (!researcherData[term]) {
+            researcherData[term] = [];
+        }
+        researcherData[term].push(item);
+    });
+
+    const csvData = convertJsonToCsvTaxonomia(researcherData);
+    const blob = new Blob([csvData], { type: 'text/csv;charset=windows-1252;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = `taxonomia.csv`;
+    link.href = url;
+    link.click();
+} catch (error) {
+    console.error('Error:', error.message);
+}
+};
+
+
+console.log(`trerge`, researcher)
+
   //logica treemap
 
    // Função para converter o objeto de dados em um formato adequado para o treemap
@@ -642,14 +697,14 @@ const onDragEnd = (result: any) => {
 
                    {termsList && !isLoading ? (
                     <div className="mt-4 absolute max-h-[500px]  bg-white flex flex-col  gap-2 z-[999] p-4 border border-gray-300 rounded-xl ">
-                     <div className="flex gap-3 flex-col overflow-y-auto elementBarra">
+                     <div className="flex gap-3 flex-col overflow-y-auto elementBarra pr-2">
                      {isLoading? (
                         ``
                        ):(
                         Object.keys(researcher).map((termo, index) => (
-                          <div className="text-sm gap-4 h-10 min-h-[40px] transition-all rounded-xl items-center px-2 hover:bg-gray-50 flex justify-between text-gray-400">
-                            <div className="flex items-center gap-2">
-                            <p className="p-1 px-3 bg-blue-400 rounded-md text-white text-xs font-medium ">{researcherCountsByTerm[termo]}</p>
+                          <div className="text-xs gap-4 h-10 min-h-[40px] font-bold transition-all rounded-xl items-center px-2 hover:bg-gray-50 flex justify-between text-gray-400">
+                            <div className="flex items-center gap-3">
+                            <p className="p-1 px-3 bg-blue-400 w-[38px] items-center justify-center flex rounded-md text-white text-xs font-medium ">{researcherCountsByTerm[termo]}</p>
                             {termo.replace(/;/g, ' ')}
 
                             </div>
@@ -697,7 +752,7 @@ const onDragEnd = (result: any) => {
                   </div>
                 ): ('')}
 
-                
+<div onClick={() => handleBtnCsvTaxonomia()}  className={`rounded-xl w-12 h-12 min-w-12 cursor-pointer  border-gray-300 border flex items-center justify-center hover:bg-gray-50 transition-all  text-blue-400 `}><FileCsv size={16} className="" /></div>
           
           </div>
 
@@ -732,52 +787,7 @@ const onDragEnd = (result: any) => {
 <div className="flex">
 <div className="flex flex-1 h-full">
 
-<div className="flex gap-6 flex-nowrap overflow-x-auto elementBarra">
-           {isLoading? (
-               <div className="w-full">
-                <Carregando/>
-               </div>
-           ):(
-            Object.keys(researcher).map((termo, index) => (
-                  <div >
-                   
- <div className=" flex h-fit flex-col" key={index}>
- {/* Renderizar a lista de pesquisadores para cada termo */}
 
-<ul className="flex rounded-r-xl gap-2 items-center mb-2">
-{researcher[termo].slice(0,1).map((researcher: any, researcherIndex: any) => (
-  <div className=" p-1 border border-blue-400 rounded-2xl">
-    <div className={`whitespace-nowrap bg-gray-50 flex items-center justify-center bg-cover bg-center bg-no-repeat h-[56px] w-[56px]  rounded-xl border-1 border-white  `} style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${researcher.lattes_10_id}) ` }}>
-            <div className="h-[56px] w-[56px]  rounded-xl bg-[#000] absolute opacity-40"></div>
-            <div className="h-[56px] w-[56px]  rounded-xl z-[99] flex items-center justify-center">
-            <CursorText size={24} className="text-white" />
-            </div>
-            </div>
-
-            
-  </div>
-))}
-
-{researcher[termo].slice(1,3).map((researcher: any, researcherIndex: any) => (
-  <div className={`whitespace-nowrap bg-gray-50 bg-cover bg-center bg-no-repeat h-12 w-12  rounded-xl border-1 border-white  `} style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${researcher.lattes_10_id}) ` }}>
-            </div>
-))}
-</ul>
-
-<div className="flex gap-3 items-center">
-<p className="p-1 px-3 bg-blue-400 rounded-md text-white text-xs font-medium ">+ {researcherCountsByTerm[termo] - 3}</p>
-<h3 className="font-medium text-xs">{termo.replace(/;/g, ' ')}</h3>
-</div>
-
-
-</div>
-
-                 
-                  </div>
-                     ))
-)}
-
-           </div>
 
 
 
@@ -862,7 +872,7 @@ const onDragEnd = (result: any) => {
 
 
 <div className="flex gap-3">
-<Link to={''} target="_blank" className={`   z-[9]  top-6 hidden group-hover:flex cursor-pointer items-center gap-4 bg-blue-400 hover:bg-blue-500 text-white rounded-md h-[32px] w-[32px] justify-center  font-medium transition right-20  ${valoresSelecionadosExport != '' ? "right-20" : "right-6"}`}>
+<Link to={`/researcher/4/${researcher.id}`} target="_blank" className={`   z-[9]  top-6 hidden group-hover:flex cursor-pointer items-center gap-4 bg-blue-400 hover:bg-blue-500 text-white rounded-md h-[32px] w-[32px] justify-center  font-medium transition right-20  ${valoresSelecionadosExport != '' ? "right-20" : "right-6"}`}>
 <ArrowSquareOut size={16} className="text-white" />
 </Link>
 
@@ -968,7 +978,7 @@ onChange={() => handleCheckboxChange(researcher)}
 </div>
 
 <div className="mb-6 flex flex-col justify-center items-center">
-<Link to={``} target="_blank" className="mb-2 h-12 w-12 rounded-2xl bg-blue-400 items-center justify-center flex hover:bg-blue-500 cursor-pointer transition-all">
+<Link to={`/researcher/4/${researcher.id}`} target="_blank" className="mb-2 h-12 w-12 rounded-2xl bg-blue-400 items-center justify-center flex hover:bg-blue-500 cursor-pointer transition-all">
 <ArrowSquareOut size={16} className="text-white" />
 </Link>
 

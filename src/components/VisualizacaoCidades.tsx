@@ -3,7 +3,7 @@ import bg_cidades from '../assets/bg_cities.png';
 import bg_cidades2 from '../assets/bg_cities2.png';
 import { useContext, useEffect, useState } from "react";
 import { Pesquisador } from "./Pesquisador";
-import { ArrowSquareOut, Buildings, CaretCircleLeft, CaretCircleRight, CaretDown, CaretUp, Eye, EyeSlash, FileCsv, MapPin, Plus, UserList, X } from "phosphor-react";
+import { ArrowSquareOut, Buildings, CaretCircleLeft, CaretCircleRight, CaretDown, CaretUp, Eye, EyeSlash, FileCsv, MapPin, Plus, Trash, UserList, X } from "phosphor-react";
 import { UserContext } from "../contexts/context";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import Carregando from "./Carregando";
@@ -336,7 +336,11 @@ const { totalPesquisadores, setTotalPesquisadores } = useContext(UserContext);
       };
     }, [researcherCity]); 
 
-
+    const handleCidade = (termo: any) => {
+      setCidadeSelecionada(termo)
+      setListaCidades(false)
+ 
+    };
 
     return  (
         <div>
@@ -391,22 +395,22 @@ const { totalPesquisadores, setTotalPesquisadores } = useContext(UserContext);
        
   </div>
         )}
-         <div style={{ backgroundImage: `${mapaEstado ? (`url(${bg_cidades2})`):(`url(${bg_cidades})`)}` }} className={` ${mapaEstado ? (``): (`items-center `)} items-center  justify-center w-full px-16 pt-24 flex flex-col  h-screen bg-cover bg-no-repeat bg-bottom`}>
-        <div className={` ${mapaEstado ? (``): (`items-center `)}   justify-center  w-full flex flex-col`}>
-        <h1 className={` ${mapaEstado ? (`text-4xl max-w-[600px] `): (`text-5xl text-center max-w-[800px]`)} z-[999]  mb-4 font-medium  `}>Pesquise os <strong className="bg-red-400 text-white font-normal">
+         <div style={{ backgroundImage: `${mapaEstado  && cidadeSelecionada == "" ? (`url(${bg_cidades2})`):(`url(${bg_cidades})`)}` }} className={` ${mapaEstado ? (``): (`items-center `)} items-center  justify-center w-full px-16 pt-24 flex flex-col  h-screen bg-cover bg-no-repeat bg-bottom`}>
+        <div className={` ${mapaEstado && cidadeSelecionada == "" ? (``): (`items-center `)}   justify-center  w-full flex flex-col`}>
+        <h1 className={` ${mapaEstado && cidadeSelecionada == "" ? (`text-4xl max-w-[600px] `): (`text-5xl text-center max-w-[800px]`)} z-[999]  mb-4 font-medium  `}>Pesquise os <strong className="bg-red-400 text-white font-normal">
          dados e pesquisadores
         </strong>{" "}
         com o filtro por cidade
       </h1>
-          <p className={`  ${mapaEstado ? (`max-w-[620px] `): (` text-center max-w-[700px]`)} mb-6 z-[999]   text-lg text-gray-400`}>Veja os dados de produção de energia e comércio associados com a produção dos pesquisadores </p>
+          <p className={`  ${mapaEstado && cidadeSelecionada == "" ? (`max-w-[620px] `): (` text-center max-w-[700px]`)} mb-6 z-[999]   text-lg text-gray-400`}>Veja os dados de produção de energia e comércio associados com a produção dos pesquisadores </p>
        
-        <div className="flex gap-4 z-[99999999] w-fit items-center text-gray-400 ">
+        <div className="flex gap-4 z-[999] w-fit items-center text-gray-400 ">
           <div>
           <div onClick={() => setListaCidades(!listaCidades)} className='w-fit h-12 border border-gray-300  hover:bg-gray-50 transition-all cursor-pointer rounded-xl flex items-center justify-between bg-white'>
                   
                   <div className='flex w-full px-4 items-center gap-6 justify-between'>
                  <div className='flex items-center gap-4'>
-                     <MapPin size={20} className="text-gray-400" />
+                     <MapPin size={16} className="text-gray-400" />
                      <p className='text-gray-400 text-sm font-medium whitespace-nowrap'>{cidadeSelecionada == "" ? (`Lista de cidades`):(cidadeSelecionada)}</p>
                  </div>
  
@@ -420,7 +424,38 @@ const { totalPesquisadores, setTotalPesquisadores } = useContext(UserContext);
                  </div>
  
                   </div>
+
+                  {(listaCidades && cities.length > 0) && (
+                    <div className="mt-4 absolute max-h-[250px]  bg-white flex flex-col  gap-2 z-[999] p-4 border border-gray-300 rounded-xl ">
+                    <div className="flex gap-3 flex-col overflow-y-auto elementBarra pr-2">
+                    {isLoading? (
+                       ``
+                      ):(
+                       cities.map((termo, index) => (
+                         <div onClick={() => handleCidade(termo.name)} className="text-xs gap-4 cursor-pointer h-10 min-h-[40px] font-bold transition-all rounded-xl items-center px-4 hover:bg-gray-50 flex justify-between text-gray-400">
+                           <div className="flex items-center gap-3">
+                           
+                           {termo.name}
+
+                           </div>
+
+                         
+                         </div>
+                        ))
+                      )}
+                    </div>
+                   </div>
+                  )}
           </div>
+
+          {cidadeSelecionada !== "" && (
+           <div onClick={() => setCidadeSelecionada("")} className='flex h-12 w-12 justify-center items-center cursor-pointer z-[9]  hover:bg-gray-50  transition-all border border-gray-300 rounded-xl'>
+           <div className='flex items-center '>
+               <Trash size={16} className="text-gray-400" />
+               
+           </div>
+           </div>
+         )}
 
         <div className={`${cidadeSelecionada == "" ? (`flex`): (`hidden`)} gap-3 items-center`}>
         ou você pode
@@ -447,25 +482,44 @@ const { totalPesquisadores, setTotalPesquisadores } = useContext(UserContext);
         </div>
         </div>
 
-        <div className="w-full h-screen max-h-screen overflow-y-hidden  overflow-hidden flex items-center absolute top-0 "><div className={` absolute w-[140%] h-[130%] left-[-20px] ${mapaEstado && cidadeSelecionada == "" ? (`flex`):(`hidden`)}`} id="containerone" /></div>
+        <div className="w-full h-screen justify-center max-h-screen overflow-y-hidden  overflow-hidden flex items-center absolute top-0 "><div className={` absolute w-[140%] h-[130%] left-[-20px] ${mapaEstado && cidadeSelecionada == "" ? (`flex`):(`hidden`)}`} id="containerone" /></div>
          
+      
          
-         
-       {mapaEstado ? (
-         <div className="absolute h-screen top-0 right-0 pr-16 items-center justify-center flex">
-         <div className="flex flex-col gap-3 max-h-[470px] overflow-y-auto elementBarra">
+       {mapaEstado && cidadeSelecionada == "" ? (
+         <div className="absolute flex-col right-0 pr-16 items-center justify-start flex">
+
+          {estadoSelecionado !== "" && (
+            <div className="bg-white w-[350px] justify-between flex mb-4 border boder-gray-300 rounded-xl backdrop-blur-sm bg-opacity-70 p-6">
+            <div className="flex gap-3  items-center text-gray-400">
+            <MapPin size={16} className="" /> {estadoSelecionado}
+            </div>
+            
+            <div className="flex gap-3  items-center">
+            <div  onClick={() => setCidadeSelecionada(estadoSelecionado)} className={`   z-[9]  top-6 flex cursor-pointer items-center gap-4 bg-blue-400 hover:bg-blue-500 text-white rounded-md h-[32px] w-[32px] justify-center  font-medium transition right-20  `}>
+               <Eye size={16} className="text-white" />
+               </div>
+            
+            <div  onClick={() => setEstadoSelecionado('')}  className={`   z-[9]  top-6 flex cursor-pointer items-center gap-4 bg-blue-400 hover:bg-blue-500 text-white rounded-md h-[32px] w-[32px] justify-center  font-medium transition right-20  `}>
+               <X size={16} className="text-white" />
+               </div>
+            </div>
+                      </div>
+          )}
+
+         <div className="flex flex-col gap-3 max-h-[470px] overflow-y-auto w-auto elementBarra overflow-x-hidden ">
            {researcherCity.map(props => {
             if (unorm.nfkd(props.city).replace(/[^\w\s]/gi, '').toLowerCase() === unorm.nfkd(estadoSelecionado).replace(/[^\w\s]/gi, '').toLowerCase()) {
                  return (
-                   <div key={props.id}  className="bg-white group cursor-pointer flex hover:shadow-md transition-all  border boder-gray-300 rounded-lg h-32 ">
+                   <div key={props.id}  className="bg-white w-[350px] group  flex hover:shadow-md transition-all  border boder-gray-300 rounded-xl backdrop-blur-sm bg-opacity-70   ">
    
    
    
    
-   <div className="p-4 h-full w-full justify-between  flex-1 flex flex-col">
+   <div className="p-6 h-full w-full justify-between  flex-1 flex flex-col">
    <div className={`flex  flex-col w-full relative `}>
-   <h4 className={`text-sm font-bold text-gray-500  mb-1 `}>{props.researcher_name}</h4>
-   <div className="flex items-center gap-2 overflow-hidden truncate">
+   <h4 className={`text-base text-gray-500 mb-2  font-bold `}>{props.researcher_name}</h4>
+   <div className="flex items-center gap-2 overflow-hidden truncate mb-2">
    {props.image == "None" ? (
     <Buildings size={16} className="text-gray-500" />
    ) : (
@@ -482,7 +536,7 @@ const { totalPesquisadores, setTotalPesquisadores } = useContext(UserContext);
    
    
    <div className="flex gap-3">
-   <Link to={''} target="_blank" className={`   z-[9]  top-6 hidden group-hover:flex cursor-pointer items-center gap-4 bg-blue-400 hover:bg-blue-500 text-white rounded-md h-[32px] w-[32px] justify-center  font-medium transition right-20  `}>
+   <Link to={`/researcher/4/${props.id}`} target="_blank" className={`   z-[9]  top-6 hidden group-hover:flex cursor-pointer items-center gap-4 bg-blue-400 hover:bg-blue-500 text-white rounded-md h-[32px] w-[32px] justify-center  font-medium transition right-20  `}>
    <ArrowSquareOut size={16} className="text-white" />
    </Link>
    
@@ -498,18 +552,22 @@ const { totalPesquisadores, setTotalPesquisadores } = useContext(UserContext);
    className="absolute hidden"
    name={props.name}
    checked={itensSelecionados.includes(props.name)}
-   
+   onChange={() => handleCheckboxChange(props)}
    />
    </label>
    </div>
    
-   <div className="border-[1px] border-gray-300 py-2 flex group-hover:hidden px-4 text-gray-400 rounded-md text-xs font-medium gap-2 items-center"><MapPin size={12} className="" /> {props.city}</div>
+   <div className="border-[1px] bg-white h-8 border-gray-300 py-2 flex group-hover:hidden px-4 text-gray-400 rounded-md text-xs font-medium gap-2 items-center"><MapPin size={12} className="" /> {props.city}</div>
    
    
    </div>
    </div>
    
-   
+   { props.area.split(';').slice(0, 1).map((value: any, index:any) => (
+   <div
+     key={index}
+     className={` w-2 rounded-r-lg text-white items-center ${value.includes('CIENCIAS AGRARIAS') ? 'bg-red-400' : value.includes('CIENCIAS EXATAS E DA TERRA') ? 'bg-green-400' : value.includes('CIENCIAS DA SAUDE') ? 'bg-[#20BDBE]' : value.includes('CIENCIAS HUMANAS') ? 'bg-[#F5831F]' : value.includes('CIENCIAS BIOLOGICAS') ? 'bg-[#EB008B]' : value.includes('ENGENHARIAS') ? 'bg-[#FCB712]' : value.includes('CIENCIAS SOCIAIS APLICADAS') ? 'bg-[#009245]' : value.includes('LINGUISTICA LETRAS E ARTES') ? 'bg-[#A67C52]' : value.includes('OUTROS') ? 'bg-[#1B1464]' : 'bg-gray-400'} `}></div>
+ ))}
    
    
    </div>
@@ -617,7 +675,7 @@ const { totalPesquisadores, setTotalPesquisadores } = useContext(UserContext);
           />
         </label>
 
-                    <div className="relative w-full">
+                    <div className="relative w-full ">
                       <Pesquisador
                         among={user.among}
                         articles={user.articles}

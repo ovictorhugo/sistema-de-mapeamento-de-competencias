@@ -7,7 +7,8 @@ import { Discover } from './pages/Discover';
 import { Indicators } from './pages/Indicators';
 import { PesquisadoresPage } from './pages/PesquisadoresPage';
 import { Login } from './pages/Login';
-
+import Papa from 'papaparse';
+import unorm from 'unorm';
 
 import { client } from './lib/apollo'
 import { ApolloProvider } from "@apollo/client"
@@ -41,7 +42,15 @@ import { Cidades } from './pages/Cidades';
 
 
 
+interface Csv {
+  tax: string
+  termos: string
+  terms: string
+  termos_tax: string
+  group: string
 
+
+}
 
 
 //rotas protegidas
@@ -77,7 +86,8 @@ export const App = () => {
   const [botaoLivrosCapitulosClicado, setBotaoLivrosCapitulosClicado] = useState(false);
   const [botaoAreasClicado, setBotaoAreasClicado] = useState(false);
   const [botaoEventosClicado, setBotaoEventosClicado] = useState(false);
-  const [botaoTaxonomiaClicado, setBotaoTaxonomiaClicado] = useState(false);
+
+  const [botaoTaxonomiaClicado, setBotaoTaxonomiaClicado] = useState(``);
   
   const [urlGeral, setUrlGeral] = useState('http://200.128.66.226:8080/');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
@@ -119,6 +129,67 @@ useEffect(() => {
   }
 }, []);
 
+const [filteredItems, setFilteredItems] = useState<Csv[]>([]);
+
+
+useEffect(() => {
+  const filePath = '../taxonomia.csv';
+
+  const fetchData = async (searchTerm) => {
+    try {
+      const response = await fetch(filePath);
+      const text = await response.text();
+
+      Papa.parse(text, {
+        complete: (result: any) => {
+          const parsedData = result.data;
+
+          if (searchTerm !== "") {
+            const formattedSearchTerm = unorm.nfkd(searchTerm).replace(/[^\w\s]/gi, '').toLowerCase();
+
+            // Verifica se searchTerm está contido em termos
+            const matchingItems = parsedData.filter(
+              (item) => unorm.nfkd(item.termos).replace(/[^\w\s]/gi, '').toLowerCase().includes(formattedSearchTerm)
+            );
+
+            console.log(`matchingItems`, matchingItems);
+
+            if (matchingItems.length > 0) {
+              // Encontra todos os termos com o mesmo tax da palavra igual
+              const sameTaxTerms = parsedData
+                .filter((item) => item.tax === matchingItems[0].tax)
+                .map((item) => item.termos);
+
+              // Concatena os termos encontrados com um ponto e vírgula
+              const concatenatedTerms = sameTaxTerms.join('/');
+
+              // Define o valor de setBotaoTaxonomiaClicado como a concatenação
+              setBotaoTaxonomiaClicado(concatenatedTerms);
+            } else {
+              setBotaoTaxonomiaClicado('');
+            }
+          }
+        },
+        header: true,
+        skipEmptyLines: true,
+        delimiter: ';',
+        encoding: 'UTF-8',
+      });
+    } catch (error) {
+      console.error('Erro ao carregar o arquivo:', error);
+    }
+  };
+
+  // Adiciona um delay de 500 milissegundos (ou ajuste conforme necessário)
+  const delay = 1000;
+  const timeoutId = setTimeout(() => {
+    fetchData(valoresSelecionadosExport);
+  }, delay);
+
+  // Limpa o timeout se o componente for desmontado ou se valoresSelecionadosExport mudar antes do término do delay
+  return () => clearTimeout(timeoutId);
+
+}, [valoresSelecionadosExport]);
 
 
 
@@ -208,7 +279,7 @@ useEffect(() => {
 
                 <Route
                   path='/minha-conta'
-                  element={loggedIn && user.state != "admin"  ? <Configuracoes/> : <Navigate to='/' />}
+                  element={loggedIn  ? <Configuracoes/> : <Navigate to='/' />}
                 />
 
 <Route
@@ -217,7 +288,12 @@ useEffect(() => {
                 />
        
             
-            <Route path='/chat' element={<Chat/>}/>
+          
+
+            <Route
+                  path='/chat'
+                  element={loggedIn   ? <Chat/> : <Navigate to='/login' />}
+                />
 
             <Route path='/export-sucupira' element={<Login/>}/>
            

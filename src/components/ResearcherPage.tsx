@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/context";
-import { File, ArrowUDownLeft, Book, Books, Buildings, CaretCircleLeft, CaretCircleRight, CaretDown, ChartBar, GraduationCap, IdentificationBadge, LinkSimple, MagnifyingGlass, MapPin, PuzzlePiece, Quotes, Rows, SquaresFour, Stamp, Student, X, Code, StripeLogo, Files, FileArrowDown } from "phosphor-react";
+import { File, ArrowUDownLeft, Book, Books, Buildings, CaretCircleLeft, CaretCircleRight, CaretDown, ChartBar, GraduationCap, IdentificationBadge, LinkSimple, MagnifyingGlass, MapPin, PuzzlePiece, Quotes, Rows, SquaresFour, Stamp, Student, X, Code, StripeLogo, Files, FileArrowDown, Ticket, FileCsv } from "phosphor-react";
 
 import background from '../assets/bg_profnit.png';
 import { Publicacao } from "./Publicacao";
@@ -17,6 +17,16 @@ import { Marca } from "./Marca";
 import { Software } from "./Software";
 import { Orientacoes } from "./Orientacoes";
 import { Report } from "./Report";
+import { Header } from "./Header";
+import { Eventos } from "./Events";
+
+type Eventos = {
+  event_name: string
+  id: string
+  nature: string
+  participation: string
+  year: string
+}
 
 type Livros = {
   id: string,
@@ -86,6 +96,7 @@ type Publicacao = {
   lattes_10_id: string
   jcr_link: string,
   jif: string
+  researcher_id: string
 }
 
 interface PalavrasChaves {
@@ -108,6 +119,7 @@ export function ResearcherPage(props: Props) {
   const { urlGeral, setUrlGeral } = useContext(UserContext);
 
   const { idVersao, setIdVersao } = useContext(UserContext);
+  const dataAtual = new Date();
 
   const urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=${props.program}`;
 
@@ -167,7 +179,7 @@ export function ResearcherPage(props: Props) {
   const valoresArray = valoresSelecionadosPopUp.split(';');
 
   const listaValores = valoresArray.map((valor, index) => (
-    <li key={index} className='whitespace-nowrap gap-2 bg-blue-100 border-blue-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold'>
+    <li key={index} className='whitespace-nowrap gap-2 bg-blue-100 border-blue-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-xl text-xs font-bold'>
       {valor.replace(/%20/g, ' ')}
       <button onClick={() => handleRemoverSelecionado(index)}>
         <X size={16} className="text-gray-400 hover:text-blue-400" />
@@ -339,6 +351,8 @@ export function ResearcherPage(props: Props) {
 
   //pubicações
 
+  const [jsonData, setJsonData] = useState<any[]>([]);
+
   let urlPublicacoesPorPesquisador = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${props.id}&type=ARTICLE&qualis=&qualis=${valoresSelecionados}&year=${value}`;
 
   if (props.type == "areas") {
@@ -379,6 +393,7 @@ export function ResearcherPage(props: Props) {
         const data = await response.json();
         if (data) {
           setPublicacoes(data);
+          setJsonData(data)
         }
       } catch (err) {
         console.log(err);
@@ -391,7 +406,7 @@ export function ResearcherPage(props: Props) {
 
   //livros 
 
-  const urlLivros = `${urlGeral}book_production_researcher?researcher_id=${props.id}&year=1000`;
+  const urlLivros = `${urlGeral}book_production_researcher?researcher_id=${props.id}&year=${value}&term=`;
   const [livros, setLivros] = useState<Livros[]>([]);
   const quantidadeDeLivros = livros.length;
 
@@ -426,7 +441,7 @@ export function ResearcherPage(props: Props) {
 
   //cap livros 
 
-  const urlCapLivros = `${urlGeral}book_chapter_production_researcher?researcher_id=${props.id}&year=1000`;
+  const urlCapLivros = `${urlGeral}book_chapter_production_researcher?researcher_id=${props.id}&year=${value}&term=`;
   const [capLivros, setCapLivros] = useState<Livros[]>([]);
   const quantidadeCapDeLivros = capLivros.length;
 
@@ -531,7 +546,7 @@ export function ResearcherPage(props: Props) {
 
   //orientacoes
 
-  const urlOrientacoes = `${urlGeral}guidance_researcher?researcher_id=${props.id}&year=1000`;
+  const urlOrientacoes = `${urlGeral}guidance_researcher?researcher_id=${props.id}&year=${value}`;
   const [orientacoes, setOrientacoes] = useState<Orientacoes[]>([]);
   const quantidadeOrientacoes = orientacoes.length;
 
@@ -834,34 +849,41 @@ export function ResearcherPage(props: Props) {
   const quantidadeTotalDePublicacoes = publicacoes.length;
   setTotalPublicacoes(quantidadeTotalDePublicacoes.toString())
 
-  //tabs
-  const [selectedTab, setSelectedTab] = useState(0);
+//tabs
+const [selectedTab, setSelectedTab] = useState(0);
 
-  function onClickPublicacoes() {
-    setSelectedTab(0)
-  }
+function onClickPublicacoes() {
+  setSelectedTab(0)
+}
 
-  function onClickProducaoTecnica() {
-    setSelectedTab(1)
-  }
+function onClickLivros() {
+  setSelectedTab(3)
+}
 
-  function onClickOrientacoes() {
-    setSelectedTab(2)
-  }
+function onClickProducaoTecnica() {
+  setSelectedTab(1)
+}
 
-  function onClickLivros() {
-    setSelectedTab(3)
-  }
+function onClickOrientacoes() {
+  setSelectedTab(2)
+}
 
-  function onClickRelatorioTecnico() {
-    setSelectedTab(4)
-  }
+ function onClickRelatorioTecnico() {
+  setSelectedTab(4)
+}
+
+function onClickEventos() {
+  setSelectedTab(5)
+}
+
+
+const [tabIndex, setTabIndex] = useState(0);
 
   //patente
 
   const [patente, setPatente] = useState<Patente[]>([]);
 
-  const urlPatente = `${urlGeral}patent_production_researcher?researcher_id=${props.id}&year=1000`;
+  const urlPatente = `${urlGeral}patent_production_researcher?researcher_id=${props.id}&year=1000&term=`;
   const quantidadePatente = patente.length;
   useEffect(() => {
     const fetchData = async () => {
@@ -905,7 +927,7 @@ export function ResearcherPage(props: Props) {
 
   const [relatorio, setRelatorio] = useState<Patente[]>([]);
 
-  const urlRelatorio = `${urlGeral}researcher_report?researcher_id=${props.id}&year=1000`;
+  const urlRelatorio = `${urlGeral}researcher_report?researcher_id=${props.id}&year=${value}`;
 
     useEffect(() => {
       const fetchData = async () => {
@@ -933,6 +955,122 @@ export function ResearcherPage(props: Props) {
       };
       fetchData();
     }, [urlRelatorio]);
+
+     //eventos
+
+     // checkbox natureza 
+
+     const [natureza, setNatureza] = useState([
+      { id: 1, itens: 'Oficina' },
+      { id: 2, itens: 'Simpósio' },
+      { id: 3, itens: 'Seminário' },
+      { id: 4, itens: 'Congresso' },
+      { id: 5, itens: 'Encontro' },
+      { id: 6, itens: 'Outra' },
+    ]);
+  
+    const naturezaColor: { [key: string]: string } = {
+      'Oficina': 'bg-[#174EA6]',
+      'Simpósio': 'bg-[#1A73E8]',
+      'Seminário': 'bg-[#8AB4F8]',
+      'Congresso': 'bg-[#7386FF]',
+      'Encontro': 'bg-[#1B1464]',
+      'Outra': 'bg-cyan-400',
+    }
+
+  const [itensSelecionadosNatureza, setItensSelecionadosNatureza] = useState<string[]>([]);
+
+  type CheckboxStatesNatureza = {
+    [index: number]: boolean;
+  };
+
+  const [checkboxStatesNatureza, setCheckboxStatesNatureza] = useState<CheckboxStatesNatureza>({});
+
+  const handleCheckboxChangeInputNatureza = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const itemId = event.target.name;
+    const isChecked = event.target.checked;
+
+    setCheckboxStatesNatureza((prevStates) => ({ ...prevStates, [itemId]: isChecked }));
+
+    setItensSelecionadosNatureza((prevSelecionados) => {
+      const selectedQualis = natureza.find((q) => q.id === parseInt(itemId));
+      if (selectedQualis) {
+        if (isChecked) {
+          return [...prevSelecionados, selectedQualis.itens];
+        } else {
+          return prevSelecionados.filter((item) => item !== selectedQualis.itens);
+        }
+      } else {
+        // handle the case where selectedQualis is undefined
+        return prevSelecionados;
+      }
+    });
+  };
+
+  const checkboxNatureza = natureza.map((quali) => {
+    const isChecked = checkboxStatesNatureza[quali.id];
+    return (
+      <li
+        key={quali.id}
+        className="checkboxLabel group list-none inline-flex  group overflow-hidden"
+        onMouseDown={(e) => e.preventDefault()}
+      >
+        <label
+          className={`group-checked:bg-blue-400 cursor-pointer border-[1px] gap-3 bg-white border-gray-300 flex h-10 items-center px-4 text-gray-400 rounded-md text-xs font-bold hover:border-blue-400 hover:bg-blue-100 ${isChecked ? 'activeTab' : ''}`}
+        >
+          <div className={`rounded-sm h-4 w-4 ${naturezaColor[quali.itens]}`}></div>
+          <span className="text-center block">{quali.itens}</span>
+          <input
+            type="checkbox"
+            name={String(quali.id)}
+            className="absolute hidden group"
+            onChange={handleCheckboxChangeInputNatureza}
+            id={quali.itens}
+            checked={isChecked}
+          />
+        </label>
+      </li>
+    );
+  });
+
+  const [valoresSelecionadosNatureza, setValoresSelecionadosNatureza] = useState('');
+
+  useEffect(() => {
+    setValoresSelecionadosNatureza(itensSelecionadosNatureza.join(';'));
+  }, [itensSelecionadosNatureza]);
+
+  const [eventos, setEventos] = useState<Eventos[]>([]);
+
+  let urlEvento = `${urlGeral}pevent_researcher?term=&researcher_id=${props.id}&year=${value}&nature=${valoresSelecionadosNatureza}`;
+
+ 
+    useEffect(() => {
+      const fetchData = async () => {
+        setIsLoading(true);
+        try {
+          const response = await fetch(urlEvento, {
+            mode: 'cors',
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'GET',
+              'Access-Control-Allow-Headers': 'Content-Type',
+              'Access-Control-Max-Age': '3600',
+              'Content-Type': 'text/plain'
+            }
+          });
+          const data = await response.json();
+          if (data) {
+            setEventos(data);
+          }
+        } catch (err) {
+          console.log(err);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchData();
+    }, [urlEvento]);
+
 
 
 
@@ -1128,10 +1266,43 @@ export function ResearcherPage(props: Props) {
           },
         },
       };
+
+
+      ////////////////////////////////
+
+      const convertJsonToCsv = (json: any[]): string => {
+        const items = json;
+        const replacer = (key: string, value: any) => (value === null ? '' : value); // Handle null values
+        const header = Object.keys(items[0]);
+        const csv = [
+          '\uFEFF' + header.join(';'), // Add BOM and CSV header
+          ...items.map((item) =>
+            header.map((fieldName) => JSON.stringify(item[fieldName], replacer)).join(';')
+          ) // CSV data
+        ].join('\r\n');
+    
+        return csv;
+      };
+    
+      const handleDownloadJson = async () => {
+        try {
+          const csvData = convertJsonToCsv(jsonData);
+          const blob = new Blob([csvData], { type: 'text/csv;charset=windows-1252;' });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.download = `${props.id}.csv`;
+          link.href = url;
+          link.click();
+        } catch (error) {
+          console.error(error);
+        }
+      };
       
 
   return (
     <div>
+
+<Header />
       {researcher.map(props => {
 
         const currentDate = new Date();
@@ -1143,28 +1314,33 @@ export function ResearcherPage(props: Props) {
         const isOutdated = monthDifference > 3;
 
         return (
-          <div className={` absolute z-[-1] bg-cover bg-center bg-no-repeat backdrop-blur-md backdrop-brightness-150 h-[280px] rounded-sm w-full flex bg-blue-100`} style={{ backgroundImage: `url(${background})` }}>
-            <div className={` bg-opacity-40 absolute backdrop-blur-sm w-full h-full`}>
+         <div className="px-16 pt-20">
+           <div className={`  bg-cover bg-center bg-no-repeat backdrop-blur-md backdrop-brightness-150 h-[380px] rounded-2xl w-full flex bg-gray-50 `} style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}>
+            <div className={` bg-opacity-20 bg-[#000000] absolute backdrop-blur-sm w-full h-full rounded-2xl`}>
               <div className="relative flex justify-end right-0 ml-auto">
                 <div className={`border-[1px] ml-auto border-gray-300 w-fit py-2 px-4 text-gray-400 rounded-full text-xs font-bold  flex gap-1 items-center absolute top-[220px] right-16 ${isOutdated ? ('bg-red-400 text-white border-none') : ('bg-white')}`}>Data de atualização do Lattes: {props.lattes_update.toString()}</div>
               </div>
             </div>
           </div>
+         </div>
         )
       })}
 
-      <div className="w-full px-6 md:px-16 flex pt-[120px] gap-12 ">
-        <div className="bg-white border-[1px] elementPesquisador z-[999] overflow-y-auto border-gray-300 rounded-lg  p-8  min-w-[400px] w-[400px] sticky top-[80px]" style={{ height: `calc(100vh - 80px)` }}>
-          {researcher.map(props => {
-            return (
+      <div className="w-full px-6 md:px-16 flex pt-12 gap-12 ">
+        
 
-              <div>
-                <div className="w-full flex justify-center ">
-                  <div className="bg-cover bg-center bg-no-repeat h-24 w-24 bg-white rounded-md mb-3 border-4 border-white relative " style={{ backgroundImage: `url(http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=${props.lattes_10_id}) ` }}></div>
-                </div>
+        <div className=" w-full flex gap-12">
+          <div className="flex-1 flex flex-col ">
+          {researcher.map(props => {      
+            return (     
+<div>
 
-                <div className="flex items-center flex-col  relative">
-                  <h4 className="text-3xl font-medium px-8 text-center mb-4">{props.name}</h4>
+<div className="flex justify-between items-center">
+<div className="flex gap-6 items-center mb-2">
+<div className="bg-cover bg-center bg-no-repeat h-24 w-24 bg-white rounded-xl mb-3  relative " style={{ backgroundImage: `url(${urlGeral}ResearcherData/Image?researcher_id=${props.id}) ` }}></div>
+
+<div>
+<h4 className="text-2xl font-medium mb-2">{props.name}</h4>
                   <div className="flex items-center gap-2 mb-4">
                     {props.image == "None" ? (
                       <Buildings size={16} className="text-gray-500" />
@@ -1174,8 +1350,24 @@ export function ResearcherPage(props: Props) {
                     )}
                     <p className="text-md  text-gray-500">{props.university}</p>
                   </div>
+</div>
+</div>
 
-                  <div className="flex gap-3 mb-6 flex-wrap  items-center w-full">
+
+<div>
+<div className="mb-6 flex flex-col justify-center items-center">
+              <div onClick={handleDownloadJson} className="mb-2 h-12 w-12 rounded-2xl text-blue-400 bg-white items-center justify-center border border-gray-300 flex hover:bg-gray-50 cursor-pointer transition-all">
+                <FileCsv size={16} className="" />
+              </div>
+
+              <p className="text-[12px] text-gray-400"> CSV publicações</p>
+            </div>
+
+
+</div>
+</div>
+
+<div className="flex gap-3 mb-4 flex-wrap  items-center w-full">
 
                     {props.area.split(';').map((value, index) => (
                       <li
@@ -1201,9 +1393,7 @@ export function ResearcherPage(props: Props) {
 
                   </div>
 
-
-
-                  <div className={isVisible ? "h-auto transition-all" : "h-[60px] overflow-hidden transition-all"}>
+<div className={`h-auto transition-all mb-8`}>
                     <p className="text-sm text-gray-400 text-justify">
                       {props.abstract
                         .replace(/&quot;/g, '"')
@@ -1224,88 +1414,51 @@ export function ResearcherPage(props: Props) {
 
                   </div>
 
+           
 
-                  <div className="flex gap-4 items-center mt-4">
-                    <div className="animate-bounce cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
-                      <CaretDown onClick={() => setIsVisible(!isVisible)} size={24} className={isVisible ? "rotate-180 transition-all text-gray-400" : "text-gray-400 transition-all"} />
-                    </div>
-                  </div>
+</div>
+         ) })}
 
+            <Tabs className={`flex flex-1 flex-col`}>
+            <TabList className={`flex gap-2 mb-6 overflow-x-auto `}>
+                    <Tab selected={selectedTab === 0} className={` whitespace-nowrap  outline-none cursor-pointer text-sm rounded-full text-gray-400 flex items-center border-[1px] border-white gap-2 px-4 py-2 font-semibold transition  ${selectedTab == 0 ? "bg-blue-400 text-white hover:bg-blue-500" : ('hover:bg-gray-100')}`} onClick={onClickPublicacoes} >
+                      <Quotes size={16} />
+                      Artigos
+                    </Tab>
 
-                  <div className="w-full lg:w-[350px] border-[1px] border-gray-300 rounded-md p-6 h-min mb-6">
-                    <div className="w-full flex justify-center mb-4">
+                    <Tab selected={selectedTab === 3} className={` whitespace-nowrap outline-none cursor-pointer text-sm rounded-full text-gray-400 flex items-center border-[1px] border-white gap-2 px-4 py-2 font-semibold transition  ${selectedTab == 3 ? "bg-blue-400 text-white hover:bg-blue-500" : ('hover:bg-gray-100')}`} onClick={onClickLivros} >
+                      <File size={16} />
+                      Livros e capítulos
+                    </Tab>
 
-                      <ChartBar size={40} className="text-blue-400" />
-                    </div>
+                    <Tab selected={selectedTab === 1} className={`whitespace-nowrap outline-none cursor-pointer text-sm rounded-full text-gray-400 flex items-center border-[1px] border-white gap-2 px-4 py-2 font-semibold transition  ${selectedTab == 1 ? "bg-blue-400 text-white hover:bg-blue-500" : ('hover:bg-gray-100')}`} onClick={onClickProducaoTecnica}>
+                      <Stamp size={16} />
+                      Produção técnica
+                    </Tab>
 
-                    <div className="flex  relative w-full justify-center">
-                      {(botaoTermosClicado && valoresSelecionadosPopUp != "") || (botaoAreasClicado && props.among != null) ? (
-                        <div className="text-blue-400 flex text-md font-bold">
-                          {props.among} ocorrências
-                          <p className="text-md  text-blue-400 mx-3">|</p>
-                        </div>
-                      ) : (
-                        <head></head>
-                      )}
-
-                      <div className=" text-blue-400 text-md font-bold">{Number(props.articles) + Number(props.book) + Number(props.book_chapters) + Number(props.software) + Number(props.brand) + Number(props.patent)} produções</div>
-
-                    </div>
-
-                    <div className="flex w-full gap-4 items-center justify-between relative">
-                      <div className="w-full grid grid-cols-2 gap-4 mt-6 ">
-                        <div className="w-full border-[1px] h-14 items-center border-gray-300 py-3 flex px-4 text-gray-400 rounded-md text-xs font-medium">{props.articles} artigos</div>
-                        <div className="w-full border-[1px] h-14 items-center border-gray-300 py-3 flex px-4 text-gray-400 rounded-md text-xs font-medium">{props.book} livros</div>
-                        <div className="w-full border-[1px] h-14 items-center border-gray-300 py-3 flex px-4 text-gray-400 rounded-md text-xs font-medium">{props.book_chapters} capítulos de livros</div>
-                        <div className="w-full border-[1px] h-14 items-center border-gray-300 py-3 flex px-4 text-gray-400 rounded-md text-xs font-medium">{props.patent} patentes</div>
-                        <div className="w-full border-[1px] h-14 items-center border-gray-300 py-3 flex px-4 text-gray-400 rounded-md text-xs font-medium">{props.software} softwares</div>
-                        <div className="w-full border-[1px] h-14 items-center border-gray-300 py-3 flex px-4 text-gray-400 rounded-md text-xs font-medium">{props.brand} marcas</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            )
-          })}
-        </div>
-
-        <div className="mt-[160px] pt-12 w-full">
-          <div className="flex-1 h-full ">
-
-
-            <Tabs>
-              <TabList className={`flex gap-2 mb-6`}>
-                <Tab selected={selectedTab === 0} className={`outline-none cursor-pointer text-sm rounded-full text-gray-400 flex items-center border-[1px] border-white gap-2 px-4 py-2 font-semibold transition  ${selectedTab == 0 ? "bg-blue-400 text-white hover:bg-blue-500" : ('hover:bg-gray-100')}`} onClick={onClickPublicacoes} >
-                  <Quotes size={16} />
-                  Artigos
-                </Tab>
-
-                <Tab selected={selectedTab === 3} className={`outline-none cursor-pointer text-sm rounded-full text-gray-400 flex items-center border-[1px] border-white gap-2 px-4 py-2 font-semibold transition  ${selectedTab == 3 ? "bg-blue-400 text-white hover:bg-blue-500" : ('hover:bg-gray-100')}`} onClick={onClickLivros} >
-                  <File size={16} />
-                  Livros e capítulos
-                </Tab>
-
-                <Tab selected={selectedTab === 1} className={`outline-none cursor-pointer text-sm rounded-full text-gray-400 flex items-center border-[1px] border-white gap-2 px-4 py-2 font-semibold transition  ${selectedTab == 1 ? "bg-blue-400 text-white hover:bg-blue-500" : ('hover:bg-gray-100')}`} onClick={onClickProducaoTecnica}>
-                  <Stamp size={16} />
-                  Produção técnica
-                </Tab>
-
-                <Tab selected={selectedTab === 4} className={`whitespace-nowrap outline-none cursor-pointer text-sm rounded-full text-gray-400 flex items-center border-[1px] border-white gap-2 px-4 py-2 font-semibold transition  ${selectedTab == 4 ? "bg-blue-400 text-white hover:bg-blue-500" : ('hover:bg-gray-100')}`} onClick={onClickRelatorioTecnico}>
+                    <Tab selected={selectedTab === 4} className={`whitespace-nowrap outline-none cursor-pointer text-sm rounded-full text-gray-400 flex items-center border-[1px] border-white gap-2 px-4 py-2 font-semibold transition  ${selectedTab == 4 ? "bg-blue-400 text-white hover:bg-blue-500" : ('hover:bg-gray-100')}`} onClick={onClickRelatorioTecnico}>
                       <Files size={16} />
                       Relatório técnico
                     </Tab>
 
-                <Tab selected={selectedTab === 2} className={`outline-none cursor-pointer text-sm text-gray-400 rounded-full flex items-center gap-2 px-4 py-2 font-semibold  transition ${selectedTab == 2 ? "bg-blue-400 text-white hover:bg-blue-500" : ('hover:bg-gray-100')}`} onClick={onClickOrientacoes}>
-                  <Student size={16} />
-                  Orientações
-                </Tab>
-              </TabList>
+                    <Tab selected={selectedTab === 2} className={`whitespace-nowrap outline-none cursor-pointer text-sm text-gray-400 rounded-full flex items-center gap-2 px-4 py-2 font-semibold  transition ${selectedTab == 2 ? "bg-blue-400 text-white hover:bg-blue-500" : ('hover:bg-gray-100')}`} onClick={onClickOrientacoes}>
+                      <Student size={16} />
+                      Orientações
+                    </Tab>
+
+                    <Tab selected={selectedTab === 5} className={`whitespace-nowrap outline-none cursor-pointer text-sm text-gray-400 rounded-full flex items-center gap-2 px-4 py-2 font-semibold  transition ${selectedTab == 5 ? "bg-blue-400 text-white hover:bg-blue-500" : ('hover:bg-gray-100')}`} onClick={onClickEventos}>
+                      <Ticket size={16} />
+                      Participação em eventos
+                    </Tab>
+
+
+                  </TabList>
+
 
               <TabPanel>
-                <div>
+                <div className="flez flex-1">
                   <div className="grid grid-cols-2 gap-6 mb-6">
-                    <div className="w-full border-[1px] border-gray-300 rounded-md p-6 h-full">
+                    <div className="w-full border-[1px] border-gray-300 rounded-xl p-6 h-full">
                       {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoAreasClicado || props.type == "abstract" ||  props.type == "areas" ? (
                         <div className="text-center font-medium text-xl text-gray-500 mb-6">Todas as publicações por ano</div>
                       ) : (
@@ -1321,13 +1474,13 @@ export function ResearcherPage(props: Props) {
                       <HighchartsReact highcharts={Highcharts} options={options} />
                     </div>
 
-                    <div className="w-full mb-6 border-[1px] border-gray-300 rounded-md p-6 h-full">
+                    <div className="w-full mb-6 border-[1px] border-gray-300 rounded-xl p-6 h-full">
                       <div className="text-center font-medium text-xl text-gray-500 mb-6">Palavras-chaves mais recorrentes</div>
                       <HighchartsReact highcharts={Highcharts} options={options2} />
                     </div>
                   </div>
 
-                  <div className="w-full border-[1px] border-gray-300 rounded-md p-6 h-min">
+                  <div className="w-full border-[1px] border-gray-300 rounded-xl p-6 h-min">
                   {valorDigitadoPesquisaDireta == "" && valoresSelecionadosPopUp == "" || botaoPesquisadoresClicado || botaoAreasClicado || props.type == "abstract" ||  props.type == "areas"? (
                     <div className="text-center font-medium text-xl text-gray-500 mb-6">Todas as publicações por qualis</div>
                   ) : (
@@ -1344,7 +1497,7 @@ export function ResearcherPage(props: Props) {
                   </div>
 
                   {valoresSelecionadosPopUp != '' ? ('') : (
-                    <div className=" flex gap-4 p-6 border-[1px] border-gray-300 rounded-md mt-6 items-center w-fit">
+                    <div className=" flex gap-4 p-6 border-[1px] border-gray-300 rounded-xl w-full mt-6 items-center w-fit">
                       <div>
                         <p className="text-gray-400 mb-4  whitespace-nowrap">Selecione os qualis desejados</p>
                         <div className="gap-4 flex flex-wrap ">
@@ -1385,17 +1538,17 @@ export function ResearcherPage(props: Props) {
                     </div>
 
                     <div className="flex gap-4">
-                      <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+                      <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
                         <ArrowUDownLeft size={24} className="text-gray-400 transition-all" />
                       </div>
 
                       <div className="bg-gray-300 h-[36px] w-[1px]"></div>
 
-                      <div onClick={toggleButtonOn} className={`cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-transparent" : "bg-gray-300"}`}>
+                      <div onClick={toggleButtonOn} className={`cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-transparent" : "bg-gray-300"}`}>
                         <SquaresFour size={24} className={'rotate-180 transition-all text-gray-400'} />
                       </div>
 
-                      <div onClick={toggleButtonOff} className={`cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-gray-300" : "bg-transparent"}`}>
+                      <div onClick={toggleButtonOff} className={`cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-gray-300" : "bg-transparent"}`}>
                         <Rows size={24} className={'rotate-180 transition-all text-gray-400'} />
                       </div>
                     </div>
@@ -1425,17 +1578,17 @@ export function ResearcherPage(props: Props) {
 
 
                     <div className="flex gap-4">
-                      <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+                      <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
                         <ArrowUDownLeft size={24} className="text-gray-400 transition-all" />
                       </div>
 
                       <div className="bg-gray-300 h-[36px] w-[1px]"></div>
 
-                      <div onClick={toggleButtonOn} className={`cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-transparent" : "bg-gray-300"}`}>
+                      <div onClick={toggleButtonOn} className={`cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-transparent" : "bg-gray-300"}`}>
                         <SquaresFour size={24} className={'rotate-180 transition-all text-gray-400'} />
                       </div>
 
-                      <div onClick={toggleButtonOff} className={`cursor-pointer rounded-full hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-gray-300" : "bg-transparent"}`}>
+                      <div onClick={toggleButtonOff} className={`cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center ${isOn ? "bg-gray-300" : "bg-transparent"}`}>
                         <Rows size={24} className={'rotate-180 transition-all text-gray-400'} />
                       </div>
                     </div>
@@ -1482,6 +1635,7 @@ export function ResearcherPage(props: Props) {
                             lattes_10_id={props.lattes_10_id}
                             jcr_link={props.jcr_link}
                             jif={props.jif}
+                            researcher_id={props.researcher_id}
                           />
 
                         )
@@ -1494,40 +1648,40 @@ export function ResearcherPage(props: Props) {
                   </div>
 
                   <div className="mb-9 flex gap-4 w-full justify-center">
-                    <button
-                      className="flex items-center gap-4 bg-blue-400 text-white rounded-full px-6 py-2 justify-center hover:bg-blue-500 mb-6 font-medium transition"
-                      onClick={() => {
-                        setCurrentPage(currentPage - 1);
-                        if (document) {
-                          document.getElementById('contentPesquisador')?.scrollIntoView({ behavior: 'smooth' });
-                        }
-                      }}
-                      style={{
-                        backgroundColor: currentPage === 1 ? '#ccc' : '#005399',
-                        opacity: currentPage === 1 ? '0.5' : '1',
-                      }}
-                      disabled={currentPage === 1}
-                    >
-                      <CaretCircleLeft size={16} className="text-white" />Anterior
-                    </button>
+                        <button
+                          className="flex items-center gap-4 bg-blue-400 text-white rounded-xl px-6 py-2 justify-center hover:bg-blue-500 mb-6 font-medium transition"
+                          onClick={() => {
+                            setCurrentPage(currentPage - 1);
+                            if (document) {
+                              document.getElementById('contentPesquisador')?.scrollIntoView({ behavior: 'smooth' });
+                            }
+                          }}
+                          style={{
+                            backgroundColor: currentPage === 1 ? '#ccc' : '#173DFF',
+                            opacity: currentPage === 1 ? '0.5' : '1',
+                          }}
+                          disabled={currentPage === 1}
+                        >
+                          <CaretCircleLeft size={16} className="text-white" />Anterior
+                        </button>
 
-                    <button
-                      className="flex items-center gap-4 bg-blue-400 text-white rounded-full px-6 py-2 justify-center hover:bg-blue-500 mb-6 font-medium transition"
-                      onClick={() => {
-                        setCurrentPage(currentPage + 1);
-                        if (document) {
-                          document.getElementById('contentPesquisador')?.scrollIntoView({ behavior: 'smooth' });
-                        }
-                      }}
-                      style={{
-                        backgroundColor: indexOfLastResult >= publicacoes.length ? '#ccc' : '#005399',
-                        opacity: indexOfLastResult >= publicacoes.length ? '0.5' : '1',
-                      }}
-                      disabled={indexOfLastResult >= publicacoes.length}
-                    >
-                      Próximo<CaretCircleRight size={16} className="text-white" />
-                    </button>
-                  </div>
+                        <button
+                          className="flex items-center gap-4 bg-blue-400 text-white rounded-xl px-6 py-2 justify-center hover:bg-blue-500 mb-6 font-medium  text-md transition"
+                          onClick={() => {
+                            setCurrentPage(currentPage + 1);
+                            if (document) {
+                              document.getElementById('contentPesquisador')?.scrollIntoView({ behavior: 'smooth' });
+                            }
+                          }}
+                          style={{
+                            backgroundColor: indexOfLastResult >= publicacoes.length ? '#ccc' : '#173DFF',
+                            opacity: indexOfLastResult >= publicacoes.length ? '0.5' : '1',
+                          }}
+                          disabled={indexOfLastResult >= publicacoes.length}
+                        >
+                          Próximo<CaretCircleRight size={16} className="text-white" />
+                        </button>
+                      </div>
                 </div>
 
 
@@ -1540,9 +1694,32 @@ export function ResearcherPage(props: Props) {
 
               </TabPanel>
 
+              
+
               <TabPanel>
+
+              <div className=" w-full mb-8 flex gap-4 p-6 border-[1px] border-gray-300 rounded-xl mt-6 items-center ">
+                      
+                      <div className=" w-full">
+                        <p className="text-gray-400 mb-4 whitespace-nowrap">Selecione o ano dos livros e capítulos</p>
+                        <div className="flex h-10 items-center">
+                          <input
+                            type="range"
+                            min={2000}
+                            max={Number(dataAtual.getFullYear())}
+                            defaultValue={2000}
+                            step={1}
+                            value={value}
+                            onChange={(e) => setValue(Number(e.target.value))}
+                            className="w-full "
+                          />
+                          <p className="ml-4 ">{value}</p>
+                        </div>
+                      </div>
+                    </div>
+
               {quantidadeDeLivros !== 0 || quantidadeCapDeLivros !== 0 ? (
-              <div className="w-full mb-6 border-[1px] border-gray-300 rounded-md p-6">
+              <div className="w-full mb-6 border-[1px] border-gray-300 rounded-xl p-6">
                 <div className="text-center font-medium text-xl text-gray-500 mb-6">Quantidade de livros e capítulos</div>
                 <HighchartsReact highcharts={Highcharts} options={optionslivros} />
               </div>
@@ -1550,7 +1727,7 @@ export function ResearcherPage(props: Props) {
               <div></div>
             )}
 
-                <div className="flex gap-4 w-full pb-8">
+                <div className="flex gap-4 w-full pb-8 pt-2">
                   <Book size={24} className="text-gray-400" />
                   <p className="text-gray-400">Livros</p>
                 </div>
@@ -1616,7 +1793,7 @@ export function ResearcherPage(props: Props) {
 
               <TabPanel className={`w-full`}>
               {quantidadeMarcas !== 0 || quantidadePatente !== 0 || quantidadeSoftware !== 0 ? (
-              <div className="w-full mb-6 border-[1px] border-gray-300 rounded-md p-6">
+              <div className="w-full mb-6 border-[1px] border-gray-300 rounded-xl p-6">
                 <div className="text-center font-medium text-xl text-gray-500 mb-6">Quantidade de produções técnicas</div>
                 <HighchartsReact highcharts={Highcharts} options={optionsproduc} />
               </div>
@@ -1723,6 +1900,27 @@ export function ResearcherPage(props: Props) {
               </TabPanel>
 
               <TabPanel>
+                
+              <div className=" w-full mb-8 flex gap-4 p-6 border-[1px] border-gray-300 rounded-xl mt-6 items-center ">
+                      
+                      <div className=" w-full">
+                        <p className="text-gray-400 mb-4 whitespace-nowrap">Selecione o ano dos relatórios técnicos</p>
+                        <div className="flex h-10 items-center">
+                          <input
+                            type="range"
+                            min={2000}
+                            max={Number(dataAtual.getFullYear())}
+                            defaultValue={2000}
+                            step={1}
+                            value={value}
+                            onChange={(e) => setValue(Number(e.target.value))}
+                            className="w-full "
+                          />
+                          <p className="ml-4 ">{value}</p>
+                        </div>
+                      </div>
+                    </div>
+
                 <div className="flex gap-4 w-full pb-8">
                   <File size={24} className="text-gray-400" />
                   <p className="text-gray-400">Todos os relatórios </p>
@@ -1758,14 +1956,14 @@ export function ResearcherPage(props: Props) {
               <TabPanel>
 
               {quantidadeOrientacoes !== 0 ? (
-              <div className="w-full mb-6 border-[1px] border-gray-300 rounded-md p-6">
+              <div className="w-full mb-6 border-[1px] border-gray-300 rounded-xl p-6">
                 <div className="text-center font-medium text-xl text-gray-500 mb-6">Contagem de Orientações por Status</div>
                 <HighchartsReact highcharts={Highcharts} options={optionsOrient} />
               </div>
             ) : (
               <div></div>
             )}
-                <div className="flex gap-4 w-full pb-8">
+                <div className="flex gap-4 w-full pb-8 pt-2">
                   <Books size={24} className="text-gray-400" />
                   <p className="text-gray-400">Orientações</p>
                 </div>
@@ -1780,7 +1978,7 @@ export function ResearcherPage(props: Props) {
                       {orientacoes.length === 0 ? (
                         <p className="text-center">Nenhuma orientação encontrada</p>
                       ) : (
-                        <div className={`mb-9 grid grid-cols-1 md:grid-cols-2 ${isOn ? "lg:grid-cols-1 2xl:grid-cols-1" : "lg:grid-cols-2 2xl:grid-cols-3"} gap-6 m-[0 auto] w-full`}>
+                        <div className={`mb-9 grid grid-cols-1 md:grid-cols-2 ${isOn ? "lg:grid-cols-1 2xl:grid-cols-1" : "lg:grid-cols-2 2xl:grid-cols-2"} gap-6 m-[0 auto] w-full`}>
                           {orientacoes.map(props => (
                             <Orientacoes
                               id={props.id}
@@ -1798,13 +1996,144 @@ export function ResearcherPage(props: Props) {
                   )}
                 </div>
               </TabPanel>
+
+              <TabPanel>
+
+<div className=" w-full flex gap-4 p-6 border-[1px] border-gray-300 rounded-xl mt-6 items-center ">
+      <div className="flex-1 flex flex-col">
+        <p className="text-gray-400 mb-4  whitespace-nowrap">Selecione a natureza desejada</p>
+        <div className="gap-4 flex flex-wrap ">
+          {checkboxNatureza}
+        </div>
+      </div>
+
+      <div className="mx-4 h-[80px] min-h-max w-[1px] bg-gray-300 relative ">
+
+      </div>
+
+      <div className=" w-[300px]">
+        <p className="text-gray-400 mb-4 whitespace-nowrap">Selecione o ano do evento</p>
+        <div className="flex h-10 items-center">
+          <input
+            type="range"
+            min={2000}
+            max={Number(dataAtual.getFullYear())}
+            defaultValue={2000}
+            step={1}
+            value={value}
+            onChange={(e) => setValue(Number(e.target.value))}
+            className="w-full "
+          />
+          <p className="ml-4 ">{value}</p>
+        </div>
+      </div>
+    </div>
+
+  
+    <div className="flex justify-between pb-8 w-full items-center mt-8">
+      <div className="flex gap-4 w-full">
+        <Ticket size={24} className="text-gray-400" />
+        <p className="text-gray-400">Todas as participações em eventos</p>
+      </div>
+
+      <div className="flex gap-4">
+        <div onClick={ArrowUDownLeftClick} className=" cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center">
+          <ArrowUDownLeft size={24} className="text-gray-400 transition-all" />
+        </div>
+
+       
+      </div>
+    </div>
+
+<div>
+    {isLoading ? (
+      <div className="flex items-center justify-center w-full py-10">
+        <Carregando />
+      </div>
+    ) : (
+      <>
+        {eventos.length === 0 ? (
+          <p className="text-center">Nenhuma participação em eventos encontrada</p>
+        ) : (
+          <div className={`mb-9 grid md:grid-cols-2 grid-cols-1  gap-6 m-[0 auto] w-full`}>
+            {eventos.map(props => (
+              <Eventos
+              event_name={props.event_name}
+              id={props.id}
+              nature={props.nature}
+              participation={props.participation}
+              year={props.year}
+
+              />
+            ))}
+          </div>
+        )}
+      </>
+    )}
+  </div>
+</TabPanel>
             </Tabs>
           </div>
 
 
+          <div className="bg-white elementPesquisador z-[999] overflow-y-auto  rounded-lg   min-w-[400px] w-[400px] sticky top-[80px]" style={{ height: `calc(100vh - 80px)` }}>
+          {researcher.map(props => {
+            return (
 
+              <div>
+                
+
+                <div className="flex items-center flex-col  relative border rounded-xl border-gray-300">
+                 
+                  
+
+
+
+
+
+                  
+
+                  <div className="w-full lg:w-[350px] pt-6  h-min mb-6">
+                    <div className="w-full flex h-fit justify-center mb-4">
+
+                      <ChartBar size={40} className="text-blue-400" />
+                    </div>
+
+                    <div className="flex  relative w-full justify-center">
+                      {(botaoTermosClicado && valoresSelecionadosPopUp != "") || (botaoAreasClicado && props.among != null) ? (
+                        <div className="text-blue-400 flex text-md font-bold">
+                          {props.among} ocorrências
+                          <p className="text-md  text-blue-400 mx-3">|</p>
+                        </div>
+                      ) : (
+                        <head></head>
+                      )}
+
+                      <div className=" text-blue-400 text-md font-bold">{Number(props.articles) + Number(props.book) + Number(props.book_chapters) + Number(props.software) + Number(props.brand) + Number(props.patent)} produções</div>
+
+                    </div>
+
+                    <div className="flex w-full gap-4 items-center justify-between relative">
+                      <div className="w-full grid grid-cols-2 gap-4 mt-6 ">
+                        <div className="w-full border-[1px] h-14 items-center border-gray-300 py-3 flex px-4 text-gray-400 rounded-md text-xs font-medium">{props.articles} artigos</div>
+                        <div className="w-full border-[1px] h-14 items-center border-gray-300 py-3 flex px-4 text-gray-400 rounded-md text-xs font-medium">{props.book} livros</div>
+                        <div className="w-full border-[1px] h-14 items-center border-gray-300 py-3 flex px-4 text-gray-400 rounded-md text-xs font-medium">{props.book_chapters} capítulos de livros</div>
+                        <div className="w-full border-[1px] h-14 items-center border-gray-300 py-3 flex px-4 text-gray-400 rounded-md text-xs font-medium">{props.patent} patentes</div>
+                        <div className="w-full border-[1px] h-14 items-center border-gray-300 py-3 flex px-4 text-gray-400 rounded-md text-xs font-medium">{props.software} softwares</div>
+                        <div className="w-full border-[1px] h-14 items-center border-gray-300 py-3 flex px-4 text-gray-400 rounded-md text-xs font-medium">{props.brand} marcas</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            )
+          })}
+        </div>
 
         </div>
+
+        
       </div>
 
     </div>
