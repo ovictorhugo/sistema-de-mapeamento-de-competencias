@@ -49,6 +49,34 @@ type ResourceType =
    content: string
   }
 
+  interface Post {
+    frequency: string
+    term: string
+    checked: boolean
+    type: string
+  }
+  
+  interface Pesquisadores {
+    id: string
+    name: string
+  }
+  
+  interface Area {
+    id: string
+    area_expertise: string,
+    area_specialty: string
+  }
+  
+  interface Patente {
+    frequency: string
+    term: string
+  }
+  
+  interface Bigrama {
+    freq: number
+    word: string
+  }
+
 
 
 export function ChatContent() {
@@ -57,6 +85,7 @@ export function ChatContent() {
   const [result, setResult] = useState<{ term: string; type: ResourceType } | null>(null);
   const { user, setUser } = useContext(UserContext);
   const [isTab, setIsTab] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [messages, setMessages] = useState<Maria[]>([]);
   const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext);
@@ -69,6 +98,8 @@ export function ChatContent() {
     const { urlGeral, setUrlGeral } = useContext(UserContext);
 
     let now = new Date
+
+    setBotaoTermosClicado(false)
 
     let hora = now.getHours() + "h" + now.getMinutes()+ "min"
 
@@ -116,96 +147,18 @@ export function ChatContent() {
 
   //////////////////////////////////////
 
-  const processInput = () => {
-    const doc = nlp(inputValue)
-
-    console.log(doc)
-
-     // Restante do código permanece inalterado
-     let type= '';
-     let term: string = '';
-
-    if(doc.has('artigos') || doc.has('artigo') || doc.has('article') || doc.has('articles')) {
-      setBotaoPatentesClicado(false)
-      setBotaoPesquisadoresClicado(false)
-      setBotaoTermosClicado(true)
-      setBotaoResumoClicado(false)
-      setBotaoAreasClicado(false)
-      setBotaoLivrosCapitulosClicado(false)
-      setBotaoEventosClicado(false)
-      type = 'Termos em artigos';
-    
-    }
-
-    if(doc.has('resumo') || doc.has('resumos') || doc.has('abstract') || doc.has('abstracts')) {
-      setBotaoPatentesClicado(false)
-      setBotaoPesquisadoresClicado(false)
-      setBotaoTermosClicado(false)
-      setBotaoResumoClicado(true)
-      setBotaoAreasClicado(false)
-      setBotaoLivrosCapitulosClicado(false)
-      setBotaoEventosClicado(false)
-      type = 'Resumo';
-    }
-
-    if(doc.has('patente') || doc.has('patentes') || doc.has('patent') || doc.has('patents')) {
-      setBotaoPatentesClicado(true)
-      setBotaoPesquisadoresClicado(false)
-      setBotaoTermosClicado(false)
-      setBotaoResumoClicado(false)
-      setBotaoAreasClicado(false)
-      setBotaoLivrosCapitulosClicado(false)
-      setBotaoEventosClicado(false)
-      type = 'Patente';
-    }
-
-    if(doc.has('evento') || doc.has('eventos') || doc.has('congressos') || doc.has('congresso') || doc.has('oficinas') || doc.has('oficina') || doc.has('seminários') || doc.has('seminário')) {
-      setBotaoPatentesClicado(false)
-      setBotaoPesquisadoresClicado(false)
-      setBotaoTermosClicado(false)
-      setBotaoResumoClicado(false)
-      setBotaoAreasClicado(false)
-      setBotaoLivrosCapitulosClicado(false)
-      setBotaoEventosClicado(true)
-      type = 'Participação em eventos';
-    }
-    let test = doc.verbs().toPastTense()
- 
-
-    const palavrasInput = inputValue.toLowerCase().split(/\s+/);
-
-    const substantivosInput = palavrasInput.filter((palavra) => {
-      const termo = nlp(palavra);
-      return termo.nouns().length > 0;
-    });
-
-    const palavrasComuns = words.filter((word: any) => palavrasInput.includes(word.term) && word.type == `ARTICLE`);
-   
-    console.log(words);
-      console.log('Palavras comuns:', palavrasComuns);
-     
-
-    // Use compromise para analisar as palavras e extrair informações relevantes
-    const terms = doc.nouns().out('array');
-    const verbs = doc.verbs().out('array');
-    const adjectives = doc.adjectives().out('array');
-    const prepositions = doc.prepositions().out('array');
-    
-
-   
-  };
-
 
 
 
   const handleMaria = () => {
+    setIsLoading(false)
     try {
       const data =  {
             model: null,
             messages: [
               {
                 role: "system",
-                content: "Você é um chatbot chamado Maria, e você faz listagens e consultas sobre temas academicos. Fale em portugues e de maneia amigável",
+                content: "Você é um chatbot chamado Maria, e você faz listagens e consultas sobre temas academicos. Fale em português brasil",
             },
               {
                   role: "user",
@@ -216,7 +169,7 @@ export function ChatContent() {
       
 
       console.log(data);
-      setInputValue('')
+     
       const urlProgram = urlGeral + 'Maria';
 
       const fetchData = async () => {
@@ -235,16 +188,18 @@ export function ChatContent() {
 
           if (response.ok) {
             console.log('Dados enviados com sucesso!');
+            setIsLoading(true)
             
           } else {
             console.error('Erro ao enviar dados para o servidor.');
           }
 
+    
           const dataGet = await response.json();
-        if (dataGet && dataGet.messages) {
-          // Adicione as novas mensagens às existentes
-          setMessages((prevMessages) => [...prevMessages, ...dataGet.messages]);
-        }
+          if (dataGet) {
+            setMessages(dataGet);
+         
+          }
         } catch (err) {
           console.log(err);
         }
@@ -259,117 +214,882 @@ export function ChatContent() {
   console.log(`messages`, messages)
 
    //estado btns 
-   const [selectedTab, setSelectedTab] = useState(0);
+   const { idGraduateProgram, setIdGraduateProgram } = useContext(UserContext)
 
-   //Se o botão Pesquisadores for clicado
-   const handleClickPesquisadores = () => {
-     setBotaoPesquisadoresClicado(true);
-     setBotaoPatentesClicado(false)
-     setBotaoTermosClicado(false);
-     setBotaoAreasClicado(false);
-     setBotaoResumoClicado(false)
-     setBotaoEventosClicado(false)
-     setBotaoLivrosCapitulosClicado(false)
-     //Apagar checkbox ao mudar de aba - termos
+   if(idGraduateProgram == '0') {
+     setIdGraduateProgram('')
+   }
 
-     setSelectedTab(3);
-   };
 
-   //patentes
-   const handleClickPatentes = () => {
-     setBotaoPesquisadoresClicado(false);
-     setBotaoPatentesClicado(true)
-     setBotaoTermosClicado(false);
-     setBotaoAreasClicado(false);
-     setBotaoResumoClicado(false)
-     setBotaoEventosClicado(false)
-     setBotaoLivrosCapitulosClicado(false)
-     //Apagar checkbox ao mudar de aba - termos
+   const [resultados, setResultados] = useState<Post[]>([]);
+   const [resultadosResumo, setResultadosResumo] = useState<Post[]>([]);
+   const [resultadosLivros, setResultadosLivros] = useState<Post[]>([]);
+   const [resultadosEventos, setResultadosEventos] = useState<Post[]>([]);
+   const [resultadosPesquisadores, setResultadosPesquisadores] = useState<Pesquisadores[]>([]);
+   const [resultadosArea, setResultadosArea] = useState<Area[]>([]);
+   const [resultadosPatentes, setResultadosPatentes] = useState<Patente[]>([]);
+   const [resultadosBigrama, setResultadosBigrama] = useState<Bigrama[]>([]);
 
-     setSelectedTab(4);
-   };
+  // pesquisa normal
+  function enviarRequisicao() {
+    const pesquisaInputFormatado = inputValue.trim().replace(/\s+/g, ";");
+  const url = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=ARTICLE`;
+  const urlResumo = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=ABSTRACT&graduate_program_id=${idGraduateProgram}`;
+  const urlPesquisador = urlGeral + `/reasercherInitials?initials=${pesquisaInputFormatado}&graduate_program_id=${idGraduateProgram}`
+  const urlArea = urlGeral + `/area_specialitInitials?initials=${inputValue.trim()}&area=&graduate_program_id=${idGraduateProgram}`;
+  const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
+  const urlBigrama = urlGeral +  `secondWord?term=${pesquisaInputFormatado}`
+  const urlPatente = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=PATENT`
+  const urlLivro = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=BOOK`
+  const urlEvento = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=SPEAKER`
 
-   //Se o botão Termos for clicado
-   const handleClickTermos = () => {
-     setBotaoPesquisadoresClicado(false);
-     setBotaoPatentesClicado(false)
-     setBotaoTermosClicado(true);
-     setBotaoAreasClicado(false);
-     setBotaoResumoClicado(false)
-     setBotaoEventosClicado(false)
-     setBotaoLivrosCapitulosClicado(false)
-
-     setSelectedTab(0);
-   };
-
-   const handleClickResumo = () => {
-     setBotaoPesquisadoresClicado(false);
-     setBotaoResumoClicado(true);
-     setBotaoPatentesClicado(false)
-     setBotaoAreasClicado(false);
-     setBotaoTermosClicado(false)
-     setBotaoEventosClicado(false)
-     setBotaoLivrosCapitulosClicado(false)
-     //Apagar checkbox ao mudar de aba - pesqisadores
-
-     setSelectedTab(1);
-
-   };
-
-   //Se o botão Areas for clicado
-   const handleClickAreas = () => {
-     setBotaoAreasClicado(true);
-     setBotaoPesquisadoresClicado(false);
-     setBotaoPatentesClicado(false)
-     setBotaoTermosClicado(false);
-     setBotaoResumoClicado(false)
-     setBotaoEventosClicado(false)
-     setBotaoLivrosCapitulosClicado(false)
-     //Apagar checkbox ao mudar de aba - pesqisadores
-
-     setSelectedTab(2);
-   };
-
-   //Se o botão Livros for clicado
-   const handleClickLivrosCapitulos = () => {
-     setBotaoAreasClicado(false);
-     setBotaoPesquisadoresClicado(false);
-     setBotaoPatentesClicado(false)
-     setBotaoTermosClicado(false);
-     setBotaoResumoClicado(false)
-     setBotaoEventosClicado(false)
-     setBotaoLivrosCapitulosClicado(true)
-     //Apagar checkbox ao mudar de aba - pesqisadores
-
-     setSelectedTab(5);
-   };
-
-   const handleClickEventos = () => {
-     setBotaoAreasClicado(false);
-     setBotaoPesquisadoresClicado(false);
-     setBotaoPatentesClicado(false)
-     setBotaoTermosClicado(false);
-     setBotaoResumoClicado(false)
-     setBotaoEventosClicado(true)
-     setBotaoLivrosCapitulosClicado(false)
-     //Apagar checkbox ao mudar de aba - pesqisadores
-
-     setSelectedTab(6);
-   };
-
-   const handleClickClose = () => {
-    setBotaoAreasClicado(false);
-    setBotaoPesquisadoresClicado(false);
-    setBotaoPatentesClicado(false)
-    setBotaoTermosClicado(true);
-    setBotaoResumoClicado(false)
-    setBotaoEventosClicado(false)
-    setBotaoLivrosCapitulosClicado(false)
-    //Apagar checkbox ao mudar de aba - pesqisadores
-    setIsTab(!isTab)
-    setSelectedTab(0);
-  };
  
+    fetch(url, {
+      mode: 'cors',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Max-Age': '3600',
+        'Content-Type': 'text/plain'
+
+      }
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        const newData = data.map((post: Post) => ({
+          ...post,
+          term: post.term.replace(/\s+/g, ";")
+        }));
+        setResultados([]);
+        setResultados(newData);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  
+       //Resumo
+
+    fetch(urlResumo, {
+      mode: 'cors',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Max-Age': '3600',
+        'Content-Type': 'text/plain'
+
+      }
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        const newData = data.map((post: Post) => ({
+          ...post,
+          term: post.term.replace(/\s+/g, ";")
+        }));
+        setResultadosResumo([]);
+        setResultadosResumo(newData);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+
+          //Evento
+
+    fetch(urlEvento, {
+      mode: 'cors',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Max-Age': '3600',
+        'Content-Type': 'text/plain'
+
+      }
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        const newData = data.map((post: Post) => ({
+          ...post,
+          term: post.term.replace(/\s+/g, ";")
+        }));
+        setResultadosEventos([]);
+        setResultadosEventos(newData);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+
+  //Livros e cap
+
+
+
+    fetch(urlLivro, {
+      mode: 'cors',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Max-Age': '3600',
+        'Content-Type': 'text/plain'
+
+      }
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        const newData = data.map((post: Post) => ({
+          ...post,
+          term: post.term.replace(/\s+/g, ";")
+        }));
+        setResultadosLivros([]);
+        setResultadosLivros(newData);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+
+  
+
+  // Pesquisador
+
+
+    fetch(urlPesquisador, {
+      mode: 'cors',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Max-Age': '3600',
+        'Content-Type': 'text/plain'
+
+
+      }
+    })
+
+      .then((response) => response.json())
+      .then((data) => {
+        ;
+        const newDataPesquisadores = data.map((post: Pesquisadores) => ({
+          ...post,
+          name: post.name.replace(/\s+/g, "%20")
+        }));
+        setResultadosPesquisadores([]);
+        setResultadosPesquisadores(newDataPesquisadores);
+
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  
+
+
+  //Area
+
+    fetch(urlArea, {
+      mode: 'cors',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Max-Age': '3600',
+        'Content-Type': 'text/plain'
+
+      }
+    })
+
+      .then((response) => response.json())
+      .then((data) => {
+        ;
+        const newDataArea = data.map((post: Area) => ({
+          ...post,
+          name: post.area_specialty.replace(/\s+/g, "%20")
+        }));
+        setResultadosArea([]);
+        setResultadosArea(newDataArea);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+
+
+      //patente
+      fetch(urlPatente, {
+        mode: 'cors',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET',
+          'Access-Control-Allow-Headers': 'Content-Type',
+          'Access-Control-Max-Age': '3600',
+          'Content-Type': 'text/plain'
+
+        }
+      })
+
+        .then((response) => response.json())
+        .then((data) => {
+          ;
+          const newDataArea = data.map((post: Patente) => ({
+            ...post,
+            name: post.term.replace(/\s+/g, "%20")
+          }));
+          setResultadosPatentes([]);
+          setResultadosPatentes(newDataArea);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+        console.log('patente', urlPatente)
+  }
+
+ 
+
+  
+
+
+
+// CHECKBOX ENVIAAAR
+
+const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  setChecked(event.target.checked);
+  const name = event.target.name;
+  const checked = event.target.checked;
+  setResultados(resultados.map(checkbox => {
+    if (checkbox.term === name) {
+      return { ...checkbox, checked };
+    }
+    return checkbox;
+  }));
+};
+
+//AHHHHHHHHHHHHH
+
+const [checked, setChecked] = useState(false);
+
+//estado btns 
+const [selectedTab, setSelectedTab] = useState(0);
+
+//Se o botão Pesquisadores for clicado
+const handleClickPesquisadores = () => {
+  setBotaoPesquisadoresClicado(true);
+  setBotaoPatentesClicado(false)
+  setBotaoTermosClicado(false);
+  setBotaoAreasClicado(false);
+  setBotaoResumoClicado(false)
+  setBotaoEventosClicado(false)
+  setBotaoLivrosCapitulosClicado(false)
+  //Apagar checkbox ao mudar de aba - termos
+
+  setResultadosPesquisadores([])
+  setResultados([])
+  setResultadosPesquisadores([])
+  setResultadosResumo([])
+  setResultadosPatentes([])
+  setResultadosEventos([])
+  setResultadosLivros([])
+
+  setSelectedTab(3);
+};
+
+//patentes
+const handleClickPatentes = () => {
+  setBotaoPesquisadoresClicado(false);
+  setBotaoPatentesClicado(true)
+  setBotaoTermosClicado(false);
+  setBotaoAreasClicado(false);
+  setBotaoResumoClicado(false)
+  setBotaoEventosClicado(false)
+  setBotaoLivrosCapitulosClicado(false)
+
+  setResultadosPesquisadores([])
+  setResultados([])
+  setResultadosPesquisadores([])
+  setResultadosResumo([])
+  setResultadosPatentes([])
+  setResultadosEventos([])
+  setResultadosLivros([])
+  setSelectedTab(4);
+};
+
+//Se o botão Termos for clicado
+const handleClickTermos = () => {
+  setBotaoPesquisadoresClicado(false);
+  setBotaoPatentesClicado(false)
+  setBotaoTermosClicado(true);
+  setBotaoAreasClicado(false);
+  setBotaoResumoClicado(false)
+  setBotaoEventosClicado(false)
+  setBotaoLivrosCapitulosClicado(false)
+
+  setResultadosPesquisadores([])
+  setResultados([])
+  setResultadosPesquisadores([])
+  setResultadosResumo([])
+  setResultadosPatentes([])
+  setResultadosEventos([])
+  setResultadosLivros([])
+  setSelectedTab(0);
+};
+
+const handleClickResumo = () => {
+  setBotaoPesquisadoresClicado(false);
+  setBotaoResumoClicado(true);
+  setBotaoPatentesClicado(false)
+  setBotaoAreasClicado(false);
+  setBotaoTermosClicado(false)
+  setBotaoEventosClicado(false)
+  setBotaoLivrosCapitulosClicado(false)
+  setResultadosPesquisadores([])
+  setResultados([])
+  setResultadosPesquisadores([])
+  setResultadosResumo([])
+  setResultadosPatentes([])
+  setResultadosEventos([])
+  setResultadosLivros([])
+
+  setSelectedTab(1);
+
+};
+
+//Se o botão Areas for clicado
+const handleClickAreas = () => {
+  setBotaoAreasClicado(true);
+  setBotaoPesquisadoresClicado(false);
+  setBotaoPatentesClicado(false)
+  setBotaoTermosClicado(false);
+  setBotaoResumoClicado(false)
+  setBotaoEventosClicado(false)
+  setBotaoLivrosCapitulosClicado(false)
+  //Apagar checkbox ao mudar de aba - pesqisadores
+
+  setResultadosPesquisadores([])
+  setResultados([])
+  setResultadosPesquisadores([])
+  setResultadosResumo([])
+  setResultadosPatentes([])
+  setResultadosEventos([])
+  setResultadosLivros([])
+  setSelectedTab(2);
+};
+
+//Se o botão Livros for clicado
+const handleClickLivrosCapitulos = () => {
+  setBotaoAreasClicado(false);
+  setBotaoPesquisadoresClicado(false);
+  setBotaoPatentesClicado(false)
+  setBotaoTermosClicado(false);
+  setBotaoResumoClicado(false)
+  setBotaoEventosClicado(false)
+  setBotaoLivrosCapitulosClicado(true)
+  //Apagar checkbox ao mudar de aba - pesqisadores
+
+  setResultadosPesquisadores([])
+  setResultados([])
+  setResultadosPesquisadores([])
+  setResultadosResumo([])
+  setResultadosPatentes([])
+  setResultadosEventos([])
+  setResultadosLivros([])
+
+  setSelectedTab(5);
+};
+
+const handleClickEventos = () => {
+  setBotaoAreasClicado(false);
+  setBotaoPesquisadoresClicado(false);
+  setBotaoPatentesClicado(false)
+  setBotaoTermosClicado(false);
+  setBotaoResumoClicado(false)
+  setBotaoEventosClicado(true)
+  setBotaoLivrosCapitulosClicado(false)
+  //Apagar checkbox ao mudar de aba - pesqisadores
+
+  setResultadosPesquisadores([])
+  setResultados([])
+  setResultadosArea([])
+  setResultadosPatentes([])
+  setResultadosResumo([])
+  setResultadosLivros([])
+
+  setSelectedTab(6);
+};
+
+const handleClickClose = () => {
+  setBotaoAreasClicado(false);
+  setBotaoPesquisadoresClicado(false);
+  setBotaoPatentesClicado(false)
+  setBotaoTermosClicado(false);
+  setBotaoResumoClicado(false)
+  setBotaoEventosClicado(false)
+  setBotaoLivrosCapitulosClicado(false)
+  //Apagar checkbox ao mudar de aba - pesqisadores
+
+  setResultadosPesquisadores([])
+  setResultados([])
+  setResultadosArea([])
+  setResultadosPatentes([])
+  setResultadosResumo([])
+  setResultadosLivros([])
+
+  setSelectedTab(0);
+  setIsTab(!isTab)
+};
+
+
+const { idVersao, setIdVersao } = useContext(UserContext);
+
+const urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=${idVersao}`;
+
+useEffect(() => {
+const fetchData = async () => {
+  try {
+    const response = await fetch(urlGraduateProgram, {
+      mode: "cors",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Max-Age": "3600",
+        "Content-Type": "text/plain",
+      },
+    });
+    const data = await response.json();
+    if (data) {
+      
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+fetchData();
+}, [urlGraduateProgram]);
+
+
+//CURRET PAGE
+
+
+
+
+//checkbo
+
+//checked do input search
+
+// Lógica para adicionar valor do checbok no input Search e atualizar pesquisa
+
+// Pesquisador
+const [pesquisadoresSelecionados, setPesquisadoresSelecionados] = useState<string[]>([]);
+
+const handleCheckboxChangeInputPesquisadores = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const { name } = event.target;
+  const isChecked = event.target.checked;
+
+  setPesquisadoresSelecionados((prevSelecionados) => {
+    if (isChecked) {
+      return [...prevSelecionados, name];
+    } else {
+      return prevSelecionados.filter((item) => item !== name);
+    }
+  });
+};
+
+const [currentPesquisadores, setCurrentPesquisadores] = useState(1);
+const resultsPerPage = 6;
+
+const indexOfLastResultPesquisadores = currentPesquisadores * resultsPerPage;
+const indexOfFirstResultPesquisadores = indexOfLastResultPesquisadores - resultsPerPage;
+const totalPagesPesquisadores = Math.ceil(resultadosPesquisadores.length / resultsPerPage);
+
+
+
+
+const currentResultsPesquisadores = resultadosPesquisadores.slice(indexOfFirstResultPesquisadores, indexOfLastResultPesquisadores);
+
+
+const checkboxPesquisadores = currentResultsPesquisadores.map((resultado) => (
+  <li
+    key={resultado.name}
+    className="checkboxLabel group list-none inline-flex mr-4 mb-4 group overflow-hidden"
+    onMouseDown={(e) => e.preventDefault()}
+  >
+    <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-blue-100 border-blue-400 hover:text-blue-400 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
+      <span className="text-center block">{resultado.name.replace(/%20/g, ' ')}</span>
+      <input
+        type="checkbox"
+        name={resultado.name}
+        className="absolute hidden group"
+        checked={pesquisadoresSelecionados.includes(resultado.name)}
+        id={resultado.name}
+        onChange={handleCheckboxChangeInputPesquisadores}
+        onClick={handleClickPesquisadores}
+      />
+    </label>
+  </li>
+));
+
+const valoresPesquisadoresSelecionados = pesquisadoresSelecionados.join(';');
+
+const valoresPesquisadoresSelecionadosJSX = pesquisadoresSelecionados.map((valor, index) => (
+  <li key={index} className='whitespace-nowrap gap-2 bg-[#FEE9E9] border-red-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold'>{valor.replace(/%20/g, ' ')}
+    <button onClick={() => handleRemoverSelecionadoPesquisadores(index)}><X size={16} className="text-gray-400 hover:text-red-400" /></button>
+  </li>
+));
+
+const handleRemoverSelecionadoPesquisadores = (index: number) => {
+  setPesquisadoresSelecionados((prevSelecionados) =>
+    prevSelecionados.filter((_, i) => i !== index)
+  );
+};
+
+// Livro
+const [livrosSelecionados, setLivrosSelecionados] = useState<string[]>([]);
+
+const handleCheckboxChangeInputLivros = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const { name } = event.target;
+  const isChecked = event.target.checked;
+
+  setLivrosSelecionados((prevSelecionados) => {
+    if (isChecked) {
+      return [...prevSelecionados, name];
+    } else {
+      return prevSelecionados.filter((item) => item !== name);
+    }
+  });
+};
+
+
+const checkboxLivros = resultadosLivros.map((resultado) => (
+  <li
+    key={resultado.term}
+    className="checkboxLabel group list-none inline-flex mr-4 mb-4 group overflow-hidden"
+    onMouseDown={(e) => e.preventDefault()}
+  >
+    <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-blue-100 border-blue-400 hover:text-blue-400 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
+      <span className="text-center block">{resultado.term.replace(/%20/g, ' ')}</span>
+      <input
+        type="checkbox"
+        name={resultado.term}
+        className="absolute hidden group"
+        checked={livrosSelecionados.includes(resultado.term)}
+        id={resultado.term}
+        onChange={handleCheckboxChangeInputLivros}
+        onClick={handleClickLivrosCapitulos}
+      />
+    </label>
+  </li>
+));
+
+const valoresLivrosSelecionados = livrosSelecionados.join(';');
+
+const valoresLivrosSelecionadosJSX = livrosSelecionados.map((valor, index) => (
+  <li key={index} className='whitespace-nowrap gap-2 bg-[#FFF5FB] border-pink-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold'>{valor.replace(/%20/g, ' ')}
+    <button onClick={() => handleRemoverSelecionadoLivros(index)}><X size={16} className="text-gray-400 hover:text-pink-400" /></button>
+  </li>
+));
+
+const handleRemoverSelecionadoLivros = (index: number) => {
+  setLivrosSelecionados((prevSelecionados) =>
+    prevSelecionados.filter((_, i) => i !== index)
+  );
+};
+
+// Area
+const [areasSelecionados, setAreasSelecionados] = useState<string[]>([]);
+
+const handleCheckboxChangeInputArea = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const { name } = event.target;
+  const isChecked = event.target.checked;
+
+  setAreasSelecionados((prevSelecionados) => {
+    if (isChecked) {
+      return [...prevSelecionados, name];
+    } else {
+      return prevSelecionados.filter((item) => item !== name);
+    }
+  });
+};
+
+const [currentArea, setCurrentArea] = useState(1);
+
+
+const indexOfLastResultArea = currentArea * resultsPerPage;
+const indexOfFirstResultArea = indexOfLastResultArea - resultsPerPage;
+const totalPages = Math.ceil(resultadosArea.length / resultsPerPage);
+
+
+
+
+const currentResultsArea = resultadosArea.slice(indexOfFirstResultArea, indexOfLastResultArea);
+
+
+
+const checkboxAreas = currentResultsArea.map((resultado) => (
+  <li
+    key={resultado.id}
+    className="checkboxLabel group list-none inline-flex mr-4 mb-4 group overflow-hidden"
+    onMouseDown={(e) => e.preventDefault()}
+  >
+    <label className="group-checked:bg-blue-400 border-[1px] cursor-pointer bg-blue-100 border-blue-400 hover:text-blue-400 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
+      <span className="text-center block">{resultado.area_specialty.replace(/%20/g, ' ')} | {resultado.area_expertise.replace(/%20/g, ' ')}</span>
+      <input
+        type="checkbox"
+        name={`${resultado.area_specialty} | ${resultado.area_expertise}`}
+        className="absolute hidden group"
+        checked={areasSelecionados.includes(`${resultado.area_specialty} | ${resultado.area_expertise}`)}
+        id={resultado.area_specialty}
+        onChange={handleCheckboxChangeInputArea}
+        onClick={handleClickAreas}
+      />
+    </label>
+  </li>
+));
+
+
+const valoresAreasSelecionados = areasSelecionados.join(';');
+
+
+const valoresAreasSelecionadosJSX = areasSelecionados.map((valor, index) => (
+  <li
+    key={index}
+    className="whitespace-nowrap gap-2 bg-[#F4FAEC] border-green-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold"
+  >
+    {valor}
+    <button onClick={() => handleRemoverSelecionadoAreas(index)}>
+      <X size={16} className="text-gray-400 hover:text-green-400" />
+    </button>
+  </li>
+));
+
+
+const handleRemoverSelecionadoAreas = (index: number) => {
+  setAreasSelecionados((prevSelecionados) =>
+    prevSelecionados.filter((_, i) => i !== index)
+  );
+};
+
+
+// Termos 
+const [itensSelecionados, setItensSelecionados] = useState<string[]>([]);
+
+const handleCheckboxChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const { name } = event.target;
+  const isChecked = event.target.checked;
+
+  setItensSelecionados((prevSelecionados) => {
+    if (isChecked) {
+      return [...prevSelecionados, name];
+    } else {
+      return prevSelecionados.filter((item) => item !== name);
+    }
+  });
+};
+
+const checkboxItems = resultados.slice(0, 6).map((resultado) => (
+  <li
+    key={resultado.term}
+    className="checkboxLabel group list-none inline-flex mr-4 mb-4 group overflow-hidden"
+    onMouseDown={(e) => e.preventDefault()}
+  >
+    <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-blue-100 border-blue-400 hover:text-blue-400 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
+      <span className="text-center block">{resultado.term.replace(/;/g, ' ')}</span>
+      <input
+        type="checkbox"
+        name={resultado.term}
+        className="absolute hidden group"
+        checked={itensSelecionados.includes(resultado.term)}
+        id={resultado.term}
+        onChange={handleCheckboxChangeInput}
+        onClick={handleClickTermos}
+      />
+    </label>
+  </li>
+));
+
+let valoresSelecionados = itensSelecionados.join(';');
+
+const valoresSelecionadosJSX = itensSelecionados.map((valor, index) => (
+  <li key={index} className='whitespace-nowrap gap-2 bg-blue-100 border-blue-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold'>{valor.replace(/;/g, ' ')}
+    <button onClick={() => handleRemoverSelecionado(index)}><X size={16} className="text-gray-400 hover:text-blue-400" /></button>
+  </li>
+));
+
+
+
+const handleRemoverSelecionado = (index: number) => {
+  setItensSelecionados((prevSelecionados) =>
+    prevSelecionados.filter((_, i) => i !== index)
+  );
+};
+
+
+
+// Resumo
+const [itensSelecionadosResumo, setItensSelecionadosResumo] = useState<string[]>([]);
+
+const handleCheckboxChangeInputResumo = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const { name } = event.target;
+  const isChecked = event.target.checked;
+
+  setItensSelecionadosResumo((prevSelecionados) => {
+    if (isChecked) {
+      return [...prevSelecionados, name];
+    } else {
+      return prevSelecionados.filter((item) => item !== name);
+    }
+  });
+};
+
+const checkboxItemsResumo = resultadosResumo.slice(0, 6).map((resultado) => (
+  <li
+    key={resultado.term}
+    className="checkboxLabel group list-none inline-flex mr-4 mb-4 group overflow-hidden"
+    onMouseDown={(e) => e.preventDefault()}
+  >
+    <label className="group-checked:bg-blue-400 cursor-pointer border-[1px]  bg-blue-100 border-blue-400 hover:text-blue-400 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
+      <span className="text-center block">{resultado.term.replace(/;/g, ' ')}</span>
+      <input
+        type="checkbox"
+        name={resultado.term}
+        className="absolute hidden group"
+        checked={itensSelecionadosResumo.includes(resultado.term)}
+        id={resultado.term}
+        onChange={handleCheckboxChangeInputResumo}
+        onClick={handleClickResumo}
+      />
+    </label>
+  </li>
+));
+const valoresResumoSelecionados = itensSelecionadosResumo.join(';');
+
+const valoresSelecionadosResumoJSX = itensSelecionadosResumo.map((valor, index) => (
+  <li key={index} className='whitespace-nowrap gap-2 bg-[#FFFAE6] border-yellow-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold'>{valor.replace(/;/g, ' ')}
+    <button onClick={() => handleRemoverSelecionadoResumo(index)}><X size={16} className="text-gray-400 hover:text-yellow-400" /></button>
+  </li>
+));
+
+const handleRemoverSelecionadoResumo = (index: number) => {
+  setItensSelecionadosResumo((prevSelecionados) =>
+    prevSelecionados.filter((_, i) => i !== index)
+  );
+};
+
+// Resumo
+const [itensSelecionadosEvento, setItensSelecionadosEvento] = useState<string[]>([]);
+
+const handleCheckboxChangeInputEvento = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const { name } = event.target;
+  const isChecked = event.target.checked;
+
+  setItensSelecionadosEvento((prevSelecionados) => {
+    if (isChecked) {
+      return [...prevSelecionados, name];
+    } else {
+      return prevSelecionados.filter((item) => item !== name);
+    }
+  });
+};
+
+const checkboxItemsEvento = resultadosEventos.slice(0, 6).map((resultado) => (
+  <li
+    key={resultado.term}
+    className="checkboxLabel group list-none inline-flex mr-4 mb-4 group overflow-hidden"
+    onMouseDown={(e) => e.preventDefault()}
+  >
+    <label className="group-checked:bg-blue-400 cursor-pointer border-[1px] bg-blue-100 border-blue-400 hover:text-blue-400 flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold hover:border-blue-400 hover:bg-blue-100">
+      <span className="text-center block">{resultado.term.replace(/;/g, ' ')}</span>
+      <input
+        type="checkbox"
+        name={resultado.term}
+        className="absolute hidden group"
+        checked={itensSelecionadosEvento.includes(resultado.term)}
+        id={resultado.term}
+        onChange={handleCheckboxChangeInputEvento}
+        onClick={handleClickEventos}
+      />
+    </label>
+  </li>
+));
+const valoresEventoSelecionados = itensSelecionadosEvento.join(';');
+
+const valoresSelecionadosEventoJSX = itensSelecionadosEvento.map((valor, index) => (
+  <li key={index} className='whitespace-nowrap gap-2 bg-[#FFF2E6] border-orange-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold'>{valor.replace(/;/g, ' ')}
+    <button onClick={() => handleRemoverSelecionadoEvento(index)}><X size={16} className="text-gray-400 hover:text-orange-400" /></button>
+  </li>
+));
+
+const handleRemoverSelecionadoEvento = (index: number) => {
+  setItensSelecionadosEvento((prevSelecionados) =>
+    prevSelecionados.filter((_, i) => i !== index)
+  );
+};
+
+// Patente
+const [itensSelecionadosPatente, setItensSelecionadosPatente] = useState<string[]>([]);
+
+const handleCheckboxChangeInputPatente = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const { name } = event.target;
+  const isChecked = event.target.checked;
+
+  setItensSelecionadosPatente((prevSelecionados) => {
+    if (isChecked) {
+      return [...prevSelecionados, name];
+    } else {
+      return prevSelecionados.filter((item) => item !== name);
+    }
+  });
+};
+
+const checkboxItemsPatente = resultadosPatentes.slice(0, 6).map((resultado) => (
+  <li
+    key={resultado.term}
+    className="checkboxLabel group list-none inline-flex mr-4 mb-4 group overflow-hidden"
+    onMouseDown={(e) => e.preventDefault()}
+  >
+    <label className="group-checked:bg-blue-400 cursor-pointer border-[1px]   flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold bg-blue-100 border-blue-400 hover:text-blue-400 hover:border-blue-400 hover:bg-blue-100">
+      <span className="text-center block">{resultado.term.replace(/;/g, ' ')}</span>
+      <input
+        type="checkbox"
+        name={resultado.term}
+        className="absolute hidden group"
+        checked={itensSelecionadosPatente.includes(resultado.term)}
+        id={resultado.term}
+        onChange={handleCheckboxChangeInputPatente}
+        onClick={handleClickPatentes}
+      />
+    </label>
+  </li>
+));
+
+
+const valoresPatenteSelecionados = itensSelecionadosPatente.join(';');
+
+const valoresSelecionadosPatenteJSX = itensSelecionadosPatente.map((valor, index) => (
+  <li key={index} className='whitespace-nowrap gap-2 bg-[#E9F4F4] border-cyan-400 border-[1px] inline-flex h-10 items-center px-4 text-gray-400 rounded-lg text-xs font-bold'>{valor.replace(/;/g, ' ')}
+    <button onClick={() => handleRemoverSelecionadoPatente(index)}><X size={16} className="text-gray-400 hover:text-cyan-400" /></button>
+  </li>
+));
+
+const handleRemoverSelecionadoPatente = (index: number) => {
+  setItensSelecionadosPatente((prevSelecionados) =>
+    prevSelecionados.filter((_, i) => i !== index)
+  );
+};
+
+
+
+useEffect(() => {
+  if (inputValue.trim().length >= 1) {
+
+    enviarRequisicao();
+  }
+}, [inputValue]);
+
+
+console.log('messages 2',messages)
+
+
   return (
     <div>
      <Header/>
@@ -381,10 +1101,21 @@ export function ChatContent() {
 </div>
      
 
-      <div>
+      <div className='w-full'>
 
 
       <div className='flex flex-col w-full pl-16'>
+        {isLoading && (
+          <div  className='flex gap-4 max-w-[650px] mb-6'>
+          <div className='h-10 min-w-10 w-10 rounded-xl '>
+            <SvgMaria/>
+          </div>
+          <div className='flex flex-1 flex-col'>
+          <div className='flex w-full gap-2 items-center mb-2'><h5 className='font-medium text-gray-400 text-lg'>MarIA</h5><p className='text-xs'> </p></div>
+         
+          </div>
+        </div>
+        )}
         {messages.map((message, i) => {
           if (message.role === '|assistant') {
             return (
@@ -407,16 +1138,31 @@ export function ChatContent() {
               <p className='p-2 px-4 rounded-xl rounded-tr-none  text-white bg-blue-400'>{message.content}</p>
               </div>
 
-              <div className='h-10 w-10 rounded-xl border botder-gray-300' style={{ backgroundImage: `url(${user.photoURL})` }}></div>
+              <div className='h-10 whitespace-nowrap min-w-[40px] w-10 rounded-xl border botder-gray-300' style={{ backgroundImage: `url(${user.photoURL})` }}></div>
             </div>
             )
-          } else {
+          } else if (message.role === 'system') {
             ``
           }
         })}
       </div>
 
-      <div className='flex  fixed bottom-0 left-0 w-full pl-[478px] px-16  items-center justify-center'>
+      <div className='flex flex-col  fixed bottom-0 left-0 w-full pl-[478px] px-16  items-center justify-center'>
+      <div className='w-full flex overflow-x-auto whitespace-nowrap'>
+      <div className='w-full whitespace-nowrap flex-nowrap flex gap-3 mb-3 overflow-x-auto'>
+  {botaoTermosClicado ? checkboxItems :
+   botaoResumoClicado ? checkboxItemsResumo :
+   botaoAreasClicado ? checkboxAreas :
+   botaoPatentesClicado ? checkboxItemsPatente :
+   botaoEventosClicado ? checkboxItemsEvento :
+   botaoLivrosCapitulosClicado ? checkboxLivros :
+   botaoPesquisadoresClicado ? checkboxPesquisadores :
+   null}
+</div>
+      </div>
+
+
+
      <div className={`p-4 border border-gray-300 group rounded-2xl w-full mb-16 min-h-[100px] flex-col transition-all ${botaoTermosClicado ? 'hover:border-blue-400' : ''} ${botaoLivrosCapitulosClicado ? 'hover:border-pink-400' : ''} ${botaoEventosClicado ? 'hover:border-orange-400' : ''} ${botaoResumoClicado ? 'hover:border-yellow-400' : ''} ${botaoAreasClicado ? 'hover:border-green-400' : ''} ${botaoPesquisadoresClicado ? 'hover:border-red-400' : ''} ${botaoPatentesClicado ? 'group-hover:border-cyan-400' : ''}`}>
      <div className={`flex  items-center h-10  w-full  text-base font-medium  justify-center transition  `}>
                 <MagnifyingGlass size={20} className={`text-gray-400 min-w-[38px] ${botaoTermosClicado ? 'group-hover:text-blue-400' : ''} ${botaoResumoClicado ? 'group-hover:text-yellow-400' : ''} ${botaoLivrosCapitulosClicado ? 'group-hover:text-pink-400' : ''} ${botaoEventosClicado ? 'group-hover:text-orange-400' : ''} ${botaoAreasClicado ? 'group-hover:text-green-400' : ''} ${botaoPesquisadoresClicado ? 'group-hover:text-red-400' : ''} ${botaoPatentesClicado ? 'group-hover:text-cyan-400' : ''}`} />
