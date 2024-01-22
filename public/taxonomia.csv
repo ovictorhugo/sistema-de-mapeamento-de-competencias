@@ -1,58 +1,62 @@
-﻿tax;termos;terms;termos_tax;group
-Energias Renováveis;"Painel;solar";"Solar;panel";Painel solar;Equipamentos
-Energias Renováveis;Biomassa;Biomass;Biomassa;Geração
-Energias Renováveis;Eólica;Wind;Eólica;Geração
-Energias Renováveis;Hídraulica;Hydraulics;Hidráulica;Geração
-Energias Renováveis;Nuclear;Nuclear;Nuclear;Geração
-Energias Renováveis;Hidrogénio;Hydrogen;Hidrogênio;Geração
-Energias Renováveis;Bioeconomia;Bioeconomy;Bioeconomia;Termos
-Energias Renováveis;"Economia;Circular";"Circular;economy";Economia circular;Termos
-Energias Renováveis;Sustentabilidade;Sustainability;Sustentabilidade;Termos
-Energias Renováveis;Sol;Sun;Sol;Termos
-Energias Renováveis;Vento;Wind;Vento;Fontes
-Energias Renováveis;Onda;Wave;Onda;Fontes
-Energias Renováveis;Água;Water;Água;Fontes
-Energias Renováveis;	"Energia;Limpa";	;	Energia Limpa	;
-Energias Renováveis;	Sustentabilidade;	;	Sustentabilidade	;
-Energias Renováveis;	Bioeconomia	;	;Bioeconomia	;
-Energias Renováveis;	"Geracao;distribuida";	;Geracao distribuida	;
-Energias Renováveis;Bioenergia	;;	Bioenergia	;
-Energias Renováveis;"Energia;Renovaveis";;Energia Renováveis;	
-Energias Renováveis;	Energia	;;	Energia	;
-Energias Renováveis;	"Tecnologia;Verde";	;	Tecnologia Verde;	
-Energias Renováveis;	Decomposicao	;;	Decomposicao	;
-Energias Renováveis;	Térmica	;	;Térmica	;
-Energias Renováveis;	Combustível	;	;Combustível	;
-Energias Renováveis;Soja;Soy;Soja;Matéria-Prima
-Energias Renováveis;Fermentação;Fermentation;Fermentação;Processos
-Energias Renováveis;Eletrólise;Electrolysis;Eletrólise;Processos
-Educação 5.0;"Ensino;Híbrido";"Hybrid;Teaching";Ensino Híbrido;Tecnologias Educacionais e Inovação Pedagógica
-Educação 5.0;"Avaliação;Formativa";"Formative;Assessment";Avaliação Formativa;Tecnologias Educacionais e Inovação Pedagógica
-Educação 5.0;"Inovação;Pedagógica";"Pedagogical;Innovation";Inovação Pedagógica;Tecnologias Educacionais e Inovação Pedagógica
-Educação 5.0;"Aprendizado;Baseado;em;Projetos";"Project-Based;Learning";Aprendizado Baseado em Projetos;Tecnologias Educacionais e Inovação Pedagógica
-Educação 5.0;"Metodologias;Ativas";"Active;Methodologies";Metodologias Ativas;Tecnologias Educacionais e Inovação Pedagógica
-Educação 5.0;"Educação;5.0";"Education;5.0";Educação 5.0;Tecnologias Educacionais e Inovação Pedagógica
-Educação 5.0;"Aprendizagem;Personalizada";"Personalized;Learning";Aprendizagem Personalizada;Tecnologias Educacionais e Inovação Pedagógica
-Educação 5.0;"Inteligência;Artificial;na;Educação";"Artificial;Intelligence;in;Education";Inteligência Artificial na Educação;Tecnologias Educacionais e Inovação Pedagógica
-Educação 5.0;"Realidade;Virtual";"Virtual;Reality";Realidade Virtual;Tecnologias Educacionais e Inovação Pedagógica
-Educação 5.0;"Gamificação;Educacional";"Educational;Gamification";Gamificação Educacional;Tecnologias Educacionais e Inovação Pedagógica
-Educação 5.0;"Tecnologias;Emergentes";"Emerging;Technologies";Tecnologias Emergentes;Tecnologias Educacionais e Inovação Pedagógica
-Educação 5.0;"Plataformas;de;Aprendizagem;Online";"Online;Learning;Platforms";Plataformas de Aprendizagem Online;Tecnologias Educacionais e Inovação Pedagógica
-Educação 5.0;"Analytics;na;Educação";"Education;Analytics";Analytics na Educação;Tecnologias Educacionais e Inovação Pedagógica
-Educação 5.0;"Tutoria;Online";"Online;Tutoring";Tutoria Online;Tecnologias Educacionais e Inovação Pedagógica
-Educação 5.0;"Realidade;Aumentada";"Augmented;Reality";Realidade Aumentada;Tecnologias Educacionais e Inovação Pedagógica
-Educação 5.0;"Programação;na;Educação";"Programming;in;Education";Programação na Educação;Tecnologia na Educação e Programação
-Educação 5.0;"Inclusão;Digital";"Digital;Inclusion";Inclusão Digital;Inclusão Digital e Ferramentas Maker
-Educação 5.0;"Robótica;Educacional";"Educational;Robotics";Robótica Educacional;Inclusão Digital e Ferramentas Maker
-Educação 5.0;"Pensamento;Computacional";"Computational;thinking";Pensamento computacional;Inclusão Digital e Ferramentas Maker
-Educação 5.0;"Robótica;Educacional";"Educational;Robotics";Robotica educacional;Inclusão Digital e Ferramentas Maker
-Educação 5.0;"Software;Scratch";"Software;Scratch";Software scratch;Inclusão Digital e Ferramentas Maker
-Educação 5.0;"Narrativas;Digitais";"Digital;Storytelling";Barrativas digitais;Inclusão Digital e Ferramentas Maker
-Educação 5.0;Fablabs;Fablabs;Fablabs;Inclusão Digital e Ferramentas Maker
-Educação 5.0;"Cultura;Maker";"Maker;culture";Cultura maker;Inclusão Digital e Ferramentas Maker
-Educação 5.0;"Jogos;Educacionais";"Educational;Games";Jogos Educacionais;Jogos Educacionais e Colaboração
-Educação 5.0;"Impressão;3D";"3D;Printing";Impressão 3d;Jogos Educacionais e Colaboração
-Educação 5.0;Gamificação;Gamification;Gamificação;Jogos Educacionais e Colaboração
-Educação 5.0;"Metodologias;Ativas";"Active;Methodologies";Metodologias ativas;Jogos Educacionais e Colaboração
-Educação 5.0;"Aprendizagem;Colaborativa";"Collaborative;learning";Aprendizagem colaborativa;Jogos Educacionais e Colaboração
-Educação 5.0;Arduino;Arduino;Arduino;Tecnologia na Educação e Programação
+﻿tax;termos;terms;termos_tax;group;
+Energias Renováveis;"Painel;solar";"Solar;panel";Painel solar;Equipamentos;
+Energias Renováveis;Biomassa;Biomass;Biomassa;Geração;
+Energias Renováveis;Eólica;Wind;Eólica;Geração;
+Energias Renováveis;Hídraulica;Hydraulics;Hidráulica;Geração;
+Energias Renováveis;Nuclear;Nuclear;Nuclear;Geração;
+Energias Renováveis;Hidrogénio;Hydrogen;Hidrogênio;Geração;
+Energias Renováveis;Bioeconomia;Bioeconomy;Bioeconomia;Termos;
+Energias Renováveis;"Economia;Circular";"Circular;economy";Economia circular;Termos;
+Energias Renováveis;Sustentabilidade;Sustainability;Sustentabilidade;Termos;
+Energias Renováveis;Sol;Sun;Sol;Termos;
+Energias Renováveis;Vento;Wind;Vento;Fontes;
+Energias Renováveis;Onda;Wave;Onda;Fontes;
+Energias Renováveis;Água;Water;Água;Fontes;
+Energias Renováveis;"	Energia Limpa";Limpa;"	";"	Energia Limpa	";
+Energias Renováveis;"	Sustentabilidade";"	";"	Sustentabilidade	";;
+Energias Renováveis;"	Bioeconomia	";"	";"Bioeconomia	";;
+Energias Renováveis;Geracao distribuida;;"	";"Geracao distribuida	";
+Energias Renováveis;"Bioenergia	";;"	Bioenergia	";;
+Energias Renováveis;"Energia;Renovaveis";;Energia Renováveis;"	";
+Energias Renováveis;"	Energia	";;"	Energia	";;
+Energias Renováveis;"	Tecnologia;Verde";"Verde""";"	";"	Tecnologia Verde";"	"
+Energias Renováveis;"	Decomposicao	";;"	Decomposicao	";;
+Energias Renováveis;"	Térmica	";"	";"Térmica	";;
+Energias Renováveis;"	Combustível	";"	";"Combustível	";;
+Energias Renováveis;Soja;Soy;Soja;Matéria-Prima;
+Energias Renováveis;Fermentação;Fermentation;Fermentação;Processos;
+Energias Renováveis;"Energia;Solar";;;;
+Energias Renováveis;"Energia;Geotérmica";;;;
+Energias Renováveis;"Energia;Hidropelágica";;;;
+Energias Renováveis;"Energia;Hidrelétrica";;;;
+Energias Renováveis;Eletrólise;Electrolysis;Eletrólise;Processos;
+Educação 5.0;"Ensino;Híbrido";"Hybrid;Teaching";Ensino Híbrido;Tecnologias Educacionais e Inovação Pedagógica;
+Educação 5.0;"Avaliação;Formativa";"Formative;Assessment";Avaliação Formativa;Tecnologias Educacionais e Inovação Pedagógica;
+Educação 5.0;"Inovação;Pedagógica";"Pedagogical;Innovation";Inovação Pedagógica;Tecnologias Educacionais e Inovação Pedagógica;
+Educação 5.0;"Aprendizado;Baseado;em;Projetos";"Project-Based;Learning";Aprendizado Baseado em Projetos;Tecnologias Educacionais e Inovação Pedagógica;
+Educação 5.0;"Metodologias;Ativas";"Active;Methodologies";Metodologias Ativas;Tecnologias Educacionais e Inovação Pedagógica;
+Educação 5.0;"Educação;5.0";"Education;5.0";Educação 5.0;Tecnologias Educacionais e Inovação Pedagógica;
+Educação 5.0;"Aprendizagem;Personalizada";"Personalized;Learning";Aprendizagem Personalizada;Tecnologias Educacionais e Inovação Pedagógica;
+Educação 5.0;"Inteligência;Artificial;na;Educação";"Artificial;Intelligence;in;Education";Inteligência Artificial na Educação;Tecnologias Educacionais e Inovação Pedagógica;
+Educação 5.0;"Realidade;Virtual";"Virtual;Reality";Realidade Virtual;Tecnologias Educacionais e Inovação Pedagógica;
+Educação 5.0;"Gamificação;Educacional";"Educational;Gamification";Gamificação Educacional;Tecnologias Educacionais e Inovação Pedagógica;
+Educação 5.0;"Tecnologias;Emergentes";"Emerging;Technologies";Tecnologias Emergentes;Tecnologias Educacionais e Inovação Pedagógica;
+Educação 5.0;"Plataformas;de;Aprendizagem;Online";"Online;Learning;Platforms";Plataformas de Aprendizagem Online;Tecnologias Educacionais e Inovação Pedagógica;
+Educação 5.0;"Analytics;na;Educação";"Education;Analytics";Analytics na Educação;Tecnologias Educacionais e Inovação Pedagógica;
+Educação 5.0;"Tutoria;Online";"Online;Tutoring";Tutoria Online;Tecnologias Educacionais e Inovação Pedagógica;
+Educação 5.0;"Realidade;Aumentada";"Augmented;Reality";Realidade Aumentada;Tecnologias Educacionais e Inovação Pedagógica;
+Educação 5.0;"Programação;na;Educação";"Programming;in;Education";Programação na Educação;Tecnologia na Educação e Programação;
+Educação 5.0;"Inclusão;Digital";"Digital;Inclusion";Inclusão Digital;Inclusão Digital e Ferramentas Maker;
+Educação 5.0;"Robótica;Educacional";"Educational;Robotics";Robótica Educacional;Inclusão Digital e Ferramentas Maker;
+Educação 5.0;"Pensamento;Computacional";"Computational;thinking";Pensamento computacional;Inclusão Digital e Ferramentas Maker;
+Educação 5.0;"Robótica;Educacional";"Educational;Robotics";Robotica educacional;Inclusão Digital e Ferramentas Maker;
+Educação 5.0;"Software;Scratch";"Software;Scratch";Software scratch;Inclusão Digital e Ferramentas Maker;
+Educação 5.0;"Narrativas;Digitais";"Digital;Storytelling";Barrativas digitais;Inclusão Digital e Ferramentas Maker;
+Educação 5.0;Fablabs;Fablabs;Fablabs;Inclusão Digital e Ferramentas Maker;
+Educação 5.0;"Cultura;Maker";"Maker;culture";Cultura maker;Inclusão Digital e Ferramentas Maker;
+Educação 5.0;"Jogos;Educacionais";"Educational;Games";Jogos Educacionais;Jogos Educacionais e Colaboração;
+Educação 5.0;"Impressão;3D";"3D;Printing";Impressão 3d;Jogos Educacionais e Colaboração;
+Educação 5.0;Gamificação;Gamification;Gamificação;Jogos Educacionais e Colaboração;
+Educação 5.0;"Metodologias;Ativas";"Active;Methodologies";Metodologias ativas;Jogos Educacionais e Colaboração;
+Educação 5.0;"Aprendizagem;Colaborativa";"Collaborative;learning";Aprendizagem colaborativa;Jogos Educacionais e Colaboração;
+Educação 5.0;Arduino;Arduino;Arduino;Tecnologia na Educação e Programação;
