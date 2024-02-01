@@ -65,22 +65,13 @@ function myWrapperFunction() {
 
     const [debouncedPesquisaInput, setDebouncedPesquisaInput] = useState('');
 
-    // Função de debounce
-    useEffect(() => {
-      const timerId = setTimeout(() => {
-        setDebouncedPesquisaInput(pesquisaInput);
-      }, 100); // Ajuste o intervalo conforme necessário (500ms neste exemplo)
-
-      return () => {
-        clearTimeout(timerId);
-      };
-    }, [pesquisaInput]);
-
+  
+ 
 
 
 
     useEffect(() => {
-      if (debouncedPesquisaInput.trim().length >= 1) {
+      if (pesquisaInput.trim().length >= 1) {
         setResultados([]);
         setResultadosPesquisadores([]);
         setResultadosArea([]);
@@ -93,7 +84,7 @@ function myWrapperFunction() {
 
 
     function handleClick() {
-      setValorDigitadoPesquisaDireta(debouncedPesquisaInput.replace(/\s+/g, ";"));
+      setValorDigitadoPesquisaDireta(pesquisaInput.replace(/\s+/g, ";"));
       setIsOpen(false)
     }
 
@@ -118,11 +109,11 @@ function myWrapperFunction() {
 
     //Enviar resultado da pesquisa
     function enviarRequisicao() {
-      const pesquisaInputFormatado = debouncedPesquisaInput.trim().replace(/\s+/g, ";");
+      const pesquisaInputFormatado = pesquisaInput.trim().replace(/\s+/g, ";");
       const url = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=ARTICLE`;
       const urlResumo = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=ABSTRACT&graduate_program_id=${idGraduateProgram}`;
       const urlPesquisador = urlGeral + `/reasercherInitials?initials=${pesquisaInputFormatado}&graduate_program_id=${idGraduateProgram}`
-      const urlArea = urlGeral + `/area_specialitInitials?initials=${debouncedPesquisaInput.trim()}&area=${selectedOptionsAreas}&graduate_program_id=${idGraduateProgram}`;
+      const urlArea = urlGeral + `/area_specialitInitials?initials=${pesquisaInput.trim()}&area=${selectedOptionsAreas}&graduate_program_id=${idGraduateProgram}`;
       const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
       const urlBigrama = urlGeral +  `secondWord?term=${pesquisaInputFormatado}`
       const urlPatente = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=PATENT`
@@ -1261,8 +1252,9 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
                 <div className='flex gap-2 mx-2'>{valoresSelecionadosJSX}{valoresSelecionadosNuvemJSX}{valoresSelecionadosEventoJSX}{valoresPesquisadoresSelecionadosJSX}{valoresSelecionadosPatenteJSX}{valoresAreasSelecionadosJSX}{valoresLivrosSelecionadosJSX}{valoresSelecionadosResumoJSX}</div>
                 <input
                   type="text"
-                  value={pesquisaInput}
-                  onChange={handlePesquisaChange}
+                
+                  onChange={(e) => setPesquisaInput(e.target.value)}
+                
                   onClick={() => setIsOpen(true)}
                   onFocus={() => setIsOpen(!isOpen)}
                   onKeyPress={handleKeyPress}
