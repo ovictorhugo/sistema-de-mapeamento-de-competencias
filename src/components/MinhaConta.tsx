@@ -101,8 +101,11 @@ export function MinhaConta() {
 
                 // Update password if popUpProgramSenha is true
                 if (popUpProgramSenha && password == confPassword && password.length >= 8 ) {
-                    const credential = await signInWithEmailAndPassword(auth, user.email, passwordAtual);
-        
+                    
+                    const userEmail: string = email || ''; // If email is null, set it to an empty string
+
+                    const credential = await signInWithEmailAndPassword(auth, userEmail, passwordAtual);
+
                     // Update the user's password
                     await updatePassword(credential.user, password);
                 }

@@ -96,6 +96,8 @@ export function Recomendadas() {
                 ...prevResearcher,
                 [item.termos]: firstFourResearchers,
               }));
+
+              
       
               setResearcher(updatedResearcherData);
               setResearcherCountsByTerm(updatedResearcherCountsByTerm);

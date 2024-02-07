@@ -8,6 +8,7 @@ import logo_2 from '../assets/logo_2.png';
 import logo_3 from '../assets/logo_3.png';
 import logo_4 from '../assets/logo_4.png';
 import bg_popup from '../assets/bg_pop_signup.png';
+import { User as FirebaseAuthUser} from 'firebase/auth'
 
 import { Pesquisadores } from "./Pesquisadores";
 import { Publicacoes } from "./Publicacoes";
@@ -17,7 +18,13 @@ import { auth, app } from "../lib/firebase";
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
-
+interface User extends FirebaseAuthUser {
+  img_url: string;
+  state: string;
+  name: string
+  email: string
+  institution_id: string
+}
 
 
 import cimatec from '../assets/cimatec.png';
@@ -115,7 +122,7 @@ export function Header() {
     try {
       await auth.signOut();
       setLoggedIn(false);
-      setUser({} as User); // Assuming you have a setUser function to update the user context
+      setUser({ img_url: '', state: '', name: '', email: '', institution_id: '',...{} } as User); // Assuming you have a setUser function to update the user context
 
      // Remove user information from local storage
     localStorage.removeItem('user');
@@ -213,8 +220,10 @@ const handleSubmit = async () => {
             // Update password if popUpProgramSenha is true
             if (popUpProgramSenha && password == confPassword && password.length >= 8 ) {
                 // Implement logic to update the user's password
-                const credential = await signInWithEmailAndPassword(auth, user.email, passwordAtual);
-        
+                const userEmail: string = email || ''; // If email is null, set it to an empty string
+
+                    const credential = await signInWithEmailAndPassword(auth, userEmail, passwordAtual);
+
               // Update the user's password
               await updatePassword(credential.user, password);
 

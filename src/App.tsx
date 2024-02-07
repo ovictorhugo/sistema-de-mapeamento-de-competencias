@@ -17,7 +17,15 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import { auth } from './lib/firebase';
-import {GoogleAuthProvider, signInWithPopup, User} from 'firebase/auth'
+import {GoogleAuthProvider, signInWithPopup, User as FirebaseAuthUser} from 'firebase/auth'
+
+interface User extends FirebaseAuthUser {
+  img_url: string;
+  state: string;
+  name: string
+  email: string
+  institution_id: string
+}
 
 import { Chat } from './pages/Chat';
 import { Terms } from './pages/Terms';
@@ -36,11 +44,8 @@ import { Admin } from './pages/Admin';
 import { MeusBaremas } from './pages/MeusBaremas';
 import { Configuracoes } from './pages/Configuracoes';
 import { Taxonomia } from './components/Taxonomia';
-import { POST } from './components/chat/route';
 import { Cidades } from './pages/Cidades';
-
-
-
+import { Testes } from './pages/Teste';
 
 interface Csv {
   tax: string
@@ -91,7 +96,7 @@ export const App = () => {
   
   const [urlGeral, setUrlGeral] = useState('http://200.128.66.226:8080/');
   const [pesquisadoresSelecionadosGroupBarema, setPesquisadoresSelecionadosGroupBarema] = useState('');
-  const [user, setUser] = useState<User>({} as User)
+  const [user, setUser] = useState<User>({ img_url: '', state: '', email: '', name: '', institution_id: '',...{} } as User);
   const [isOn, setIsOn] = useState(false);
   const [enabled, setEnabled] = useState(false);
   const [intituicoesSelecionadasCheckbox, setIntituicoesSelecionadasCheckbox] = useState('');
@@ -135,7 +140,7 @@ const [filteredItems, setFilteredItems] = useState<Csv[]>([]);
 useEffect(() => {
   const filePath = '../taxonomia.csv';
 
-  const fetchData = async (searchTerm) => {
+  const fetchData = async (searchTerm: any) => {
     try {
       const response = await fetch(filePath);
       const text = await response.text();
@@ -149,7 +154,7 @@ useEffect(() => {
 
             // Verifica se searchTerm está contido em termos
             const matchingItems = parsedData.filter(
-              (item) => unorm.nfkd(item.termos).replace(/[^\w\s]/gi, '').toLowerCase().includes(formattedSearchTerm)
+              (item: any) => unorm.nfkd(item.termos).replace(/[^\w\s]/gi, '').toLowerCase().includes(formattedSearchTerm)
             );
 
             console.log(`matchingItems`, matchingItems);
@@ -157,8 +162,8 @@ useEffect(() => {
             if (matchingItems.length > 0) {
               // Encontra todos os termos com o mesmo tax da palavra igual
               const sameTaxTerms = parsedData
-                .filter((item) => item.tax === matchingItems[0].tax)
-                .map((item) => item.termos);
+                .filter((item: any) => item.tax === matchingItems[0].tax)
+                .map((item: any) => item.termos);
 
               // Concatena os termos encontrados com um ponto e vírgula
               const concatenatedTerms = sameTaxTerms.join('/');
@@ -258,7 +263,7 @@ useEffect(() => {
             <Route path='/profnit' element={<Profnit/>}/>
             <Route path='/bem-vindo' element={<HomePageSimcc/>}/>
             <Route path='/discover' element={<Discover/>}/>
-           
+            <Route path='/teste' element={<Testes/>}/>
             <Route path='/pesquisadoresSelecionados' element={<PesquisadoresPage/>}/>
            
           

@@ -21,6 +21,15 @@ import bg_popup from '../assets/bg_admin.png';
 
 import { getDatabase, ref, child, get } from 'firebase/database';
 
+import { User as FirebaseAuthUser} from 'firebase/auth'
+
+interface User extends FirebaseAuthUser {
+  img_url: string;
+  state: string;
+  name: string
+  email: string
+  institution_id: string
+}
 
 export function ContentLoginAdmin() {
   // meial sneha
@@ -40,7 +49,7 @@ export function ContentLoginAdmin() {
         const db = getFirestore();
         const userDocRef = doc(db, 'institution', result.user.uid);
         const snapshot = await getDoc(userDocRef);
-
+        const userData = snapshot.data();
         // Verifique se os dados personalizados existem antes de adicionar ao objeto result.user
         if (snapshot.exists()) {
           
@@ -48,28 +57,31 @@ export function ContentLoginAdmin() {
           const userData = snapshot.data();
           console.log('userData:', userData);
           // Adicione os dados personalizados diretamente ao objeto result.user
-          result.user = {
-            ...result.user,
-            acronym: userData.acronym,
-            img_url: userData.img_url,
-            institution_id: userData.institution_id,
-            name: userData.name,
-            state: userData.state,
-            uid: result.user.uid
-            // Adicione outros campos personalizados conforme necessário
-            
-          };
+         
 
           console.log("user",user)
 
           // Atualize o estado com o objeto modificado
-          setUser(result.user);
+          setUser({ img_url: userData.img_url, state:  userData.state, name: userData.name, email: userData.email, institution_id: userData.institution_id,...{} } as User)
+          
         }
   
       // Save user information to local storage
       localStorage.setItem('user', JSON.stringify(result.user));
 
-      setUser(result.user)
+      if (userData) {
+        setUser({
+          img_url: userData.img_url,
+          state: userData.state,
+          name: userData.name,
+          email: userData.email,
+          institution_id: userData.institution_id,
+          // ... any other properties you want to include
+        } as User);
+      } else {
+        // Handle the case where userData is undefined, for example:
+        console.error("userData is undefined");
+      }
   
       setTimeout(() => {
         history('/dashboard');
@@ -90,7 +102,16 @@ export function ContentLoginAdmin() {
 
     signInWithPopup(auth, provider)
       .then((result) => {
-        setUser(result.user)
+        const userData: User = {
+          ...result.user,
+          img_url: '', // Set to the appropriate default value or leave it empty if you don't have a default
+          state: '',
+          name:  '',
+          email: result.user.email || '',
+          institution_id: '',
+        };
+  
+        setUser(userData);
         setLoggedIn(true);
         setTimeout(() => {
           history('/');

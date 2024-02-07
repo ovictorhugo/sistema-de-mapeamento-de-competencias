@@ -8,7 +8,6 @@ import axios from 'axios';
 
 import {AiChat} from '@nlux/react';
 import {useAdapter} from '@nlux/openai-react';
-import Typical from 'react-typical'
 import {useChat} from 'ai/react'
 
 

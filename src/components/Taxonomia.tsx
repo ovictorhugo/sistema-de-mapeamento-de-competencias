@@ -19,8 +19,6 @@ import search_animation from "./search_animation.json";
 import loading from "./loading_red.json";
 import { Footer } from "./Footer";
 
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-
 // Inicializando o módulo treemap do Highcharts
 HighchartsTreemap(Highcharts);
 
@@ -488,7 +486,7 @@ const handleBtnCsv = (id_pesquisador: any) => {
     link.href = url;
     link.click();
 } catch (error) {
-    console.error('Error:', error.message);
+   
 }
 };
 
@@ -815,7 +813,7 @@ const onDragEnd = (result: any) => {
 
 
          <div className="w-full overflow-x-auto mt-8 elementBarra overflow-y-hidden flex gap-6">
-           <DragDropContext onDragEnd={onDragEnd} className="flex gap-6 flex-nowrap h-full ">
+           <div  className="flex gap-6 flex-nowrap h-full ">
            {isLoading? (
                <div className="flex items-center justify-center h-full w-full py-10">
                <div className="w-[700px]">
@@ -825,9 +823,9 @@ const onDragEnd = (result: any) => {
            </div>
            ):(
             Object.keys(researcher).map((termo, index) => (
-                  <Droppable droppableId={termo} index={index} key={termo}  direction="horizontal" type="PERSON">
-                    {(provided: any, snapshot: any) => (
- <div id={`trellobox${index}`} ref={provided.innerRef}  {...provided.dragHandleProps}  {...provided.droppableProps}  style={{ maxHeight: `calc(90vh - 196px )`,  ...snapshot.isDraggingOver }} className="min-w-[370px] w-[370px]  gap-3 flex flex-col h-fit bg-white border border-gray-300 p-4 rounded-xl" key={index}>
+                  <div  key={termo} >
+          
+ <div id={`trellobox${index}`}  style={{ maxHeight: `calc(90vh - 196px )`}} className="min-w-[370px] w-[370px]  gap-3 flex flex-col h-fit bg-white border border-gray-300 p-4 rounded-xl" key={index}>
  {/* Renderizar a lista de pesquisadores para cada termo */}
 
 
@@ -888,7 +886,7 @@ type="checkbox"
 className="absolute hidden"
 name={researcher.name}
 checked={itensSelecionados.includes(researcher.name)}
-onChange={() => handleCheckboxChange(user)}
+onChange={() => handleCheckboxChange(researcher)}
 />
 </label>
 </div>
@@ -996,12 +994,12 @@ onChange={() => handleCheckboxChange(researcher)}
 
 </div>
 
-                    )}
-                  </Droppable>
+                   
+                  </div>
                      ))
 )}
 
-           </DragDropContext>
+           </div>
 
 
 

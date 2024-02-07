@@ -1,5 +1,14 @@
 import { createContext, useState } from "react"
-import {GoogleAuthProvider, signInWithPopup, User} from 'firebase/auth'
+import {GoogleAuthProvider, signInWithPopup, User as FirebaseAuthUser} from 'firebase/auth'
+
+
+interface User extends FirebaseAuthUser {
+  img_url: string;
+  state: string;
+  name: string
+  email: string
+  institution_id: string
+}
 
 interface UserContextType {
     valoresSelecionadosExport: string;

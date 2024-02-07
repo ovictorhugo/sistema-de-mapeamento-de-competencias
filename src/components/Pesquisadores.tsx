@@ -4,7 +4,6 @@ import { UserContext } from '../contexts/context'
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowSquareOut, CaretCircleLeft, CaretCircleRight, CaretDown, FileArrowDown, FileCsv, GitBranch, ListNumbers, MapPin, MapTrifold, Plus, Rows, SquaresFour, Target, UserList, X } from "phosphor-react";
 import Carregando from "./Carregando";
-
 import Cookies from "js-cookie";
 
 import { useLocation } from 'react-router-dom';
@@ -159,18 +158,21 @@ export function Pesquisadores() {
   const defaultLatitude = Number(-13.29);
   const defaultLongitude =  Number(-41.71);
   const [defaultZoom, setDefaultZoom] = useState(5.5);
-
   const [positionInit, setPositionInit ] = useState({lat: -13.29, lng: -41.71 })
   const mapRef = useRef(null);
   const handleCenterMap = () => {
     setPositionInit({lat: -13.29, lng: -41.71 })
     setDefaultZoom(5.5)
 
+   
     mapRef.current.flyTo([defaultLatitude, defaultLongitude], defaultZoom, {
       duration: 1, // Animation duration in seconds
       easeLinearity: 0.5, // Animation easing, adjust as needed
     });
+ 
   };
+
+  
 
 
   useEffect(() => {
@@ -399,9 +401,9 @@ localStorage.setItem('pesquisadoresSelecionadosGroupBarema', JSON.stringify(pesq
   // Outros códigos do componente
 
   // Função para exibir o PopUp
-  const [popUpVisibilities, setPopUpVisibilities] = useState([]);
+  const [popUpVisibilities, setPopUpVisibilities] = useState<boolean[]>([]);
 
-  const [popUpVisibilitiesMap, setPopUpVisibilitiesMap] = useState([]);
+  const [popUpVisibilitiesMap, setPopUpVisibilitiesMap] = useState<boolean[]>([]);
 
   const handleOpenPopUp = (index: any) => {
     const newVisibilities = [...popUpVisibilities];

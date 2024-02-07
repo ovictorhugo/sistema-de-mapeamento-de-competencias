@@ -16,6 +16,15 @@ import { Circle2 } from "./Circle2";
 import { AuthWrapper } from "./AuthWrapper";
 import { SvgLogin } from "./SvgLogin";
 
+import { User as FirebaseAuthUser} from 'firebase/auth'
+
+interface User extends FirebaseAuthUser {
+  img_url: string;
+  state: string;
+  name: string
+  email: string
+  institution_id: string
+}
 
 
 
@@ -37,7 +46,16 @@ export function ContentLogin() {
       // Save user information to local storage
       localStorage.setItem('user', JSON.stringify(result.user));
 
-      setUser(result.user)
+      const userData: User = {
+        ...result.user,
+        img_url: '', // Set to the appropriate default value or leave it empty if you don't have a default
+        state: '',
+        name: '',
+        email: result.user.email || '',
+        institution_id: '',
+      };
+
+      setUser(userData);
   
       setTimeout(() => {
         history('/');
@@ -60,7 +78,16 @@ export function ContentLogin() {
 
     signInWithPopup(auth, provider)
       .then((result) => {
-        setUser(result.user)
+        const userData: User = {
+          ...result.user,
+          img_url: '', // Set to the appropriate default value or leave it empty if you don't have a default
+          state: '',
+          name:  '',
+          email: result.user.email || '',
+          institution_id: '',
+        };
+  
+        setUser(userData);
         setLoggedIn(true);
         setTimeout(() => {
           history('/');

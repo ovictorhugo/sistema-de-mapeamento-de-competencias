@@ -8,7 +8,15 @@ import logo_2 from '../assets/logo_2.png';
 import logo_3 from '../assets/logo_3.png';
 import logo_4 from '../assets/logo_4_white.png';
 import bg_popup from '../assets/bg_pop_signup.png';
+import { User as FirebaseAuthUser} from 'firebase/auth'
 
+interface User extends FirebaseAuthUser {
+  img_url: string;
+  state: string;
+  name: string
+  email: string
+  institution_id: string
+}
 import { getAuth, signInWithEmailAndPassword,  updateProfile, GoogleAuthProvider, signInWithPopup, updateEmail, updatePassword, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { auth, app } from "../lib/firebase";
 
@@ -119,7 +127,7 @@ export function HeaderBarema() {
     try {
       await auth.signOut();
       setLoggedIn(false);
-      setUser({} as User); // Assuming you have a setUser function to update the user context
+      setUser({ img_url: '', state: '', name: '', email: '', institution_id: '',...{} } as User); // Assuming you have a setUser function to update the user context
 
      // Remove user information from local storage
     localStorage.removeItem('user');
@@ -216,7 +224,9 @@ const handleSubmit = async () => {
 
             // Update password if popUpProgramSenha is true
             if (popUpProgramSenha && password == confPassword && password.length >= 8 ) {
-              const credential = await signInWithEmailAndPassword(auth, user.email, passwordAtual);
+              const userEmail: string = email || ''; // If email is null, set it to an empty string
+
+              const credential = await signInWithEmailAndPassword(auth, userEmail, passwordAtual);
         
               // Update the user's password
               await updatePassword(credential.user, password);

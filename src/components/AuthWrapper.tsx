@@ -41,12 +41,14 @@ export function AuthWrapper(props: AuthWrapperProps) {
 
                 <div>
                     <h1 className={` text-4xl font-medium max-w-[750px]   ${isAdmin ? (`text-gray-400`):(`text-white`)}`}>Uma <strong className="bg-blue-400 text-white font-medium">plataforma</strong> para</h1>
+                <h1 className={` ${isAdmin ? (`text-gray-400`):(`text-white`)} text-4xl mb-4 font-medium max-w-[750px] `}>
                 <Typical
         steps={['encontrar pesquisadores', 3000, 'ver produções científicas', 3000, 'fazer baremas de avaliação', 3000, 'analisar dados da pós-graduação', 3000, 'olhar produções técnicas', 3000,]}
         loop={Infinity}
         wrapper="p"
-        className={` ${isAdmin ? (`text-gray-400`):(`text-white`)} text-4xl mb-4 font-medium max-w-[750px] `}
+        
       />
+                </h1>
                 </div>
 
                 {isAdmin ? (

@@ -1063,7 +1063,7 @@ useEffect(() => {
                         
                         >
                            <div className="w-full h-full rounded-xl">
-                           <iframe className="w-full h-full rounded-xl"  src="https://www.youtube.com/embed/dqj4Gr4BM2c?si=O6ZfeuYVWAOVEH5C" title="SIMCC - BA" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                           <iframe className="w-full h-full rounded-xl"  src="https://www.youtube.com/embed/dqj4Gr4BM2c?si=O6ZfeuYVWAOVEH5C" title="SIMCC - BA" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
                            </div>
                         </div>
                         </div>

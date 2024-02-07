@@ -88,6 +88,7 @@ export function ContentProfnit(props: Props) {
     setIdGraduateProgram(name);
     
   }
+  
   const [valueInstPesquisa, setValueInstPesquisa] = useState('')
   function handleClickPesquisa(name: string, id: string) {
     setIdGraduateProgram(id)
@@ -144,12 +145,6 @@ export function ContentProfnit(props: Props) {
     props.name.toUpperCase().includes(filterValue.toUpperCase()) ||
     props.instituicao.toUpperCase().includes(filterValue.toUpperCase())
   );
-
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      handleFilterChange()
-    }
-  };
 
 
    //
@@ -210,7 +205,7 @@ export function ContentProfnit(props: Props) {
                         <MagnifyingGlass size={20} className={`text-gray-400 min-w-[52px] `} />
                         <input
                           type="text"
-                          onKeyPress={handleKeyPress}
+                         
                           value={filterValue}
                           onChange={e => setFilterValue(e.target.value)}
                           placeholder={`Nome ou sigla da instituição`}

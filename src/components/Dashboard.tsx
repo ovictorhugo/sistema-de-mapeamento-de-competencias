@@ -347,9 +347,9 @@ export function Dashboard() {
           fetchData();
         }, [urlGetProgram, handleSubmit]);
 
-        const [popUpVisibilities, setPopUpVisibilities] = useState([]);
+        const [popUpVisibilities, setPopUpVisibilities] = useState<boolean[]>([]);
 
-        const handleOpenPopUp = (index: any, props: any) => {
+        const handleOpenPopUp = (index: number, props: any) => {
           const newVisibilities = [...popUpVisibilities];
           newVisibilities[index] = true;
           setPopUpVisibilities(newVisibilities);
