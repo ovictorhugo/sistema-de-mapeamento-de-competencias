@@ -45,7 +45,6 @@ import { MeusBaremas } from './pages/MeusBaremas';
 import { Configuracoes } from './pages/Configuracoes';
 import { Taxonomia } from './components/Taxonomia';
 import { Cidades } from './pages/Cidades';
-import { Testes } from './pages/Teste';
 
 interface Csv {
   tax: string
@@ -263,7 +262,7 @@ useEffect(() => {
             <Route path='/profnit' element={<Profnit/>}/>
             <Route path='/bem-vindo' element={<HomePageSimcc/>}/>
             <Route path='/discover' element={<Discover/>}/>
-            <Route path='/teste' element={<Testes/>}/>
+           
             <Route path='/pesquisadoresSelecionados' element={<PesquisadoresPage/>}/>
            
           
