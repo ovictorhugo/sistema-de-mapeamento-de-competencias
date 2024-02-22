@@ -237,7 +237,7 @@ export function Dashboard() {
                 researcher_id: docId,
                 name: nomePesquisador,
                 lattes_id: lattesID,
-                institution_id: Number(user.institution_id),
+                institution_id: user.institution_id,
               }
           ]
 
@@ -651,7 +651,7 @@ export function Dashboard() {
             <div className='flex gap-6  w-full h-full overflow-y-auto elementBarra'>
        <div className='border border-gray-300 rounded-xl w-1/2 h-full p-6'>
        <div className=" overflow-y-auto max-h-fit h-full elementBarra pr-2">
-       {researcher.map((props, index) => {
+       {researcher.slice(0, 10).map((props, index) => {
           return(
             <div className="flex justify-between items-center py-4 border-b border-b-gray-300 group">
                 <div className="flex gap-3 items-center">
