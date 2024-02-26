@@ -121,7 +121,7 @@ function myWrapperFunction() {
       const urlEvento = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=SPEAKER`
 
 
-     
+     console.log(url)
 
 
 
