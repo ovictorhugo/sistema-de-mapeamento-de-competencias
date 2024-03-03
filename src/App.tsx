@@ -45,6 +45,7 @@ import { MeusBaremas } from './pages/MeusBaremas';
 import { Configuracoes } from './pages/Configuracoes';
 import { Taxonomia } from './components/Taxonomia';
 import { Cidades } from './pages/Cidades';
+import { AdminPesquisadores } from './pages/AdminPesquisadores';
 
 interface Csv {
   tax: string
@@ -279,6 +280,11 @@ useEffect(() => {
               <Route
                   path='/dashboard'
                   element={loggedIn   ? <Admin/> : <Navigate to='/admin' />}
+                />
+
+              <Route
+                  path='/dashboard/pesquisadores'
+                  element={loggedIn   ? <AdminPesquisadores/> : <Navigate to='/admin' />}
                 />
 
                 <Route

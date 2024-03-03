@@ -253,7 +253,7 @@ export function Pesquisadores() {
       }
     };
     fetchData();
-  }, []);
+  }, [valoresSelecionadosExport]);
 
 
 

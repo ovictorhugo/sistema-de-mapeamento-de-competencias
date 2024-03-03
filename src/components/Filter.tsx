@@ -246,7 +246,7 @@ export function Filter() {
 
       //instituições
       //dropdowsn
-      const optionsDropdown = ['Universidade Estadual do Sudoeste da Bahia', 'Universidade Estadual de Santa Cruz', 'Universidade do Estado da Bahia', 'Universidade Estadual de Feira de Santana'];
+      const optionsDropdown = ['Universidade Estadual do Sudoeste da Bahia', 'Universidade Estadual de Santa Cruz', 'Universidade do Estado da Bahia', 'Universidade Estadual de Feira de Santana', 'Universidade Federal do Sul da Bahia'];
       const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
       const {intituicoesSelecionadasCheckbox, setIntituicoesSelecionadasCheckbox} = useContext(UserContext)
       

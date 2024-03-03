@@ -65,8 +65,17 @@ function myWrapperFunction() {
 
     const [debouncedPesquisaInput, setDebouncedPesquisaInput] = useState('');
 
-  
- 
+    // Função de debounce
+    useEffect(() => {
+      const timerId = setTimeout(() => {
+        setDebouncedPesquisaInput(pesquisaInput);
+      }, 0); 
+
+      return () => {
+        clearTimeout(timerId);
+      };
+    }, [pesquisaInput]);
+
 
 
 
@@ -121,7 +130,7 @@ function myWrapperFunction() {
       const urlEvento = urlGeral + `/originals_words?initials=${pesquisaInputFormatado}&type=SPEAKER`
 
 
-     console.log(url)
+     
 
 
 
@@ -1252,9 +1261,8 @@ const { botaoPatentesClicado, setBotaoPatentesClicado } = useContext(UserContext
                 <div className='flex gap-2 mx-2'>{valoresSelecionadosJSX}{valoresSelecionadosNuvemJSX}{valoresSelecionadosEventoJSX}{valoresPesquisadoresSelecionadosJSX}{valoresSelecionadosPatenteJSX}{valoresAreasSelecionadosJSX}{valoresLivrosSelecionadosJSX}{valoresSelecionadosResumoJSX}</div>
                 <input
                   type="text"
-                
+                  value={pesquisaInput}
                   onChange={(e) => setPesquisaInput(e.target.value)}
-                
                   onClick={() => setIsOpen(true)}
                   onFocus={() => setIsOpen(!isOpen)}
                   onKeyPress={handleKeyPress}

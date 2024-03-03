@@ -66,9 +66,6 @@ export function ContentLogin() {
     }
   };
   
-  
-  
-  console.log(loggedIn)
 
 
   //

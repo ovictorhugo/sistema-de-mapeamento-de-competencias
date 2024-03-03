@@ -34,7 +34,7 @@ interface Program {
   }
 
 
-export function Dashboard() {
+export function DashboardPesquisadores() {
     const { user, setUser } = useContext(UserContext);
 
     const [name, setName] = useState('');
@@ -80,7 +80,7 @@ export function Dashboard() {
       }
 
       const isDashboard = location.pathname === `/dashboard`
-      const isPesquisadores = location.pathname === `dashboard/pesquisadores`
+      const isPesquisadores = location.pathname === `/dashboard/pesquisadores`
 
 
       //submit
@@ -591,29 +591,12 @@ export function Dashboard() {
                 </Link>
           </div>
 
-            <div className="flex flex-1 mr-6 flex-col">
-            <div className="flex gap-6 w-full h-fit items-center ">
-           <div className="flex gap-2 items-center">
-           <h1 className=" text-4xl  font-medium max-w-[400px] ">
-            Bem vindo(a) ao Módulo <strong className="bg-red-400 text-white font-normal"> administrativo </strong>{" "}
-        </h1>
-        <img src={user.img_url} alt="" className="h-20" />
-           </div>
-                <div className="grid grid-cols-2 gap-6 w-full flex-1">
-                    <div className="border h-32 border-gray-300 rounded-2xl w-full justify-center px-6 flex flex-col items-end">
-                    <p className="text-gray-400">Total de docentes</p>
-                <h3 className="text-6xl font-medium">{researcher.length}</h3>
-                    </div>
-                    <div className="border h-32 border-gray-300 rounded-2xl w-full justify-center px-6 flex flex-col items-end">
-                    <p className="text-gray-400 text-right">Total de  pós-graduação</p>
-                <h3 className="text-6xl font-medium">{program.length}</h3>
-                    </div>
-                   
-                </div>
-            </div>
+            <div className="flex flex-1 flex-col">
+            
+        
 
-            <div  style={{ backgroundImage: `url(${bg_popup})` }} className="rounded-2xl bg-cover bg-center bg-no-repeat  mt-6 border p-6 gap-6 border-gray-300 h-64 min-h-[256px] flex items-center justify-center w-full">
-            <h3 className="max-w-[250px] font-medium text-2xl  text-gray-400"><strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">Vincule</strong> os pesquisadores à sua instituição de ensino</h3>
+            <div  style={{ backgroundImage: `url(${bg_popup})` }} className="rounded-2xl bg-cover bg-center bg-no-repeat border p-6 gap-6 border-gray-300 h-64 min-h-[256px] flex items-center justify-center w-full">
+            <h3 className=" font-medium text-2xl  text-gray-400"><strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">Vincule</strong> os pesquisadores à sua instituição de ensino</h3>
                         <div className="flex gap-6 items-end">
                         <div>
                         <p className="text-sm text-gray-500 mb-2">Nome completo</p>
@@ -652,9 +635,9 @@ export function Dashboard() {
             </div>
 
 
-            <div className="mt-6 h-full overflow-y-auto elementBarra">
-            <div className='flex gap-6  w-full h-full overflow-y-auto elementBarra'>
-       <div className='border border-gray-300 rounded-xl w-1/2 h-full p-6'>
+            <div className="mt-6 h-full ">
+            <div className='flex gap-6  w-full h-full '>
+       <div className='w-full h-full'>
 
        <div className="flex mb-6 items-center justify-center border-gray-300 border-[1px] rounded-xl py-4">
                         <MagnifyingGlass size={20} className={`text-gray-400 min-w-[52px] `} />
@@ -694,9 +677,7 @@ export function Dashboard() {
        </div>
        </div>
 
-       <div className="w-1/2 border rounded-2xl border-gray-300">
-
-       </div>
+      
       </div>
             </div>
 
@@ -705,324 +686,7 @@ export function Dashboard() {
 
 
             </div>
-            <div className=" max-w-[500px] overflow-y-auto elementBarra pr-2">
-                <div className="rounded-xl  border border-gray-300 p-12 ">
-                <h3 className="max-w-[250px] font-medium text-2xl mb-4 text-gray-400">Cadastrar programa de <strong className="bg-blue-400 text-white hover:bg-blue-500 transition duration-500 font-medium">pós-graduação</strong></h3>
-                    <p className="  text-gray-400 mb-8">
-                        Adicione as informações básicas do programa de pós-graduação como o corpo docente envolvido, classificação, descrição e localidade 
-                    </p>
-
-                    <form className="w-full ">
-              <p className="text-sm text-gray-500 mb-2">Nome do programa</p>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-             
-               
-                required
-                className="mb-4 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
-
-              <div className="flex gap-6">
-                <div>
-                <p className="text-sm text-gray-500 mb-2">Modalidade</p>
-                <input
-                    type="text"
-                    onChange={(e) => setModality(e.target.value)}
-                        value={modality}
-                
-                    required
-                    className="mb-6 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
-                </div>
-
-                <div>
-                <p className="text-sm text-gray-500 mb-2">Cidade</p>
-                <input
-                    type="text"
-                    onChange={(e) => setCity(e.target.value)}
-                        value={city}
-                
-                    required
-                    className="mb-6 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
-                </div>
-              </div>
-           
-              <div className="flex gap-6">
-              <div onClick={() => handleClickAdicionarBtn()} className="whitespace-nowrap flex cursor-pointer items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500  font-medium transition flex-1 h-12 ml-auto">
-                <Plus size={16} className="text-white" /> Adicionar
-              </div>
-
-              <div  className="h-12 w-12 border transition-all cursor-pointer border-gray-300 text-blue-400 rounded-xl flex items-center whitespace-nowrap justify-center hover:bg-gray-50">
-                <Trash size={16} className="" />
-                <input type="reset" value=""/>
-              </div>
-              </div>
-            </form>
-                </div>
-
-                <div className=" mt-6  grid grid-rows-1 overflow-y-auto">
-
-                <div className="overflow-y-auto flex flex-col gap-6 h-fit">
-                {program.map((props, index) => {
-                return(
-                    <div>
-                      <li
-                    onClick={() => handleOpenPopUp(index, props)}
-                    key={props.graduate_program_id}
-                    className=" checkboxLabel group transition-all list-none inline-flex group w-full "
-         
-                    
-                  >
-                    <label  className={`justify-between w-full p-6 flex-col  cursor-pointer border-[1px] bg-white bg-opacity-70 backdrop-blur-sm border-gray-300 flex text-gray-400 rounded-2xl text-xs font-bold hover:border-blue-400 transition-all `}>
-                      <div className="flex flex-col">
-                      
-  
-                      <div className="flex items-center gap-3">
-                      
-                        <div className="flex-1">
-                        <div>
-                        <span className=" whitespace-normal text-base text-gray-400 mb-2  font-bold">{props.name}</span>
-                        <p className="font-medium flex gap-1 items-center mt-2"> <MapPin size={16} className="textwhite" /> </p>
-                        </div>
-
-                        <div className="flex items-center justify-between mt-4">
-
-                            <div className="text-xs font-medium">{props.code}</div>
-
-                        <div className="flex gap-2  flex-wrap group-hover:hidden">
-                      {props.type.split(';').map((value, index) => {
-                        const ratingValues = props.rating.split(';');
-                        const ratingDoutorado = ratingValues[0]; // Valor correspondente a DOUTORADO
-                        const ratingMestrado = ratingValues[1]; // Valor correspondente a MESTRADO
-
-                        return (
-                          <div
-                            key={index}
-                            
-                            className={`py-2 h-[34px] px-4 text-white w-fit rounded-md text-xs font-bold flex gap-2 items-center ${value.includes('MESTRADO') ? 'bg-blue-200' : 'bg-blue-300'
-                              }`}
-                          >
-                            <GraduationCap size={12} className="textwhite" />
-                            {value.trim()}
-                            <p className=" flex gap-2 items-center"><Star size={12} className="textwhite" /> {props.type.split(';').length == 2 ? (value.includes('MESTRADO') ? ratingMestrado : ratingDoutorado) : (props.rating)}</p>
-                          </div>
-                        );
-                      })}
-
-                      <div className="bg-blue-400 py-2 px-4 text-white rounded-md text-xs font-bold flex gap-2 items-center">
-                        <BookmarkSimple size={12} className="textwhite" />
-                        {props.modality}
-                      </div>
-                    </div>
-
-                    <div className="group-hover:flex hidden gap-2">
-                    <div onClick={() => handleVisibleProgram(index, props.graduate_program_id)} className="bg-blue-400 hover:bg-blue-500 transition-all  w-[34px] h-[34px] justify-center text-white rounded-md text-xs font-bold flex gap-2 items-center">
-                        {props.visible == true ? (
-                          <Eye size={16} className="textwhite" />
-                        ): (
-                          <EyeSlash size={16} className="textwhite" />
-                        )}
-                      
-                      </div>
-
-                      <div onClick={() => handleDeleteProgram(index, props.graduate_program_id)} className=" transition-all  w-[34px] h-[34px] justify-center text-blue-400 border border-gray-300 hover:bg-gray-50 rounded-md text-xs font-bold flex gap-2 items-center">
-                        <Trash size={16} className="textwhite" />
-                      
-                      </div>
-                    </div>
-
-                        </div>
-                        </div>
-                      </div>
-                        
-                        
-                      </div>
-                    </label>
-                  </li>
-
-
-
-                  <div>
-
-                  {popUpVisibilities[index] && (
-                    <PopUpWrapper
-                   title="Print ('Bem-vindo/a')"
-                   subtitle="Novo usuário?"
-                   textLink="Criar conta"
-                   link="/signup"
-                  >
- <div className="w-full h-full flex">
-                        <div className=" flex flex-1 p-6">
-                        <div
-                        className="rounded-xl bg-blue-100 bg-cover flex items-center justify-center bg-right bg-no-repeat w-full h-full mr-6"
-                        style={{ backgroundImage: `url(${bg_popup})` }}
-                        >
-                            <div className="whitespace-nowrap w-fit flex cursor-pointer items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500  font-medium transition  h-12 ">
-                                <Plus size={16} className="text-white" /> Importar csv
-                            </div>
-                        </div>
-                        </div>
-
-                        <div className="">
-                            <div className="h-full max-w-[500px] ">
-                                <div className=" border-l h-full pb-[96px] overflow-y-auto elementBarra border-l-gray-300 p-12 ">
-                                <div onClick={() => handleClosePopUp(index)} className={`ml-auto float-right cursor-pointer rounded-xl hover:bg-gray-100 h-[38px] w-[38px] transition-all flex items-center justify-center `}>
-                        <X size={20} className={'rotate-180 transition-all text-gray-400'} />
-                        </div>
-                                
-                        <div className="flex mb-4 items-center gap-4">
-                               
-                               
-                          
-                    <div className="h-16 w-16 p-2 bg-cover bg-center bg-no-repeat " style={{ backgroundImage: `url(${props.url_image})` }}></div>
-             
-               
-              
-
-<div>
-<h3 className="max-w-[250px] font-medium text-2xl  text-gray-400">{props.name}</h3>
-<p className="text-gray-400 text-sm">{props.code}</p>
-</div>
-                               </div>
-
-                                    <p className="  text-gray-400 mb-8">
-                                        {props.description}
-                                    </p>
-
-                                    <form className="w-full ">
-                            <p className="text-sm text-gray-500 mb-2">Nome do programa</p>
-                            <input
-                                type="text"
-                                onChange={(e) => setName(e.target.value)}
-                                value={name}
-                            
-                                required
-                                className="mb-6 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
-
-                            <div className="flex gap-6">
-                                <div>
-                                <p className="text-sm text-gray-500 mb-2">Modalidade</p>
-                                <input
-                                    type="text"
-                                    onChange={(e) => setModality(e.target.value)}
-                                    value={modality}
-                                
-                                    required
-                                    className="mb-6 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
-                                </div>
-
-                                <div>
-                                <p className="text-sm text-gray-500 mb-2">Cidade</p>
-                                <input
-                                    type="text"
-                                    onChange={(e) => setCity(e.target.value)}
-                                    value={city}
-                                
-                                    required
-                                    className="mb-6 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
-                                </div>
-                            </div>
-
-                            <div className=" w-full h-[1px] bg-gray-300 my-2"></div>
-
-
-                            <p className="text-sm text-gray-500 mb-2 mt-8">Tipo do programa</p>
-                            
-                            <div className="flex gap-4 mb-6">
-                            <input type="checkbox" id="vehicle1" name="vehicle1" value="DOUTORADO " checked={type === 'DOUTORADO'} onChange={handleCheckboxChange}/>
-                            <label htmlFor="vehicle1"> DOUTORADO</label>
-                            <input type="checkbox" id="vehicle2" name="vehicle2" value="MESTRADO" checked={type === 'MESTRADO'} onChange={handleCheckboxChange}/>
-                            <label htmlFor="vehicle2"> MESTRADO</label>
-                            </div>
-
-                            <div className="flex gap-6">
-                            <div>
-                                <p className="text-sm text-gray-500 mb-2">Ranking</p>
-                                <input
-                                    type="number"
-                                    onChange={(e) => setRanking(e.target.value)}
-                                    value={ranking}
-                                
-                                    required
-                                    className="mb-6 border-[1px] border-gray-300 w-12 h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
-                                </div>
-                                
-                                <div className="w-full">
-                                <p className="text-sm text-gray-500 mb-2">Área</p>
-                                <input
-                                    type="text"
-                                    onChange={(e) => setArea(e.target.value)}
-                                    value={area}
-                                
-                                    required
-                                    className="mb-6 flex-1 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
-                                </div>
-
-            
-
-                               
-                            </div>
-
-                            <p className="text-sm text-gray-500 mb-2">Código do programa (Sucupira)</p>
-              <input
-                type="text"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-             
-               
-                required
-                className="mb-4 border-[1px] border-gray-300 w-full h-12 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
-
-
-                            <p className="text-sm text-gray-500 mb-2">Descrição (não obrigatório)*</p>
-                                <textarea
-                                   
-                                    onChange={(e) => setDescricao(e.target.value)}
-                                    value={descricao}
-                                
-                                    required
-                                    className="mb-6 flex-1 border-[1px] border-gray-300 w-full h-32 rounded-xl outline-none p-4 text-md hover:border-blue-400 focus:border-blue-400" />
-
-                            </form>
-                                </div>
-
-                                <div className="flex border-l  border-l-gray-300 gap-6 px-12 py-6 bg-white top-[-96px] z-[99] right-0 relative">
-                            <div onClick={() => handleChangeProgram(index, props)} className="whitespace-nowrap flex cursor-pointer items-center gap-4 bg-blue-400 text-white rounded-xl px-4 py-2 justify-center hover:bg-blue-500  font-medium transition flex-1 h-12 ml-auto">
-                                <ArrowClockwise size={16} className="text-white" /> Atualizar dados
-                            </div>
-
-                            <div onClick={() => handleDeleteProgram(index, props.graduate_program_id)} className="h-12 w-12 border transition-all cursor-pointer border-gray-300 text-blue-400 rounded-xl flex items-center whitespace-nowrap justify-center hover:bg-gray-50">
-                                <Trash size={16} className="" />
-                                <input type="reset" value=""/>
-                            </div>
-                            </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                  </PopUpWrapper>
-
-                  )}
-                  
-
-
-
-
-
-
-
-
-                  </div>
-                    </div>
-                )
-                })}
-                </div>
-
-
-
-                </div>
-            </div>
+     
           </div>
 
             {popUpProgram ? (
