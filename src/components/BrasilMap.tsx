@@ -45,7 +45,16 @@ function BrasilMap() {
 
 
    const { idVersao, setIdVersao } = useContext(UserContext);
-  const urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=${idVersao}`;
+   let urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=`;
+   const isDashboard = location.pathname === `/profnit`
+   useEffect(() => {
+    if(isDashboard) {
+       urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=2`;
+    } else (
+      urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=`
+    )
+  }, []);
+  
 
   useEffect(() => {
     const fetchData = async () => {

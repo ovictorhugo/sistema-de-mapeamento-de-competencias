@@ -45,7 +45,7 @@ function BahiaMap() {
 
 
    const { idVersao, setIdVersao } = useContext(UserContext);
-  const urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=${idVersao}`;
+  const urlGraduateProgram = `${urlGeral}/graduate_program_profnit?id=`;
 
   useEffect(() => {
     const fetchData = async () => {
