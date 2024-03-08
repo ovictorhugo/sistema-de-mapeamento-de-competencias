@@ -161,16 +161,18 @@ export function Publicacoes() {
 
   //pesqusisadores
 
-  let urlTermPesquisadores = `${urlGeral}/researcherName?name=${valoresSelecionadosExport}`;
+  let urlTermPesquisadores = `${urlGeral}/researcherName?name=${valoresSelecionadosExport.split("%20").join(";")}`;
 
   if (botaoPesquisadoresClicado) {
-    urlTermPesquisadores = `${urlGeral}/researcherName?name=${valoresSelecionadosExport}`;
+    urlTermPesquisadores = `${urlGeral}/researcherName?name=${valoresSelecionadosExport.split("%20").join(";")}`;
   }
 
   if (botaoPesquisadoresClicado && valoresSelecionadosExport == "") {
     let valorDigitadoPesquisaDiretaPesquisadores = valorDigitadoPesquisaDireta.replace(/;/g, '%20')
-    urlTermPesquisadores = `${urlGeral}/researcherName?name=${valorDigitadoPesquisaDiretaPesquisadores}&year=${value}`;
+    urlTermPesquisadores = `${urlGeral}/researcherName?name=${valorDigitadoPesquisaDiretaPesquisadores.split("%20").join(";")}&year=${value}`;
   }
+
+  console.log(urlTermPesquisadores)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -260,12 +262,14 @@ export function Publicacoes() {
   }
 
   if (botaoPesquisadoresClicado) {
-    urlTermPublicacoes = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${researcher.map((item) => item.id).join(';')}&type=ARTICLE&qualis=${valoresSelecionados}`;
+    urlTermPublicacoes = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${researcher.map((item) => item.id).join(";")}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}`;
   }
 
   if (botaoPesquisadoresClicado && valoresSelecionadosExport == "") {
-    urlTermPublicacoes = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${researcher.map((item) => item.id).join(';')}&type=ARTICLE&qualis=${valoresSelecionados}`;
+    urlTermPublicacoes = `${urlGeral}bibliographic_production_researcher?terms=&researcher_id=${researcher.map((item) => item.id).join(";")}&type=ARTICLE&qualis=${valoresSelecionados}&year=${value}`;
   }
+
+  console.log(urlTermPublicacoes)
 
   const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
   useEffect(() => {

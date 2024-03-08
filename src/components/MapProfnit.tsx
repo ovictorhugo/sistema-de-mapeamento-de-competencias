@@ -7,6 +7,7 @@ import { Circle } from "./Circle";
 import DropdownMultiSelect from "./DropdownMultiSelect";
 import bg_passo from '../assets/bg_passo.png';
 import { SvgLines } from "./SvgLines";
+import Papa from 'papaparse';
 
 import logo_1 from '../assets/logo_1.png';
 import logo_2 from '../assets/logo_2.png';
@@ -49,6 +50,7 @@ import { GridHome } from "./GridHome";
 import { SvgHome } from "./SvgHome";
 import { Cities } from "./Cities";
 import { Recomendadas } from "./Recomendadas";
+import { NewSearch } from "./NewSearch";
 
 
 interface GraduateProgram {
@@ -100,6 +102,13 @@ interface Post {
   checked: boolean
   area_expertise: string
   area_specialty: string
+}
+
+interface Csv {
+  research_dictionary_id: string
+  term: string
+  frequency: string
+  type_: string
 }
 
 export function MapProfnit(props: Props) {
@@ -315,39 +324,42 @@ export function MapProfnit(props: Props) {
       }
     };
 
-  
-  
-  
+    const [filteredItems, setFilteredItems] = useState<Csv[]>([]);
 
-
-    
-  
     useEffect(() => {
+      const filePath = "../dicionario.csv";
+
       const fetchData = async () => {
-        setIsLoading(true);
         try {
-          const response = await fetch(urlPalavrasChaves, {
-            mode: 'cors',
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'Access-Control-Allow-Methods': 'GET',
-              'Access-Control-Allow-Headers': 'Content-Type',
-              'Access-Control-Max-Age': '3600',
-              'Content-Type': 'text/plain'
-            }
+          const response = await fetch(filePath);
+          const text = await response.text();
+  
+          Papa.parse(text, {
+            complete: (result: any) => {
+              const parsedData = result.data;
+          
+              setFilteredItems(parsedData); 
+              console.log(parsedData);
+              
+                    
+            },
+            header: true,
+            skipEmptyLines: true,
+            delimiter: ',',
+            encoding: 'UTF-8',
           });
-          const data = await response.json();
-          if (data) {
-            setWords(data);
-          }
-        } catch (err) {
-          console.log(err);
-        } finally {
-          setIsLoading(false);
+        } catch (error) {
+          console.error('Erro ao carregar o arquivo:', error);
         }
       };
+  
       fetchData();
-    }, [urlPalavrasChaves]);
+    }, []);
+
+    const filteredSugestoes = filteredItems
+    .sort((a, b) => Number(b.frequency) - Number(a.frequency))
+    .filter(resultado => resultado.type_ === "ARTICLE")
+    .slice(0, 20);
   
     const options = {
       chart: {
@@ -365,9 +377,9 @@ export function MapProfnit(props: Props) {
       series: [
         {
           type: 'wordcloud',
-          data: words.map((word) => ({
+          data: filteredSugestoes.map((word) => ({
             name: word.term,
-            weight: word.among,
+            weight: word.frequency,
           })),
           events: {
             click: handleWordClick, // Adiciona o manipulador de eventos para clique em palavras
@@ -399,9 +411,9 @@ export function MapProfnit(props: Props) {
 
   useEffect(() => {
     // ...
-    if (words) {
-      const categories = words.map((d) => d.term);
-      const amongValues = words.map((d) => Number(d.among));
+    if (filteredSugestoes) {
+      const categories = filteredSugestoes.map((d) => d.term);
+      const amongValues = filteredSugestoes.map((d) => Number(d.frequency));
       const sumAmongValues = amongValues.reduce((acc, cur) => acc + cur, 0);
 
       setChartOptions({
@@ -468,7 +480,7 @@ export function MapProfnit(props: Props) {
         },
       });
     }
-  }, [words]);
+  }, [filteredItems]);
   
 //
 
@@ -642,7 +654,7 @@ useEffect(() => {
             <Header />
           </div>
 
-          <Search  />
+          <NewSearch  />
         </div>
 
 

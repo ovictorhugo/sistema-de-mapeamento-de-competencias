@@ -97,7 +97,7 @@ export function Pesquisadores() {
   //fetch
 
   if (botaoPesquisadoresClicado) {
-    urlTermPesquisadores = `${urlGeral}/researcherName?name=${valoresSelecionadosExport}${valorDigitadoPesquisaDireta}`;
+    urlTermPesquisadores = `${urlGeral}/researcherName?name=${valoresSelecionadosExport.split("%20").join(";")}${valorDigitadoPesquisaDireta.split("%20").join(";")}`;
   }
 
 
@@ -139,7 +139,7 @@ export function Pesquisadores() {
 
 
 
-
+console.log(urlTermPesquisadores)
 
 
   const location = useLocation();
