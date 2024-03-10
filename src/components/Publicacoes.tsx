@@ -161,15 +161,15 @@ export function Publicacoes() {
 
   //pesqusisadores
 
-  let urlTermPesquisadores = `${urlGeral}/researcherName?name=${valoresSelecionadosExport.split("%20").join(";")}`;
+  let urlTermPesquisadores = `${urlGeral}/researcherName?name=${valoresSelecionadosExport.split(" ").join(";")}`;
 
   if (botaoPesquisadoresClicado) {
-    urlTermPesquisadores = `${urlGeral}/researcherName?name=${valoresSelecionadosExport.split("%20").join(";")}`;
+    urlTermPesquisadores = `${urlGeral}/researcherName?name=${valoresSelecionadosExport.split(" ").join(";")}`;
   }
 
   if (botaoPesquisadoresClicado && valoresSelecionadosExport == "") {
-    let valorDigitadoPesquisaDiretaPesquisadores = valorDigitadoPesquisaDireta.replace(/;/g, '%20')
-    urlTermPesquisadores = `${urlGeral}/researcherName?name=${valorDigitadoPesquisaDiretaPesquisadores.split("%20").join(";")}&year=${value}`;
+    let valorDigitadoPesquisaDiretaPesquisadores = valorDigitadoPesquisaDireta.replace(/;/g, ' ')
+    urlTermPesquisadores = `${urlGeral}/researcherName?name=${valorDigitadoPesquisaDiretaPesquisadores.split(" ").join(";")}&year=${value}`;
   }
 
   console.log(urlTermPesquisadores)

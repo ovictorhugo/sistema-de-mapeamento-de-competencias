@@ -97,7 +97,7 @@ export function Pesquisadores() {
   //fetch
 
   if (botaoPesquisadoresClicado) {
-    urlTermPesquisadores = `${urlGeral}/researcherName?name=${valoresSelecionadosExport.split("%20").join(";")}${valorDigitadoPesquisaDireta.split("%20").join(";")}`;
+    urlTermPesquisadores = `${urlGeral}/researcherName?name=${valoresSelecionadosExport.split(" ").join(";")}${valorDigitadoPesquisaDireta.split(" ").join(";")}`;
   }
 
 

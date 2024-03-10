@@ -62,9 +62,99 @@ export function NewSearch() {
         fetchData();
       }, []);
 
-      const filteredResults = filteredItems.filter(props =>
-        unorm.nfkd(props.term).replace(/[^\w\s]/gi, '').toLowerCase().startsWith(unorm.nfkd(pesquisaInput).replace(/[^\w\s]/gi, '').toLowerCase())
-      );
+      const filteredResultsArticle = []
+      const filteredResultsBook = []
+      const filteredResultsResearcher = []
+      const filteredResultsPatent = []
+      const filteredResultsSpeaker = []
+      const filteredResultsAbstract = []
+
+const pesquisaInputNormalizado = unorm.nfkd(pesquisaInput).replace(/[^\w\s]/gi, '').toLowerCase();
+
+
+//Article
+for (const item of filteredItems) {
+  // Verifica se o tipo do item é "ARTICLE"
+  if (item.type_ === "ARTICLE") {
+    const termoNormalizado = unorm.nfkd(item.term).replace(/[^\w\s]/gi, '').toLowerCase();
+
+    if (termoNormalizado.startsWith(pesquisaInputNormalizado)) {
+      filteredResultsArticle.push(item);
+    }
+  }
+
+}
+
+
+//Abstract
+for (const item of filteredItems) {
+  if (item.type_ === "ABSTRACT") {
+    const termoNormalizado = unorm.nfkd(item.term).replace(/[^\w\s]/gi, '').toLowerCase();
+
+    if (termoNormalizado.startsWith(pesquisaInputNormalizado)) {
+      filteredResultsAbstract.push(item);
+
+    }
+  }
+
+}
+
+//patent
+for (const item of filteredItems) {
+  if (item.type_ === "PATENT") {
+    const termoNormalizado = unorm.nfkd(item.term).replace(/[^\w\s]/gi, '').toLowerCase();
+
+    if (termoNormalizado.startsWith(pesquisaInputNormalizado)) {
+      filteredResultsPatent.push(item);
+
+    
+    }
+  }
+
+}
+
+//book
+for (const item of filteredItems) {
+  if (item.type_ === "BOOK_CHAPTER") {
+    const termoNormalizado = unorm.nfkd(item.term).replace(/[^\w\s]/gi, '').toLowerCase();
+
+    if (termoNormalizado.startsWith(pesquisaInputNormalizado)) {
+      filteredResultsBook.push(item);
+
+    }
+  }
+
+}
+
+//researcher
+
+for (const item of filteredItems) {
+  if (item.type_ === "NAME") {
+    const termoNormalizado = unorm.nfkd(item.term).replace(/[^\w\s]/gi, '').toLowerCase();
+
+    if (termoNormalizado.startsWith(pesquisaInputNormalizado)) {
+      filteredResultsResearcher.push(item);
+
+     
+    }
+  }
+
+}
+
+
+//speaker
+for (const item of filteredItems) {
+  if (item.type_ === "SPEAKER") {
+    const termoNormalizado = unorm.nfkd(item.term).replace(/[^\w\s]/gi, '').toLowerCase();
+
+    if (termoNormalizado.startsWith(pesquisaInputNormalizado)) {
+      filteredResultsSpeaker.push(item);
+
+     
+    }
+  }
+}
+      
 
       //limpar pesquisa
     const limparPesquisa = () => {
@@ -319,7 +409,7 @@ export function NewSearch() {
           
         </ul>
                   <p className='mb-4'>Termo</p>
-                  {filteredResults.slice(0, 5).map((resultado, index) => {
+                  {filteredResultsArticle.slice(0, 5).map((resultado, index) => {
                     if(resultado.type_ == "ARTICLE") {
                         return (
                             <li
@@ -344,7 +434,7 @@ export function NewSearch() {
                     }
                   })}
                   <p className='mb-4'>Resumo</p>
-                  {filteredResults.slice(0, 5).map((resultado, index) => {
+                  {filteredResultsAbstract.slice(0, 5).map((resultado, index) => {
                     if(resultado.type_ == "ABSTRACT") {
                         return (
                             <li
@@ -370,7 +460,7 @@ export function NewSearch() {
                   })}
 
                   <p className='mb-4'>Participação em eventos</p>
-                  {filteredResults.slice(0, 5).map((resultado, index) => {
+                  {filteredResultsSpeaker.slice(0, 5).map((resultado, index) => {
                     if(resultado.type_ == "SPEAKER") {
                         return (
                             <li
@@ -401,7 +491,7 @@ export function NewSearch() {
                   
 
                 <p className='mb-4'>Patentes</p>
-                {filteredResults.slice(0, 5).map((resultado, index) => {
+                {filteredResultsPatent.slice(0, 5).map((resultado, index) => {
                     if(resultado.type_ == "PATENT") {
                         return (
                             <li
@@ -431,7 +521,7 @@ export function NewSearch() {
 
                 <div className='block  w-full ' >
                   <p className='mb-4'>Nome</p>
-                  {filteredResults.slice(0, 5).map((resultado, index) => {
+                  {filteredResultsResearcher.slice(0, 5).map((resultado, index) => {
                     if(resultado.type_ == "NAME") {
                         return (
                             <li
@@ -458,7 +548,7 @@ export function NewSearch() {
 
 
                   <p className='mb-4'>Livros e capítulos</p>
-                  {filteredResults.slice(0, 5).map((resultado, index) => {
+                  {filteredResultsBook.slice(0, 5).map((resultado, index) => {
                     if(resultado.type_ == "BOOK_CHAPTER") {
                         return (
                             <li
