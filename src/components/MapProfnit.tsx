@@ -666,11 +666,7 @@ useEffect(() => {
  
 ) : (
   <div className="w-full">
-    {botaoTermosClicado && botaoTaxonomiaClicado.length > 0 && (
-       <div className="px-16 mt-8 w-full">
-       <Recomendadas/>
-        </div>
-    )}
+
 
     <Tabs className="w-full items-center flex flex-col " >
     <div className="flex items-center justify-between w-full mt-6  px-6 md:px-16 m-[0 auto]">
