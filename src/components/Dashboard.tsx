@@ -641,10 +641,7 @@ export function Dashboard() {
                 <Plus size={16} className="text-white" /> Adicionar
               </div>
 
-              <label  htmlFor="fileInput" onChange={handleFileUpload}  className="h-12 w-12 min-w-[48px] border transition-all cursor-pointer border-gray-300 text-blue-400 rounded-xl flex items-center whitespace-nowrap justify-center hover:bg-gray-50">
-              <input onChange={handleFileUpload} id="fileInput" type="file" accept=".csv"  hidden />
-                <FileCsv size={16} className="" />
-              </label>
+              z
                         </div>
             <div>
 

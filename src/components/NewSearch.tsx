@@ -115,7 +115,7 @@ for (const item of filteredItems) {
 
 //book
 for (const item of filteredItems) {
-  if (item.type_ === "BOOK_CHAPTER") {
+  if (item.type_ === "BOOK_CHAPTER" || item.type_ === "BOOK") {
     const termoNormalizado = unorm.nfkd(item.term).replace(/[^\w\s]/gi, '').toLowerCase();
 
     if (termoNormalizado.startsWith(pesquisaInputNormalizado)) {
@@ -393,7 +393,7 @@ for (const item of filteredItems) {
 
 
 
-            {pesquisaInput.length <= 2 ? (
+            {pesquisaInput.length <= 2 || (filteredResultsAbstract.length == 0 && filteredResultsArticle.length == 0 && filteredResultsBook.length == 0 && filteredResultsPatent.length == 0 && filteredResultsResearcher.length == 0 && filteredResultsSpeaker.length == 0) ? (
             <div></div>
           ) : (
             <div id='teste'
